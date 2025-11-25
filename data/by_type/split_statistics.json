@@ -1,0 +1,12 @@
+{
+  "total_documents": 232560,
+  "split_by": "type",
+  "started_at": "2025-11-25T17:00:41.045164",
+  "completed_at": "2025-11-25T17:03:16.960366",
+  "label_counts": {
+    "secondary_legislation": 31696,
+    "primary_legislation": 9059,
+    "decision": 189216,
+    "bill": 2589
+  }
+}

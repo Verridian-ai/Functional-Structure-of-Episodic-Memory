@@ -83,9 +83,16 @@ Thumbs.db
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# Data directories (large files)
+# Data directories (large jsonl files)
 data/domains/*.jsonl
 data/processed/*.jsonl
+data/by_type/*.jsonl
+data/by_source/*.jsonl
+data/by_court/*.jsonl
+
+# Keep statistics files (small JSON)
+!data/**/*statistics.json
+!data/**/*_statistics.json
 
 # Keep structure but ignore large files
 !data/.gitkeep

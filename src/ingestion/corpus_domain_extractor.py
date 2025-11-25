@@ -254,15 +254,17 @@ class DomainClassifier:
 class DomainFileManager:
     """Manages output file handles for all domain files."""
 
-    def __init__(self, output_dir: Path):
+    def __init__(self, output_dir: Path, append: bool = False):
         self.output_dir = output_dir
         self.handles: Dict[str, TextIO] = {}
+        self.append = append
 
     def __enter__(self) -> "DomainFileManager":
         self.output_dir.mkdir(parents=True, exist_ok=True)
         for domain in ALL_DOMAINS:
             path = self.output_dir / f"{domain.lower()}.jsonl"
-            self.handles[domain] = open(path, 'w', encoding='utf-8')
+            mode = 'a' if self.append else 'w'
+            self.handles[domain] = open(path, mode, encoding='utf-8')
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -333,7 +335,7 @@ class CorpusDomainExtractor:
 
         start_time = datetime.now()
 
-        with DomainFileManager(self.output_dir) as file_manager:
+        with DomainFileManager(self.output_dir, append=resume) as file_manager:
             with open(self.input_path, 'r', encoding='utf-8') as infile:
                 for line_num, line in enumerate(infile):
                     # Skip lines if resuming

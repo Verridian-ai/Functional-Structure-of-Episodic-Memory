@@ -1,0 +1,17 @@
+{
+  "total_documents": 232560,
+  "split_by": "source",
+  "started_at": "2025-11-25T17:03:27.087326",
+  "completed_at": "2025-11-25T17:05:45.917489",
+  "label_counts": {
+    "tasmanian_legislation": 2552,
+    "nsw_legislation": 2216,
+    "high_court_of_australia": 8096,
+    "south_australian_legislation": 1350,
+    "nsw_caselaw": 117371,
+    "queensland_legislation": 3306,
+    "federal_court_of_australia": 63749,
+    "western_australian_legislation": 1564,
+    "federal_register_of_legislation": 32356
+  }
+}
