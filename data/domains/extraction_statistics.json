@@ -1,0 +1,753 @@
+{
+  "extraction_completed": "2025-11-25T16:04:10.328429",
+  "total_documents": 57560,
+  "domain_stats": {
+    "Administrative": {
+      "document_count": 23417,
+      "by_type": {
+        "decision": 21795,
+        "secondary_legislation": 1467,
+        "primary_legislation": 148,
+        "bill": 7
+      },
+      "by_jurisdiction": {
+        "commonwealth": 15046,
+        "new_south_wales": 8336,
+        "norfolk_island": 7,
+        "tasmania": 7,
+        "western_australia": 9,
+        "south_australia": 5,
+        "queensland": 7
+      },
+      "by_source": {
+        "federal_court_of_australia": 9064,
+        "nsw_caselaw": 8327,
+        "federal_register_of_legislation": 1585,
+        "high_court_of_australia": 4404,
+        "tasmanian_legislation": 7,
+        "nsw_legislation": 9,
+        "western_australian_legislation": 9,
+        "south_australian_legislation": 5,
+        "queensland_legislation": 7
+      },
+      "by_category": {
+        "Admin_Information": 22567,
+        "Admin_Migration": 577,
+        "Admin_Disciplinary": 50,
+        "Admin_Veterans": 128,
+        "Admin_Social_Security": 95
+      },
+      "date_range": {
+        "min": "1903-11-11",
+        "max": "2025-03-10"
+      },
+      "text_length_stats": {
+        "min": 682,
+        "max": 379048,
+        "mean": 35889.2905982906,
+        "count": 234
+      },
+      "sample_citations": [
+        "Lukey v Corporate Investment Australia Funds Management Pty Ltd [2005] FCA 298",
+        "Commonwealth Bank of Australia v Segal (No 2) [2015] NSWSC 656",
+        "DDU v Children\u2019s Guardian [2018] NSWCATAD 6",
+        "AZT15 v Minister for Immigration and Border Protection [2017] FCA 191",
+        "REGINA v Timothy James COATES [2002] NSWCCA 441",
+        "R v Black [2007] NSWDC 234",
+        "Quin (Trustee), in the matter of Rowe (Bankrupt) [2016] FCA 823",
+        "REGINA v. BOND [2002] NSWSC 786",
+        "Prosperity Group 888 Pty Ltd v Penrith City Council [2023] NSWLEC 1421",
+        "Joan Street & 4 Ors v Luna Park Sydney Pty Ltd [2005] NSWSC 1303"
+      ]
+    },
+    "Criminal": {
+      "document_count": 436,
+      "by_type": {
+        "decision": 384,
+        "secondary_legislation": 19,
+        "primary_legislation": 31,
+        "bill": 2
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 300,
+        "commonwealth": 124,
+        "norfolk_island": 2,
+        "tasmania": 2,
+        "western_australia": 2,
+        "queensland": 2,
+        "south_australia": 4
+      },
+      "by_source": {
+        "nsw_caselaw": 297,
+        "federal_court_of_australia": 25,
+        "federal_register_of_legislation": 39,
+        "high_court_of_australia": 62,
+        "nsw_legislation": 3,
+        "tasmanian_legislation": 2,
+        "western_australian_legislation": 2,
+        "queensland_legislation": 2,
+        "south_australian_legislation": 4
+      },
+      "by_category": {
+        "Criminal_Property": 71,
+        "Criminal_Violence": 94,
+        "Criminal_Procedure": 73,
+        "Criminal_Drugs": 41,
+        "Criminal_Sexual": 34,
+        "Criminal_General": 123
+      },
+      "date_range": {
+        "min": "1905-09-04",
+        "max": "2025-03-10"
+      },
+      "text_length_stats": {
+        "min": 8637,
+        "max": 95126,
+        "mean": 46985.0,
+        "count": 4
+      },
+      "sample_citations": [
+        "R v Bin LI and Kun WANG [2013] NSWDC 211",
+        "R v Gattellari; R v Hatfield [2019] NSWDC 244",
+        "Mirus Australia Pty Ltd v Gage [2016] NSWSC 1519",
+        "R v Afu; R v Caleo [2017] NSWSC 1780",
+        "R v Elbadar [2012] NSWSC 1492",
+        "R v Newton [2020] NSWDC 806",
+        "The Commissioner of the Australian Federal Police v Revell-Reade & Ors [2019] NSWSC 334",
+        "R v Barton (a pseudonym) [2020] NSWDC 389",
+        "R v Whiteley [2021] NSWSC 153",
+        "R v Russell (No 2) [2018] NSWSC 797"
+      ]
+    },
+    "Property": {
+      "document_count": 388,
+      "by_type": {
+        "decision": 187,
+        "secondary_legislation": 176,
+        "primary_legislation": 24,
+        "bill": 1
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 104,
+        "commonwealth": 279,
+        "norfolk_island": 2,
+        "south_australia": 1,
+        "western_australia": 2
+      },
+      "by_source": {
+        "nsw_caselaw": 85,
+        "federal_court_of_australia": 67,
+        "federal_register_of_legislation": 179,
+        "high_court_of_australia": 35,
+        "nsw_legislation": 19,
+        "south_australian_legislation": 1,
+        "western_australian_legislation": 2
+      },
+      "by_category": {
+        "Env_Development": 30,
+        "Prop_Neighbours": 44,
+        "Prop_Torrens": 35,
+        "Native_Title": 107,
+        "Prop_Strata": 26,
+        "Env_Protection": 140,
+        "Env_Compulsory_Acq": 5,
+        "Prop_Leasing": 1
+      },
+      "date_range": {
+        "min": "1907-03-28",
+        "max": "2025-03-05"
+      },
+      "text_length_stats": {
+        "min": 3091,
+        "max": 56092,
+        "mean": 37913.666666666664,
+        "count": 3
+      },
+      "sample_citations": [
+        "Hawkesbury City Council v Johnson; Hawkesbury City Council v Johnson Property Group Pty Limited (No 2) [2009] NSWLEC 6",
+        "Brydall v The Owners of Strata Plan 66794 [2009] NSWSC 819",
+        "Dominelli v Sutherland Shire Council [2023] NSWLEC 1055",
+        "BP7 Pty Ltd v Gavancorp Pty Ltd [2021] NSWSC 265",
+        "Weber v Ankin [2008] NSWSC 106",
+        "Douglas Wilson v Michael Anderson & Ors [1999] NSWSC 8",
+        "Bernadette Mills v GM Amalgamated Investments (Dulwich Hill) Pty Ltd & Anor [2013] NSWSC 519",
+        "Owners Corporation Strata Plan 72535 v Brookfield [2012] NSWSC 712",
+        "Hosking & Anor v Haas & Anor (No. 2) [2009] NSWSC 1328",
+        "Coburn (NSW Department of Planning, Industry and Environment) v Cool-Off Pty Ltd [2021] NSWLC 6"
+      ]
+    },
+    "Commercial": {
+      "document_count": 542,
+      "by_type": {
+        "decision": 416,
+        "secondary_legislation": 66,
+        "primary_legislation": 60
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 147,
+        "commonwealth": 394,
+        "western_australia": 1
+      },
+      "by_source": {
+        "nsw_caselaw": 146,
+        "federal_court_of_australia": 229,
+        "federal_register_of_legislation": 124,
+        "high_court_of_australia": 41,
+        "nsw_legislation": 1,
+        "western_australian_legislation": 1
+      },
+      "by_category": {
+        "Corp_Insolvency": 336,
+        "Comm_Banking": 132,
+        "Comm_Consumer": 25,
+        "Comm_Contract": 11,
+        "IP_Copyright": 9,
+        "Comm_Insurance": 16,
+        "IP_Patent_Trademark": 13
+      },
+      "date_range": {
+        "min": "1905-10-02",
+        "max": "2025-03-06"
+      },
+      "text_length_stats": {
+        "min": 3674,
+        "max": 98677,
+        "mean": 30632.0,
+        "count": 5
+      },
+      "sample_citations": [
+        "In the matter of ASMI International Education Pty Ltd [2021] NSWSC 1345",
+        "KEITH SMITH EAST WEST TRANSPORT PTY LTD v AUSTRALIAN TAXATION OFFICE [2002] NSWCA 264",
+        "National Australia Bank Ltd v C & O Voukidis Pty Ltd [2014] NSWSC 384",
+        "Australian Competition and Consumer Commission v Phoenix Institute of Australia Pty Ltd (Subject to Deed of Company Arrangement) (No 3) [2023] FCA 859",
+        "In the matter of Steel Tigers Pty Ltd (in liq) [2014] NSWSC 1748",
+        "St George Bank Ltd v The Australian Private Capital Group Ltd [2001] NSWSC 762",
+        "Morgan, in the matter of Brighton Hall Securities Pty Ltd (in liq) [2013] FCA 970",
+        "In the matter of Watson Road Moss Vale Developments Pty Limited [2013] NSWSC 783",
+        "New Cap Reinsurance Corporation Ltd (in liq) v A E Grant & Ors [2008] NSWSC 1015",
+        "ASIC v Great Northern Developments Pty Ltd [2010] NSWSC 1087"
+      ]
+    },
+    "Equity": {
+      "document_count": 74,
+      "by_type": {
+        "decision": 67,
+        "primary_legislation": 7
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 49,
+        "commonwealth": 22,
+        "norfolk_island": 1,
+        "queensland": 1,
+        "south_australia": 1
+      },
+      "by_source": {
+        "nsw_caselaw": 49,
+        "federal_court_of_australia": 7,
+        "high_court_of_australia": 11,
+        "federal_register_of_legislation": 5,
+        "queensland_legislation": 1,
+        "south_australian_legislation": 1
+      },
+      "by_category": {
+        "Succession_Family_Provision": 24,
+        "Equity_General": 10,
+        "Succession_Probate": 22,
+        "Equity_Trusts": 18
+      },
+      "date_range": {
+        "min": "1912-03-11",
+        "max": "2025-02-21"
+      },
+      "text_length_stats": {
+        "min": 0,
+        "max": 0,
+        "mean": 0,
+        "count": 0
+      },
+      "sample_citations": [
+        "Jurak v Latham [2023] NSWSC 1318",
+        "Ocvirk v Permanent Custodians Limited [2013] NSWSC 1021",
+        "Limberger v Limberger; Oakman v Limberger [2021] NSWSC 474",
+        "Cantrell v Williams [2004] NSWSC 579",
+        "Estate of Beatrice Nicholas; Davis v Clifford & Ors [2012] NSWSC 347",
+        "Brown v Brown [2022] NSWSC 1393",
+        "Kastrounis v Foundouradakis [2012] NSWSC 264",
+        "McCrae and Burtenshaw v Burtenshaw [2006] NSWSC 396",
+        "The Estate of Stanislaw Budniak; NSW Trustee & Guardian v Budniak [2015] NSWSC 934",
+        "Hawkesbury City Council v Grewlan Investments Pty Ltd [2007] NSWSC 1376"
+      ]
+    },
+    "Torts": {
+      "document_count": 253,
+      "by_type": {
+        "decision": 161,
+        "secondary_legislation": 60,
+        "primary_legislation": 32
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 94,
+        "commonwealth": 154,
+        "norfolk_island": 1,
+        "south_australia": 1,
+        "western_australia": 1,
+        "queensland": 2
+      },
+      "by_source": {
+        "nsw_caselaw": 91,
+        "federal_court_of_australia": 15,
+        "federal_register_of_legislation": 85,
+        "high_court_of_australia": 55,
+        "south_australian_legislation": 1,
+        "nsw_legislation": 3,
+        "western_australian_legislation": 1,
+        "queensland_legislation": 2
+      },
+      "by_category": {
+        "Tort_Defamation": 103,
+        "Tort_Negligence": 104,
+        "Comp_Motor_Accidents": 5,
+        "Comp_Workers": 2,
+        "Tort_Intentional": 37,
+        "Tort_Nuisance": 1,
+        "Tort_Institutional": 1
+      },
+      "date_range": {
+        "min": "1904-10-17",
+        "max": "2025-03-07"
+      },
+      "text_length_stats": {
+        "min": 8946,
+        "max": 9383,
+        "mean": 9164.5,
+        "count": 2
+      },
+      "sample_citations": [
+        "Stanton v Fell [2013] NSWSC 1001",
+        "Hana v Juno Investments Pty Ltd [2003] NSWSC 551",
+        "DAWSON v ACP PUBLISHING PTY LTD [2002] NSWSC 712",
+        "Polon v Dorian [2014] NSWSC 571",
+        "Dowdell v Knispel Fruit Juices Pty Ltd [2003] FCA 851",
+        "Bruno Pisano -v- Georgia Dandris [2014] NSWSC 1070",
+        "Adams v Scobie [2020] NSWDC 620",
+        "Darwin v Norman [2020] NSWSC 357",
+        "Gangi v Boral Resources (NSW) Pty Limited [2012] NSWSC 398",
+        "Connolly v Tweed Shire Council [2021] NSWDC 257"
+      ]
+    },
+    "Industrial": {
+      "document_count": 462,
+      "by_type": {
+        "decision": 395,
+        "primary_legislation": 14,
+        "secondary_legislation": 53
+      },
+      "by_jurisdiction": {
+        "commonwealth": 377,
+        "new_south_wales": 73,
+        "south_australia": 2,
+        "tasmania": 4,
+        "queensland": 3,
+        "western_australia": 3
+      },
+      "by_source": {
+        "federal_court_of_australia": 231,
+        "nsw_caselaw": 70,
+        "federal_register_of_legislation": 52,
+        "high_court_of_australia": 94,
+        "south_australian_legislation": 2,
+        "tasmanian_legislation": 4,
+        "queensland_legislation": 3,
+        "nsw_legislation": 3,
+        "western_australian_legislation": 3
+      },
+      "by_category": {
+        "Ind_Industrial": 370,
+        "Ind_Safety": 85,
+        "Ind_Employment": 7
+      },
+      "date_range": {
+        "min": "1904-12-05",
+        "max": "2025-03-07"
+      },
+      "text_length_stats": {
+        "min": 20158,
+        "max": 69625,
+        "mean": 47208.25,
+        "count": 4
+      },
+      "sample_citations": [
+        "Duffy v Construction, Forestry, Mining & Energy Union (No 2) [2009] FCA 299",
+        "Industrial Enterprises Ltd & Ors v Federated Storemen & Packers Union of Australia & Ors [1979] FCA 1",
+        "Stuart v Construction, Forestry, Mining and Energy Union [2009] FCA 1119",
+        "Notification under section 130 by Bechtel Australia Pty Ltd of a dispute with Unions New South Wales and others re clause 32 in Enterprise Agreement [2007] NSWIRComm 1012",
+        "SafeWork NSW v Southern Meats Pty Ltd [2023] NSWDC 204",
+        "Broadway Credit Union v Bellamy & Anor [2000] NSWSC 778",
+        "Young, D. v. The Australlian Workers Union [1985] FCA 414",
+        "Construction Forestry Mining and Energy Union v Endeavour Coal Pty Ltd [2015] FCAFC 76",
+        "Diprose & National Union of Workers v Simplot Australia Pty Ltd [1997] IRCA 279",
+        "Communication Workers Union of Australia Postal and Telecommunications Branch, in the matter of an election for an office in the Communication Workers Union of Australia Postal and Telecommunications Branch, New South Wales [1996] IRCA 236"
+      ]
+    },
+    "Family": {
+      "document_count": 134,
+      "by_type": {
+        "decision": 68,
+        "secondary_legislation": 50,
+        "primary_legislation": 16
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 34,
+        "commonwealth": 92,
+        "tasmania": 2,
+        "queensland": 3,
+        "western_australia": 3
+      },
+      "by_source": {
+        "nsw_caselaw": 34,
+        "federal_court_of_australia": 20,
+        "federal_register_of_legislation": 58,
+        "high_court_of_australia": 14,
+        "tasmanian_legislation": 2,
+        "queensland_legislation": 3,
+        "western_australian_legislation": 3
+      },
+      "by_category": {
+        "Family_General": 64,
+        "Family_Child_Protection": 6,
+        "Family_Parenting": 39,
+        "Family_Property": 4,
+        "Family_Violence": 21
+      },
+      "date_range": {
+        "min": "1915-09-17",
+        "max": "2025-02-26"
+      },
+      "text_length_stats": {
+        "min": 87387,
+        "max": 87387,
+        "mean": 87387.0,
+        "count": 1
+      },
+      "sample_citations": [
+        "Virginia Nemeth (by her tutor) v Australian Litigation Funders Pty Ltd and Ors [2013] NSWSC 529",
+        "The Secretary of the Department of Communities and Justice (DCJ) and the Stonsky Children [2019] NSWChC 8",
+        "Horne (Trustee), in the matter of Tebb (Bankrupt) v Tebb [2013] FCA 585",
+        "State of New South Wales v Irwin (No. 2) [2014] NSWSC 454",
+        "R v Assaf [2022] NSWDC 466",
+        "R v TREGONNING [2009] NSWDC 430",
+        "R v Patterson (No 5) [2024] NSWSC 457",
+        "Costa v Verney [2012] NSWSC 1129",
+        "Jonak v Enscope Pty Ltd [2021] FCA 1606",
+        "Testart v Testart (No 2) [2023] FCA 209"
+      ]
+    },
+    "Tax": {
+      "document_count": 388,
+      "by_type": {
+        "decision": 340,
+        "secondary_legislation": 29,
+        "primary_legislation": 19
+      },
+      "by_jurisdiction": {
+        "commonwealth": 355,
+        "new_south_wales": 27,
+        "south_australia": 3,
+        "queensland": 2,
+        "western_australia": 1
+      },
+      "by_source": {
+        "federal_court_of_australia": 160,
+        "nsw_caselaw": 24,
+        "federal_register_of_legislation": 39,
+        "high_court_of_australia": 156,
+        "south_australian_legislation": 3,
+        "queensland_legislation": 2,
+        "nsw_legislation": 3,
+        "western_australian_legislation": 1
+      },
+      "by_category": {
+        "Tax_Federal": 350,
+        "Tax_State": 38
+      },
+      "date_range": {
+        "min": "1906-04-03",
+        "max": "2025-02-28"
+      },
+      "text_length_stats": {
+        "min": 10938,
+        "max": 51657,
+        "mean": 25743.333333333332,
+        "count": 3
+      },
+      "sample_citations": [
+        "Deputy Commissioner of Taxation v Interactive Community Planning Pty Ltd [2011] FCA 1173",
+        "Deputy Commissioner of Taxation v Blaikie [2006] FCA 1695",
+        "Smith, W.D.W. v Commissioner of Taxation [1982] FCA 96",
+        "Woodside Energy Ltd (ABN 63 005 482 986) v Commissioner of Taxation for the Commonwealth of Australia [2006] FCA 1303",
+        "Pratt Holdings Pty Ltd v Commissioner of Taxation [2004] FCAFC 122",
+        "Deputy Commissioner of Taxation v Fitzgerald [2016] NSWSC 971",
+        "Commissioner of Taxation of the Commonwealth of Australia v Coombes, David [1998] FCA 1634",
+        "Matuschka Holdings Pty Ltd v Chief Commissioner of State Revenue [2007] NSWADT 60",
+        "Noza Holdings Pty Ltd (ACN 098 410 881) v Commissioner of Taxation [2010] FCA 990",
+        "Risby Forest Industries Pty Ltd v Commissioner of Taxation [1988] FCA 474"
+      ]
+    },
+    "Procedural": {
+      "document_count": 166,
+      "by_type": {
+        "decision": 157,
+        "primary_legislation": 7,
+        "secondary_legislation": 2
+      },
+      "by_jurisdiction": {
+        "new_south_wales": 117,
+        "commonwealth": 43,
+        "norfolk_island": 1,
+        "south_australia": 1,
+        "tasmania": 1,
+        "queensland": 3
+      },
+      "by_source": {
+        "nsw_caselaw": 116,
+        "federal_court_of_australia": 18,
+        "high_court_of_australia": 23,
+        "federal_register_of_legislation": 3,
+        "south_australian_legislation": 1,
+        "tasmanian_legislation": 1,
+        "nsw_legislation": 1,
+        "queensland_legislation": 3
+      },
+      "by_category": {
+        "Proc_Civil": 117,
+        "Proc_Evidence": 49
+      },
+      "date_range": {
+        "min": "1920-12-06",
+        "max": "2025-03-06"
+      },
+      "text_length_stats": {
+        "min": 137173,
+        "max": 137173,
+        "mean": 137173.0,
+        "count": 1
+      },
+      "sample_citations": [
+        "Randall v State of New South Wales [2014] NSWDC 48",
+        "Skalkos v Smiles & 5 Ors [2001] NSWSC 261",
+        "Sydney Securities v iGuard Australia Pty Ltd (No 4) [2017] NSWSC 1657",
+        "Reeves v State of NSW [2006] NSWSC 857",
+        "Van Gorp v Davy [2021] NSWSC 1509",
+        "S Lander & Partners Pty Limited v Todd and anor [2017] NSWSC 1119",
+        "R v Hickson (No. 2) [2019] NSWSC 1616",
+        "Trolan v WD Gelle Insurance and Finance Brokers Pty Ltd [2014] NSWDC 185",
+        "Westpac Banking Corporation v Lahood [2011] NSWSC 1057",
+        "In the matter of Festival Corp Pty Ltd [2020] NSWSC 701"
+      ]
+    },
+    "Unclassified": {
+      "document_count": 10,
+      "by_type": {
+        "decision": 10
+      },
+      "by_jurisdiction": {
+        "commonwealth": 10
+      },
+      "by_source": {
+        "federal_court_of_australia": 6,
+        "high_court_of_australia": 4
+      },
+      "by_category": {
+        "Unclassified": 10
+      },
+      "date_range": {
+        "min": "1914-04-03",
+        "max": "2005-05-24"
+      },
+      "text_length_stats": {
+        "min": 0,
+        "max": 0,
+        "mean": 0,
+        "count": 0
+      },
+      "sample_citations": [
+        "Commissioner of Police v Duthie [1989] AFPDT 2",
+        "Nash v von Doussa [2005] FCA 660 - [Not for electronic distribution]",
+        "Shlakht v Nissan Finance Corporation Limited [1991] FCA 943",
+        "Commissioner of Police v Carey [1989] AFPDT 1",
+        "Seidermann, Re W.R.R. G.James Pty Ltd, Ex parte [1988] FCA 310",
+        "Re Cook, W.B. v. Ex parte Ingles & Tiffin (A Firm) [1987] FCA 423",
+        "FLOWERDALE TIMBER COY. PTY. LTD. V. JONES 20/1922",
+        "R v Snow [1919] HCA 48",
+        "Cail v Rea [1914] HCA 87",
+        "THE MANTLE LAMP CO. OF AMERICA & ALADIN INDUSTRIES LTD. 82/1926"
+      ]
+    },
+    "Specialized": {
+      "document_count": 146,
+      "by_type": {
+        "decision": 15,
+        "primary_legislation": 20,
+        "secondary_legislation": 111
+      },
+      "by_jurisdiction": {
+        "commonwealth": 138,
+        "new_south_wales": 6,
+        "norfolk_island": 1,
+        "south_australia": 1
+      },
+      "by_source": {
+        "federal_court_of_australia": 5,
+        "federal_register_of_legislation": 129,
+        "nsw_caselaw": 5,
+        "high_court_of_australia": 5,
+        "south_australian_legislation": 1,
+        "nsw_legislation": 1
+      },
+      "by_category": {
+        "Spec_Aviation": 126,
+        "Spec_Maritime": 14,
+        "Spec_Coronial": 6
+      },
+      "date_range": {
+        "min": "1924-08-20",
+        "max": "2025-02-27"
+      },
+      "text_length_stats": {
+        "min": 11568,
+        "max": 11568,
+        "mean": 11568.0,
+        "count": 1
+      },
+      "sample_citations": [
+        "Civil Aviation Safety Authority v Barrier Aviation Pty Ltd [2013] FCA 227",
+        "Transfield ER Futures Limited v The Ship 'Giovanna Iuliano' (No 2) [2012] FCA 967",
+        "Kim v Daebo International Shipping Co Ltd [2015] FCA 684",
+        "Patrick Stevedoring No 2 Pty Ltd v Turakina Waitemata Stevedoring Services Ltd v Rangitata & Ors [1998] FCA 457",
+        "Civil Aviation Amendment (CASA Board) Act 2014 (Cth)",
+        "Civil Aviation Order 20.7.1B - Aeroplane weight & performance limitations - Aeroplanes above 5 700kg - All operations (turbine & piston-engined) (02/12/2004) (Cth)",
+        "Civil Aviation Order 95.14 - Exemption from the provisions of the Civil Aviation Regulations 1988 - Parasails & gyrogliders (12/12/2004) (Cth)",
+        "Civil Aviation Amendment Order (No. R73) 2004 - Civil Aviation Order 95.26 - Exemption from subregulations 178(1) & (2) of the Civil Aviation Regulations 1988 - For trial operations of supply dropping of search & rescue (SAR) stores at night (12/12/2004) (Cth)",
+        "Civil Aviation Legislation Amendment Act 1995 (Cth)",
+        "Civil Aviation Order 20.16.1 - Loading - General (02/12/2004) (Cth)"
+      ]
+    },
+    "Legislation_Other": {
+      "document_count": 31105,
+      "by_type": {
+        "primary_legislation": 4939,
+        "bill": 102,
+        "secondary_legislation": 26064
+      },
+      "by_jurisdiction": {
+        "south_australia": 208,
+        "commonwealth": 29820,
+        "norfolk_island": 206,
+        "new_south_wales": 318,
+        "tasmania": 126,
+        "queensland": 205,
+        "western_australia": 222
+      },
+      "by_source": {
+        "south_australian_legislation": 208,
+        "federal_register_of_legislation": 30026,
+        "nsw_legislation": 318,
+        "tasmanian_legislation": 126,
+        "queensland_legislation": 205,
+        "western_australian_legislation": 222
+      },
+      "by_category": {
+        "Legislation_Other": 31105
+      },
+      "date_range": {
+        "min": "1906-09-24",
+        "max": "2025-03-10"
+      },
+      "text_length_stats": {
+        "min": 397,
+        "max": 1256873,
+        "mean": 25337.816720257233,
+        "count": 311
+      },
+      "sample_citations": [
+        "Nuclear Waste Storage Facility (Prohibition) Act 2000 (SA)",
+        "Parliament (Joint Services) (Clerks) Amendment Bill 2024 (SA)",
+        "Liquor Licensing (Declared Criminal Organisations) Regulations 2015 (SA)",
+        "Lobbyists Regulations 2016 (SA)",
+        "Landlord and Tenant (Commercial Tenancies) Regulations 1986 (SA)",
+        "National Electricity (South Australia) (Ministerial Reliability Instrument) Amendment Bill 2023 (SA)",
+        "AD/B747/295 - Wing Foreflap Sequence Carriage Clevis Bushings (Cth)",
+        "Customs Charges and Levies Legislation Amendment (Sheep and Lamb) Act 2020 (Cth)",
+        "Superannuation Contributions Tax (Members of Constitutionally Protected Superannuation Funds) Imposition Act 1997 (Cth)",
+        "AD/SM-260/19 - Airspeed Indicator Markings (Cth)"
+      ]
+    },
+    "Constitutional": {
+      "document_count": 39,
+      "by_type": {
+        "secondary_legislation": 13,
+        "decision": 7,
+        "primary_legislation": 19
+      },
+      "by_jurisdiction": {
+        "commonwealth": 39
+      },
+      "by_source": {
+        "federal_register_of_legislation": 32,
+        "high_court_of_australia": 7
+      },
+      "by_category": {
+        "Constitutional_Federal": 33,
+        "Constitutional_State": 6
+      },
+      "date_range": {
+        "min": "1956-03-02",
+        "max": "2025-02-20"
+      },
+      "text_length_stats": {
+        "min": 0,
+        "max": 0,
+        "mean": 0,
+        "count": 0
+      },
+      "sample_citations": [
+        "Singapore-Australia Free Trade Agreement - Determined Manufactured Raw Materials Notice No. 2004/1 (Cth)",
+        "Spence v Queensland [2019] HCA 15",
+        "Alexander v Minister for Home Affairs [2022] HCA 19",
+        "Determination that a distinct population of biological entities is a species under section 517 of the Environment Protection and Biodiversity Conservation Act 1999 (24/09/2001) (Cth)",
+        "Notice of Entry into Force of the Peru-Australia Free Trade Agreement (Cth)",
+        "Determination that a distinct population of biological entities is a species under section 517 of the Environment Protection and Biodiversity Conservation Act 1999 (208) (Cth)",
+        "Customs Tariff Amendment (Thailand-Australia Free Trade Agreement Implementation) Act 2004 (Cth)",
+        "Customs Amendment (Australia-United Kingdom Free Trade Agreement Implementation) Act 2022 (Cth)",
+        "Customs (Australia\u2013US Free Trade Agreement) Regulations 2004 (Cth)",
+        "Notice of Entry into Force of the Free Trade Agreement between Australia and Hong Kong, China (Cth)"
+      ]
+    }
+  },
+  "overlap_stats": {
+    "single_domain": 37449,
+    "multi_domain": 20111,
+    "top_pairs": {
+      "('Administrative', 'Criminal')": 6698,
+      "('Administrative', 'Procedural')": 5996,
+      "('Administrative', 'Commercial')": 5704,
+      "('Administrative', 'Torts')": 4065,
+      "('Administrative', 'Property')": 3346,
+      "('Administrative', 'Family')": 2818,
+      "('Administrative', 'Tax')": 2705,
+      "('Administrative', 'Industrial')": 2641,
+      "('Administrative', 'Equity')": 2078,
+      "('Commercial', 'Procedural')": 2032,
+      "('Criminal', 'Procedural')": 1761,
+      "('Criminal', 'Torts')": 1495,
+      "('Administrative', 'Constitutional')": 1376,
+      "('Criminal', 'Family')": 1343,
+      "('Procedural', 'Torts')": 1271,
+      "('Commercial', 'Criminal')": 1148,
+      "('Commercial', 'Tax')": 922,
+      "('Commercial', 'Equity')": 908,
+      "('Commercial', 'Property')": 811,
+      "('Equity', 'Procedural')": 730
+    }
+  }
+}

@@ -98,3 +98,20 @@ data/by_court/*.jsonl
 !data/.gitkeep
 !data/workspaces/.gitkeep
 !data/domains/.gitkeep
+
+# UI/Next.js
+ui/node_modules/
+ui/.next/
+ui/out/
+ui/.env.local
+
+# Docker volumes
+docker/langfuse/postgres_data/
+
+# Large processed data files
+data/processed/*.json
+!data/processed/extraction_statistics.json
+data/legislation/*.jsonl
+
+# Pytest cache
+.pytest_cache/
