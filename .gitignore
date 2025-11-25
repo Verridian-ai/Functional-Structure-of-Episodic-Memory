@@ -1,0 +1,14 @@
+# Large data files (exceed GitHub's 100MB limit)
+corpus.jsonl
+
+# Video files
+*.mp4
+
+# Temporary files
+nul
+*.tmp
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
