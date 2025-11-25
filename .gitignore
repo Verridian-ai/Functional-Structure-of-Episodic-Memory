@@ -18,8 +18,7 @@ prompts/
 /Consolidated_Documents.md
 /Research Law Docs
 
-# Keep videos in assets (but exclude large ones elsewhere)
-!assets/videos/*.mp4
+# Videos in assets are allowed (for README)
 
 # Old PDF files at root (now in docs/research/)
 gsw_example*.pdf
@@ -92,4 +91,3 @@ data/processed/*.jsonl
 !data/.gitkeep
 !data/workspaces/.gitkeep
 !data/domains/.gitkeep
-assets/videos/*.mp4

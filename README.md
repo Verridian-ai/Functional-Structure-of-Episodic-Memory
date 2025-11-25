@@ -1,15 +1,15 @@
-<![CDATA[<!-- Verridian AI Logo Animation -->
-<p align="center">
-  <a href="https://github.com/Verridian-ai">
-    <img src="assets/images/verridian_logo.png" alt="Verridian AI" width="300">
-  </a>
-</p>
+<![CDATA[<!-- Verridian AI Logo Animation Video -->
+<div align="center">
 
-<p align="center">
-  <a href="assets/videos/verridian_logo_reveal.mp4">
-    <img src="https://img.shields.io/badge/Watch-Logo%20Animation-ff6b6b?style=for-the-badge&logo=youtube" alt="Watch Animation">
-  </a>
-</p>
+### VERRIDIAN AI
+
+https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/raw/master/assets/videos/verridian_logo_reveal.mp4
+
+<a href="https://github.com/Verridian-ai">
+  <img src="assets/images/verridian_logo.png" alt="Verridian AI" width="280">
+</a>
+
+</div>
 
 ---
 
@@ -48,15 +48,15 @@
 
 ## Video Overview: How AI Learns to Remember
 
-<p align="center">
-  <a href="assets/videos/How_AI_Learns_to_Remember.mp4">
-    <img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="How AI Learns to Remember - Click to Watch" width="100%">
-  </a>
-</p>
+<div align="center">
 
-<p align="center">
-  <em>Click image above to watch: How AI Learns to Remember</em>
-</p>
+<img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="GSW: Giving Language Models Human-like Episodic Memory" width="100%">
+
+https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/raw/master/assets/videos/How_AI_Learns_to_Remember.mp4
+
+*How AI Learns to Remember - GSW Episodic Memory System*
+
+</div>
 
 ---
 
