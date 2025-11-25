@@ -27,6 +27,32 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
     showCanvas,
   } = useStore();
 
+  // Touch handling for swipe gestures
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!touchStart) return;
+    
+    const touchEnd = e.changedTouches[0].clientX;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && sidebarOpen) {
+      setSidebarOpen(false);
+    }
+    
+    if (isRightSwipe && !sidebarOpen && touchStart < 30) { // Only open if start from left edge
+      setSidebarOpen(true);
+    }
+    
+    setTouchStart(null);
+  };
+
   // Mobile responsiveness: close sidebar by default on mobile
   useEffect(() => {
     const handleResize = () => {
@@ -50,7 +76,11 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
   );
 
   return (
-    <div className="flex h-screen bg-zinc-950 text-white overflow-hidden relative">
+    <div 
+      className="flex h-screen bg-zinc-950 text-white overflow-hidden relative"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* 3D Brain Background */}
       <VerridianBrainUltimate />
 
@@ -69,144 +99,156 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       <aside
         className={`
             fixed md:relative z-30 h-full
-            ${sidebarOpen ? 'translate-x-0 w-72' : '-translate-x-full md:translate-x-0 md:w-0'}
-            flex flex-col bg-blue-950/40 backdrop-blur-2xl border-r border-cyan-500/20 transition-all duration-300 overflow-hidden
+            ${sidebarOpen ? 'translate-x-0 w-80' : '-translate-x-full md:translate-x-0 md:w-0'}
+            flex flex-col bg-blue-950/60 backdrop-blur-3xl border-r border-cyan-500/10 transition-all duration-300 overflow-hidden shadow-2xl
         `}
       >
-        {/* Sidebar Header */}
-        <div className="flex-shrink-0 p-4 border-b border-cyan-500/20">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="relative w-10 h-10">
+        {/* Sidebar Header Section */}
+        <div className="flex-shrink-0 px-6 pt-8 pb-6 border-b border-white/5">
+          <div className="flex items-center gap-4 mb-8">
+            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 border border-white/10 flex items-center justify-center shadow-lg">
               <Image 
                 src="/verridian_logo.png"
                 alt="Verridian"
-                fill
-                className="object-contain"
+                width={28}
+                height={28}
+                className="object-contain drop-shadow-md"
               />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="font-bold text-white text-lg tracking-tight">LAW OS</h1>
+              <h1 className="font-semibold text-white text-xl tracking-tight leading-none">LAW OS</h1>
+              <p className="text-xs text-zinc-400 font-medium tracking-wider mt-1.5">VERRIDIAN AI</p>
             </div>
           </div>
 
-          {/* New Chat Button */}
+          {/* New Chat Button - Standard 52px Height */}
           <button
             onClick={() => {
                 onNewChat();
                 if (window.innerWidth < 768) setSidebarOpen(false);
             }}
-            className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-xl font-medium shadow-lg shadow-cyan-500/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+            className="group w-full flex items-center gap-4 px-4 h-[52px] bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-medium shadow-lg shadow-cyan-900/20 transition-all active:scale-[0.98]"
           >
-            <Plus className="w-5 h-5" />
-            New Conversation
+            <div className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors">
+                <Plus className="w-5 h-5 text-white stroke-[2.5]" />
+            </div>
+            <span className="tracking-wide text-[15px]">New Project</span>
           </button>
         </div>
 
-        {/* Search */}
-        <div className="flex-shrink-0 p-3">
-          <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-cyan-300/50 group-focus-within:text-cyan-400 transition-colors" />
+        {/* Search Section - Spacious & Distinct */}
+        <div className="flex-shrink-0 px-6 py-6 border-b border-white/5 bg-white/[0.02]">
+          <div className="relative group flex items-center">
+            <Search className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-cyan-400 transition-colors stroke-[2] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search conversations..."
-              className="w-full pl-10 pr-4 py-2.5 bg-blue-950/40 border border-cyan-500/20 rounded-xl text-sm text-white placeholder:text-cyan-300/30 focus:outline-none focus:border-cyan-500/50 focus:bg-blue-900/40 focus:shadow-[0_0_15px_rgba(6,182,212,0.1)] transition-all"
+              placeholder="Search"
+              className="w-full h-12 pl-14 pr-4 bg-black/40 border border-zinc-800 rounded-xl text-[15px] text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:bg-black/60 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
             />
           </div>
         </div>
 
+        {/* Recent Activity Label - Increased Spacing */}
+        <div className="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] mt-2">
+            <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
+            <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-2 py-0.5 rounded-md">{filteredConversations.length}</span>
+        </div>
+
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto px-3 pb-3">
+        <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2 custom-scrollbar">
           {filteredConversations.length === 0 ? (
-            <div className="text-center py-12">
-              <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-blue-900/20 flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-cyan-400" />
+            <div className="text-center py-16 px-4">
+              <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-zinc-900/50 border border-dashed border-zinc-800 flex items-center justify-center">
+                <MessageSquare className="w-6 h-6 text-zinc-600" />
               </div>
-              <p className="text-sm text-cyan-300/70">
-                {searchQuery ? 'No matching conversations' : 'No conversations yet'}
+              <p className="text-sm text-zinc-500 font-medium">
+                {searchQuery ? 'No matches found' : 'No history yet'}
               </p>
-              <p className="text-xs text-cyan-300/50 mt-1">Start a new chat to begin</p>
             </div>
           ) : (
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               {filteredConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`group flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all duration-200 animate-fade-in hover:translate-x-1 ${
+                  className={`group relative flex items-center gap-3.5 p-3.5 rounded-2xl cursor-pointer transition-all duration-200 border ${
                     conv.id === currentConversationId
-                      ? 'bg-cyan-600/20 border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
-                      : 'hover:bg-blue-900/20 border border-transparent'
+                      ? 'bg-blue-900/20 border-cyan-500/30 shadow-md shadow-cyan-900/10'
+                      : 'hover:bg-white/5 border-transparent hover:border-white/5'
                   }`}
-                  style={{ animationDelay: `${index * 50}ms` }}
                   onClick={() => {
                       setCurrentConversation(conv.id);
                       if (window.innerWidth < 768) setSidebarOpen(false);
                   }}
                 >
-                  <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 ${
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                     conv.id === currentConversationId
-                      ? 'bg-cyan-500/20'
-                      : 'bg-blue-900/30'
+                      ? 'bg-gradient-to-br from-cyan-500/20 to-blue-600/20 text-cyan-400'
+                      : 'bg-zinc-900 text-zinc-500 group-hover:text-zinc-300 group-hover:bg-zinc-800'
                   }`}>
-                    <MessageSquare className={`w-4 h-4 ${
-                      conv.id === currentConversationId ? 'text-cyan-400' : 'text-cyan-300/50'
-                    }`} />
+                    <MessageSquare className="w-4.5 h-4.5" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-medium truncate ${
-                      conv.id === currentConversationId ? 'text-white' : 'text-zinc-300'
+                  
+                  <div className="flex-1 min-w-0 py-0.5">
+                    <div className={`text-sm font-medium truncate mb-0.5 ${
+                      conv.id === currentConversationId ? 'text-cyan-100' : 'text-zinc-400 group-hover:text-zinc-200'
                     }`}>
                       {conv.title}
                     </div>
-                    <div className="text-xs text-cyan-300/50 truncate">
-                      {conv.messages.length} messages
+                    <div className="flex items-center gap-2 text-xs text-zinc-600 group-hover:text-zinc-500">
+                        <span>{new Date().toLocaleDateString()}</span>
+                        <span className="w-0.5 h-0.5 rounded-full bg-zinc-600" />
+                        <span>{conv.messages.length} msgs</span>
                     </div>
                   </div>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteConversation(conv.id);
-                    }}
-                    className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-red-500/20 rounded-lg transition-all"
-                  >
-                    <Trash2 className="w-4 h-4 text-red-400" />
-                  </button>
+
+                  {/* Hover Actions */}
+                  <div className="absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity flex items-center bg-zinc-950/80 rounded-lg shadow-sm backdrop-blur-sm">
+                    <button
+                        onClick={(e) => {
+                        e.stopPropagation();
+                        deleteConversation(conv.id);
+                        }}
+                        className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                        title="Delete"
+                    >
+                        <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>
           )}
         </div>
 
-        {/* Sidebar Footer */}
-        <div className="flex-shrink-0 p-3 border-t border-cyan-500/20 space-y-1">
-          <button
-            onClick={() => {
-                toggleCanvas();
-                if (window.innerWidth < 768) setSidebarOpen(false);
-            }}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all hover:bg-blue-900/20 active:scale-95 ${
-              showCanvas
-                ? 'bg-cyan-600/20 text-cyan-300 border border-cyan-500/30'
-                : 'hover:bg-blue-900/20 text-zinc-400 border border-transparent'
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            <span className="flex-1 text-left">Canvas</span>
-            {showCanvas && <div className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(6,182,212,0.5)]" />}
-          </button>
-          <button
-            onClick={toggleAdmin}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-zinc-400 hover:bg-blue-900/20 active:scale-95 transition-all border border-transparent"
-          >
-            <Settings className="w-4 h-4" />
-            <span className="flex-1 text-left">Settings</span>
-          </button>
-        </div>
-
-        {/* Stats - Badges Removed */}
-        <div className="flex-shrink-0 p-3 border-t border-cyan-500/20">
-           {/* Empty container to maintain layout structure if needed, or can be removed entirely */}
+        {/* Sidebar Footer - Separated */}
+        <div className="flex-shrink-0 p-6 border-t border-white/10 bg-[#0B101B]">
+            <div className="space-y-2">
+                <button
+                    onClick={() => {
+                        toggleCanvas();
+                        if (window.innerWidth < 768) setSidebarOpen(false);
+                    }}
+                    className={`group w-full flex items-center gap-4 px-4 h-14 rounded-2xl text-[15px] font-medium transition-all ${
+                    showCanvas
+                        ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                        : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                    }`}
+                >
+                    <FileText className="w-6 h-6 stroke-[1.5]" />
+                    <span className="flex-1 text-left">Canvas</span>
+                    <div className={`w-2 h-2 rounded-full transition-colors ${showCanvas ? 'bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]' : 'bg-zinc-800 group-hover:bg-zinc-700'}`} />
+                </button>
+                
+                <button
+                    onClick={toggleAdmin}
+                    className="w-full flex items-center gap-4 px-4 h-14 rounded-2xl text-[15px] font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent transition-all"
+                >
+                    <Settings className="w-6 h-6 stroke-[1.5]" />
+                    <span className="flex-1 text-left">Settings</span>
+                </button>
+          </div>
         </div>
       </aside>
 

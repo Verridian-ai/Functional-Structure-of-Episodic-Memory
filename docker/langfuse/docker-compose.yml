@@ -9,11 +9,15 @@
 # Access:
 #   - LangFuse UI: http://localhost:3001
 #   - API: http://localhost:3001/api
+#
+# Container Names (unique to avoid conflicts):
+#   - verridian-langfuse-server
+#   - verridian-langfuse-db
 
 services:
   langfuse-server:
     image: langfuse/langfuse:2
-    container_name: langfuse-server
+    container_name: verridian-langfuse-server
     depends_on:
       langfuse-db:
         condition: service_healthy
@@ -49,7 +53,7 @@ services:
 
   langfuse-db:
     image: postgres:16-alpine
-    container_name: langfuse-db
+    container_name: verridian-langfuse-db
     environment:
       - POSTGRES_USER=langfuse
       - POSTGRES_PASSWORD=langfuse_password
@@ -57,7 +61,7 @@ services:
     ports:
       - "5433:5432"
     volumes:
-      - langfuse_postgres_data:/var/lib/postgresql/data
+      - verridian_langfuse_postgres_data:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U langfuse -d langfuse"]
@@ -66,9 +70,9 @@ services:
       retries: 5
 
 volumes:
-  langfuse_postgres_data:
+  verridian_langfuse_postgres_data:
     driver: local
 
 networks:
   default:
-    name: verridian-network
+    name: verridian-langfuse-network

@@ -646,7 +646,7 @@ class LegalEvidenceDetector:
     ) -> List[Dict]:
         """
         Rank questions by Expected Value of Information.
-
+        
         Returns questions sorted by EVI (highest first).
         This drives the "curiosity" of the legal AI.
         """

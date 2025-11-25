@@ -1,0 +1,382 @@
+{
+  "timestamp": "2025-11-26T01:16:26.961440",
+  "workspace_path": "data\\workspaces\\family_law_gsw.json",
+  "workspace_stats": {
+    "total_actors": 5170,
+    "total_questions": 7615,
+    "total_verb_phrases": 0,
+    "total_links": 646,
+    "answered_questions": 0,
+    "answer_rate": "0.0%"
+  },
+  "performance_summary": {
+    "queries_executed": 29,
+    "queries_successful": 29,
+    "success_rate": "100.0%",
+    "total_query_time_ms": 342.95,
+    "avg_query_time_ms": 11.83,
+    "min_query_time_ms": 0.01,
+    "max_query_time_ms": 78.03
+  },
+  "performance_by_query_type": {
+    "find_parties": {
+      "count": 5,
+      "avg_ms": 4.5,
+      "min_ms": 3.35,
+      "max_ms": 6.63
+    },
+    "get_actors_by_role": {
+      "count": 7,
+      "avg_ms": 3.2,
+      "min_ms": 2.16,
+      "max_ms": 4.18
+    },
+    "find_cases_by_type": {
+      "count": 5,
+      "avg_ms": 4.7,
+      "min_ms": 1.44,
+      "max_ms": 9.43
+    },
+    "get_unanswered_questions": {
+      "count": 4,
+      "avg_ms": 0.29,
+      "min_ms": 0.27,
+      "max_ms": 0.31
+    },
+    "get_context_toon": {
+      "count": 3,
+      "avg_ms": 68.14,
+      "min_ms": 62.93,
+      "max_ms": 78.03
+    },
+    "get_context_json": {
+      "count": 3,
+      "avg_ms": 20.54,
+      "min_ms": 18.02,
+      "max_ms": 22.69
+    },
+    "get_timeline": {
+      "count": 1,
+      "avg_ms": 0.01,
+      "min_ms": 0.01,
+      "max_ms": 0.01
+    },
+    "get_stats": {
+      "count": 1,
+      "avg_ms": 7.3,
+      "min_ms": 7.3,
+      "max_ms": 7.3
+    }
+  },
+  "coverage": {
+    "actors_by_type": {
+      "person": 2124,
+      "organization": 1523,
+      "temporal": 1523
+    },
+    "actors_by_role": {
+      "Applicant": 96,
+      "Respondent": 37,
+      "Judge": 967,
+      "Mother": 5,
+      "Father": 1,
+      "Party": 1049,
+      "Court": 1523
+    },
+    "questions_by_type": {
+      "when": 1291,
+      "what": 4162,
+      "how": 140,
+      "who": 1011,
+      "where": 1011
+    }
+  },
+  "detailed_results": [
+    {
+      "type": "find_parties",
+      "params": {
+        "query": ""
+      },
+      "time_ms": 6.63,
+      "results": 50,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_parties",
+      "params": {
+        "query": "smith"
+      },
+      "time_ms": 4.92,
+      "results": 12,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_parties",
+      "params": {
+        "query": "jones"
+      },
+      "time_ms": 4.04,
+      "results": 8,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_parties",
+      "params": {
+        "query": "mother"
+      },
+      "time_ms": 3.58,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_parties",
+      "params": {
+        "query": "XYZ"
+      },
+      "time_ms": 3.35,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Applicant"
+      },
+      "time_ms": 2.91,
+      "results": 96,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Respondent"
+      },
+      "time_ms": 3.47,
+      "results": 37,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Judge"
+      },
+      "time_ms": 3.29,
+      "results": 967,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Mother"
+      },
+      "time_ms": 2.54,
+      "results": 5,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Father"
+      },
+      "time_ms": 2.16,
+      "results": 1,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Party"
+      },
+      "time_ms": 3.84,
+      "results": 1049,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_actors_by_role",
+      "params": {
+        "role": "Court"
+      },
+      "time_ms": 4.18,
+      "results": 1523,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_cases_by_type",
+      "params": {
+        "case_type": "parenting"
+      },
+      "time_ms": 9.07,
+      "results": 20,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_cases_by_type",
+      "params": {
+        "case_type": "property"
+      },
+      "time_ms": 9.43,
+      "results": 20,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_cases_by_type",
+      "params": {
+        "case_type": "divorce"
+      },
+      "time_ms": 1.71,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_cases_by_type",
+      "params": {
+        "case_type": "child_support"
+      },
+      "time_ms": 1.86,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "find_cases_by_type",
+      "params": {
+        "case_type": "general"
+      },
+      "time_ms": 1.44,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_unanswered_questions",
+      "params": {
+        "limit": 5
+      },
+      "time_ms": 0.29,
+      "results": 5,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_unanswered_questions",
+      "params": {
+        "limit": 10
+      },
+      "time_ms": 0.31,
+      "results": 10,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_unanswered_questions",
+      "params": {
+        "limit": 20
+      },
+      "time_ms": 0.27,
+      "results": 20,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_unanswered_questions",
+      "params": {
+        "limit": 50
+      },
+      "time_ms": 0.31,
+      "results": 50,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_toon",
+      "params": {
+        "max_actors": 10
+      },
+      "time_ms": 63.46,
+      "results": 1,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_toon",
+      "params": {
+        "max_actors": 30
+      },
+      "time_ms": 78.03,
+      "results": 1,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_toon",
+      "params": {
+        "max_actors": 50
+      },
+      "time_ms": 62.93,
+      "results": 1,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_json",
+      "params": {
+        "max_actors": 10
+      },
+      "time_ms": 22.69,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_json",
+      "params": {
+        "max_actors": 30
+      },
+      "time_ms": 20.9,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_context_json",
+      "params": {
+        "max_actors": 50
+      },
+      "time_ms": 18.02,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_timeline",
+      "params": {},
+      "time_ms": 0.01,
+      "results": 0,
+      "success": true,
+      "error": ""
+    },
+    {
+      "type": "get_stats",
+      "params": {},
+      "time_ms": 7.3,
+      "results": 0,
+      "success": true,
+      "error": ""
+    }
+  ]
+}

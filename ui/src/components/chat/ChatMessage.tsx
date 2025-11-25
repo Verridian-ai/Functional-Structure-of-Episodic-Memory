@@ -3,9 +3,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { User, Sparkles, Code, FileText, Loader2, CheckCircle2, AlertCircle, Clock, ExternalLink, Copy } from 'lucide-react';
+import { User, Sparkles, Code, FileText, Loader2, CheckCircle2, AlertCircle, Clock, ExternalLink, Copy, BrainCircuit } from 'lucide-react';
 import type { Message, Artifact, ToolCall } from '@/types';
 import { useStore } from '@/lib/store';
+import { SynapseLoader } from '../ui/SynapseLoader';
 
 interface ChatMessageProps {
   message: Message;
@@ -42,7 +43,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
             {isUser ? (
               <User className="w-5 h-5 text-white" />
             ) : (
-              <Sparkles className="w-5 h-5 text-white" />
+              <BrainCircuit className="w-5 h-5 text-white" />
             )}
           </div>
         </div>
@@ -72,12 +73,8 @@ export function ChatMessage({ message }: ChatMessageProps) {
           <div className="prose prose-invert prose-sm max-w-none">
             {message.isStreaming && !message.content ? (
               <div className="flex items-center gap-3 text-zinc-400 py-2">
-                <div className="flex gap-1">
-                  <div className="w-2 h-2 rounded-full bg-cyan-500 typing-dot" />
-                  <div className="w-2 h-2 rounded-full bg-blue-500 typing-dot" />
-                  <div className="w-2 h-2 rounded-full bg-purple-500 typing-dot" />
-                </div>
-                <span className="text-sm">Thinking...</span>
+                <SynapseLoader size="sm" />
+                <span className="text-sm animate-pulse">Neural Processing...</span>
               </div>
             ) : (
               <ReactMarkdown
