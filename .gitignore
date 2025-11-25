@@ -1,14 +1,95 @@
 # Large data files (exceed GitHub's 100MB limit)
 corpus.jsonl
 
-# Video files
-*.mp4
+# Old folders (reorganized into new structure)
+GWK LAW/
+Readme Assets/
+Notes docs/
+GSW_docs/
+prompts/
+
+# Root level duplicates (now in assets/ or docs/)
+/Beyond Search Building a True Legal Reasoning Engine.png
+/GSW Giving Language Model a Human Like Episodic Memory.png
+/RAG VS GSW.png
+/motivation.png
+/operatorv2.png
+/How_AI_Learns_to_Remember.mp4
+/Consolidated_Documents.md
+/Research Law Docs
+
+# Keep videos in assets (but exclude large ones elsewhere)
+!assets/videos/*.mp4
+
+# Old PDF files at root (now in docs/research/)
+gsw_example*.pdf
+GSW_pipeline*.pdf
+GSW_QA_pipeline*.pdf
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE settings
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
 
 # Temporary files
 nul
 *.tmp
 *.log
+*.bak
 
 # OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+
+# Environment variables
+.env
+.env.local
+*.env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data directories (large files)
+data/domains/*.jsonl
+data/processed/*.jsonl
+
+# Keep structure but ignore large files
+!data/.gitkeep
+!data/workspaces/.gitkeep
+!data/domains/.gitkeep
+assets/videos/*.mp4
