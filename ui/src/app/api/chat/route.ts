@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Memory } from 'mem0ai';
+import { MemoryClient } from 'mem0ai';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     // Note: For this test session, we assume MEM0_API_KEY is available or we fallback gracefully
     if (process.env.MEM0_API_KEY) {
       try {
-        memoryClient = new Memory({
+        memoryClient = new MemoryClient({
           apiKey: process.env.MEM0_API_KEY
         });
 

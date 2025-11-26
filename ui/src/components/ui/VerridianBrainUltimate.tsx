@@ -11,12 +11,15 @@ import Image from 'next/image';
 const PARTICLE_COUNT = 4000;
 const BRAIN_SIZE = 2;
 
-// 4-Color Palette
+// 6-Color Palette (Dark Mode / Legal Theme Aligned)
+// Deep Charcoal, Metallic Silver, Emerald, Gold, Deep Blue, and White
 const COLORS = [
-  new THREE.Color('#0088ff'), // Deep Blue
-  new THREE.Color('#00f3ff'), // Electric Cyan
-  new THREE.Color('#b026ff'), // Vivid Purple
-  new THREE.Color('#ffffff'), // Pure White
+  new THREE.Color('#18181b'), // Zinc-900 (Dark Base)
+  new THREE.Color('#52525b'), // Zinc-600 (Metallic Grey)
+  new THREE.Color('#059669'), // Emerald-600 (Legal Green)
+  new THREE.Color('#d97706'), // Amber-600 (Gold/Justice)
+  new THREE.Color('#2563eb'), // Blue-600 (Trust/Authority)
+  new THREE.Color('#fafafa'), // White (Highlights)
 ];
 
 // --- Audio Analyzer Hook ---

@@ -186,23 +186,23 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   const quickActions = [
     {
       icon: Gavel,
-      label: 'Case Law Research',
-      action: () => setInput('Find recent HCA precedents regarding '),
+      label: 'Find Precedents',
+      action: () => setInput('Find case law regarding '),
     },
     {
       icon: ScrollText,
-      label: 'Contract Review',
-      action: () => setInput('Review this clause for ambiguity and risk: '),
+      label: 'Review Contract',
+      action: () => setInput('Review this contract clause for risk: '),
     },
     {
       icon: FileText,
-      label: 'Legal Drafting',
+      label: 'Draft Letter',
       action: () => setInput('Draft a formal Letter of Demand for '),
     },
     {
         icon: BookOpen,
-        label: 'Statutory Analysis',
-        action: () => setInput('Explain s 60CC of the Family Law Act regarding '),
+        label: 'Explain Statute',
+        action: () => setInput('Explain Section 60CC of the Family Law Act in relation to '),
     }
   ];
 
@@ -220,9 +220,9 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                             action.action();
                             textareaRef.current?.focus();
                         }}
-                        className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-sm text-zinc-300 hover:bg-white/10 hover:text-white hover:border-cyan-500/30 transition-all active:scale-95 shadow-lg"
+                        className="flex items-center gap-2 px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-sm text-zinc-300 hover:bg-white/10 hover:text-white hover:border-emerald-500/30 transition-all active:scale-95 shadow-lg"
                     >
-                        <action.icon className="w-3.5 h-3.5 text-cyan-400" />
+                        <action.icon className="w-3.5 h-3.5 text-emerald-400" />
                         <span>{action.label}</span>
                     </button>
                 ))}
@@ -244,7 +244,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                     className="w-8 h-8 object-cover rounded"
                   />
                 ) : (
-                  <FileText className="w-5 h-5 text-cyan-400" />
+                  <FileText className="w-5 h-5 text-emerald-400" />
                 )}
                 <span className="text-sm text-zinc-300 max-w-[120px] truncate">
                   {af.file.name}
@@ -261,11 +261,11 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           </div>
         )}
 
-        {/* Input Container */}
+          {/* Input Container */}
         <div
           className={`relative flex items-end gap-2 p-2 rounded-[2rem] border transition-all duration-300 ${
             isFocused
-              ? 'bg-black/60 border-cyan-500/50 shadow-[0_0_30px_rgba(6,182,212,0.2)] backdrop-blur-xl'
+              ? 'bg-black/60 border-emerald-500/50 shadow-[0_0_30px_rgba(16,185,129,0.2)] backdrop-blur-xl'
               : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-[0_0_20px_rgba(0,0,0,0.5)]'
           }`}
         >
@@ -282,13 +282,13 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           {/* Attachment Button - Uniform 44px Target */}
           <button
             onClick={triggerFileInput}
-            className="flex-shrink-0 w-11 h-11 flex items-center justify-center text-zinc-400 hover:text-cyan-400 transition-colors hover:bg-cyan-500/10 rounded-full active:scale-95 group"
+            className="flex-shrink-0 w-11 h-11 flex items-center justify-center text-zinc-400 hover:text-emerald-400 transition-colors hover:bg-emerald-500/10 rounded-full active:scale-95 group"
             title="Attach file"
           >
             <div className="relative">
                 <PlusCircle className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300 stroke-[1.5]" />
                 {attachedFiles.length > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-cyan-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-emerald-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center">
                     {attachedFiles.length}
                   </span>
                 )}
@@ -321,7 +321,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                 className={`w-11 h-11 flex items-center justify-center rounded-full transition-all duration-300 ${
                   voice.isListening
                     ? 'bg-red-500 text-white shadow-lg shadow-red-500/40 animate-pulse'
-                    : 'text-zinc-400 hover:text-cyan-400 hover:bg-cyan-500/10'
+                    : 'text-zinc-400 hover:text-emerald-400 hover:bg-emerald-500/10'
                 }`}
                 title={voice.isListening ? 'Stop listening' : 'Start voice input'}
               >
@@ -351,7 +351,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                 disabled={(!input.trim() && attachedFiles.length === 0) || disabled}
                 className={`w-11 h-11 flex items-center justify-center rounded-full transition-all transform active:scale-95 ${
                   input.trim() || attachedFiles.length > 0
-                    ? 'bg-cyan-600 text-white shadow-lg hover:bg-cyan-500 shadow-cyan-500/30'
+                    ? 'bg-emerald-600 text-white shadow-lg hover:bg-emerald-500 shadow-emerald-500/30'
                     : 'bg-zinc-800/50 text-zinc-600 cursor-not-allowed'
                 }`}
                 title="Send message"

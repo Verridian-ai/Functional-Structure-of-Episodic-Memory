@@ -3,7 +3,7 @@
 import React, { useState, useRef } from 'react';
 import {
   X, Download, Copy, Edit3, Save, FileText, Code, File,
-  ChevronLeft, ChevronRight, Trash2, Plus, ExternalLink, Highlighter, Layout, Image as ImageIcon, Type, Grid
+  ChevronLeft, ChevronRight, Trash2, Plus, ExternalLink, Highlighter, Layout, Image as ImageIcon, Type, Grid, Scale
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import type { Artifact, ArtifactSection } from '@/types';
@@ -22,16 +22,78 @@ export function CanvasPanel() {
     showCanvas,
     setActiveArtifact,
     updateArtifact,
+    addArtifact,
     toggleCanvas,
   } = useStore();
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [editContent, setEditContent] = useState('');
-  const [highlighterMode, setHighlighterMode] = useState(false);
-  const [imagePrompt, setImagePrompt] = useState('');
-  const [showImageModal, setShowImageModal] = useState(false);
+    const [showLayoutMenu, setShowLayoutMenu] = useState(false);
+    const [canvasConfig, setCanvasConfig] = useState({
+        fontFamily: 'Inter',
+        fontSize: '16px',
+        headingSize: '2.25rem',
+        margin: '2rem',
+        layout: 'standard' as 'standard' | 'legal' | 'newsletter' | 'report'
+    });
 
-  const activeArtifact = artifacts.find(a => a.id === activeArtifactId);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editContent, setEditContent] = useState('');
+    const [highlighterMode, setHighlighterMode] = useState(false);
+    const [imagePrompt, setImagePrompt] = useState('');
+    const [showImageModal, setShowImageModal] = useState(false);
+
+    const activeArtifact = artifacts.find(a => a.id === activeArtifactId);
+
+    const TEMPLATES = [
+      { id: 'legal', name: 'Legal Brief', icon: Scale, desc: 'Standard legal document layout with wide margins and formal font.' },
+      { id: 'report', name: 'Client Report', icon: FileText, desc: 'Professional report with cover page structure and headers.' },
+      { id: 'newsletter', name: 'Legal Newsletter', icon: Layout, desc: 'Multi-column layout for updates and news.' },
+      { id: 'standard', name: 'Blank Document', icon: File, desc: 'Empty canvas with standard formatting.' },
+    ];
+
+    const createFromTemplate = (templateId: string) => {
+      const templateName = TEMPLATES.find(t => t.id === templateId)?.name || 'Document';
+      
+      const structure: Artifact['structure'] = {
+          layout: templateId as any,
+          sections: []
+      };
+
+      if (templateId === 'legal') {
+          structure.sections = [
+              { id: 'h1', type: 'text', region: 'header', content: '<div class="text-center font-bold uppercase">In the Federal Circuit and Family Court of Australia</div>' },
+              { id: 'm1', type: 'text', region: 'main', content: '<h3>1. INTRODUCTION</h3><p>The Applicant applies for the following orders...</p>' },
+              { id: 'f1', type: 'text', region: 'footer', content: '<div class="text-xs text-center">Page 1 of 1</div>' }
+          ];
+      } else if (templateId === 'newsletter') {
+          structure.sections = [
+               { id: 'h1', type: 'text', region: 'header', content: '<h1 class="text-4xl font-bold text-emerald-700">Legal Update</h1><p class="text-zinc-500">November 2025 Edition</p>' },
+               { id: 's1', type: 'text', region: 'sidebar-left', content: '<h3>Contents</h3><ul><li>Case Law Update</li><li>Legislative Changes</li></ul>' },
+               { id: 'm1', type: 'text', region: 'main', content: '<h2>New Precedent in Family Law</h2><p>A recent decision has shifted the landscape regarding...</p>' }
+          ];
+      } else {
+           structure.sections = [
+              { id: 'm1', type: 'text', region: 'main', content: '<h1>Untitled Document</h1><p>Start typing here...</p>' }
+           ];
+      }
+
+      const newArtifact: Artifact = {
+          id: `artifact_${Date.now()}`,
+          type: 'smart-canvas',
+          title: `New ${templateName}`,
+          content: '',
+          structure,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+      };
+      
+      addArtifact(newArtifact);
+      setShowLayoutMenu(false);
+    };
+
+    const updateCanvasSetting = (key: keyof typeof canvasConfig, value: string) => {
+        setCanvasConfig(prev => ({ ...prev, [key]: value }));
+    };
+
 
   if (!showCanvas) return null;
 
@@ -138,18 +200,18 @@ export function CanvasPanel() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-blue-950/40 backdrop-blur-xl border-l border-cyan-500/20">
+    <div className="h-full flex flex-col bg-zinc-950/40 backdrop-blur-xl border-l border-white/5">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-cyan-500/20">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
         <div className="flex items-center gap-3">
           <button
             onClick={toggleCanvas}
-            className="p-1.5 hover:bg-blue-900/30 rounded-lg transition"
+            className="p-1.5 hover:bg-white/5 rounded-lg transition"
           >
-            <ChevronRight className="w-5 h-5 text-cyan-300/70" />
+            <ChevronRight className="w-5 h-5 text-zinc-400" />
           </button>
           <h2 className="font-semibold text-white">Canvas</h2>
-          <span className="px-2 py-0.5 text-xs bg-blue-900/30 rounded-full text-cyan-300/70 border border-cyan-500/10">
+          <span className="px-2 py-0.5 text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10">
             {artifacts.length} items
           </span>
         </div>
@@ -169,19 +231,102 @@ export function CanvasPanel() {
             {/* Highlighter Toggle */}
              <button
                 onClick={() => setHighlighterMode(!highlighterMode)}
-                className={`p-2 rounded-lg transition ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-blue-900/30 text-zinc-400 hover:text-white'}`}
+                className={`p-2 rounded-lg transition ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Highlighter Pen"
               >
                 <Highlighter className="w-4 h-4" />
               </button>
 
-            {/* Layout/Grid Toggle (Placeholder for now) */}
-             <button
-                className="p-2 hover:bg-blue-900/30 text-zinc-400 hover:text-white rounded-lg transition"
-                title="Layout Options"
+            {/* Layout/Grid Toggle */}
+            <div className="relative">
+              <button
+                onClick={() => setShowLayoutMenu(!showLayoutMenu)}
+                className={`p-2 rounded-lg transition ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                title="Layout & Templates"
               >
-                <Grid className="w-4 h-4" />
+                <Layout className="w-4 h-4" />
               </button>
+
+              {showLayoutMenu && (
+                <div className="absolute right-0 top-full mt-2 w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                    {/* Header */}
+                    <div className="px-4 py-3 border-b border-zinc-800 bg-black/20">
+                        <h3 className="text-sm font-semibold text-white flex items-center gap-2">
+                            <Layout className="w-4 h-4 text-emerald-500" />
+                            Canvas Layout
+                        </h3>
+                    </div>
+
+                    <div className="p-4 space-y-6 max-h-[60vh] overflow-y-auto custom-scrollbar">
+                        {/* Templates Section */}
+                        <div>
+                            <h4 className="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-3">New from Template</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {TEMPLATES.map(t => (
+                                    <button
+                                        key={t.id}
+                                        onClick={() => createFromTemplate(t.id)}
+                                        className="flex flex-col items-center gap-2 p-3 rounded-lg bg-zinc-800 hover:bg-zinc-700 hover:ring-1 hover:ring-emerald-500/50 transition group"
+                                    >
+                                        <div className="w-8 h-8 rounded-full bg-black/30 flex items-center justify-center group-hover:bg-emerald-500/20 transition-colors">
+                                            <t.icon className="w-4 h-4 text-zinc-400 group-hover:text-emerald-400" />
+                                        </div>
+                                        <span className="text-xs font-medium text-zinc-300 group-hover:text-white">{t.name}</span>
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Config Section */}
+                        <div className="space-y-4 border-t border-zinc-800 pt-4">
+                            <h4 className="text-xs font-medium text-zinc-500 uppercase tracking-wider">Typography & Spacing</h4>
+                            
+                            <div className="space-y-3">
+                                <div>
+                                    <label className="text-xs text-zinc-400 mb-1 block">Font Family</label>
+                                    <select 
+                                        value={canvasConfig.fontFamily}
+                                        onChange={(e) => updateCanvasSetting('fontFamily', e.target.value)}
+                                        className="w-full bg-black/40 border border-zinc-700 rounded-lg px-2 py-1.5 text-xs text-white focus:border-emerald-500 outline-none"
+                                    >
+                                        <option value="Inter">Inter (Sans)</option>
+                                        <option value="Merriweather">Merriweather (Serif)</option>
+                                        <option value="JetBrains Mono">Monospace</option>
+                                    </select>
+                                </div>
+                                
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label className="text-xs text-zinc-400 mb-1 block">Font Size</label>
+                                        <select 
+                                            value={canvasConfig.fontSize}
+                                            onChange={(e) => updateCanvasSetting('fontSize', e.target.value)}
+                                            className="w-full bg-black/40 border border-zinc-700 rounded-lg px-2 py-1.5 text-xs text-white focus:border-emerald-500 outline-none"
+                                        >
+                                            <option value="14px">Small (14px)</option>
+                                            <option value="16px">Medium (16px)</option>
+                                            <option value="18px">Large (18px)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="text-xs text-zinc-400 mb-1 block">Margins</label>
+                                        <select 
+                                            value={canvasConfig.margin}
+                                            onChange={(e) => updateCanvasSetting('margin', e.target.value)}
+                                            className="w-full bg-black/40 border border-zinc-700 rounded-lg px-2 py-1.5 text-xs text-white focus:border-emerald-500 outline-none"
+                                        >
+                                            <option value="1rem">Compact</option>
+                                            <option value="2rem">Standard</option>
+                                            <option value="3rem">Wide</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              )}
+            </div>
 
             {isEditing ? (
               <button
@@ -194,7 +339,7 @@ export function CanvasPanel() {
             ) : (
               <button
                 onClick={handleEdit}
-                className="p-2 hover:bg-blue-900/30 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
                 title="Edit"
               >
                 <Edit3 className="w-4 h-4" />
@@ -202,7 +347,7 @@ export function CanvasPanel() {
             )}
             <button
               onClick={handleCopy}
-              className="p-2 hover:bg-blue-900/30 text-zinc-400 hover:text-white rounded-lg transition"
+              className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
               title="Copy"
             >
               <Copy className="w-4 h-4" />
@@ -211,7 +356,7 @@ export function CanvasPanel() {
             {/* Export Menu */}
             <div className="relative group">
               <button
-                className="p-2 hover:bg-blue-900/30 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
                 title="Export"
               >
                 <Download className="w-4 h-4" />
@@ -242,15 +387,15 @@ export function CanvasPanel() {
 
       {/* Tabs */}
       {artifacts.length > 0 && (
-        <div className="flex items-center gap-1 px-2 py-2 border-b border-cyan-500/20 overflow-x-auto">
+        <div className="flex items-center gap-1 px-2 py-2 border-b border-white/5 overflow-x-auto">
           {artifacts.map((artifact) => (
             <button
               key={artifact.id}
               onClick={() => setActiveArtifact(artifact.id)}
               className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition ${
                 artifact.id === activeArtifactId
-                  ? 'bg-cyan-600/20 text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10'
-                  : 'hover:bg-blue-900/30 text-cyan-300/50 border border-transparent'
+                  ? 'bg-white/10 text-white border border-white/10 shadow-sm'
+                  : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
               }`}
             >
               {getArtifactIcon(artifact)}
@@ -299,31 +444,39 @@ export function CanvasPanel() {
                 </div>
             )}
 
+            {/* Content Rendering Logic */}
             {isEditing ? (
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full h-full p-4 bg-transparent text-white font-mono text-sm resize-none outline-none"
+                className="w-full h-full p-8 bg-transparent text-white font-mono text-sm resize-none outline-none leading-relaxed"
                 spellCheck={false}
               />
-            ) : activeArtifact.type === 'smart-canvas' ? (
-               <SmartCanvasRenderer artifact={activeArtifact} />
             ) : (
-              <ArtifactContent artifact={activeArtifact} highlighterMode={highlighterMode} />
+              <div className="h-full w-full relative">
+                 {/* Only show SmartCanvasRenderer for smart-canvas type, else standard text/markdown */}
+                 {activeArtifact.type === 'smart-canvas' ? (
+                    <SmartCanvasRenderer artifact={activeArtifact} />
+                 ) : (
+                    <ArtifactContent artifact={activeArtifact} highlighterMode={highlighterMode} />
+                 )}
+              </div>
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-cyan-300/30">
-            <FileText className="w-12 h-12 mb-4 opacity-50" />
-            <p>No artifacts yet</p>
-            <p className="text-sm mt-1">Documents, code, and letters will appear here</p>
+          <div className="flex flex-col items-center justify-center h-full text-zinc-500">
+            <FileText className="w-16 h-16 mb-6 opacity-20 stroke-[1.5]" />
+            <p className="text-lg font-medium text-zinc-400">No artifacts selected</p>
+            <p className="text-sm mt-2 max-w-xs text-center opacity-60">
+              Select an item from the chat or ask Verridian to create a new document.
+            </p>
           </div>
         )}
       </div>
       
       {/* Footer ... */}
       {activeArtifact && (
-        <div className="px-4 py-2 border-t border-cyan-500/20 text-xs text-cyan-300/50 flex items-center justify-between bg-blue-900/10">
+        <div className="px-4 py-2 border-t border-white/5 text-xs text-zinc-500 flex items-center justify-between bg-black/20">
           <span>
             {activeArtifact.type} • Created {activeArtifact.createdAt ? new Date(activeArtifact.createdAt).toLocaleString() : 'Unknown'}
           </span>
@@ -344,12 +497,12 @@ function SmartCanvasRenderer({ artifact }: { artifact: Artifact }) {
                 <div 
                     key={section.id}
                     className={`
-                        relative border border-transparent hover:border-cyan-500/30 transition-all group p-4
+                        relative border border-transparent hover:border-zinc-300 transition-all group p-4
                         ${getSectionClass(section.region)}
                     `}
                     style={section.style as any}
                 >
-                    <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-cyan-100 text-cyan-800 text-[10px] px-1 uppercase font-bold">
+                    <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-zinc-100 text-zinc-800 text-[10px] px-1 uppercase font-bold">
                         {section.region}
                     </div>
                     

@@ -100,24 +100,20 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         className={`
             fixed md:relative z-30 h-full
             ${sidebarOpen ? 'translate-x-0 w-80' : '-translate-x-full md:translate-x-0 md:w-0'}
-            flex flex-col bg-blue-950/60 backdrop-blur-3xl border-r border-cyan-500/10 transition-all duration-300 overflow-hidden shadow-2xl
+            flex flex-col bg-zinc-950/80 backdrop-blur-3xl border-r border-white/5 transition-all duration-300 overflow-hidden shadow-2xl
         `}
       >
         {/* Sidebar Header Section */}
-        <div className="flex-shrink-0 px-6 pt-8 pb-6 border-b border-white/5">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="relative w-12 h-12 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/20 border border-white/10 flex items-center justify-center shadow-lg">
+        <div className="flex-shrink-0 px-8 pt-8 pb-6 border-b border-white/5">
+          <div className="flex justify-center mb-8">
+            <div className="relative w-40 h-40 flex items-center justify-center hover:scale-105 transition-transform duration-300">
               <Image 
-                src="/verridian_logo.png"
+                src="/verridian_logo_new.png"
                 alt="Verridian"
-                width={28}
-                height={28}
-                className="object-contain drop-shadow-md"
+                fill
+                className="object-contain drop-shadow-2xl"
+                priority
               />
-            </div>
-            <div className="flex-1 min-w-0">
-              <h1 className="font-semibold text-white text-xl tracking-tight leading-none">LAW OS</h1>
-              <p className="text-xs text-zinc-400 font-medium tracking-wider mt-1.5">VERRIDIAN AI</p>
             </div>
           </div>
 
@@ -127,9 +123,9 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                 onNewChat();
                 if (window.innerWidth < 768) setSidebarOpen(false);
             }}
-            className="group w-full flex items-center gap-4 px-4 h-[52px] bg-cyan-600 hover:bg-cyan-500 text-white rounded-xl font-medium shadow-lg shadow-cyan-900/20 transition-all active:scale-[0.98]"
+            className="group w-full flex items-center gap-4 px-4 h-[52px] bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium shadow-lg transition-all active:scale-[0.98]"
           >
-            <div className="w-8 h-8 flex items-center justify-center bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors">
+            <div className="w-8 h-8 flex items-center justify-center bg-white/5 rounded-lg group-hover:bg-white/10 transition-colors">
                 <Plus className="w-5 h-5 text-white stroke-[2.5]" />
             </div>
             <span className="tracking-wide text-[15px]">New Project</span>
@@ -137,33 +133,33 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         </div>
 
         {/* Search Section - Spacious & Distinct */}
-        <div className="flex-shrink-0 px-6 py-6 border-b border-white/5 bg-white/[0.02]">
+        <div className="flex-shrink-0 px-8 py-6 border-b border-white/5 bg-white/[0.02]">
           <div className="relative group flex items-center">
-            <Search className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-cyan-400 transition-colors stroke-[2] pointer-events-none" />
+            <Search className="absolute left-4 w-5 h-5 text-zinc-500 group-focus-within:text-zinc-200 transition-colors stroke-[2] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search"
-              className="w-full h-12 pl-14 pr-4 bg-black/40 border border-zinc-800 rounded-xl text-[15px] text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:bg-black/60 focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all"
+              className="w-full h-12 pl-14 pr-4 bg-black/40 border border-zinc-800 rounded-xl text-[15px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
             />
           </div>
         </div>
 
         {/* Recent Activity Label - Increased Spacing */}
-        <div className="px-6 pt-6 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] mt-2">
+        <div className="px-8 pt-6 pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] mt-2">
             <span className="text-xs font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
             <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-2 py-0.5 rounded-md">{filteredConversations.length}</span>
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-2 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto px-6 pb-4 space-y-2 custom-scrollbar">
           {filteredConversations.length === 0 ? (
             <div className="text-center py-16 px-4">
               <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-zinc-900/50 border border-dashed border-zinc-800 flex items-center justify-center">
-                <MessageSquare className="w-6 h-6 text-zinc-600" />
+                <MessageSquare className="w-6 h-6 text-zinc-700" />
               </div>
-              <p className="text-sm text-zinc-500 font-medium">
+              <p className="text-sm text-zinc-600 font-medium">
                 {searchQuery ? 'No matches found' : 'No history yet'}
               </p>
             </div>
@@ -174,7 +170,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                   key={conv.id}
                   className={`group relative flex items-center gap-3.5 p-3.5 rounded-2xl cursor-pointer transition-all duration-200 border ${
                     conv.id === currentConversationId
-                      ? 'bg-blue-900/20 border-cyan-500/30 shadow-md shadow-cyan-900/10'
+                      ? 'bg-white/10 border-white/10 shadow-md'
                       : 'hover:bg-white/5 border-transparent hover:border-white/5'
                   }`}
                   onClick={() => {
@@ -184,15 +180,15 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                 >
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                     conv.id === currentConversationId
-                      ? 'bg-gradient-to-br from-cyan-500/20 to-blue-600/20 text-cyan-400'
-                      : 'bg-zinc-900 text-zinc-500 group-hover:text-zinc-300 group-hover:bg-zinc-800'
+                      ? 'bg-white/10 text-white'
+                      : 'bg-zinc-900 text-zinc-600 group-hover:text-zinc-400 group-hover:bg-zinc-800'
                   }`}>
                     <MessageSquare className="w-4.5 h-4.5" />
                   </div>
                   
                   <div className="flex-1 min-w-0 py-0.5">
                     <div className={`text-sm font-medium truncate mb-0.5 ${
-                      conv.id === currentConversationId ? 'text-cyan-100' : 'text-zinc-400 group-hover:text-zinc-200'
+                      conv.id === currentConversationId ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'
                     }`}>
                       {conv.title}
                     </div>
@@ -223,7 +219,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         </div>
 
         {/* Sidebar Footer - Separated */}
-        <div className="flex-shrink-0 p-6 border-t border-white/10 bg-[#0B101B]">
+        <div className="flex-shrink-0 p-8 border-t border-white/10 bg-black/20">
             <div className="space-y-2">
                 <button
                     onClick={() => {
@@ -232,13 +228,13 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                     }}
                     className={`group w-full flex items-center gap-4 px-4 h-14 rounded-2xl text-[15px] font-medium transition-all ${
                     showCanvas
-                        ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
+                        ? 'bg-white/10 text-white border border-white/10'
                         : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
                     }`}
                 >
                     <FileText className="w-6 h-6 stroke-[1.5]" />
                     <span className="flex-1 text-left">Canvas</span>
-                    <div className={`w-2 h-2 rounded-full transition-colors ${showCanvas ? 'bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]' : 'bg-zinc-800 group-hover:bg-zinc-700'}`} />
+                    <div className={`w-2 h-2 rounded-full transition-colors ${showCanvas ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'bg-zinc-800 group-hover:bg-zinc-700'}`} />
                 </button>
                 
                 <button
@@ -255,31 +251,31 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 relative z-[2]">
         {/* Top Bar */}
-        <header className="flex-shrink-0 flex items-center justify-between px-4 py-3 bg-blue-950/40 backdrop-blur-xl border-b border-cyan-500/20">
+        <header className="flex-shrink-0 flex items-center justify-between px-4 py-3 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-blue-900/30 rounded-xl transition-colors"
+              className="p-2 hover:bg-white/5 rounded-xl transition-colors"
             >
               {sidebarOpen ? (
-                <ChevronLeft className="w-5 h-5 text-cyan-300/70" />
+                <ChevronLeft className="w-5 h-5 text-zinc-400" />
               ) : (
-                <Menu className="w-5 h-5 text-cyan-300/70" />
+                <Menu className="w-5 h-5 text-zinc-400" />
               )}
             </button>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Model Badge */}
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-900/20 rounded-full border border-cyan-500/20">
-              <div className="w-2 h-2 rounded-full status-online bg-cyan-400 shadow-[0_0_8px_rgba(6,182,212,0.8)]" />
-              <span className="text-xs text-cyan-200">Gemini 3 Pro</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+              <div className="w-2 h-2 rounded-full status-online bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
+              <span className="text-xs text-zinc-300">Gemini 3 Pro</span>
             </div>
 
             {/* Knowledge Base Badge */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-cyan-600/20 rounded-full border border-cyan-500/30">
-              <Brain className="w-3.5 h-3.5 text-cyan-300" />
-              <span className="text-xs text-cyan-200">GSW Connected</span>
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+              <Brain className="w-3.5 h-3.5 text-zinc-300" />
+              <span className="text-xs text-zinc-300">GSW Connected</span>
             </div>
           </div>
         </header>

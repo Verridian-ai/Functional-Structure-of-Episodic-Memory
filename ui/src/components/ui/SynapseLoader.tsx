@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function SynapseLoader({ size = 'md', color = 'cyan' }: { size?: 'sm' | 'md' | 'lg', color?: 'cyan' | 'purple' }) {
+export function SynapseLoader({ size = 'md', color = 'emerald' }: { size?: 'sm' | 'md' | 'lg', color?: 'emerald' | 'purple' }) {
   // Map sizes to pixel values
   const sizeMap = {
     sm: 24,
@@ -10,9 +10,9 @@ export function SynapseLoader({ size = 'md', color = 'cyan' }: { size?: 'sm' | '
   
   const px = sizeMap[size];
   
-  const colorClass = color === 'cyan' ? 'bg-cyan-500' : 'bg-purple-500';
-  const shadowClass = color === 'cyan' ? 'shadow-[0_0_10px_rgba(6,182,212,0.8)]' : 'shadow-[0_0_10px_rgba(168,85,247,0.8)]';
-  const borderColorClass = color === 'cyan' ? 'border-cyan-400' : 'border-purple-400';
+  const colorClass = color === 'emerald' ? 'bg-emerald-500' : 'bg-purple-500';
+  const shadowClass = color === 'emerald' ? 'shadow-[0_0_10px_rgba(16,185,129,0.8)]' : 'shadow-[0_0_10px_rgba(168,85,247,0.8)]';
+  const borderColorClass = color === 'emerald' ? 'border-emerald-400' : 'border-purple-400';
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: px, height: px }}>

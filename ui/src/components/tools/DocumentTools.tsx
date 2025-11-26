@@ -229,14 +229,14 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 flex items-center justify-center">
             <FileText className="w-4 h-4 text-white" />
           </div>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="bg-transparent text-white font-medium text-lg outline-none border-b border-transparent hover:border-zinc-700 focus:border-cyan-500 transition"
+            className="bg-transparent text-white font-medium text-lg outline-none border-b border-transparent hover:border-zinc-700 focus:border-emerald-500 transition"
           />
         </div>
 
@@ -251,7 +251,7 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
           <button
             onClick={() => setIsPreview(!isPreview)}
             className={`p-2.5 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center ${
-              isPreview ? 'bg-cyan-600/20 text-cyan-400' : 'hover:bg-zinc-800 text-zinc-400'
+              isPreview ? 'bg-emerald-600/20 text-emerald-400' : 'hover:bg-zinc-800 text-zinc-400'
             }`}
           >
             {isPreview ? <Edit3 className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
@@ -268,9 +268,9 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
               <button
                 key={template.id}
                 onClick={() => applyTemplate(template)}
-                className="p-4 text-left bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-cyan-500/50 transition active:scale-[0.98]"
+                className="p-4 text-left bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-emerald-500/50 transition active:scale-[0.98]"
               >
-                <FileText className="w-6 h-6 text-blue-400 mb-2" />
+                <FileText className="w-6 h-6 text-zinc-400 mb-2" />
                 <div className="text-base font-medium text-white">{template.name}</div>
               </button>
             ))}
@@ -339,7 +339,7 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
 
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition min-h-[44px] font-medium shadow-lg shadow-cyan-900/20"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition min-h-[44px] font-medium shadow-lg shadow-emerald-900/20"
           >
             <Save className="w-5 h-5" />
             <span className="hidden sm:inline">Save to Canvas</span>
