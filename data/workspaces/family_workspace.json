@@ -1,1202 +1,5301 @@
 {
   "metadata": {
-    "created_at": "2025-11-25T12:00:34.006187",
-    "last_updated": "2025-11-25T12:04:03.585917",
-    "chunk_count": 10,
+    "created_at": "2025-11-26T17:16:42.853743",
+    "last_updated": "2025-11-26T17:34:03.243758",
+    "chunk_count": 15,
     "document_count": 0,
     "domain": "family"
   },
   "actors": {
     "actor_001": {
       "id": "actor_001",
-      "name": "Family Violence Reforms Act 2017",
+      "name": "Intervention Orders (Prevention of Abuse) Act 2009 (SA)",
       "actor_type": "person",
-      "aliases": [],
+      "aliases": [
+        "This Act"
+      ],
       "roles": [
         "Primary Legislation"
       ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_002": {
+      "id": "actor_002",
+      "name": "South Australia",
+      "actor_type": "organization",
+      "aliases": [
+        "this State"
+      ],
+      "roles": [
+        "Jurisdiction"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_003": {
+      "id": "actor_003",
+      "name": "intervention orders",
+      "actor_type": "person",
+      "aliases": [
+        "an intervention order",
+        "the order",
+        "interim intervention order",
+        "final intervention order"
+      ],
+      "roles": [
+        "Subject of Act",
+        "Legal Instrument"
+      ],
       "states": [
         {
-          "id": "state_942f7770",
-          "entity_id": "actor_001",
-          "name": "Status",
-          "value": "Repealed",
+          "id": "state_8c9e9010",
+          "entity_id": "actor_003",
+          "name": "Type",
+          "value": "interim",
           "start_date": null,
           "end_date": null,
-          "source_chunk_id": "chunk_0664671c"
+          "source_chunk_id": "chunk_2528bbd7"
+        },
+        {
+          "id": "state_7a60911f",
+          "entity_id": "actor_003",
+          "name": "Type",
+          "value": "final",
+          "start_date": null,
+          "end_date": null,
+          "source_chunk_id": "chunk_2528bbd7"
         }
       ],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_0664671c"
-      ]
-    },
-    "actor_002": {
-      "id": "actor_002",
-      "name": "section 6",
-      "actor_type": "person",
-      "aliases": [],
-      "roles": [
-        "Legal Reference"
-      ],
-      "states": [],
-      "spatio_temporal_link_ids": [],
-      "involved_cases": [],
-      "source_chunk_ids": [
-        "chunk_0664671c"
-      ]
-    },
-    "actor_003": {
-      "id": "actor_003",
-      "name": "Family Court (Surrogacy) Rules 2009",
-      "actor_type": "person",
-      "aliases": [
-        "These rules"
-      ],
-      "roles": [
-        "Rules"
-      ],
-      "states": [],
-      "spatio_temporal_link_ids": [],
-      "involved_cases": [],
-      "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_004": {
       "id": "actor_004",
-      "name": "1",
+      "name": "associated problem gambling and tenancy orders",
       "actor_type": "person",
-      "aliases": [],
+      "aliases": [
+        "associated orders"
+      ],
       "roles": [
-        "Rule Number"
+        "Subject of Act",
+        "Legal Instrument"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_005": {
       "id": "actor_005",
-      "name": "2",
+      "name": "domestic and non-domestic abuse",
       "actor_type": "person",
-      "aliases": [],
+      "aliases": [
+        "abuse",
+        "act of abuse",
+        "domestic abuse",
+        "non-domestic abuse"
+      ],
       "roles": [
-        "Rule Number"
+        "Subject of Act",
+        "Harm"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_006": {
       "id": "actor_006",
-      "name": "3",
+      "name": "Part 1—Preliminary",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_007": {
       "id": "actor_007",
-      "name": "4",
+      "name": "1 Short title",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_008": {
       "id": "actor_008",
-      "name": "5",
+      "name": "3 Interpretation",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_009": {
       "id": "actor_009",
-      "name": "7",
+      "name": "4 Application of Act outside State",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_010": {
       "id": "actor_010",
-      "name": "8",
+      "name": "Part 2—Objects of Act",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_011": {
       "id": "actor_011",
-      "name": "9",
+      "name": "5 Objects of Act",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_012": {
       "id": "actor_012",
-      "name": "10",
+      "name": "Part 3—Intervention and associated orders",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_013": {
       "id": "actor_013",
-      "name": "11",
+      "name": "Division 1—General",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_014": {
       "id": "actor_014",
-      "name": "12",
+      "name": "6 Grounds for issuing intervention order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Rule Number"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_015": {
       "id": "actor_015",
-      "name": "Parliament",
-      "actor_type": "organization",
+      "name": "7 Persons for whose protection intervention order may be issued",
+      "actor_type": "person",
       "aliases": [],
-      "roles": [],
+      "roles": [
+        "Section of Act"
+      ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_c5d6832f"
+        "chunk_2528bbd7"
       ]
     },
     "actor_016": {
       "id": "actor_016",
-      "name": "Surrogacy Act 2008",
+      "name": "8 Meaning of abuse—domestic and non‑domestic",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Relevant Legislation"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_017": {
       "id": "actor_017",
-      "name": "Chief Judge",
+      "name": "9 Priority for certain interventions",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Approving Authority"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_018": {
       "id": "actor_018",
-      "name": "Council",
-      "actor_type": "organization",
+      "name": "10 Principles for intervention against abuse",
+      "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Regulatory Body"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_019": {
       "id": "actor_019",
-      "name": "child",
+      "name": "11 Ongoing effect of intervention order",
       "actor_type": "person",
-      "aliases": [
-        "the child"
-      ],
+      "aliases": [],
       "roles": [
-        "Subject child"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_020": {
       "id": "actor_020",
-      "name": "Family Court",
-      "actor_type": "organization",
-      "aliases": [
-        "the Court"
-      ],
+      "name": "12 Terms of intervention order—general",
+      "actor_type": "person",
+      "aliases": [],
       "roles": [
-        "Court"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_021": {
       "id": "actor_021",
-      "name": "Family Court Rules 2021",
+      "name": "13 Terms of intervention order—intervention programs",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Procedural Rules"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_022": {
       "id": "actor_022",
-      "name": "SL 2021/148",
+      "name": "14 Terms of intervention order—firearms",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Amendment"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_023": {
       "id": "actor_023",
-      "name": "parentage order",
+      "name": "15 Terms of intervention order—date after which defendant may apply for variation or revocation",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Legal Order"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_024": {
       "id": "actor_024",
-      "name": "applicants",
+      "name": "15A Declaration that intervention order addresses domestic violence concern",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Applicants"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_025": {
       "id": "actor_025",
-      "name": "marriage certificate",
+      "name": "16 Inconsistent Family Law Act or State child protection orders",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Evidence"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_026": {
       "id": "actor_026",
-      "name": "ancillary application",
+      "name": "17 Explanation for defendant and protected persons",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Legal Application"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_027": {
       "id": "actor_027",
-      "name": "approved plan",
+      "name": "Division 2—Police orders",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Legal Plan"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_028": {
       "id": "actor_028",
-      "name": "person",
+      "name": "18 Interim intervention order issued by police",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Affected Party"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_029": {
       "id": "actor_029",
-      "name": "Principal Registrar",
+      "name": "19 Revocation of interim intervention order by Commissioner of Police",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Court Officer"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_030": {
       "id": "actor_030",
-      "name": "25 Feb 2009",
+      "name": "Division 3—Court orders",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Publication Date"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_031": {
       "id": "actor_031",
-      "name": "1 Mar 2009",
+      "name": "20 Application to Court for intervention order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Commencement Date"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_032": {
       "id": "actor_032",
-      "name": "18 Aug 2021",
+      "name": "21 Preliminary hearing and issue of interim intervention order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Publication Date"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_033": {
       "id": "actor_033",
-      "name": "23 Aug 2021",
+      "name": "22 Adjournments",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Commencement Date"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_034": {
       "id": "actor_034",
-      "name": "arranged parents",
+      "name": "23 Determination of application for intervention order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Arranged Parents"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_035": {
       "id": "actor_035",
-      "name": "birth parents",
+      "name": "24 Problem gambling order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Birth Parents"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_036": {
       "id": "actor_036",
-      "name": "lawyer",
+      "name": "25 Tenancy order",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Lawyer"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
       ]
     },
     "actor_037": {
       "id": "actor_037",
-      "name": "persons",
+      "name": "Division 4—Variation or revocation of orders",
       "actor_type": "person",
       "aliases": [],
       "roles": [
-        "Affected Parties"
+        "Section of Act"
       ],
       "states": [],
       "spatio_temporal_link_ids": [],
       "involved_cases": [],
       "source_chunk_ids": [
-        "chunk_e9d13943"
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_038": {
+      "id": "actor_038",
+      "name": "26 Intervention orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_039": {
+      "id": "actor_039",
+      "name": "26A Interim variation where application made by police",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_040": {
+      "id": "actor_040",
+      "name": "27 Problem gambling orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_041": {
+      "id": "actor_041",
+      "name": "Division 5—Evidentiary matters",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_042": {
+      "id": "actor_042",
+      "name": "28 Burden of proof",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_043": {
+      "id": "actor_043",
+      "name": "28A Use of recorded evidence where application made by police",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_044": {
+      "id": "actor_044",
+      "name": "29 Special arrangements for evidence and cross‑examination",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_045": {
+      "id": "actor_045",
+      "name": "Part 3A—National recognition of domestic violence orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_046": {
+      "id": "actor_046",
+      "name": "Division 1—Preliminary",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_047": {
+      "id": "actor_047",
+      "name": "29A Interpretation",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_048": {
+      "id": "actor_048",
+      "name": "29B Registered foreign orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_049": {
+      "id": "actor_049",
+      "name": "29C Domestic violence concern",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_050": {
+      "id": "actor_050",
+      "name": "Division 2—National recognition of DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_051": {
+      "id": "actor_051",
+      "name": "Subdivision 1—General principles",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_052": {
+      "id": "actor_052",
+      "name": "29D Recognition of DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_053": {
+      "id": "actor_053",
+      "name": "29E Variations to DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_054": {
+      "id": "actor_054",
+      "name": "29F Revocation of recognised DVO",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_055": {
+      "id": "actor_055",
+      "name": "29G Recognised DVO prevails over earlier comparable DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_056": {
+      "id": "actor_056",
+      "name": "29H Making of new orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_057": {
+      "id": "actor_057",
+      "name": "Subdivision 2—Enforcement of recognised DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_058": {
+      "id": "actor_058",
+      "name": "29I Recognised DVOs and variations are enforceable against defendant",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_059": {
+      "id": "actor_059",
+      "name": "29J Properly notified—meaning",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_060": {
+      "id": "actor_060",
+      "name": "29K Contravention of enforceable recognised DVO",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_061": {
+      "id": "actor_061",
+      "name": "Subdivision 3—Enforcement of non‑local DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_062": {
+      "id": "actor_062",
+      "name": "29L Non‑local DVO to be treated as local DVO",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_063": {
+      "id": "actor_063",
+      "name": "29M Licences, permits and other authorisations",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_064": {
+      "id": "actor_064",
+      "name": "29N Recognition of disqualification to hold firearms licence",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_065": {
+      "id": "actor_065",
+      "name": "29O Orders for costs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_066": {
+      "id": "actor_066",
+      "name": "Division 3—Variation and revocation of recognised non‑local DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_067": {
+      "id": "actor_067",
+      "name": "29P Power of Court to vary or revoke recognised non‑local DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_068": {
+      "id": "actor_068",
+      "name": "29Q Application for variation or revocation of recognised non‑local DVO",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_069": {
+      "id": "actor_069",
+      "name": "29R Decision about hearing of application",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_070": {
+      "id": "actor_070",
+      "name": "Division 4—Exchange of information",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_071": {
+      "id": "actor_071",
+      "name": "29S Issuing authorities may obtain DVO information",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_072": {
+      "id": "actor_072",
+      "name": "29T Issuing authorities must provide DVO information",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_073": {
+      "id": "actor_073",
+      "name": "29U Law enforcement agencies may obtain DVO information",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_074": {
+      "id": "actor_074",
+      "name": "29V Information to be provided to law enforcement agencies",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_075": {
+      "id": "actor_075",
+      "name": "Division 5—Miscellaneous",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_076": {
+      "id": "actor_076",
+      "name": "29W Certificate evidence—notification",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_077": {
+      "id": "actor_077",
+      "name": "Division 6—Transitional provisions",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_078": {
+      "id": "actor_078",
+      "name": "Subdivision 1—Preliminary",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_079": {
+      "id": "actor_079",
+      "name": "29X Interpretation",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_080": {
+      "id": "actor_080",
+      "name": "29Y Enforcement of DVOs under other provisions",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_081": {
+      "id": "actor_081",
+      "name": "Subdivision 2—DVOs to which scheme applies",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_082": {
+      "id": "actor_082",
+      "name": "29Z DVOs made in this jurisdiction",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_083": {
+      "id": "actor_083",
+      "name": "29ZA DVOs made in other jurisdictions",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_084": {
+      "id": "actor_084",
+      "name": "Subdivision 3—Extension of scheme to older DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_085": {
+      "id": "actor_085",
+      "name": "29ZB DVOs declared to be recognised DVOs",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_086": {
+      "id": "actor_086",
+      "name": "29ZC DVOs declared to be recognised in other jurisdictions before commencement date",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_087": {
+      "id": "actor_087",
+      "name": "Subdivision 4—Power to declare DVO to be recognised",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_088": {
+      "id": "actor_088",
+      "name": "29ZCA Interpretation",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_089": {
+      "id": "actor_089",
+      "name": "29ZD Power to declare DVO to be recognised",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_090": {
+      "id": "actor_090",
+      "name": "29ZE Application for order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_091": {
+      "id": "actor_091",
+      "name": "29ZF Declarations relating to general violence orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_092": {
+      "id": "actor_092",
+      "name": "Part 4—Foreign intervention orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_093": {
+      "id": "actor_093",
+      "name": "30 Registration of foreign intervention orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_094": {
+      "id": "actor_094",
+      "name": "Part 5—Offences and enforcement",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_095": {
+      "id": "actor_095",
+      "name": "Division 1—Offences",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_096": {
+      "id": "actor_096",
+      "name": "31 Contravention of intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_097": {
+      "id": "actor_097",
+      "name": "31A Special provisions applying to review or appeal in relation to certain offences against section 31",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_098": {
+      "id": "actor_098",
+      "name": "32 Landlord not to allow access to excluded defendant",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_099": {
+      "id": "actor_099",
+      "name": "33 Publication of report about proceedings or orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_100": {
+      "id": "actor_100",
+      "name": "Division 2—Special police powers",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_101": {
+      "id": "actor_101",
+      "name": "34 Powers facilitating service of intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_102": {
+      "id": "actor_102",
+      "name": "35 Powers following service of intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_103": {
+      "id": "actor_103",
+      "name": "36 Power to arrest and detain for contravention of intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_104": {
+      "id": "actor_104",
+      "name": "37 Power to search for weapons and articles required to be surrendered by intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_105": {
+      "id": "actor_105",
+      "name": "Division 3—Disclosure of information",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_106": {
+      "id": "actor_106",
+      "name": "38 Disclosure to police of information relevant to locating defendant",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_107": {
+      "id": "actor_107",
+      "name": "Part 6—Miscellaneous",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_108": {
+      "id": "actor_108",
+      "name": "39 Delegation by intervention program manager",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_109": {
+      "id": "actor_109",
+      "name": "40 Dealing with items surrendered under intervention order",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_110": {
+      "id": "actor_110",
+      "name": "41 Evidentiary provision",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_111": {
+      "id": "actor_111",
+      "name": "42 Regulations",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_112": {
+      "id": "actor_112",
+      "name": "Schedule 1—Transitional provisions",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_113": {
+      "id": "actor_113",
+      "name": "Part 15—Transitional provisions",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_114": {
+      "id": "actor_114",
+      "name": "37 Continuance of restraining orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_115": {
+      "id": "actor_115",
+      "name": "38 Continuance of registered foreign restraining orders",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_116": {
+      "id": "actor_116",
+      "name": "39 Validation of certain intervention orders in force before commencement of section 6 of Intervention Orders (Prevention of Abuse) (Miscellaneous) Amendment Act 2015",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_117": {
+      "id": "actor_117",
+      "name": "Legislative history",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Section of Act"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_118": {
+      "id": "actor_118",
+      "name": "The Parliament of South Australia",
+      "actor_type": "organization",
+      "aliases": [],
+      "roles": [
+        "Legislative Body"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_2528bbd7"
+      ]
+    },
+    "actor_119": {
+      "id": "actor_119",
+      "name": "Procedure on first court date",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Rule Title"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
+      ]
+    },
+    "actor_120": {
+      "id": "actor_120",
+      "name": "Evidence to be provided with application",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Rule Title"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
+      ]
+    },
+    "actor_121": {
+      "id": "actor_121",
+      "name": "Subdivision 6 — Nullity and validity of marriage and divorce",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Sub-subsection of Rules"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
+      ]
+    },
+    "actor_122": {
+      "id": "actor_122",
+      "name": "Application of Subdivision",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Rule Title"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
+      ]
+    },
+    "actor_123": {
+      "id": "actor_123",
+      "name": "Fixing hearing date",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Rule Title"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
+      ]
+    },
+    "actor_124": {
+      "id": "actor_124",
+      "name": "Affidavit to be filed with application",
+      "actor_type": "person",
+      "aliases": [],
+      "roles": [
+        "Rule Title"
+      ],
+      "states": [],
+      "spatio_temporal_link_ids": [],
+      "involved_cases": [],
+      "source_chunk_ids": [
+        "chunk_887ced85"
       ]
     }
   },
   "verb_phrases": {
     "verb_001": {
       "id": "verb_001",
-      "verb": "repealed",
-      "agent_id": "actor_001",
+      "verb": "makes",
+      "agent_id": "actor_002",
       "patient_ids": [
-        "actor_002"
+        "actor_001"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_0664671c"
+      "source_chunk_id": "chunk_ab5a0b4f"
     },
     "verb_002": {
       "id": "verb_002",
-      "verb": "apply",
-      "agent_id": "actor_021",
-      "patient_ids": [
-        "actor_020",
-        "actor_016"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_003": {
-      "id": "verb_003",
-      "verb": "filed",
-      "agent_id": "actor_024",
-      "patient_ids": [
-        "actor_020"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_004": {
-      "id": "verb_004",
-      "verb": "oppose",
-      "agent_id": "actor_037",
-      "patient_ids": [
-        "actor_023",
-        "actor_026"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_005": {
-      "id": "verb_005",
-      "verb": "filed",
-      "agent_id": "actor_037",
-      "patient_ids": [
-        "actor_020"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_006": {
-      "id": "verb_006",
-      "verb": "served",
-      "agent_id": "actor_020",
-      "patient_ids": [
-        "actor_037"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_007": {
-      "id": "verb_007",
-      "verb": "directs",
-      "agent_id": "actor_020",
-      "patient_ids": [
-        "actor_037"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_008": {
-      "id": "verb_008",
-      "verb": "decides",
-      "agent_id": "actor_020",
-      "patient_ids": [
-        "actor_014"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_009": {
-      "id": "verb_009",
-      "verb": "give notice",
-      "agent_id": "actor_029",
-      "patient_ids": [
-        "actor_037"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_010": {
-      "id": "verb_010",
-      "verb": "published",
-      "agent_id": "actor_003",
-      "patient_ids": [
-        "actor_011"
-      ],
-      "temporal_id": "actor_030",
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_011": {
-      "id": "verb_011",
-      "verb": "inserted",
-      "agent_id": "actor_022",
-      "patient_ids": [
-        "actor_008"
-      ],
-      "temporal_id": "actor_032",
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "verb_012": {
-      "id": "verb_012",
-      "verb": "deserted",
-      "agent_id": "actor_003",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_013": {
-      "id": "verb_013",
-      "verb": "neglected",
-      "agent_id": "actor_003",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_014": {
-      "id": "verb_014",
-      "verb": "brought up",
-      "agent_id": "actor_016",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_015": {
-      "id": "verb_015",
-      "verb": "boarded out",
-      "agent_id": "actor_015",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_016": {
-      "id": "verb_016",
-      "verb": "given up",
-      "agent_id": "actor_016",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_017": {
-      "id": "verb_017",
-      "verb": "brought up",
-      "agent_id": "actor_003",
-      "patient_ids": [
-        "actor_002"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_018": {
-      "id": "verb_018",
-      "verb": "satisfied",
-      "agent_id": "actor_004",
+      "verb": "exercises powers under",
+      "agent_id": "actor_002",
       "patient_ids": [
         "actor_003"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_ab5a0b4f"
     },
-    "verb_019": {
-      "id": "verb_019",
-      "verb": "brought up",
-      "agent_id": "actor_002",
+    "verb_003": {
+      "id": "verb_003",
+      "verb": "exercising jurisdiction under",
+      "agent_id": "actor_005",
       "patient_ids": [
-        "Religion"
+        "actor_006"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_ab5a0b4f"
     },
-    "verb_020": {
-      "id": "verb_020",
-      "verb": "given up",
+    "verb_004": {
+      "id": "verb_004",
+      "verb": "take effect",
+      "agent_id": "actor_001",
+      "patient_ids": [],
+      "temporal_id": "actor_007",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_005": {
+      "id": "verb_005",
+      "verb": "referred to as",
+      "agent_id": "actor_008",
+      "patient_ids": [
+        "actor_001"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_006": {
+      "id": "verb_006",
+      "verb": "incorporated into",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_008"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_007": {
+      "id": "verb_007",
+      "verb": "made by",
       "agent_id": "actor_002",
+      "patient_ids": [
+        "actor_001"
+      ],
+      "temporal_id": "actor_009",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_008": {
+      "id": "verb_008",
+      "verb": "displayed and numbered in accordance with",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_019"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_009": {
+      "id": "verb_009",
+      "verb": "notified in",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_020"
+      ],
+      "temporal_id": "actor_007",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_010": {
+      "id": "verb_010",
+      "verb": "administered in",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_021"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "verb_011": {
+      "id": "verb_011",
+      "verb": "owned",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_014"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "verb_012": {
+      "id": "verb_012",
+      "verb": "utilised",
+      "agent_id": "actor_015",
       "patient_ids": [
         "actor_013"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_474d68b0"
     },
-    "verb_021": {
-      "id": "verb_021",
-      "verb": "varied",
-      "agent_id": "actor_004",
-      "patient_ids": [
-        "Order"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_022": {
-      "id": "verb_022",
-      "verb": "revoked",
-      "agent_id": "actor_004",
-      "patient_ids": [
-        "Order"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_023": {
-      "id": "verb_023",
-      "verb": "appeal",
-      "agent_id": "Applicant",
-      "patient_ids": [
-        "actor_004"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_024": {
-      "id": "verb_024",
-      "verb": "enforced",
-      "agent_id": "Order",
-      "patient_ids": [
-        "actor_012"
-      ],
-      "temporal_id": null,
-      "spatial_id": null,
-      "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
-    },
-    "verb_025": {
-      "id": "verb_025",
-      "verb": "served",
-      "agent_id": "Order",
+    "verb_013": {
+      "id": "verb_013",
+      "verb": "held in",
+      "agent_id": "actor_015",
       "patient_ids": [
         "actor_016"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "verb_014": {
+      "id": "verb_014",
+      "verb": "unable to access",
+      "agent_id": "actor_001",
+      "patient_ids": [
+        "actor_015"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "verb_015": {
+      "id": "verb_015",
+      "verb": "amended",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": "actor_031",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_016": {
+      "id": "verb_016",
+      "verb": "filed",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_032"
+      ],
+      "temporal_id": "actor_033",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_017": {
+      "id": "verb_017",
+      "verb": "filed",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": "actor_035",
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_018": {
+      "id": "verb_018",
+      "verb": "claims order",
+      "agent_id": "actor_010",
+      "patient_ids": [],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_019": {
+      "id": "verb_019",
+      "verb": "dismissing",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_020": {
+      "id": "verb_020",
+      "verb": "staying",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_021": {
+      "id": "verb_021",
+      "verb": "striking out",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_022": {
+      "id": "verb_022",
+      "verb": "owed duties",
+      "agent_id": "actor_010",
+      "patient_ids": [
+        "actor_001"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_023": {
+      "id": "verb_023",
+      "verb": "appropriated moneys",
+      "agent_id": "actor_010",
+      "patient_ids": [
+        "actor_001"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_024": {
+      "id": "verb_024",
+      "verb": "caused loss",
+      "agent_id": "actor_010",
+      "patient_ids": [
+        "actor_001"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "verb_025": {
+      "id": "verb_025",
+      "verb": "struck out",
+      "agent_id": null,
+      "patient_ids": [
+        "actor_035"
+      ],
+      "temporal_id": null,
+      "spatial_id": null,
+      "is_implicit": false,
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_026": {
       "id": "verb_026",
-      "verb": "complying",
-      "agent_id": "actor_016",
+      "verb": "engaged in",
+      "agent_id": "actor_010",
       "patient_ids": [
-        "Order"
+        "actor_035"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_027": {
       "id": "verb_027",
-      "verb": "removed",
-      "agent_id": "actor_004",
+      "verb": "instituted",
+      "agent_id": "actor_035",
       "patient_ids": [
-        "Application"
+        "actor_009"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_028": {
       "id": "verb_028",
-      "verb": "give notice",
-      "agent_id": "Person",
+      "verb": "transferred",
+      "agent_id": "actor_009",
       "patient_ids": [
-        "Change of address"
+        "actor_035",
+        "actor_007"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_029": {
       "id": "verb_029",
-      "verb": "attached",
-      "agent_id": "Pension or income",
+      "verb": "impact on",
+      "agent_id": "actor_010",
       "patient_ids": [
-        "Person"
+        "actor_001",
+        "actor_037"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_030": {
       "id": "verb_030",
-      "verb": "give up",
-      "agent_id": "actor_003",
+      "verb": "stay",
+      "agent_id": null,
       "patient_ids": [
-        "actor_002"
+        "actor_035"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_031": {
       "id": "verb_031",
-      "verb": "appoint",
-      "agent_id": "actor_004",
+      "verb": "transferred",
+      "agent_id": "actor_035",
       "patient_ids": [
-        "actor_020"
+        "actor_017"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_032": {
       "id": "verb_032",
-      "verb": "settlement",
-      "agent_id": "actor_004",
+      "verb": "dismissed",
+      "agent_id": null,
       "patient_ids": [
-        "Damages"
+        "actor_035"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_033": {
       "id": "verb_033",
-      "verb": "deciding",
-      "agent_id": "actor_004",
+      "verb": "succeeded",
+      "agent_id": "actor_010",
       "patient_ids": [
-        "Custody or upbringing"
+        "actor_035"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     },
     "verb_034": {
       "id": "verb_034",
-      "verb": "apply",
-      "agent_id": "actor_003",
+      "verb": "failed",
+      "agent_id": "actor_010",
       "patient_ids": [
-        "actor_004"
+        "actor_035"
       ],
       "temporal_id": null,
       "spatial_id": null,
       "is_implicit": false,
-      "source_chunk_id": "chunk_2db0ea67"
+      "source_chunk_id": "chunk_c6a4f294"
     }
   },
   "questions": {
     "q_001": {
       "id": "q_001",
-      "question_text": "What is the status of the Family Violence Reforms Act 2017?",
+      "question_text": "What is the short title of these rules of court?",
       "question_type": "what",
       "target_entity_id": "actor_001",
       "answerable": true,
-      "answer_text": "Repealed",
+      "answer_text": "Justices Amendment (Family Violence) Rules 2005",
       "answer_entity_id": "actor_001",
-      "source_chunk_id": "chunk_0664671c",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_002": {
       "id": "q_002",
-      "question_text": "By what section was the Family Violence Reforms Act 2017 repealed?",
-      "question_type": "what",
+      "question_text": "When do these rules of court take effect?",
+      "question_type": "when",
       "target_entity_id": "actor_001",
       "answerable": true,
-      "answer_text": "section 6 of the Family Violence Reforms Act 2017",
-      "answer_entity_id": "actor_002",
-      "source_chunk_id": "chunk_0664671c",
+      "answer_text": "30 March 2005",
+      "answer_entity_id": "actor_007",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_003": {
       "id": "q_003",
-      "question_text": "When was the Family Violence Reforms Act 2017 repealed?",
-      "question_type": "when",
+      "question_text": "Who made these rules of court?",
+      "question_type": "who",
       "target_entity_id": "actor_001",
-      "answerable": false,
-      "answer_text": null,
-      "answer_entity_id": null,
-      "source_chunk_id": "chunk_0664671c",
+      "answerable": true,
+      "answer_text": "The Magistrates Rule Committee",
+      "answer_entity_id": "actor_002",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_004": {
       "id": "q_004",
-      "question_text": "What replaced the Family Violence Reforms Act 2017?",
+      "question_text": "What are the Principal Rules referred to in this document?",
       "question_type": "what",
       "target_entity_id": "actor_001",
-      "answerable": false,
-      "answer_text": null,
-      "answer_entity_id": null,
-      "source_chunk_id": "chunk_0664671c",
+      "answerable": true,
+      "answer_text": "the Justices Rules 2003",
+      "answer_entity_id": "actor_008",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_005": {
       "id": "q_005",
-      "question_text": "Why was the Family Violence Reforms Act 2017 repealed?",
-      "question_type": "why",
+      "question_text": "When was the meeting held where these rules of court were made?",
+      "question_type": "when",
       "target_entity_id": "actor_001",
-      "answerable": false,
-      "answer_text": null,
-      "answer_entity_id": null,
-      "source_chunk_id": "chunk_0664671c",
+      "answerable": true,
+      "answer_text": "21 March 2005",
+      "answer_entity_id": "actor_009",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_006": {
       "id": "q_006",
-      "question_text": "How much notice is given for a hearing?",
-      "question_type": "what",
-      "target_entity_id": "actor_014",
+      "question_text": "Which department administers these rules of court?",
+      "question_type": "who",
+      "target_entity_id": "actor_001",
       "answerable": true,
-      "answer_text": "not less than 28 days' notice",
-      "answer_entity_id": "actor_014",
-      "source_chunk_id": "chunk_e9d13943",
+      "answer_text": "Department of Justice",
+      "answer_entity_id": "actor_021",
+      "source_chunk_id": "chunk_ab5a0b4f",
       "answered_in_chunk_id": null
     },
     "q_007": {
       "id": "q_007",
-      "question_text": "What happens if a parent is deemed unfit to have custody of a minor?",
-      "question_type": "what",
-      "target_entity_id": "actor_004",
+      "question_text": "Who granted leave for VE Group Pty Ltd to commence proceedings against Wei Xu?",
+      "question_type": "who",
+      "target_entity_id": "actor_001",
       "answerable": true,
-      "answer_text": "The Court may order that the minor shall be given up to the custody of some near relative or other person willing to accept such custody, and may by such order impose terms for the maintenance of the minor chargeable upon the parent.",
-      "answer_entity_id": "actor_004",
-      "source_chunk_id": "chunk_2db0ea67",
-      "answered_in_chunk_id": null
-    },
-    "q_008": {
-      "id": "q_008",
-      "question_text": "What jurisdiction does the Local Court have?",
-      "question_type": "what",
-      "target_entity_id": "actor_012",
-      "answerable": true,
-      "answer_text": "The jurisdiction conferred on the Supreme Court by this Part may also be exercised by the District Court or by the Local Court.",
-      "answer_entity_id": "actor_012",
-      "source_chunk_id": "chunk_2db0ea67",
+      "answer_text": "Black J",
+      "answer_entity_id": "actor_017",
+      "source_chunk_id": "chunk_c6a4f294",
       "answered_in_chunk_id": null
     }
   },
   "spatio_temporal_links": {
+    "link_aeb3102e": {
+      "id": "link_aeb3102e",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009",
+        "actor_032"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1999-10-21",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_39625a22": {
+      "id": "link_39625a22",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009",
+        "actor_032"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "High Court of Australia",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_27f2491d": {
+      "id": "link_27f2491d",
+      "linked_entity_ids": [
+        "actor_034",
+        "actor_011",
+        "actor_020",
+        "actor_035",
+        "actor_036"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Family Court of Australia",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_9f2dbc2f": {
+      "id": "link_9f2dbc2f",
+      "linked_entity_ids": [
+        "actor_036",
+        "actor_010",
+        "actor_037",
+        "actor_038",
+        "actor_049",
+        "actor_050"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "July and August 1998",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_fb6e522d": {
+      "id": "link_fb6e522d",
+      "linked_entity_ids": [
+        "actor_036",
+        "actor_010",
+        "actor_037",
+        "actor_038",
+        "actor_049",
+        "actor_050"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Family Court building in Melbourne",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_6351060d": {
+      "id": "link_6351060d",
+      "linked_entity_ids": [
+        "actor_011",
+        "actor_020",
+        "actor_036",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_054"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "September 1998",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_56391d32": {
+      "id": "link_56391d32",
+      "linked_entity_ids": [
+        "actor_011",
+        "actor_019",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_060"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1998-10-20",
+      "source_chunk_id": "chunk_db761937"
+    },
+    "link_73ba4ea9": {
+      "id": "link_73ba4ea9",
+      "linked_entity_ids": [
+        "actor_011",
+        "actor_019",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_060"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Melbourne",
+      "source_chunk_id": "chunk_db761937"
+    },
     "link_001": {
       "id": "link_001",
       "linked_entity_ids": [
-        "actor_003",
-        "actor_030"
+        "actor_001",
+        "actor_007"
       ],
       "tag_type": "temporal",
-      "tag_value": "25 Feb 2009",
-      "source_chunk_id": "chunk_e9d13943"
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_ab5a0b4f"
     },
     "link_002": {
       "id": "link_002",
       "linked_entity_ids": [
-        "actor_003",
-        "actor_031"
-      ],
-      "tag_type": "temporal",
-      "tag_value": "1 Mar 2009",
-      "source_chunk_id": "chunk_e9d13943"
-    },
-    "link_9f33b327": {
-      "id": "link_9f33b327",
-      "linked_entity_ids": [
+        "actor_001",
         "actor_002",
-        "actor_002",
-        "actor_003",
-        "actor_005",
-        "actor_004"
-      ],
-      "tag_type": "temporal",
-      "tag_value": "6 October 2015",
-      "source_chunk_id": "chunk_9f12cb94"
-    },
-    "link_132bba80": {
-      "id": "link_132bba80",
-      "linked_entity_ids": [
-        "actor_002",
-        "actor_002",
-        "actor_003",
-        "actor_005",
         "actor_009"
       ],
       "tag_type": "temporal",
-      "tag_value": "Three hundred and sixty fifth day from the day on which it commences",
-      "source_chunk_id": "chunk_9f12cb94"
-    },
-    "link_b8f5a18d": {
-      "id": "link_b8f5a18d",
-      "linked_entity_ids": [
-        "actor_001",
-        "actor_002",
-        "actor_003",
-        "actor_004",
-        "actor_005",
-        "actor_006",
-        "actor_007",
-        "actor_008",
-        "actor_009",
-        "actor_010",
-        "actor_011",
-        "actor_012",
-        "actor_016"
-      ],
-      "tag_type": "temporal",
-      "tag_value": "20 September 2022",
-      "source_chunk_id": "chunk_c5d6832f"
-    },
-    "link_3028ebb2": {
-      "id": "link_3028ebb2",
-      "linked_entity_ids": [
-        "actor_001",
-        "actor_002",
-        "actor_003",
-        "actor_004",
-        "actor_005",
-        "actor_006",
-        "actor_007",
-        "actor_008",
-        "actor_009",
-        "actor_010",
-        "actor_011",
-        "actor_012",
-        "actor_017"
-      ],
-      "tag_type": "temporal",
-      "tag_value": "first anniversary of the day on which the last uncommenced provision of this Act commenced",
-      "source_chunk_id": "chunk_c5d6832f"
+      "tag_value": "2005-03-21",
+      "source_chunk_id": "chunk_ab5a0b4f"
     },
     "link_003": {
       "id": "link_003",
       "linked_entity_ids": [
-        "actor_022",
-        "actor_032"
+        "actor_001",
+        "actor_020",
+        "actor_007"
       ],
       "tag_type": "temporal",
-      "tag_value": "18 Aug 2021",
-      "source_chunk_id": "chunk_e9d13943"
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_d1073d3c": {
+      "id": "link_d1073d3c",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "South Australia",
+      "source_chunk_id": "chunk_ef9821cf"
+    },
+    "link_41ec0a57": {
+      "id": "link_41ec0a57",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_010"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2023",
+      "source_chunk_id": "chunk_ef9821cf"
+    },
+    "link_761eb1d2": {
+      "id": "link_761eb1d2",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_011"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2022",
+      "source_chunk_id": "chunk_ef9821cf"
+    },
+    "link_04bb0d6d": {
+      "id": "link_04bb0d6d",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_006",
+        "actor_007",
+        "actor_009"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_ef9821cf"
+    },
+    "link_1ca5a701": {
+      "id": "link_1ca5a701",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_004",
+        "actor_005"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2015-10-06",
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_d4c0bcfb": {
+      "id": "link_d4c0bcfb",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_005",
+        "actor_014",
+        "actor_024"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2015-10-06",
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_f494fdac": {
+      "id": "link_f494fdac",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Tasmania",
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_982edab1": {
+      "id": "link_982edab1",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_023",
+        "actor_025",
+        "actor_026"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2016-10-05",
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_463719b4": {
+      "id": "link_463719b4",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_015",
+        "actor_016",
+        "actor_017"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_3b36b3b7": {
+      "id": "link_3b36b3b7",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_018",
+        "actor_019",
+        "actor_020"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_ef30140b"
+    },
+    "link_0a0ec3b7": {
+      "id": "link_0a0ec3b7",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_058",
+        "actor_059",
+        "actor_060",
+        "actor_061",
+        "actor_062",
+        "actor_008"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2024-07-30",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_8a5353dd": {
+      "id": "link_8a5353dd",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_001",
+        "actor_004",
+        "actor_063"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-10-08",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_fc6f42b8": {
+      "id": "link_fc6f42b8",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_036",
+        "actor_064"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-10-13",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_57a3723d": {
+      "id": "link_57a3723d",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_037",
+        "actor_065"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-11-06",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_ced0613e": {
+      "id": "link_ced0613e",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_001",
+        "actor_012",
+        "actor_066"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-10-15",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_efb4e1ca": {
+      "id": "link_efb4e1ca",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_009",
+        "actor_065"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-11-06",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_ff7d095f": {
+      "id": "link_ff7d095f",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_009",
+        "actor_067"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-12-11",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_e0fbbc06": {
+      "id": "link_e0fbbc06",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_068"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-05",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_03bbe44c": {
+      "id": "link_03bbe44c",
+      "linked_entity_ids": [
+        "actor_009",
+        "actor_069"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-08",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_5be48e9f": {
+      "id": "link_5be48e9f",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_012",
+        "actor_013",
+        "actor_063",
+        "actor_070"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-10-08",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_3ad68228": {
+      "id": "link_3ad68228",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_012",
+        "actor_014",
+        "actor_070",
+        "actor_069"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2020-12-29",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_7defea45": {
+      "id": "link_7defea45",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_012",
+        "actor_069"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-08",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_4b6a2a56": {
+      "id": "link_4b6a2a56",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_071"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-12",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_77b50d50": {
+      "id": "link_77b50d50",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_015",
+        "actor_072",
+        "actor_073"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-14",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_866dabcb": {
+      "id": "link_866dabcb",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_003",
+        "actor_024",
+        "actor_073"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2024-01-31",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_60364abb": {
+      "id": "link_60364abb",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_038",
+        "actor_074"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-02-18",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_14b4da0d": {
+      "id": "link_14b4da0d",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_039",
+        "actor_075"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-03-19",
+      "source_chunk_id": "chunk_77130284"
+    },
+    "link_fe14bb2c": {
+      "id": "link_fe14bb2c",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_005",
+        "actor_004",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_007",
+        "actor_007",
+        "actor_015",
+        "actor_016",
+        "actor_002",
+        "actor_018",
+        "actor_019",
+        "actor_020",
+        "actor_021",
+        "actor_007",
+        "actor_023",
+        "actor_007",
+        "actor_025",
+        "actor_026",
+        "actor_027",
+        "actor_028",
+        "actor_029",
+        "actor_030",
+        "actor_004",
+        "actor_004",
+        "actor_033",
+        "actor_034",
+        "actor_035",
+        "actor_005",
+        "actor_037",
+        "actor_009",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_044",
+        "actor_045",
+        "actor_046",
+        "actor_047",
+        "actor_012",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_060",
+        "actor_061",
+        "actor_062",
+        "actor_063",
+        "actor_064",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_082",
+        "actor_083",
+        "actor_084",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_005",
+        "actor_091",
+        "actor_004",
+        "actor_093",
+        "actor_094",
+        "actor_095",
+        "actor_096",
+        "actor_097",
+        "actor_098",
+        "actor_099",
+        "actor_100"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1899",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_bd33eaa9": {
+      "id": "link_bd33eaa9",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_007",
+        "actor_007",
+        "actor_007",
+        "actor_056"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_225c155a": {
+      "id": "link_225c155a",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_007",
+        "actor_007",
+        "actor_007",
+        "actor_056",
+        "actor_085"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_b5df8921": {
+      "id": "link_b5df8921",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_005",
+        "actor_004",
+        "actor_010",
+        "actor_002",
+        "actor_029",
+        "actor_030",
+        "actor_004",
+        "actor_004",
+        "actor_005",
+        "actor_037",
+        "actor_009",
+        "actor_042",
+        "actor_012",
+        "actor_049",
+        "actor_051",
+        "actor_058",
+        "actor_062",
+        "actor_064",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_081",
+        "actor_082",
+        "actor_086",
+        "actor_089",
+        "actor_005",
+        "actor_091",
+        "actor_004"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_ef430711": {
+      "id": "link_ef430711",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_019"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1970",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_f9543068": {
+      "id": "link_f9543068",
+      "linked_entity_ids": [
+        "actor_007",
+        "actor_023"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2007",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_333c24c5": {
+      "id": "link_333c24c5",
+      "linked_entity_ids": [
+        "actor_055",
+        "actor_056"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2001",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_e86b32c8": {
+      "id": "link_e86b32c8",
+      "linked_entity_ids": [
+        "actor_057",
+        "actor_063"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_577e2c52": {
+      "id": "link_577e2c52",
+      "linked_entity_ids": [
+        "actor_060",
+        "actor_061"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1987",
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_6371ee72": {
+      "id": "link_6371ee72",
+      "linked_entity_ids": [
+        "actor_095",
+        "actor_096"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_ba475a01": {
+      "id": "link_ba475a01",
+      "linked_entity_ids": [
+        "actor_097",
+        "actor_098"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_471bcc5d"
+    },
+    "link_0ec67c67": {
+      "id": "link_0ec67c67",
+      "linked_entity_ids": [
+        "actor_099",
+        "actor_100"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1891",
+      "source_chunk_id": "chunk_471bcc5d"
     },
     "link_004": {
       "id": "link_004",
       "linked_entity_ids": [
-        "actor_022",
-        "actor_033"
+        "actor_010",
+        "actor_032",
+        "actor_030"
       ],
       "tag_type": "temporal",
-      "tag_value": "23 Aug 2021",
-      "source_chunk_id": "chunk_e9d13943"
+      "tag_value": "2013-10-31",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_7845a4a3": {
+      "id": "link_7845a4a3",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_009",
+        "actor_010"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_53d2dac8"
+    },
+    "link_8e9fdfd2": {
+      "id": "link_8e9fdfd2",
+      "linked_entity_ids": [
+        "actor_006",
+        "actor_014"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_53d2dac8"
+    },
+    "link_e7183321": {
+      "id": "link_e7183321",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_006",
+        "actor_011",
+        "actor_012"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005-03-23",
+      "source_chunk_id": "chunk_53d2dac8"
+    },
+    "link_064cfad6": {
+      "id": "link_064cfad6",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_002",
+        "actor_003",
+        "actor_005"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "State of Tasmania and its Dependencies in the Commonwealth of Australia",
+      "source_chunk_id": "chunk_53d2dac8"
+    },
+    "link_5c35345b": {
+      "id": "link_5c35345b",
+      "linked_entity_ids": [
+        "actor_006",
+        "actor_015"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_53d2dac8"
+    },
+    "link_74f6e4f9": {
+      "id": "link_74f6e4f9",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_065",
+        "actor_014"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2009-02-25",
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_c45082fd": {
+      "id": "link_c45082fd",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_066",
+        "actor_019",
+        "actor_020",
+        "actor_067"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2009-03-01",
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_1bca43a7": {
+      "id": "link_1bca43a7",
+      "linked_entity_ids": [
+        "actor_031",
+        "actor_068",
+        "actor_069",
+        "actor_070"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-08-18",
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_80845b01": {
+      "id": "link_80845b01",
+      "linked_entity_ids": [
+        "actor_031",
+        "actor_068",
+        "actor_069",
+        "actor_071"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021-08-23",
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_b4f4a358": {
+      "id": "link_b4f4a358",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_019"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Western Australia",
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_0e3bd9e8": {
+      "id": "link_0e3bd9e8",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_001",
+        "actor_031",
+        "actor_019"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_add0995e"
+    },
+    "link_702fe52b": {
+      "id": "link_702fe52b",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_002"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1 July 2016",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_c0a648cc": {
+      "id": "link_c0a648cc",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_082"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "10 business days",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_5d3501ab": {
+      "id": "link_5d3501ab",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_083"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "first appearance for the proceeding",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_810c119a": {
+      "id": "link_810c119a",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_097"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "4:30pm",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_0894628e": {
+      "id": "link_0894628e",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_098"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "day the registry is open for business",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_321f140a": {
+      "id": "link_321f140a",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
+        "actor_011",
+        "actor_013",
+        "actor_015",
+        "actor_024",
+        "actor_028",
+        "actor_002",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_036",
+        "actor_037",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_026",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_056",
+        "actor_034",
+        "actor_059",
+        "actor_061",
+        "actor_039",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_093",
+        "actor_094",
+        "actor_096",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_109",
+        "actor_112",
+        "actor_115",
+        "actor_119",
+        "actor_122",
+        "actor_124",
+        "actor_120"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "3 business days",
+      "source_chunk_id": "chunk_78af8abd"
+    },
+    "link_39a297ad": {
+      "id": "link_39a297ad",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2017",
+      "source_chunk_id": "chunk_c6c23563"
     },
     "link_005": {
       "id": "link_005",
       "linked_entity_ids": [
+        "actor_035",
+        "actor_031"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-12-20",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_006": {
+      "id": "link_006",
+      "linked_entity_ids": [
+        "actor_032",
+        "actor_033"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-01-30",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_007": {
+      "id": "link_007",
+      "linked_entity_ids": [
+        "actor_035",
+        "actor_035"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-10-16",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_15055cca": {
+      "id": "link_15055cca",
+      "linked_entity_ids": [
+        "actor_017",
+        "actor_003",
+        "actor_004",
         "actor_001",
+        "actor_035",
+        "actor_035",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_035",
+        "actor_035",
+        "actor_035"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-02-27",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_89f7d66a": {
+      "id": "link_89f7d66a",
+      "linked_entity_ids": [
+        "actor_017",
+        "actor_003",
+        "actor_004",
+        "actor_001",
+        "actor_035",
+        "actor_035",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_035",
+        "actor_035",
+        "actor_035"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Supreme Court of New South Wales",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_279bd2d2": {
+      "id": "link_279bd2d2",
+      "linked_entity_ids": [
+        "actor_035",
+        "actor_035",
+        "actor_023"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-08-23",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_08e58bb8": {
+      "id": "link_08e58bb8",
+      "linked_entity_ids": [
+        "actor_016",
+        "actor_017",
+        "actor_035",
+        "actor_019",
+        "actor_001",
+        "actor_010",
+        "actor_035",
+        "actor_031"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-08-14",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_c39e4955": {
+      "id": "link_c39e4955",
+      "linked_entity_ids": [
+        "actor_019",
+        "actor_010",
+        "actor_035",
+        "actor_007",
+        "actor_009",
+        "actor_037"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_864e62f2": {
+      "id": "link_864e62f2",
+      "linked_entity_ids": [
+        "actor_019",
+        "actor_010",
+        "actor_035",
+        "actor_007",
+        "actor_009",
+        "actor_037"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Federal Circuit Court of Australia",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_b1d6f88f": {
+      "id": "link_b1d6f88f",
+      "linked_entity_ids": [
+        "actor_019",
+        "actor_010",
+        "actor_035",
+        "actor_009"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Family Court of Australia",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_c1f49a02": {
+      "id": "link_c1f49a02",
+      "linked_entity_ids": [
+        "actor_024",
+        "actor_025",
+        "actor_026"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "June 2009 to December 2012",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_829bfd85": {
+      "id": "link_829bfd85",
+      "linked_entity_ids": [
+        "actor_024",
+        "actor_025"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Melbourne and Sydney",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_3da27a00": {
+      "id": "link_3da27a00",
+      "linked_entity_ids": [
+        "actor_032",
+        "actor_030"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-10-31",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_cb91e7bb": {
+      "id": "link_cb91e7bb",
+      "linked_entity_ids": [
+        "actor_035",
+        "actor_031"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-12-20",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_22fa7f3e": {
+      "id": "link_22fa7f3e",
+      "linked_entity_ids": [
+        "actor_032",
+        "actor_033"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-01-30",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_759e62c7": {
+      "id": "link_759e62c7",
+      "linked_entity_ids": [
+        "actor_035",
+        "actor_035"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-10-16",
+      "source_chunk_id": "chunk_c6a4f294"
+    },
+    "link_0b7c27db": {
+      "id": "link_0b7c27db",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_005",
+        "actor_003",
+        "actor_010",
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_011",
+        "actor_055"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-08-25",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_698927e7": {
+      "id": "link_698927e7",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_005",
+        "actor_010",
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_011"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Supreme Court of New South Wales",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_5a417841": {
+      "id": "link_5a417841",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_013",
+        "actor_044"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2013-12-31T23:59:59",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_5fc50e02": {
+      "id": "link_5fc50e02",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_013"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Bangor",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_00ec548b": {
+      "id": "link_00ec548b",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_014",
+        "actor_015"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Oatley",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_3e6a57f3": {
+      "id": "link_3e6a57f3",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_018",
+        "actor_045"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-03-10",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_6f150aa5": {
+      "id": "link_6f150aa5",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_018",
+        "actor_043"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-03-XX",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_278b103f": {
+      "id": "link_278b103f",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_009",
+        "actor_007",
+        "actor_022",
+        "actor_046"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-06-17",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_b39464b7": {
+      "id": "link_b39464b7",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_009",
+        "actor_007",
+        "actor_022",
+        "actor_055"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Family Court of Australia",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_b1fda28e": {
+      "id": "link_b1fda28e",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_008",
+        "actor_047"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-07-15",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_542d2d37": {
+      "id": "link_542d2d37",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_008",
+        "actor_048"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-08-27",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_0754b642": {
+      "id": "link_0754b642",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_025",
+        "actor_049"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-08-18",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_00998489": {
+      "id": "link_00998489",
+      "linked_entity_ids": [
+        "actor_030",
+        "actor_050"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2014-10-20",
+      "source_chunk_id": "chunk_474d68b0"
+    },
+    "link_edae465d": {
+      "id": "link_edae465d",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_006",
+        "actor_043",
+        "actor_044",
+        "actor_002",
+        "actor_001",
+        "actor_003"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-07-17",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_820ab5b7": {
+      "id": "link_820ab5b7",
+      "linked_entity_ids": [
+        "actor_004",
+        "actor_006",
+        "actor_043",
+        "actor_044",
+        "actor_002",
+        "actor_001",
+        "actor_003"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "SYDNEY",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_d7edb656": {
+      "id": "link_d7edb656",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_045"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1976-08-14",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_6280ae81": {
+      "id": "link_6280ae81",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_046"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1993-08-31",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_2f323c6e": {
+      "id": "link_2f323c6e",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_012",
+        "actor_047"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1995-12-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_d24836ec": {
+      "id": "link_d24836ec",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_001",
+        "actor_005",
+        "actor_048",
+        "actor_011"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-02-22",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_bef74421": {
+      "id": "link_bef74421",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_049",
+        "actor_016"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-04-18",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_cc9d2c99": {
+      "id": "link_cc9d2c99",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_013",
+        "actor_015",
+        "actor_049"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-04-18",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_87a6b1fe": {
+      "id": "link_87a6b1fe",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_013",
+        "actor_050"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1995-12-18",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_522c9822": {
+      "id": "link_522c9822",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_005",
+        "actor_051"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-07-30",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_3f10246b": {
+      "id": "link_3f10246b",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_052"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-09-05",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_f8588024": {
+      "id": "link_f8588024",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_053"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-10-24",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_56ab60ed": {
+      "id": "link_56ab60ed",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_054"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-11-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_2448ede0": {
+      "id": "link_2448ede0",
+      "linked_entity_ids": [
+        "actor_020",
+        "actor_055"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-11-20",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_b5c7931d": {
+      "id": "link_b5c7931d",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_005",
+        "actor_022",
+        "actor_056"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-11-19",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_ef0865b9": {
+      "id": "link_ef0865b9",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_057"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1995-12-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_ecb4e259": {
+      "id": "link_ecb4e259",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_018",
+        "actor_050"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1995-12-18",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_17e847a3": {
+      "id": "link_17e847a3",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_058"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-11-28",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_a0c10b01": {
+      "id": "link_a0c10b01",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_005",
+        "actor_059"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-17",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_aee1a517": {
+      "id": "link_aee1a517",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_029",
+        "actor_059"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-17",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_84c0fc63": {
+      "id": "link_84c0fc63",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_029",
+        "actor_030",
+        "actor_060"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-18",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_2e29b6ef": {
+      "id": "link_2e29b6ef",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_010",
+        "actor_061"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-20",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_0e2a477a": {
+      "id": "link_0e2a477a",
+      "linked_entity_ids": [
+        "actor_031",
+        "actor_003",
+        "actor_062"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-27",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_36067c99": {
+      "id": "link_36067c99",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_003",
+        "actor_063"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-04-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_f37b50d0": {
+      "id": "link_f37b50d0",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_029",
+        "actor_064"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-04-08",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_863b4fbd": {
+      "id": "link_863b4fbd",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_009",
+        "actor_065"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-04-17",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_1a56431e": {
+      "id": "link_1a56431e",
+      "linked_entity_ids": [
+        "actor_013",
+        "actor_066"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-05-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_dc485ccf": {
+      "id": "link_dc485ccf",
+      "linked_entity_ids": [
+        "actor_014",
+        "actor_067",
+        "actor_068"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-12-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_2edcdbb8": {
+      "id": "link_2edcdbb8",
+      "linked_entity_ids": [
+        "actor_014",
+        "actor_067",
+        "actor_068"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-03-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_63f2fc36": {
+      "id": "link_63f2fc36",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_014",
+        "actor_027",
+        "actor_069"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1996-01-01",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_aad43659": {
+      "id": "link_aad43659",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_034",
+        "actor_070"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-05-26",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_44eddff5": {
+      "id": "link_44eddff5",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_035",
+        "actor_071"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-05-13",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_8bde6f53": {
+      "id": "link_8bde6f53",
+      "linked_entity_ids": [
+        "actor_036",
+        "actor_072"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "1997-05-22",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_f15e8b1b": {
+      "id": "link_f15e8b1b",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_025"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_e5318c3a": {
+      "id": "link_e5318c3a",
+      "linked_entity_ids": [
+        "actor_017"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Guernsey",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_8effa652": {
+      "id": "link_8effa652",
+      "linked_entity_ids": [
+        "actor_024"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Western Samoa",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_1d533617": {
+      "id": "link_1d533617",
+      "linked_entity_ids": [
+        "actor_005"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Sydney",
+      "source_chunk_id": "chunk_d1343892"
+    },
+    "link_18d07447": {
+      "id": "link_18d07447",
+      "linked_entity_ids": [
+        "actor_008",
+        "actor_002",
+        "actor_003"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Western Australia",
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_406a1c7a": {
+      "id": "link_406a1c7a",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_017",
+        "actor_018",
+        "actor_020",
+        "actor_021",
+        "actor_022",
+        "actor_023",
+        "actor_026",
+        "actor_027",
+        "actor_028",
+        "actor_029",
+        "actor_030",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_034",
+        "actor_035",
+        "actor_036",
+        "actor_037",
+        "actor_038",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_044",
+        "actor_046",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_061",
+        "actor_062",
+        "actor_063",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_081",
+        "actor_082",
+        "actor_083",
+        "actor_084",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_090",
+        "actor_091",
+        "actor_092",
+        "actor_093",
+        "actor_094",
+        "actor_097",
+        "actor_098",
+        "actor_099",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_107",
+        "actor_108",
+        "actor_109",
+        "actor_110",
+        "actor_111",
+        "actor_112",
+        "actor_113",
+        "actor_114",
+        "actor_116",
+        "actor_117",
+        "actor_119",
+        "actor_120",
+        "actor_121",
+        "actor_122",
+        "actor_123",
+        "actor_124"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2021",
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_a0eb966e": {
+      "id": "link_a0eb966e",
+      "linked_entity_ids": [
+        "actor_015",
+        "actor_016",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_3c6aba12": {
+      "id": "link_3c6aba12",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_018",
+        "actor_020",
+        "actor_021",
+        "actor_022",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_034",
+        "actor_040"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_3f38c681": {
+      "id": "link_3f38c681",
+      "linked_entity_ids": [
+        "actor_024",
+        "actor_009",
+        "actor_023"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_689f4fc2": {
+      "id": "link_689f4fc2",
+      "linked_entity_ids": [
+        "actor_015",
+        "actor_073",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_081",
+        "actor_084"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_10f66bfe": {
+      "id": "link_10f66bfe",
+      "linked_entity_ids": [
+        "actor_009",
+        "actor_043",
+        "actor_044",
+        "actor_009",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_057",
+        "actor_059",
+        "actor_062",
+        "actor_065",
+        "actor_066",
+        "actor_079",
+        "actor_083",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_033",
+        "actor_094",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_107",
+        "actor_108",
+        "actor_111",
+        "actor_112",
+        "actor_116",
+        "actor_120",
+        "actor_124"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_3497688f": {
+      "id": "link_3497688f",
+      "linked_entity_ids": [
+        "actor_051",
+        "actor_050",
+        "actor_053",
+        "actor_109"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_39e9ff73": {
+      "id": "link_39e9ff73",
+      "linked_entity_ids": [
+        "actor_064",
+        "actor_063",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_104",
+        "actor_105",
+        "actor_123"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_180c2caa": {
+      "id": "link_180c2caa",
+      "linked_entity_ids": [
+        "actor_090",
+        "actor_105",
+        "actor_119"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_9b540127": {
+      "id": "link_9b540127",
+      "linked_entity_ids": [
+        "actor_011",
+        "actor_094",
+        "actor_099"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_887ced85"
+    },
+    "link_88ce018d": {
+      "id": "link_88ce018d",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_fd3289f7": {
+      "id": "link_fd3289f7",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_007",
         "actor_020"
       ],
       "tag_type": "temporal",
-      "tag_value": "Western Australia",
-      "source_chunk_id": "chunk_e9d13943"
+      "tag_value": "2005-03-30",
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_515f3372": {
+      "id": "link_515f3372",
+      "linked_entity_ids": [
+        "actor_002",
+        "actor_009",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_015",
+        "actor_016",
+        "actor_017",
+        "actor_018"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2005-03-21",
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_a0618539": {
+      "id": "link_a0618539",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_51b40c55": {
+      "id": "link_51b40c55",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_021"
+      ],
+      "tag_type": "spatial",
+      "tag_value": null,
+      "source_chunk_id": "chunk_ab5a0b4f"
+    },
+    "link_856ac903": {
+      "id": "link_856ac903",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_015",
+        "actor_016",
+        "actor_017",
+        "actor_018",
+        "actor_019",
+        "actor_020",
+        "actor_021",
+        "actor_022",
+        "actor_023",
+        "actor_024",
+        "actor_025",
+        "actor_026",
+        "actor_027",
+        "actor_028",
+        "actor_029",
+        "actor_030",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_034",
+        "actor_035",
+        "actor_036",
+        "actor_037",
+        "actor_038",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_044",
+        "actor_045",
+        "actor_046",
+        "actor_047",
+        "actor_048",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_060",
+        "actor_061",
+        "actor_062",
+        "actor_063",
+        "actor_064",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_082",
+        "actor_083",
+        "actor_084",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_092",
+        "actor_093",
+        "actor_094",
+        "actor_095",
+        "actor_096",
+        "actor_097",
+        "actor_098",
+        "actor_099",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_107",
+        "actor_108",
+        "actor_109",
+        "actor_110",
+        "actor_111",
+        "actor_112",
+        "actor_113",
+        "actor_114",
+        "actor_115",
+        "actor_116",
+        "actor_117",
+        "actor_118"
+      ],
+      "tag_type": "temporal",
+      "tag_value": "2009",
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_b26d155e": {
+      "id": "link_b26d155e",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_002",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_006",
+        "actor_007",
+        "actor_008",
+        "actor_009",
+        "actor_010",
+        "actor_011",
+        "actor_012",
+        "actor_013",
+        "actor_014",
+        "actor_015",
+        "actor_016",
+        "actor_017",
+        "actor_018",
+        "actor_019",
+        "actor_020",
+        "actor_021",
+        "actor_022",
+        "actor_023",
+        "actor_024",
+        "actor_025",
+        "actor_026",
+        "actor_027",
+        "actor_028",
+        "actor_029",
+        "actor_030",
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_034",
+        "actor_035",
+        "actor_036",
+        "actor_037",
+        "actor_038",
+        "actor_039",
+        "actor_040",
+        "actor_041",
+        "actor_042",
+        "actor_043",
+        "actor_044",
+        "actor_045",
+        "actor_046",
+        "actor_047",
+        "actor_048",
+        "actor_049",
+        "actor_050",
+        "actor_051",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_055",
+        "actor_056",
+        "actor_057",
+        "actor_058",
+        "actor_059",
+        "actor_060",
+        "actor_061",
+        "actor_062",
+        "actor_063",
+        "actor_064",
+        "actor_065",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_075",
+        "actor_076",
+        "actor_077",
+        "actor_078",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_082",
+        "actor_083",
+        "actor_084",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091",
+        "actor_092",
+        "actor_093",
+        "actor_094",
+        "actor_095",
+        "actor_096",
+        "actor_097",
+        "actor_098",
+        "actor_099",
+        "actor_100",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_105",
+        "actor_106",
+        "actor_107",
+        "actor_108",
+        "actor_109",
+        "actor_110",
+        "actor_111",
+        "actor_112",
+        "actor_113",
+        "actor_114",
+        "actor_115",
+        "actor_116",
+        "actor_117",
+        "actor_118"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "South Australia",
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_431163e7": {
+      "id": "link_431163e7",
+      "linked_entity_ids": [
+        "actor_001",
+        "actor_003",
+        "actor_004",
+        "actor_005",
+        "actor_012",
+        "actor_014",
+        "actor_015",
+        "actor_016",
+        "actor_018",
+        "actor_019",
+        "actor_020",
+        "actor_021",
+        "actor_022",
+        "actor_023",
+        "actor_024",
+        "actor_025",
+        "actor_026",
+        "actor_028",
+        "actor_029",
+        "actor_031",
+        "actor_032",
+        "actor_034",
+        "actor_035",
+        "actor_036",
+        "actor_038",
+        "actor_039",
+        "actor_040",
+        "actor_092",
+        "actor_093",
+        "actor_096",
+        "actor_101",
+        "actor_102",
+        "actor_103",
+        "actor_104",
+        "actor_109"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_f89ac510": {
+      "id": "link_f89ac510",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_028",
+        "actor_032"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_c5fe45a9": {
+      "id": "link_c5fe45a9",
+      "linked_entity_ids": [
+        "actor_003",
+        "actor_034"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_29f6b8a5": {
+      "id": "link_29f6b8a5",
+      "linked_entity_ids": [
+        "actor_005",
+        "actor_016"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_57c78a40": {
+      "id": "link_57c78a40",
+      "linked_entity_ids": [
+        "actor_009",
+        "actor_082",
+        "actor_083"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "outside State / other jurisdictions",
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_25d66ec0": {
+      "id": "link_25d66ec0",
+      "linked_entity_ids": [
+        "actor_028",
+        "actor_029",
+        "actor_039",
+        "actor_043"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_1bd17d6b": {
+      "id": "link_1bd17d6b",
+      "linked_entity_ids": [
+        "actor_031",
+        "actor_032",
+        "actor_033",
+        "actor_034",
+        "actor_035",
+        "actor_036",
+        "actor_067",
+        "actor_068",
+        "actor_069"
+      ],
+      "tag_type": "spatial",
+      "tag_value": "Court",
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_52600706": {
+      "id": "link_52600706",
+      "linked_entity_ids": [
+        "actor_035",
+        "actor_040"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_28973042": {
+      "id": "link_28973042",
+      "linked_entity_ids": [
+        "actor_045",
+        "actor_047",
+        "actor_049",
+        "actor_050",
+        "actor_052",
+        "actor_053",
+        "actor_054",
+        "actor_055",
+        "actor_056",
+        "actor_058",
+        "actor_060",
+        "actor_061",
+        "actor_062",
+        "actor_066",
+        "actor_067",
+        "actor_068",
+        "actor_069",
+        "actor_070",
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074",
+        "actor_076",
+        "actor_077",
+        "actor_079",
+        "actor_080",
+        "actor_081",
+        "actor_082",
+        "actor_083",
+        "actor_084",
+        "actor_085",
+        "actor_086",
+        "actor_087",
+        "actor_088",
+        "actor_089",
+        "actor_090",
+        "actor_091"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
+    },
+    "link_d4bc95df": {
+      "id": "link_d4bc95df",
+      "linked_entity_ids": [
+        "actor_071",
+        "actor_072",
+        "actor_073",
+        "actor_074"
+      ],
+      "tag_type": "temporal",
+      "tag_value": null,
+      "source_chunk_id": "chunk_2528bbd7"
     }
   },
   "entity_summaries": {}

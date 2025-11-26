@@ -23,6 +23,8 @@ Usage:
 import argparse
 import json
 import sys
+import os
+import time
 from pathlib import Path
 from datetime import datetime
 from typing import Optional, List
@@ -31,12 +33,23 @@ from typing import Optional, List
 PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
+# Load .env file if exists
+env_file = PROJECT_ROOT / ".env"
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                key, value = line.split("=", 1)
+                os.environ[key.strip()] = value.strip()
+
 from src.logic.gsw_schema import GlobalWorkspace, ChunkExtraction
 from src.gsw.legal_operator import LegalOperator, chunk_legal_text
 from src.gsw.legal_spacetime import LegalSpacetime
 from src.gsw.legal_reconciler import LegalReconciler
 from src.gsw.workspace import WorkspaceManager
 from src.gsw.legal_summary import LegalSummary
+from src.gsw.cost_tracker import reset_cost_tracker, get_cost_tracker
 
 
 # ============================================================================
@@ -44,8 +57,8 @@ from src.gsw.legal_summary import LegalSummary
 # ============================================================================
 
 DEFAULT_INPUT = PROJECT_ROOT.parent / "corpus.jsonl"
-DOMAINS_DIR = PROJECT_ROOT / "data" / "processed" / "domains"
-WORKSPACES_DIR = PROJECT_ROOT / "data" / "processed" / "workspaces"
+DOMAINS_DIR = PROJECT_ROOT / "data" / "domains"
+WORKSPACES_DIR = PROJECT_ROOT / "data" / "workspaces"
 REPORTS_DIR = PROJECT_ROOT / "reports" / "domain_analysis"
 
 
@@ -101,6 +114,9 @@ def run_gsw_processing(
     print("=" * 60)
     print(f"PHASE 2: GSW Processing - {domain.title()}")
     print("=" * 60)
+
+    # Initialize cost tracker
+    cost_tracker = reset_cost_tracker("google/gemini-2.5-flash")
 
     # Paths
     domain_file = DOMAINS_DIR / f"{domain.lower()}.jsonl"
@@ -197,10 +213,8 @@ def run_gsw_processing(
 
                     processed += 1
 
-                    # Progress
-                    if processed % 10 == 0:
-                        print(f"  Processed: {processed} | Actors: {len(workspace.actors)} | "
-                              f"Questions: {len(workspace.questions)}", end='\r')
+                    # Progress with cost
+                    cost_tracker.print_progress(processed, limit or 0)
 
                 else:
                     # Mock processing for testing without API
@@ -217,10 +231,21 @@ def run_gsw_processing(
             if processed % batch_size == 0 and not calibration:
                 _save_checkpoint(manager, state_file, line_num, processed)
 
+            # Small delay between documents (paid tier)
+            time.sleep(0.5)
+
     print(f"\n\n[Complete] Processed: {processed} | Errors: {errors}")
     print(f"[Workspace] Actors: {len(workspace.actors)} | "
           f"Questions: {len(workspace.questions)} | "
           f"Answered: {len(workspace.get_answered_questions())}")
+
+    # Print cost summary
+    print(cost_tracker.get_summary())
+
+    # Save cost report
+    cost_file = WORKSPACES_DIR / f"{domain.lower()}_costs.json"
+    cost_tracker.save(str(cost_file))
+    print(f"[Saved] Cost report: {cost_file}")
 
     # Save final state
     if not calibration:

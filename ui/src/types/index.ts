@@ -10,11 +10,25 @@ export interface Message {
   isStreaming?: boolean;
 }
 
+export interface ArtifactSection {
+  id: string;
+  type: 'text' | 'image' | 'chart';
+  title?: string;
+  content: string;
+  region: 'header' | 'footer' | 'main' | 'sidebar-left' | 'sidebar-right';
+  style?: Record<string, string>;
+  highlights?: { start: number; end: number; color: string; comment?: string }[];
+}
+
 export interface Artifact {
   id: string;
-  type: 'document' | 'code' | 'pdf' | 'letter' | 'markdown' | 'html';
+  type: 'document' | 'code' | 'pdf' | 'letter' | 'markdown' | 'html' | 'smart-canvas';
   title: string;
   content: string;
+  structure?: {
+    layout: 'standard' | 'report' | 'newsletter' | 'legal-brief';
+    sections: ArtifactSection[];
+  };
   language?: string;
   createdAt: Date;
   updatedAt: Date;

@@ -1,0 +1,34 @@
+{
+  "RelationshipStatus": {
+    "valid_transitions": {
+      "Single": ["Married", "De Facto"],
+      "Married": ["Separated"],
+      "Separated": ["Divorced", "Reconciled"],
+      "De Facto": ["Separated", "Married"],
+      "Divorced": ["Married", "De Facto"],
+      "Widowed": ["Married", "De Facto"]
+    },
+    "constraints": [
+      "Divorce cannot precede Marriage",
+      "Separation cannot precede Marriage (unless De Facto)",
+      "Death terminates all other states",
+      "Cannot be Married to two people simultaneously (Bigamy)"
+    ]
+  },
+  "CustodyArrangement": {
+    "valid_transitions": {
+      "Unknown": ["Sole Care", "Shared Care", "No Contact"],
+      "Sole Care": ["Shared Care", "No Contact", "Supervised"],
+      "Shared Care": ["Sole Care", "No Contact"],
+      "No Contact": ["Supervised", "Restored Contact"],
+      "Supervised": ["Shared Care", "Sole Care", "No Contact"]
+    }
+  },
+  "AssetOwnership": {
+    "valid_transitions": {
+      "Solely Owned": ["Jointly Owned", "Sold", "Transferred"],
+      "Jointly Owned": ["Solely Owned", "Sold", "Transferred"],
+      "Unknown": ["Solely Owned", "Jointly Owned"]
+    }
+  }
+}

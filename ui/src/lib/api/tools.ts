@@ -47,6 +47,12 @@ export async function executeTool(
         // Artifacts are handled directly in the UI
         return { success: true, data: { message: 'Artifact created' } };
 
+      case 'update_canvas_section':
+        // Updates to canvas sections are handled in the UI state management, 
+        // but the tool definition exists for the agent to call it.
+        // The ChatPanel will intercept this tool call and update the store.
+        return { success: true, data: { message: 'Canvas section updated' } };
+
       case 'execute_code':
         return await executeCode(args.code as string);
 

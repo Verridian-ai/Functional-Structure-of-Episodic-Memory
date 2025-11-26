@@ -57,7 +57,7 @@ interface VoicePanelProps {
 }
 
 export function VoicePanel({ onTranscript }: VoicePanelProps) {
-  const { voice, setVoice, settings } = useStore();
+  const { voice, setVoice, settings, updateSettings } = useStore();
   const [audioLevel, setAudioLevel] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -92,7 +92,7 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
 
           if (finalTranscript) {
             onTranscript(finalTranscript);
-            setVoice({ transcript: '', isListening: false });
+            setVoice({ isListening: false });
           }
         };
 
@@ -248,8 +248,11 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
                   <div className="font-medium text-white">Auto-send on pause</div>
                   <div className="text-sm text-zinc-400">Send message when you stop speaking</div>
                 </div>
-                <button className="w-12 h-6 rounded-full bg-cyan-600">
-                  <div className="w-5 h-5 bg-white rounded-full translate-x-6" />
+                <button 
+                  onClick={() => updateSettings({ voiceAutoSend: !settings.voiceAutoSend })}
+                  className={`w-12 h-6 rounded-full transition-colors ${settings.voiceAutoSend ? 'bg-cyan-600' : 'bg-zinc-600'}`}
+                >
+                  <div className={`w-5 h-5 bg-white rounded-full transition-transform ${settings.voiceAutoSend ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
               </div>
 

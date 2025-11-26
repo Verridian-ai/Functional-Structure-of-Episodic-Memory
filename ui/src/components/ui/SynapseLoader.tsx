@@ -12,6 +12,7 @@ export function SynapseLoader({ size = 'md', color = 'cyan' }: { size?: 'sm' | '
   
   const colorClass = color === 'cyan' ? 'bg-cyan-500' : 'bg-purple-500';
   const shadowClass = color === 'cyan' ? 'shadow-[0_0_10px_rgba(6,182,212,0.8)]' : 'shadow-[0_0_10px_rgba(168,85,247,0.8)]';
+  const borderColorClass = color === 'cyan' ? 'border-cyan-400' : 'border-purple-400';
 
   return (
     <div className="relative flex items-center justify-center" style={{ width: px, height: px }}>
@@ -28,7 +29,7 @@ export function SynapseLoader({ size = 'md', color = 'cyan' }: { size?: 'sm' | '
         </div>
         
         {/* Firing Lines (CSS only implementation for simplicity) */}
-        <div className="absolute w-full h-full animate-ping opacity-20 rounded-full border border-cyan-400" />
+        <div className={`absolute w-full h-full animate-ping opacity-20 rounded-full border ${borderColorClass}`} />
       </div>
     </div>
   );

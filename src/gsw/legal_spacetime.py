@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from src.logic.gsw_schema import (
     Actor, SpatioTemporalLink, LinkType, ChunkExtraction
 )
+from .cost_tracker import get_cost_tracker
 
 
 # ============================================================================
@@ -112,7 +113,7 @@ class LegalSpacetime:
 
     def __init__(
         self,
-        model: str = "google/gemini-2.0-flash-001",
+        model: str = "google/gemini-2.5-flash",
         api_key: Optional[str] = None,
         use_openrouter: bool = True
     ):
@@ -203,7 +204,19 @@ class LegalSpacetime:
                 }
             )
             response.raise_for_status()
-            return response.json()["choices"][0]["message"]["content"]
+            result = response.json()
+
+            # Track token usage
+            usage = result.get("usage", {})
+            if usage:
+                tracker = get_cost_tracker(self.model)
+                tracker.add_usage(
+                    "spacetime",
+                    usage.get("prompt_tokens", 0),
+                    usage.get("completion_tokens", 0)
+                )
+
+            return result["choices"][0]["message"]["content"]
         else:
             raise NotImplementedError("Direct Google API not implemented")
 

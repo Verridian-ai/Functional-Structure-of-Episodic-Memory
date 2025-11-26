@@ -86,7 +86,7 @@ class LegalSummary:
 
     def __init__(
         self,
-        model: str = "gemini-2.0-flash",
+        model: str = "google/gemini-2.5-flash",
         api_key: Optional[str] = None,
         use_openrouter: bool = True
     ):

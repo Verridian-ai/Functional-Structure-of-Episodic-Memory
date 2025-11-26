@@ -33,7 +33,35 @@
       "title": "How a court determines what is in a child's best interests",
       "legal_test": "Best Interests Factors",
       "keywords": ["best interests", "factors", "safety", "meaningful relationship", "views of child"],
-      "summary": "Lists primary considerations (safety, meaningful relationship) and additional considerations (views of child, nature of relationship, capacity of parents)"
+      "summary": "Lists primary considerations (safety, meaningful relationship) and additional considerations (views of child, nature of relationship, capacity of parents)",
+      "required_elements": [
+        {
+          "element": "safety",
+          "keywords": ["safe", "safety", "harm", "risk", "abuse", "violence", "family violence"],
+          "weight": 0.95,
+          "description": "Paramount consideration: safety from harm"
+        },
+        {
+          "element": "meaningful_relationship",
+          "keywords": ["meaningful", "relationship", "contact", "time", "benefit"],
+          "weight": 0.90,
+          "description": "Benefit of meaningful relationship with both parents"
+        },
+        {
+          "element": "views_of_child",
+          "keywords": ["views", "wishes", "maturity", "express", "opinion"],
+          "weight": 0.75,
+          "description": "Views expressed by the child"
+        },
+        {
+          "element": "parenting_capacity",
+          "keywords": ["capacity", "parent", "care", "provide", "needs"],
+          "weight": 0.80,
+          "description": "Capacity of each parent"
+        }
+      ],
+      "threshold": 0.6,
+      "minimum_elements": 2
     },
     {
       "section": "61DA",
@@ -90,7 +118,29 @@
       "title": "Property - matters to be taken into account",
       "legal_test": "Property Contribution Factors",
       "keywords": ["contribution", "financial", "non-financial", "homemaker", "parent"],
-      "summary": "Court must consider (a) financial contributions, (b) non-financial contributions, (c) contributions as homemaker or parent, (d) future needs factors"
+      "summary": "Court must consider (a) financial contributions, (b) non-financial contributions, (c) contributions as homemaker or parent, (d) future needs factors",
+      "required_elements": [
+        {
+          "element": "financial_contributions",
+          "keywords": ["financial", "money", "income", "purchase", "funds", "deposit"],
+          "weight": 0.85,
+          "description": "Direct financial contributions to acquisition/maintenance of property"
+        },
+        {
+          "element": "non_financial_contributions",
+          "keywords": ["non-financial", "renovation", "improvement", "labor", "work"],
+          "weight": 0.80,
+          "description": "Non-financial contributions to property"
+        },
+        {
+          "element": "homemaker_parent",
+          "keywords": ["homemaker", "parent", "cooking", "cleaning", "raising", "care"],
+          "weight": 0.85,
+          "description": "Contributions to welfare of family as homemaker or parent"
+        }
+      ],
+      "threshold": 0.5,
+      "minimum_elements": 1
     },
     {
       "section": "75(2)",

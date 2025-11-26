@@ -190,6 +190,28 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
     }
   };
 
+  const downloadAsDOCX = async () => {
+    try {
+      const response = await fetch('/api/docx/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content }),
+      });
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${title.replace(/\s+/g, '_')}.docx`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('DOCX generation failed:', error);
+    }
+  };
+
   const handleSave = () => {
     const doc: DocumentData = {
       id: `doc_${Date.now()}`,
@@ -221,18 +243,18 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowTemplates(!showTemplates)}
-            className="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition min-h-[44px]"
           >
-            <Plus className="w-4 h-4" />
-            Templates
+            <Plus className="w-5 h-5" />
+            <span className="hidden sm:inline">Templates</span>
           </button>
           <button
             onClick={() => setIsPreview(!isPreview)}
-            className={`p-2 rounded-lg transition ${
+            className={`p-2.5 rounded-lg transition min-h-[44px] min-w-[44px] flex items-center justify-center ${
               isPreview ? 'bg-cyan-600/20 text-cyan-400' : 'hover:bg-zinc-800 text-zinc-400'
             }`}
           >
-            {isPreview ? <Edit3 className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            {isPreview ? <Edit3 className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
           </button>
         </div>
       </div>
@@ -241,15 +263,15 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
       {showTemplates && (
         <div className="p-4 border-b border-zinc-800 bg-zinc-800/30">
           <h4 className="text-sm font-medium text-white mb-3">Choose a Template</h4>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {LETTER_TEMPLATES.map((template) => (
               <button
                 key={template.id}
                 onClick={() => applyTemplate(template)}
-                className="p-3 text-left bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-cyan-500/50 transition"
+                className="p-4 text-left bg-zinc-800 hover:bg-zinc-700 rounded-lg border border-zinc-700 hover:border-cyan-500/50 transition active:scale-[0.98]"
               >
-                <FileText className="w-5 h-5 text-blue-400 mb-2" />
-                <div className="text-sm font-medium text-white">{template.name}</div>
+                <FileText className="w-6 h-6 text-blue-400 mb-2" />
+                <div className="text-base font-medium text-white">{template.name}</div>
               </button>
             ))}
           </div>
@@ -283,38 +305,45 @@ export function DocumentTools({ onDocumentCreate, initialContent = '', initialTi
 
         <div className="flex items-center gap-2">
           <div className="relative group">
-            <button className="flex items-center gap-2 px-3 py-1.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition">
-              <Download className="w-4 h-4" />
-              Export
+            <button className="flex items-center gap-2 px-4 py-2.5 text-sm bg-zinc-800 hover:bg-zinc-700 rounded-lg transition min-h-[44px]">
+              <Download className="w-5 h-5" />
+              <span className="hidden sm:inline">Export</span>
             </button>
-            <div className="absolute right-0 bottom-full mb-2 w-40 py-2 bg-zinc-800 rounded-lg border border-zinc-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition">
+            <div className="absolute right-0 bottom-full mb-2 w-40 py-2 bg-zinc-800 rounded-lg border border-zinc-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition shadow-xl z-50">
               <button
                 onClick={downloadAsText}
-                className="w-full px-4 py-2 text-sm text-left text-zinc-300 hover:bg-zinc-700"
+                className="w-full px-4 py-3 text-sm text-left text-zinc-300 hover:bg-zinc-700 min-h-[44px]"
               >
                 Text (.txt)
               </button>
               <button
                 onClick={downloadAsMarkdown}
-                className="w-full px-4 py-2 text-sm text-left text-zinc-300 hover:bg-zinc-700"
+                className="w-full px-4 py-3 text-sm text-left text-zinc-300 hover:bg-zinc-700 min-h-[44px]"
               >
                 Markdown (.md)
               </button>
               <button
                 onClick={downloadAsPDF}
-                className="w-full px-4 py-2 text-sm text-left text-zinc-300 hover:bg-zinc-700"
+                className="w-full px-4 py-3 text-sm text-left text-zinc-300 hover:bg-zinc-700 min-h-[44px]"
               >
                 PDF (.pdf)
+              </button>
+              <button
+                onClick={downloadAsDOCX}
+                className="w-full px-4 py-3 text-sm text-left text-zinc-300 hover:bg-zinc-700 min-h-[44px]"
+              >
+                Word (.docx)
               </button>
             </div>
           </div>
 
           <button
             onClick={handleSave}
-            className="flex items-center gap-2 px-4 py-1.5 text-sm bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition"
+            className="flex items-center gap-2 px-4 py-2.5 text-sm bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg transition min-h-[44px] font-medium shadow-lg shadow-cyan-900/20"
           >
-            <Save className="w-4 h-4" />
-            Save to Canvas
+            <Save className="w-5 h-5" />
+            <span className="hidden sm:inline">Save to Canvas</span>
+            <span className="sm:hidden">Save</span>
           </button>
         </div>
       </div>

@@ -3,6 +3,53 @@ import { promises as fs } from 'fs';
 import * as readline from 'readline';
 import { createReadStream } from 'fs';
 import path from 'path';
+import { TEMFactorizer, ZeroShotLegalReasoner } from '@/lib/tem/caseFactorizer';
+import { LegalEvidenceDetector } from '@/lib/active_inference/evidenceDetector';
+import { LegalVSA } from '@/lib/vsa/legalVSA';
+
+// TEM Singleton
+let legalReasoner: ZeroShotLegalReasoner | null = null;
+// Active Inference Singleton
+let evidenceDetector: LegalEvidenceDetector | null = null;
+// VSA Singleton
+let legalVSA: LegalVSA | null = null;
+
+function getLegalVSA() {
+  if (!legalVSA) {
+    legalVSA = new LegalVSA();
+  }
+  return legalVSA;
+}
+
+function getEvidenceDetector() {
+  if (!evidenceDetector) {
+    evidenceDetector = new LegalEvidenceDetector();
+  }
+  return evidenceDetector;
+}
+
+async function getLegalReasoner(cases: CaseRecord[]) {
+  if (!legalReasoner) {
+    console.log('Initializing Zero-Shot Legal Reasoner...');
+    legalReasoner = new ZeroShotLegalReasoner();
+    
+    // Pre-process cases for TEM (this might take a moment on first load)
+    const actualCases = cases.filter(c => isActualCase(c));
+    
+    // In a real prod env, this would be pre-computed. 
+    // Here we'll just load a subset to keep startup fast, or all if possible.
+    // Let's load top 200 most relevant looking ones or just first 200 for speed demo
+    const sampleCases = actualCases.slice(0, 200).map(c => ({
+      citation: c.citation,
+      text: c.text,
+      outcome: extractOutcome(c.text) || undefined
+    }));
+    
+    legalReasoner.loadPrecedents(sampleCases);
+    console.log(`Zero-Shot Legal Reasoner initialized with ${sampleCases.length} structural precedents.`);
+  }
+  return legalReasoner;
+}
 
 // Case data structure from family.jsonl
 interface CaseRecord {
@@ -313,21 +360,54 @@ function isActualCase(caseRecord: CaseRecord): boolean {
   return !isLegislation(caseRecord);
 }
 
-// Score how relevant a case is to keywords
+// Hierarchy weights for Australian courts
+const COURT_HIERARCHY: Record<string, { weight: number; name: string }> = {
+  'HCA': { weight: 10, name: 'High Court of Australia' },
+  'FCAFC': { weight: 9, name: 'Federal Court Full Court' },
+  'FamCAFC': { weight: 8, name: 'Family Court Full Court' },
+  'FCA': { weight: 7, name: 'Federal Court' },
+  'FamCA': { weight: 6, name: 'Family Court' },
+  'FCCA': { weight: 5, name: 'Federal Circuit Court' },
+  'NSWSC': { weight: 4, name: 'NSW Supreme Court' },
+  'VSC': { weight: 4, name: 'Supreme Court of Victoria' },
+  'QSC': { weight: 4, name: 'Supreme Court of Queensland' },
+  'SASC': { weight: 4, name: 'Supreme Court of SA' },
+  'WASC': { weight: 4, name: 'Supreme Court of WA' },
+  'NSWDC': { weight: 3, name: 'District Court' },
+  'Tribunal': { weight: 2, name: 'Administrative Tribunal' },
+};
+
+// Score how relevant a case is to keywords, with authority boosting
 function scoreCaseRelevance(caseRecord: CaseRecord, keywords: string[]): number {
   const textLower = caseRecord.text.toLowerCase();
-  let score = 0;
+  let baseScore = 0;
 
   for (const kw of keywords) {
     // Count occurrences (up to a max to prevent bias)
     const regex = new RegExp(kw, 'gi');
     const matches = textLower.match(regex);
     if (matches) {
-      score += Math.min(matches.length, 10);
+      baseScore += Math.min(matches.length, 10);
     }
   }
 
-  return score;
+  // Apply Authority Boosting
+  const citation = caseRecord.citation || '';
+  let authorityBoost = 1.0;
+  
+  // Extract court identifier from citation [YYYY] COURT ###
+  const courtMatch = citation.match(/\[\d{4}\]\s*(\w+)\s*\d+/);
+  if (courtMatch) {
+    const courtCode = courtMatch[1];
+    const hierarchy = COURT_HIERARCHY[courtCode] || COURT_HIERARCHY[courtCode.toUpperCase()];
+    
+    if (hierarchy) {
+      // Boost score: HCA (10) gets 1.5x, Tribunal (2) gets 1.1x
+      authorityBoost = 1 + (hierarchy.weight / 20); 
+    }
+  }
+
+  return baseScore * authorityBoost;
 }
 
 // Extract case summary (first ~500 chars that look like a summary)
@@ -585,26 +665,51 @@ export async function POST(request: NextRequest) {
         const cases = await loadCases();
         const keywords = extractKeyTerms(story);
 
-        if (keywords.length === 0) {
+        // Initialize TEM Reasoner
+        const reasoner = await getLegalReasoner(cases);
+        const structuralMatches = reasoner.findStructuralPrecedents(story, limit);
+
+        if (keywords.length === 0 && structuralMatches.length === 0) {
           return NextResponse.json({
             results: [],
-            message: 'Could not identify relevant legal keywords from your story. Please include details about your family law situation (e.g., children, property, separation).',
+            message: 'Could not identify relevant legal keywords or patterns from your story.',
             keywords: [],
           });
         }
 
-        // Score and rank cases (filter out legislation documents)
-        const scoredCases = cases
-          .filter(c => isActualCase(c)) // Only include actual court cases
+        // Classic Keyword Matching
+        const keywordResults = cases
+          .filter(c => isActualCase(c))
           .map(c => ({
             case: c,
             score: scoreCaseRelevance(c, keywords),
+            type: 'keyword'
           }))
           .filter(sc => sc.score > 0)
           .sort((a, b) => b.score - a.score)
           .slice(0, limit);
 
-        const results = scoredCases.map(sc => ({
+        // Convert TEM matches back to CaseRecords if possible
+        const structuralResults = structuralMatches.map(match => {
+          const foundCase = cases.find(c => c.citation === match.citation);
+          return foundCase ? {
+            case: foundCase,
+            score: match.similarity * 100, // Scale 0-1 to 0-100 approx
+            reasoning: match.reasoning,
+            type: 'structural'
+          } : null;
+        }).filter(Boolean) as Array<{ case: CaseRecord, score: number, reasoning?: string, type: string }>;
+
+        // Merge results (deduplicate by citation)
+        const combined = [...structuralResults, ...keywordResults];
+        const seen = new Set();
+        const uniqueResults = combined.filter(item => {
+          if (seen.has(item.case.citation)) return false;
+          seen.add(item.case.citation);
+          return true;
+        }).slice(0, limit);
+
+        const results = uniqueResults.map(sc => ({
           citation: sc.case.citation,
           date: sc.case.date,
           jurisdiction: sc.case.jurisdiction,
@@ -612,6 +717,8 @@ export async function POST(request: NextRequest) {
           url: sc.case.url,
           category: sc.case._classification?.primary_category || 'Unknown',
           relevance_score: sc.score,
+          match_type: sc.type,
+          structural_reasoning: sc.reasoning,
           summary: extractCaseSummary(sc.case.text),
           outcome: extractOutcome(sc.case.text),
           matched_keywords: keywords.filter(kw =>
@@ -623,7 +730,7 @@ export async function POST(request: NextRequest) {
           results,
           keywords_identified: keywords,
           total_cases_searched: cases.length,
-          message: `Found ${results.length} cases similar to your situation based on keywords: ${keywords.join(', ')}`,
+          message: `Found ${results.length} cases. ${structuralResults.length} structural matches, ${keywordResults.length} keyword matches.`,
         });
       }
 
@@ -724,14 +831,48 @@ export async function POST(request: NextRequest) {
         // Get similar cases (filter out legislation documents - only actual court cases)
         const cases = await loadCases();
         const keywords = extractKeyTerms(story);
+
+        // Initialize TEM Reasoner and predict outcome
+        const reasoner = await getLegalReasoner(cases);
+        const prediction = reasoner.predictOutcome(story);
+        
+        // Active Inference: Detect Gaps
+        const detector = getEvidenceDetector();
+        const gaps = detector.detectGaps(story);
+        const significantGaps = gaps.filter(g => g.evi > 0.5); // Filter for significant gaps
+
+        // Score cases with hybrid approach
         const scoredCases = cases
-          .filter(c => isActualCase(c)) // Only include actual court cases, not legislation
+          .filter(c => isActualCase(c))
           .map(c => ({ case: c, score: scoreCaseRelevance(c, keywords) }))
           .filter(sc => sc.score > 0)
           .sort((a, b) => b.score - a.score)
           .slice(0, limit);
 
+        // VSA: Anti-Hallucination Check
+        const vsa = getLegalVSA();
+        const vsaCheck = vsa.verifyNoHallucination(story);
+
         return NextResponse.json({
+          // Active Inference: Missing Evidence
+          missing_evidence: significantGaps.length > 0 ? {
+            status: 'incomplete',
+            gaps: significantGaps.slice(0, 3), // Top 3 gaps
+            recommendation: "Providing this information will significantly improve the accuracy of the advice."
+          } : { status: 'complete' },
+          // TEM Predictive Insight
+          prediction: {
+            outcome: prediction.prediction,
+            confidence: prediction.confidence,
+            reasoning: prediction.reasoning,
+            structural_precedents: prediction.supporting_precedents
+          },
+          // VSA Validation
+          validation: {
+            valid: vsaCheck.valid,
+            issues: vsaCheck.issues,
+            confidence_score: vsaCheck.confidence
+          },
           // Legislation (the LAW)
           applicable_law: relevantSections.map(s => ({
             citation: `Section ${s.section} of the Family Law Act 1975 (Cth)`,

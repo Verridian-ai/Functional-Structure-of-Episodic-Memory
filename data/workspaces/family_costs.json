@@ -1,0 +1,27 @@
+{
+  "model": "google/gemini-2.5-flash",
+  "total_input_tokens": 147344,
+  "total_output_tokens": 87659,
+  "total_requests": 29,
+  "input_cost": 0.0442032,
+  "output_cost": 0.2191475,
+  "total_cost": 0.2633507,
+  "components": {
+    "operator": {
+      "input": 52261,
+      "output": 62841
+    },
+    "reconciler": {
+      "input": 38300,
+      "output": 9762
+    },
+    "spacetime": {
+      "input": 56783,
+      "output": 15056
+    },
+    "summary": {
+      "input": 0,
+      "output": 0
+    }
+  }
+}

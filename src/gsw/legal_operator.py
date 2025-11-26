@@ -12,13 +12,20 @@ It takes raw legal text and extracts structured semantic information:
 
 Based on: GSW_prompt_operator.pdf
 Adapted for: Australian Legal Domain
+
+NOTE: This module has been refactored into smaller components:
+- operator_prompts.py: System and user prompts
+- extraction_parser.py: Parsing helpers for schema objects
+- text_chunker.py: Text chunking utilities
+
+This file contains the main LegalOperator class and re-exports for compatibility.
 """
 
 import json
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Tuple
+from typing import Dict, List, Optional, Any
 from uuid import uuid4
 import os
 
@@ -30,212 +37,11 @@ from src.logic.gsw_schema import (
     SpatioTemporalLink, ChunkExtraction, QuestionType, LinkType,
     OntologyContext
 )
+from .operator_prompts import LEGAL_OPERATOR_SYSTEM_PROMPT, LEGAL_OPERATOR_USER_PROMPT
+from .extraction_parser import ExtractionParser
+from .text_chunker import chunk_legal_text
+from .cost_tracker import get_cost_tracker
 
-
-# ============================================================================
-# LEGAL OPERATOR PROMPT
-# ============================================================================
-
-LEGAL_OPERATOR_SYSTEM_PROMPT = """You are the Legal Operator for a Global Semantic Workspace (GSW) system.
-Your task is to extract structured episodic memory from Australian legal documents.
-
-The GSW model is ACTOR-CENTRIC, not verb-centric. This means:
-- We organize information around WHO is involved (actors)
-- Each actor has ROLES (their function) and STATES (their condition)
-- VERBS become links between actors, not the organizing principle
-- We track WHEN and WHERE things happen (spatio-temporal binding)
-- We generate QUESTIONS that the text might answer
-
-This mirrors how human episodic memory works:
-When you remember an experience, you remember WHO was involved and WHAT happened to them.
-"""
-
-LEGAL_OPERATOR_USER_PROMPT = """
-## Your 6 Tasks
-
-### Task 1: ACTOR IDENTIFICATION
-Extract ALL actors from this legal text. An actor can be:
-
-**PERSONS:**
-- Parties: Applicant, Respondent, Appellant, Husband, Wife, Father, Mother
-- Children: Named children, "the child", "the children of the marriage"
-- Legal professionals: Judge, Magistrate, Solicitor, Barrister, ICL (Independent Children's Lawyer)
-- Witnesses, experts, third parties
-
-**ORGANIZATIONS:**
-- Courts: Family Court, Federal Circuit Court, Full Court
-- Government: Department of Communities, Child Safety, Centrelink
-- Employers, businesses, banks
-
-**ASSETS (treat as actors):**
-- Real property: "the matrimonial home", "123 Smith Street"
-- Financial: Superannuation, bank accounts, shares
-- Vehicles, businesses, personal property
-
-**TEMPORAL ENTITIES:**
-- All dates: marriage date, separation date, hearing dates, order dates
-- Time periods: "during the marriage", "post-separation"
-
-**DOCUMENTS (treat as actors):**
-- Applications, Orders, Affidavits, Subpoenas, Judgments
-
-**ABSTRACT ENTITIES:**
-- "The proceedings", "the appeal", "the property pool"
-
-### Task 2: ROLE ASSIGNMENT
-For each actor, assign their ROLE in this legal context:
-- Party roles: "Applicant husband", "Respondent mother", "Subject child"
-- Asset roles: "Matrimonial home", "Pre-relationship asset", "Jointly owned asset"
-- Professional roles: "Trial Judge", "Appellant's solicitor"
-
-### Task 3: STATE IDENTIFICATION
-Track the STATE of each actor at different points:
-
-**Relationship States:**
-- Married, De facto, Separated, Divorced, Remarried
-
-**Custody/Parenting States:**
-- Lives with [parent], Shared care (50/50), Limited time, Supervised contact, No contact
-
-**Financial States:**
-- Employed (occupation, income), Unemployed, Receiving Centrelink
-- Asset value: "Valued at $X", "Encumbered by mortgage of $Y"
-
-**Legal/Procedural States:**
-- Filed application, Orders made, Appeal pending, Matter concluded
-
-### Task 4: VERB PHRASE IDENTIFICATION
-Extract legal actions (verbs that LINK actors):
-
-**Explicit verbs:**
-- Filing: filed, lodged, served, issued, commenced
-- Court: ordered, granted, dismissed, allowed, refused, adjourned, appealed
-- Party actions: separated, relocated, married, purchased, sold, transferred
-
-**Implicit verbs (infer from context):**
-- "The parties separated in March 2020" → separated(husband, wife, March 2020)
-- "Property settlement" → seek_division(applicant, property_pool)
-
-### Task 5: PREDICTIVE QUESTION GENERATION
-Generate questions this text MIGHT answer:
-
-**WHO questions:**
-- Who is the applicant/respondent?
-- Who has primary care of the children?
-
-**WHAT questions:**
-- What assets form the property pool?
-- What orders were made?
-
-**WHEN questions:**
-- When did the parties marry/separate/divorce?
-- When was the hearing?
-
-**WHERE questions:**
-- Where do the children live?
-- Where is the matrimonial home?
-
-**HOW MUCH questions:**
-- What is the value of the property pool?
-- What percentage was awarded?
-
-### Task 6: ANSWER MAPPING
-For each question, if the text provides an answer:
-- Mark as answerable: true
-- Provide the answer_text
-- Link to the relevant actor_id
-
----
-
-<situation>
-{situation}
-</situation>
-
-<background_context>
-{background_context}
-</background_context>
-
-{ontology_context}
-
-<input_text>
-{input_text}
-</input_text>
-
----
-
-## Output Format
-
-Return a JSON object with this structure:
-
-```json
-{{
-    "situation_summary": "Brief description of what this text is about",
-    "actors": [
-        {{
-            "id": "actor_001",
-            "name": "John Smith",
-            "actor_type": "person",
-            "aliases": ["the husband", "the applicant", "Mr Smith"],
-            "roles": ["Applicant", "Husband", "Father"],
-            "states": [
-                {{
-                    "name": "RelationshipStatus",
-                    "value": "Separated",
-                    "start_date": "2020-03-15"
-                }},
-                {{
-                    "name": "Employment",
-                    "value": "Employed as accountant",
-                    "start_date": null
-                }}
-            ]
-        }}
-    ],
-    "verb_phrases": [
-        {{
-            "id": "verb_001",
-            "verb": "filed",
-            "agent_id": "actor_001",
-            "patient_ids": ["actor_010"],
-            "temporal_id": "actor_020",
-            "is_implicit": false
-        }}
-    ],
-    "questions": [
-        {{
-            "id": "q_001",
-            "question_text": "When did the parties separate?",
-            "question_type": "when",
-            "target_entity_id": "actor_001",
-            "answerable": true,
-            "answer_text": "March 15, 2020",
-            "answer_entity_id": "actor_020"
-        }}
-    ],
-    "spatio_temporal_links": [
-        {{
-            "id": "link_001",
-            "linked_entity_ids": ["actor_001", "actor_002", "actor_003"],
-            "tag_type": "temporal",
-            "tag_value": "2020-03-15"
-        }}
-    ]
-}}
-```
-
-IMPORTANT:
-- Extract ALL actors, even minor ones
-- Generate IDs consistently (actor_001, actor_002, etc.)
-- If a date is mentioned, create a temporal actor for it
-- Link actors via verb_phrases and spatio_temporal_links
-- Be conservative with states - only include what's explicitly stated
-- Generate at least 5 predictive questions
-"""
-
-
-# ============================================================================
-# OPERATOR CLASS
-# ============================================================================
 
 class LegalOperator:
     """
@@ -252,7 +58,7 @@ class LegalOperator:
 
     def __init__(
         self,
-        model: str = "google/gemini-2.0-flash-001",
+        model: str = "google/gemini-2.5-flash",
         api_key: Optional[str] = None,
         use_openrouter: bool = True
     ):
@@ -266,6 +72,7 @@ class LegalOperator:
         """
         self.model = model
         self.use_openrouter = use_openrouter
+        self.parser = ExtractionParser()
 
         # Get API key
         if api_key:
@@ -367,7 +174,19 @@ class LegalOperator:
                 }
             )
             response.raise_for_status()
-            return response.json()["choices"][0]["message"]["content"]
+            result = response.json()
+
+            # Track token usage
+            usage = result.get("usage", {})
+            if usage:
+                tracker = get_cost_tracker(self.model)
+                tracker.add_usage(
+                    "operator",
+                    usage.get("prompt_tokens", 0),
+                    usage.get("completion_tokens", 0)
+                )
+
+            return result["choices"][0]["message"]["content"]
         else:
             response = self.client.generate_content(
                 f"{LEGAL_OPERATOR_SYSTEM_PROMPT}\n\n{user_prompt}"
@@ -437,117 +256,25 @@ class LegalOperator:
 
         # Parse actors
         for actor_data in data.get("actors", []):
-            actor = self._parse_actor(actor_data, chunk_id)
+            actor = self.parser.parse_actor(actor_data, chunk_id)
             extraction.actors.append(actor)
 
         # Parse verb phrases
         for verb_data in data.get("verb_phrases", []):
-            verb = self._parse_verb_phrase(verb_data, chunk_id)
+            verb = self.parser.parse_verb_phrase(verb_data, chunk_id)
             extraction.verb_phrases.append(verb)
 
         # Parse questions
         for q_data in data.get("questions", []):
-            question = self._parse_question(q_data, chunk_id)
+            question = self.parser.parse_question(q_data, chunk_id)
             extraction.questions.append(question)
 
         # Parse spatio-temporal links
         for link_data in data.get("spatio_temporal_links", []):
-            link = self._parse_link(link_data, chunk_id)
+            link = self.parser.parse_link(link_data, chunk_id)
             extraction.spatio_temporal_links.append(link)
 
         return extraction
-
-    def _parse_actor(self, data: Dict[str, Any], chunk_id: str) -> Actor:
-        """Parse actor from response data."""
-        # Parse states
-        states = []
-        for state_data in data.get("states", []):
-            state = State(
-                id=f"state_{uuid4().hex[:8]}",
-                entity_id=data.get("id", ""),
-                name=state_data.get("name", "Unknown"),
-                value=state_data.get("value", ""),
-                start_date=state_data.get("start_date"),
-                end_date=state_data.get("end_date"),
-                source_chunk_id=chunk_id
-            )
-            states.append(state)
-
-        # Parse actor type
-        actor_type_str = data.get("actor_type", "person").lower()
-        try:
-            actor_type = ActorType(actor_type_str)
-        except ValueError:
-            actor_type = ActorType.PERSON
-
-        return Actor(
-            id=data.get("id", f"actor_{uuid4().hex[:8]}"),
-            name=data.get("name", "Unknown"),
-            actor_type=actor_type,
-            aliases=data.get("aliases", []),
-            roles=data.get("roles", []),
-            states=states,
-            source_chunk_ids=[chunk_id]
-        )
-
-    def _parse_verb_phrase(self, data: Dict[str, Any], chunk_id: str) -> VerbPhrase:
-        """Parse verb phrase from response data."""
-        # Ensure agent_id is string or None (LLM sometimes returns [])
-        agent_id = data.get("agent_id")
-        if not isinstance(agent_id, str):
-            agent_id = None
-        # Ensure patient_ids is a list of strings
-        patient_ids = data.get("patient_ids", [])
-        if not isinstance(patient_ids, list):
-            patient_ids = []
-        patient_ids = [p for p in patient_ids if isinstance(p, str)]
-
-        return VerbPhrase(
-            id=data.get("id", f"verb_{uuid4().hex[:8]}"),
-            verb=data.get("verb", ""),
-            agent_id=agent_id,
-            patient_ids=patient_ids,
-            temporal_id=data.get("temporal_id") if isinstance(data.get("temporal_id"), str) else None,
-            spatial_id=data.get("spatial_id") if isinstance(data.get("spatial_id"), str) else None,
-            is_implicit=data.get("is_implicit", False),
-            source_chunk_id=chunk_id
-        )
-
-    def _parse_question(self, data: Dict[str, Any], chunk_id: str) -> PredictiveQuestion:
-        """Parse predictive question from response data."""
-        # Parse question type
-        q_type_str = data.get("question_type", "what").lower()
-        try:
-            q_type = QuestionType(q_type_str)
-        except ValueError:
-            q_type = QuestionType.WHAT
-
-        return PredictiveQuestion(
-            id=data.get("id", f"q_{uuid4().hex[:8]}"),
-            question_text=data.get("question_text", ""),
-            question_type=q_type,
-            target_entity_id=data.get("target_entity_id"),
-            answerable=data.get("answerable", False),
-            answer_text=data.get("answer_text"),
-            answer_entity_id=data.get("answer_entity_id"),
-            source_chunk_id=chunk_id
-        )
-
-    def _parse_link(self, data: Dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
-        """Parse spatio-temporal link from response data."""
-        tag_type_str = data.get("tag_type", "temporal").lower()
-        try:
-            tag_type = LinkType(tag_type_str)
-        except ValueError:
-            tag_type = LinkType.TEMPORAL
-
-        return SpatioTemporalLink(
-            id=data.get("id", f"link_{uuid4().hex[:8]}"),
-            linked_entity_ids=data.get("linked_entity_ids", []),
-            tag_type=tag_type,
-            tag_value=data.get("tag_value"),
-            source_chunk_id=chunk_id
-        )
 
     def review_extraction(
         self,
@@ -599,109 +326,27 @@ If improvements needed, respond with corrections in the same JSON format as orig
             print(f"[Review Warning] {e}")
             return extraction
 
+    # Legacy method aliases for backwards compatibility
+    def _parse_actor(self, data: Dict[str, Any], chunk_id: str) -> Actor:
+        """Legacy method - delegates to ExtractionParser."""
+        return self.parser.parse_actor(data, chunk_id)
 
-# ============================================================================
-# HELPER FUNCTIONS
-# ============================================================================
+    def _parse_verb_phrase(self, data: Dict[str, Any], chunk_id: str) -> VerbPhrase:
+        """Legacy method - delegates to ExtractionParser."""
+        return self.parser.parse_verb_phrase(data, chunk_id)
 
-def chunk_legal_text(
-    text: str,
-    max_chunk_size: int = 15000,
-    overlap: int = 500
-) -> List[Tuple[str, int, int]]:
-    """
-    Split legal text into chunks for processing.
+    def _parse_question(self, data: Dict[str, Any], chunk_id: str) -> PredictiveQuestion:
+        """Legacy method - delegates to ExtractionParser."""
+        return self.parser.parse_question(data, chunk_id)
 
-    Tries to split at paragraph boundaries.
-
-    Returns:
-        List of (chunk_text, start_pos, end_pos)
-    """
-    if len(text) <= max_chunk_size:
-        return [(text, 0, len(text))]
-
-    chunks = []
-    start = 0
-
-    while start < len(text):
-        end = start + max_chunk_size
-
-        if end >= len(text):
-            chunks.append((text[start:], start, len(text)))
-            break
-
-        # Try to find a paragraph break
-        para_break = text.rfind('\n\n', start + overlap, end)
-        if para_break > start + overlap:
-            end = para_break
-
-        # Or sentence break
-        else:
-            sent_break = text.rfind('. ', start + overlap, end)
-            if sent_break > start + overlap:
-                end = sent_break + 1
-
-        chunks.append((text[start:end], start, end))
-        start = end - overlap
-
-    return chunks
+    def _parse_link(self, data: Dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
+        """Legacy method - delegates to ExtractionParser."""
+        return self.parser.parse_link(data, chunk_id)
 
 
-# ============================================================================
-# TEST / DEMO
-# ============================================================================
-
-if __name__ == "__main__":
-    # Demo usage
-    sample_text = """
-    FAMILY COURT OF AUSTRALIA
-
-    Smith & Smith [2024] FamCA 123
-
-    JUDGE: Wilson J
-    DATE: 15 March 2024
-
-    PARTIES:
-    Applicant: John Smith (the husband)
-    Respondent: Jane Smith (the wife)
-
-    BACKGROUND:
-    The parties married on 10 June 2010 in Sydney. They have two children,
-    Emma (born 2012) and Jack (born 2015). The parties separated on
-    1 March 2020 after approximately 10 years of marriage.
-
-    The matrimonial home at 123 Smith Street, Parramatta was purchased
-    in 2012 for $650,000 and is currently valued at $1.2 million.
-    The property is subject to a mortgage of $400,000.
-
-    ORDERS:
-    1. The wife shall have sole parental responsibility for the children.
-    2. The children shall live with the wife.
-    3. The husband shall have supervised time with the children.
-    """
-
-    print("Testing Legal Operator...")
-    print("-" * 60)
-
-    try:
-        operator = LegalOperator()
-        extraction = operator.extract(
-            text=sample_text,
-            situation="Family law property and parenting matter",
-            background_context="Family Court of Australia judgment"
-        )
-
-        print(f"Extracted {len(extraction.actors)} actors:")
-        for actor in extraction.actors:
-            print(f"  - {actor.name} ({actor.actor_type.value}): {actor.roles}")
-
-        print(f"\nExtracted {len(extraction.questions)} questions:")
-        for q in extraction.questions:
-            status = "✓" if q.answerable else "?"
-            print(f"  {status} {q.question_text}")
-            if q.answerable:
-                print(f"      → {q.answer_text}")
-
-    except Exception as e:
-        print(f"Demo failed (need API key): {e}")
-        print("Set OPENROUTER_API_KEY environment variable to test.")
+__all__ = [
+    "LegalOperator",
+    "chunk_legal_text",
+    "LEGAL_OPERATOR_SYSTEM_PROMPT",
+    "LEGAL_OPERATOR_USER_PROMPT",
+]

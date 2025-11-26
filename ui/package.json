@@ -21,6 +21,7 @@
     "@react-three/postprocessing": "^3.0.4",
     "@types/three": "^0.181.0",
     "lucide-react": "^0.554.0",
+    "mem0ai": "^2.1.38",
     "next": "16.0.4",
     "openai": "^6.9.1",
     "pdf-lib": "^1.17.1",

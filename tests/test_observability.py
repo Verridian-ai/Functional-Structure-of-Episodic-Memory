@@ -55,8 +55,9 @@ from observability.scoring import (
 @pytest.fixture
 def mock_langfuse():
     """Mock LangFuse client for testing without network calls."""
-    with patch('observability.langfuse_tracer.LANGFUSE_AVAILABLE', True):
-        with patch('observability.langfuse_tracer.Langfuse') as mock:
+    # Patch tracer_core where Langfuse is actually used (after refactoring)
+    with patch('observability.tracer_core.LANGFUSE_AVAILABLE', True):
+        with patch('observability.tracer_core.Langfuse') as mock:
             mock_instance = MagicMock()
             mock_instance.trace.return_value = MagicMock()
             mock_instance.score.return_value = None

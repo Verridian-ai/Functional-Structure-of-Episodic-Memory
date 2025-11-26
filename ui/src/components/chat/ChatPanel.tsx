@@ -111,6 +111,17 @@ export function ChatPanel() {
               toolCalls,
               artifacts,
             });
+
+            // Add assistant response to memory (Async)
+            fetch('/api/memory/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    content, 
+                    role: 'assistant', 
+                    userId: 'test_session_user' // In real app, use actual user ID
+                })
+            }).catch(err => console.warn('Failed to save memory:', err));
           },
           onError: (error) => {
             updateMessage(assistantId, {

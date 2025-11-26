@@ -1,0 +1,43 @@
+{
+  "total": 5,
+  "passed": 3,
+  "logic_checks_correct": 3,
+  "avg_steps": 3.4,
+  "details": [
+    {
+      "id": "Q001",
+      "success": false,
+      "steps": 5,
+      "duration": 0.040482282638549805,
+      "logic_correct": true
+    },
+    {
+      "id": "Q002",
+      "success": false,
+      "steps": 1,
+      "duration": 0.0007524490356445312,
+      "logic_correct": false
+    },
+    {
+      "id": "Q003",
+      "success": false,
+      "steps": 5,
+      "duration": 0.022214651107788086,
+      "logic_correct": false
+    },
+    {
+      "id": "Q004",
+      "success": false,
+      "steps": 1,
+      "duration": 0.0006697177886962891,
+      "logic_correct": true
+    },
+    {
+      "id": "Q005",
+      "success": true,
+      "steps": 5,
+      "duration": 0.024977684020996094,
+      "logic_correct": true
+    }
+  ]
+}

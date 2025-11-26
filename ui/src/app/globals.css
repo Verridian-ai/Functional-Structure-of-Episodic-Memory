@@ -76,7 +76,15 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
   min-height: 100vh;
+  min-height: 100dvh; /* Mobile viewport fix */
   overflow: hidden;
+  /* Prevent pull-to-refresh on mobile */
+  overscroll-behavior-y: none;
+}
+
+/* Safe area padding for modern mobile devices */
+.safe-area-pb {
+  padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 /* Scrollbar Styling - Cyan/Blue accent */

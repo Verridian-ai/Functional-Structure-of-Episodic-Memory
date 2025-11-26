@@ -1,0 +1,48 @@
+[
+  {
+    "id": "Q001",
+    "category": "Family Law - Divorce",
+    "query": "Can I get a divorce if we have been separated for 2 months?",
+    "expected_intent": "REQUIREMENT_CHECK",
+    "required_concepts": ["DIVORCE", "SEPARATION", "TIME"],
+    "expected_logic_validation": false,
+    "notes": "Should fail because 2 months < 12 months requirement (logic rule check)"
+  },
+  {
+    "id": "Q002",
+    "category": "Family Law - Parenting",
+    "query": "What factors does the court consider for child custody?",
+    "expected_intent": "INFO_RETRIEVAL",
+    "required_concepts": ["PARENTING_ORDER", "CHILD", "SAFETY_RISK"],
+    "expected_logic_validation": true,
+    "notes": "Should successfully retrieve s60CC factors"
+  },
+  {
+    "id": "Q003",
+    "category": "Family Law - Property",
+    "query": "My wife stayed at home with the kids. Does she get any property?",
+    "expected_intent": "CONTRIBUTION_ASSESSMENT",
+    "required_concepts": ["PROPERTY_SETTLEMENT", "HOMEMAKER", "CONTRIBUTION"],
+    "expected_logic_validation": true,
+    "notes": "Tests recognition of non-financial contributions"
+  },
+  {
+    "id": "Q004",
+    "category": "Logic Trap",
+    "query": "I want to divorce my de facto partner.",
+    "expected_intent": "LOGIC_CHECK",
+    "required_concepts": ["DIVORCE", "DE_FACTO"],
+    "expected_logic_validation": false,
+    "notes": "Logic Trap: Divorce applies to Marriage, not De Facto. VSA should flag."
+  },
+  {
+    "id": "Q005",
+    "category": "Family Law - Violence",
+    "query": "There is family violence. Can I move away with the kids?",
+    "expected_intent": "RELOCATION_RISK",
+    "required_concepts": ["RELOCATION", "FAMILY_VIOLENCE", "SAFETY_RISK"],
+    "expected_logic_validation": true,
+    "notes": "Complex interaction of violence and relocation"
+  }
+]
+

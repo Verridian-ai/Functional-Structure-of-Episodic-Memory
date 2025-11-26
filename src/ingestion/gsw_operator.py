@@ -7,8 +7,9 @@ from pydantic import ValidationError
 from src.logic.schema import LegalCase
 
 # OpenRouter Model Strings
-PRODUCTION_MODEL = "google/gemini-2.5-flash-preview-09-2025"
-EXPERIMENTAL_MODEL = "google/gemini-3-pro-preview"
+# Gemini 2.5 Flash - $0.30/1M input, $2.50/1M output, 1M context
+PRODUCTION_MODEL = "google/gemini-2.5-flash"
+EXPERIMENTAL_MODEL = "google/gemini-2.5-pro"
 
 class TheOperator:
     """

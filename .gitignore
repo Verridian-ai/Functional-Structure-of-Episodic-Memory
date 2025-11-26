@@ -7,6 +7,13 @@ Readme Assets/
 Notes docs/
 GSW_docs/
 prompts/
+examples/
+reports/
+
+# IDE and task management
+.cursor/
+.taskmaster/
+tasks/
 
 # Root level duplicates (now in assets/ or docs/)
 /Beyond Search Building a True Legal Reasoning Engine.png
@@ -108,10 +115,26 @@ ui/.env.local
 # Docker volumes
 docker/langfuse/postgres_data/
 
-# Large processed data files
+# Large processed data files (keep extraction state)
 data/processed/*.json
+!data/processed/extraction_state.json
 !data/processed/extraction_statistics.json
 data/legislation/*.jsonl
+
+# Keep workspace files (essential for system)
+!data/workspaces/*.json
+
+# Keep benchmark files
+!data/benchmarks/*.json
+
+# Keep validation files
+!data/validation/*.json
+
+# Keep legislation sections (not large)
+!data/legislation/family_law_act_1975_sections.json
+
+# Keep model checkpoints
+!data/models/**/*
 
 # Pytest cache
 .pytest_cache/

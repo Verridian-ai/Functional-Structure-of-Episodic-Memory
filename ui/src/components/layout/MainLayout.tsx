@@ -35,7 +35,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
   };
 
   const handleTouchEnd = (e: React.TouchEvent) => {
-    if (!touchStart) return;
+    if (touchStart === null) return;
     
     const touchEnd = e.changedTouches[0].clientX;
     const distance = touchStart - touchEnd;

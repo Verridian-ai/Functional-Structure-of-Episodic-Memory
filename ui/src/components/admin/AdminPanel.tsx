@@ -56,14 +56,14 @@ export function AdminPanel() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition whitespace-nowrap ${
+                className={`flex items-center gap-3 px-4 py-3 md:py-2 rounded-lg text-sm transition whitespace-nowrap flex-1 md:flex-none justify-center md:justify-start ${
                   activeTab === tab.id
                     ? 'bg-cyan-600/20 text-cyan-300'
                     : 'text-zinc-400 hover:bg-zinc-800'
                 }`}
               >
-                <tab.icon className="w-4 h-4" />
-                <span className="md:inline">{tab.label}</span>
+                <tab.icon className="w-5 h-5 md:w-4 md:h-4" />
+                <span className="hidden md:inline">{tab.label}</span>
               </button>
             ))}
           </div>
