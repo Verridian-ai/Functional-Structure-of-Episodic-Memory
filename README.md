@@ -46,8 +46,8 @@
 
 <br>
 
-<!-- LAW OS Logo -->
-<img src="assets/images/Light Mode Law OS.png" alt="LAW OS" width="400">
+<!-- LAW OS Banner -->
+<img src="assets/images/Law OS Banner.jpg" alt="LAW OS - Giving Language Models Human-Like Episodic Memory" width="100%">
 
 <br>
 
