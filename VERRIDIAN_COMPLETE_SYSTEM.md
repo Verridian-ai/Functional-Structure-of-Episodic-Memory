@@ -60,54 +60,46 @@ Verridian operates on the principle that **legal reasoning is not pattern matchi
 
 ## High-Level System Diagram
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                              USER INTERFACE                                  │
-│                    (Chat, Voice, Canvas, Admin Panel)                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         QUERY PROCESSING PIPELINE                            │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐  │
-│  │   Intent    │───▶│   Entity    │───▶│  Temporal   │───▶│   Query     │  │
-│  │ Classifier  │    │ Extractor   │    │  Parser     │    │  Enricher   │  │
-│  └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    GLOBAL SEMANTIC WORKSPACE (GSW)                           │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                     ACTIVE INFERENCE CONTROLLER                        │  │
-│  │            Monitors Free Energy | Triggers Information Seeking         │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-│                                      │                                       │
-│         ┌────────────────────────────┼────────────────────────────┐         │
-│         ▼                            ▼                            ▼         │
-│  ┌─────────────┐            ┌─────────────┐            ┌─────────────┐      │
-│  │ NAVIGATION  │            │   AGENCY    │            │    LOGIC    │      │
-│  │   LAYER     │◀──────────▶│   LAYER     │◀──────────▶│   LAYER     │      │
-│  │    (TEM)    │            │  (pymdp)    │            │   (VSA)     │      │
-│  └─────────────┘            └─────────────┘            └─────────────┘      │
-│         │                            │                            │         │
-│         └────────────────────────────┼────────────────────────────┘         │
-│                                      ▼                                       │
-│  ┌───────────────────────────────────────────────────────────────────────┐  │
-│  │                      RESPONSE SYNTHESIZER                              │  │
-│  │          Combines statutory law + case law + user facts                │  │
-│  └───────────────────────────────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                            KNOWLEDGE BASE                                    │
-│  ┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐  │
-│  │   Family    │    │   1,523+    │    │   5,170+    │    │   7,615+    │  │
-│  │  Law Act    │    │   Cases     │    │   Actors    │    │  Questions  │  │
-│  │  Sections   │    │             │    │             │    │             │  │
-│  └─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘  │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    UI[USER INTERFACE<br/>Chat, Voice, Canvas, Admin Panel]
+
+    subgraph QPP[QUERY PROCESSING PIPELINE]
+        IC[Intent<br/>Classifier] --> EE[Entity<br/>Extractor]
+        EE --> TP[Temporal<br/>Parser]
+        TP --> QE[Query<br/>Enricher]
+    end
+
+    subgraph GSW[GLOBAL SEMANTIC WORKSPACE]
+        AIC[ACTIVE INFERENCE CONTROLLER<br/>Monitors Free Energy | Triggers Information Seeking]
+
+        NAV[NAVIGATION<br/>LAYER<br/>TEM]
+        AGN[AGENCY<br/>LAYER<br/>pymdp]
+        LOG[LOGIC<br/>LAYER<br/>VSA]
+
+        AIC --> NAV
+        AIC --> AGN
+        AIC --> LOG
+
+        NAV <--> AGN
+        AGN <--> LOG
+        NAV <--> LOG
+
+        NAV --> RS[RESPONSE SYNTHESIZER<br/>Combines statutory law + case law + user facts]
+        AGN --> RS
+        LOG --> RS
+    end
+
+    subgraph KB[KNOWLEDGE BASE]
+        FLA[Family<br/>Law Act<br/>Sections]
+        CASES[1,523+<br/>Cases]
+        ACTORS[5,170+<br/>Actors]
+        QUESTIONS[7,615+<br/>Questions]
+    end
+
+    UI --> QPP
+    QPP --> GSW
+    GSW --> KB
 ```
 
 ## Technology Stack
@@ -136,30 +128,19 @@ The Navigation Layer maps the "legal space" by separating the **structure** of a
 
 ### How It Works
 
-```
-INPUT: "My husband and I separated 2 years ago. He earns $200k, I stayed
-        home with our 3 kids. We have a $1.5M house and he wants 70%."
+```mermaid
+flowchart TB
+    INPUT["INPUT: My husband and I separated 2 years ago. He earns $200k,<br/>I stayed home with our 3 kids. We have a $1.5M house and he wants 70%."]
 
-                              ┌─────────────────────────────────┐
-                              │         TEM FACTORIZER          │
-                              └─────────────────────────────────┘
-                                             │
-                    ┌────────────────────────┴────────────────────────┐
-                    ▼                                                  ▼
-        ┌───────────────────────┐                        ┌───────────────────────┐
-        │   STRUCTURAL (g)      │                        │    SENSORY (x)        │
-        │                       │                        │                       │
-        │ • Income Disparity:   │                        │ • Husband: $200k      │
-        │   HIGH                │                        │ • Wife: $0            │
-        │ • Primary Carer:      │                        │ • House: $1.5M        │
-        │   APPLICANT           │                        │ • Children: 3         │
-        │ • Asset Type:         │                        │ • Separation: 2 years │
-        │   REAL_PROPERTY       │                        │ • Claim: 70/30        │
-        │ • Contribution:       │                        │                       │
-        │   HOMEMAKER           │                        │                       │
-        │ • Dispute Type:       │                        │                       │
-        │   PROPERTY_DIVISION   │                        │                       │
-        └───────────────────────┘                        └───────────────────────┘
+    TEM[TEM FACTORIZER]
+
+    STRUCTURAL["STRUCTURAL (g)<br/>• Income Disparity: HIGH<br/>• Primary Carer: APPLICANT<br/>• Asset Type: REAL_PROPERTY<br/>• Contribution: HOMEMAKER<br/>• Dispute Type: PROPERTY_DIVISION"]
+
+    SENSORY["SENSORY (x)<br/>• Husband: $200k<br/>• Wife: $0<br/>• House: $1.5M<br/>• Children: 3<br/>• Separation: 2 years<br/>• Claim: 70/30"]
+
+    INPUT --> TEM
+    TEM --> STRUCTURAL
+    TEM --> SENSORY
 ```
 
 ### Structural Dimensions Tracked
@@ -227,18 +208,20 @@ The Agency Layer transforms Verridian from a passive chatbot into an active inve
 
 Active Inference is based on Karl Friston's Free Energy Principle: **intelligent systems minimize "surprise" (prediction error) by either updating beliefs or gathering information**.
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                        ACTIVE INFERENCE LOOP                                 │
-│                                                                              │
-│   ┌──────────┐        ┌──────────┐        ┌──────────┐        ┌──────────┐ │
-│   │  BELIEF  │───────▶│  ACTION  │───────▶│ OBSERVE  │───────▶│  UPDATE  │ │
-│   │   (B)    │        │   (A)    │        │   (O)    │        │   (B')   │ │
-│   └──────────┘        └──────────┘        └──────────┘        └──────────┘ │
-│        │                                                            │       │
-│        └────────────────────────────────────────────────────────────┘       │
-│                              MINIMIZE FREE ENERGY                           │
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart LR
+    B[BELIEF<br/>B]
+    A[ACTION<br/>A]
+    O[OBSERVE<br/>O]
+    U[UPDATE<br/>B']
+
+    B --> A --> O --> U
+    U -.MINIMIZE FREE ENERGY.-> B
+
+    style B fill:#e1f5ff
+    style A fill:#fff4e1
+    style O fill:#e8f5e9
+    style U fill:#f3e5f5
 ```
 
 ### Gap Detection System
@@ -304,32 +287,33 @@ def compute_evi(missing_field, current_belief, potential_outcomes):
 
 ### Example: Active Gap Detection
 
+**USER:** "I want a divorce. What will happen to my property?"
+
+**ACTIVE INFERENCE ANALYSIS:**
+
+```mermaid
+graph TB
+    FE[CURRENT FREE ENERGY: 0.87<br/>HIGH - significant uncertainty]
+
+    subgraph MI[MISSING INFORMATION sorted by EVI]
+        G1["1. Separation date<br/>EVI: 0.34 ████████████████████<br/>Why: Determines if de facto/married, affects limitation periods"]
+        G2["2. Asset pool composition<br/>EVI: 0.31 ██████████████████<br/>Why: Cannot apply s79 without knowing what assets exist"]
+        G3["3. Contributions history<br/>EVI: 0.28 ████████████████<br/>Why: s79(4) requires assessing financial and non-financial contributions"]
+        G4["4. Children from relationship?<br/>EVI: 0.22 ████████████<br/>Why: Affects parenting orders, child support, and s79(4)(e)"]
+        G5["5. Length of relationship<br/>EVI: 0.19 ██████████<br/>Why: Short marriages treated differently under s79"]
+    end
+
+    FE --> MI
+
+    style FE fill:#ffebee
+    style G1 fill:#fff3e0
+    style G2 fill:#fff3e0
+    style G3 fill:#fff3e0
+    style G4 fill:#fff3e0
+    style G5 fill:#fff3e0
 ```
-USER: "I want a divorce. What will happen to my property?"
 
-ACTIVE INFERENCE ANALYSIS:
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ CURRENT FREE ENERGY: 0.87 (HIGH - significant uncertainty)                   │
-│                                                                              │
-│ MISSING INFORMATION (sorted by EVI):                                         │
-│                                                                              │
-│ 1. Separation date                    EVI: 0.34  ████████████████████        │
-│    Why: Determines if de facto/married,affects limitation periods            │
-│                                                                              │
-│ 2. Asset pool composition             EVI: 0.31  ██████████████████          │
-│    Why: Cannot apply s79 without knowing what assets exist                   │
-│                                                                              │
-│ 3. Contributions history              EVI: 0.28  ████████████████            │
-│    Why: s79(4) requires assessing financial and non-financial contributions  │
-│                                                                              │
-│ 4. Children from relationship?        EVI: 0.22  ████████████                │
-│    Why: Affects parenting orders, child support, and s79(4)(e)               │
-│                                                                              │
-│ 5. Length of relationship             EVI: 0.19  ██████████                  │
-│    Why: Short marriages treated differently under s79                        │
-└─────────────────────────────────────────────────────────────────────────────┘
-
-VERRIDIAN RESPONSE:
+**VERRIDIAN RESPONSE:**
 "Before I can advise on property division under Section 79 of the Family Law
 Act 1975, I need to understand your situation better:
 
@@ -347,7 +331,6 @@ Act 1975, I need to understand your situation better:
 
 Once I have this information, I can identify which sections of the Family
 Law Act apply and find similar cases to predict likely outcomes."
-```
 
 ### Confidence Thresholds
 
@@ -419,32 +402,33 @@ print(torchhd.cos_similarity(APPLICANT_ASSETS, RESPONDENT_ASSETS))  # ≈ 0.00
 
 Every fact in a case is bound to its proper role and category:
 
-```
-CASE REPRESENTATION:
+```mermaid
+flowchart TB
+    subgraph HVCM[HYPERVECTOR CASE MEMORY]
+        F1["APPLICANT ⊗ ASSET ⊗ REAL_PROPERTY ⊗ $750,000"]
+        F2["APPLICANT ⊗ ASSET ⊗ SUPERANNUATION ⊗ $200,000"]
+        F3["RESPONDENT ⊗ ASSET ⊗ BUSINESS ⊗ $500,000"]
+        F4["RESPONDENT ⊗ LIABILITY ⊗ MORTGAGE ⊗ $300,000"]
+        F5["JOINT ⊗ ASSET ⊗ SAVINGS ⊗ $50,000"]
 
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                           HYPERVECTOR CASE MEMORY                            │
-│                                                                              │
-│   APPLICANT ⊗ ASSET ⊗ REAL_PROPERTY ⊗ $750,000                              │
-│   +                                                                          │
-│   APPLICANT ⊗ ASSET ⊗ SUPERANNUATION ⊗ $200,000                             │
-│   +                                                                          │
-│   RESPONDENT ⊗ ASSET ⊗ BUSINESS ⊗ $500,000                                  │
-│   +                                                                          │
-│   RESPONDENT ⊗ LIABILITY ⊗ MORTGAGE ⊗ $300,000                              │
-│   +                                                                          │
-│   JOINT ⊗ ASSET ⊗ SAVINGS ⊗ $50,000                                         │
-│   =                                                                          │
-│   ─────────────────────────────────────────────────────────────────────────  │
-│   CASE_MEMORY (single 10,000-D vector containing ALL facts)                  │
-└─────────────────────────────────────────────────────────────────────────────┘
+        F1 -.+.-> F2
+        F2 -.+.-> F3
+        F3 -.+.-> F4
+        F4 -.+.-> F5
+        F5 -.=.-> CM[CASE_MEMORY<br/>single 10,000-D vector<br/>containing ALL facts]
+    end
 
-QUERY: "What are the applicant's assets?"
+    QUERY["QUERY: What are the applicant's assets?"]
+    UNBIND["UNBIND:<br/>CASE_MEMORY ⊗ APPLICANT⁻¹ ⊗ ASSET⁻¹<br/>= [$750,000, $200,000]"]
+    NOTE["The respondent's business ($500,000) is NEVER returned<br/>because it is bound to RESPONDENT, not APPLICANT."]
 
-UNBIND: CASE_MEMORY ⊗ APPLICANT⁻¹ ⊗ ASSET⁻¹ = [$750,000, $200,000]
+    CM --> QUERY
+    QUERY --> UNBIND
+    UNBIND --> NOTE
 
-The respondent's business ($500,000) is NEVER returned because it is
-bound to RESPONDENT, not APPLICANT.
+    style CM fill:#e3f2fd
+    style UNBIND fill:#fff3e0
+    style NOTE fill:#f1f8e9
 ```
 
 ### Statutory Rule Binding
@@ -502,77 +486,110 @@ The Global Semantic Workspace is the orchestration layer that coordinates all th
 
 ## GSW Architecture
 
-```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                      GLOBAL SEMANTIC WORKSPACE                               │
-│                                                                              │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │                        WORKING MEMORY                                    ││
-│  │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐  ││
-│  │  │  User    │  │ Extracted│  │ Retrieved│  │ Applied  │  │ Generated│  ││
-│  │  │  Query   │  │  Facts   │  │  Cases   │  │  Rules   │  │ Response │  ││
-│  │  └──────────┘  └──────────┘  └──────────┘  └──────────┘  └──────────┘  ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-│                                      │                                       │
-│                                      ▼                                       │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │                     ATTENTION CONTROLLER                                 ││
-│  │         Prioritizes information | Manages cognitive resources            ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-│                                      │                                       │
-│         ┌────────────────────────────┼────────────────────────────┐         │
-│         ▼                            ▼                            ▼         │
-│  ┌─────────────────┐    ┌─────────────────────┐    ┌─────────────────┐      │
-│  │   NAVIGATION    │    │       AGENCY        │    │      LOGIC      │      │
-│  │                 │    │                     │    │                 │      │
-│  │ • TEM Encoder   │    │ • Gap Detector      │    │ • VSA Binder    │      │
-│  │ • Structure Map │    │ • EVI Calculator    │    │ • Rule Applier  │      │
-│  │ • Case Matcher  │    │ • Question Generator│    │ • Fact Checker  │      │
-│  └─────────────────┘    └─────────────────────┘    └─────────────────┘      │
-│         │                            │                            │         │
-│         └────────────────────────────┼────────────────────────────┘         │
-│                                      ▼                                       │
-│  ┌─────────────────────────────────────────────────────────────────────────┐│
-│  │                    KNOWLEDGE INTEGRATION                                 ││
-│  │   Statutory Database │ Case Database │ Actor Database │ Question DB     ││
-│  └─────────────────────────────────────────────────────────────────────────┘│
-└─────────────────────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph GSW[GLOBAL SEMANTIC WORKSPACE]
+        subgraph WM[WORKING MEMORY]
+            UQ[User<br/>Query]
+            EF[Extracted<br/>Facts]
+            RC[Retrieved<br/>Cases]
+            AR[Applied<br/>Rules]
+            GR[Generated<br/>Response]
+        end
+
+        AC[ATTENTION CONTROLLER<br/>Prioritizes information | Manages cognitive resources]
+
+        subgraph NAV[NAVIGATION]
+            NE[TEM Encoder]
+            SM[Structure Map]
+            CM[Case Matcher]
+        end
+
+        subgraph AGN[AGENCY]
+            GD[Gap Detector]
+            EVI[EVI Calculator]
+            QG[Question Generator]
+        end
+
+        subgraph LOG[LOGIC]
+            VB[VSA Binder]
+            RA[Rule Applier]
+            FC[Fact Checker]
+        end
+
+        subgraph KI[KNOWLEDGE INTEGRATION]
+            SD[Statutory Database]
+            CD[Case Database]
+            AD[Actor Database]
+            QD[Question DB]
+        end
+
+        WM --> AC
+        AC --> NAV
+        AC --> AGN
+        AC --> LOG
+        NAV --> KI
+        AGN --> KI
+        LOG --> KI
+    end
 ```
 
 ## GSW Processing Cycle
 
-```
-CYCLE 1: INTAKE
-├── Parse user query
-├── Extract entities (names, dates, amounts)
-├── Classify intent (property, parenting, procedure)
-└── Initialize working memory
+```mermaid
+flowchart TB
+    subgraph C1[CYCLE 1: INTAKE]
+        C1A[Parse user query]
+        C1B[Extract entities<br/>names, dates, amounts]
+        C1C[Classify intent<br/>property, parenting, procedure]
+        C1D[Initialize working memory]
+        C1A --> C1B --> C1C --> C1D
+    end
 
-CYCLE 2: NAVIGATION
-├── Encode query into structural space (TEM)
-├── Find structurally similar cases
-├── Retrieve relevant statutory sections
-└── Populate working memory with matches
+    subgraph C2[CYCLE 2: NAVIGATION]
+        C2A[Encode query into<br/>structural space TEM]
+        C2B[Find structurally<br/>similar cases]
+        C2C[Retrieve relevant<br/>statutory sections]
+        C2D[Populate working<br/>memory with matches]
+        C2A --> C2B --> C2C --> C2D
+    end
 
-CYCLE 3: AGENCY CHECK
-├── Compare working memory to complete case model
-├── Identify gaps in information
-├── Compute EVI for each gap
-├── Decision: Answer or Ask?
-│   ├── If gaps critical: Generate clarifying questions
-│   └── If sufficient: Continue to reasoning
+    subgraph C3[CYCLE 3: AGENCY CHECK]
+        C3A[Compare working memory<br/>to complete case model]
+        C3B[Identify gaps<br/>in information]
+        C3C[Compute EVI<br/>for each gap]
+        C3D{Decision:<br/>Answer or Ask?}
+        C3E[If gaps critical:<br/>Generate clarifying questions]
+        C3F[If sufficient:<br/>Continue to reasoning]
+        C3A --> C3B --> C3C --> C3D
+        C3D -->|Critical Gaps| C3E
+        C3D -->|Sufficient| C3F
+    end
 
-CYCLE 4: LOGIC APPLICATION
-├── Bind facts to legal roles (VSA)
-├── Match fact patterns to statutory tests
-├── Apply precedent ratios from similar cases
-└── Generate legally-grounded conclusion
+    subgraph C4[CYCLE 4: LOGIC APPLICATION]
+        C4A[Bind facts to<br/>legal roles VSA]
+        C4B[Match fact patterns<br/>to statutory tests]
+        C4C[Apply precedent ratios<br/>from similar cases]
+        C4D[Generate legally-grounded<br/>conclusion]
+        C4A --> C4B --> C4C --> C4D
+    end
 
-CYCLE 5: RESPONSE SYNTHESIS
-├── Structure response with statutory citations
-├── Include case examples with outcomes
-├── Apply appropriate caveats
-└── Return to user
+    subgraph C5[CYCLE 5: RESPONSE SYNTHESIS]
+        C5A[Structure response with<br/>statutory citations]
+        C5B[Include case examples<br/>with outcomes]
+        C5C[Apply appropriate<br/>caveats]
+        C5D[Return to user]
+        C5A --> C5B --> C5C --> C5D
+    end
+
+    C1 --> C2 --> C3
+    C3F --> C4 --> C5
+
+    style C1 fill:#e3f2fd
+    style C2 fill:#fff3e0
+    style C3 fill:#f1f8e9
+    style C4 fill:#fce4ec
+    style C5 fill:#f3e5f5
 ```
 
 ---
@@ -1236,42 +1253,34 @@ Traditional legal search uses keywords. Verridian uses **structural matching**:
 
 ## The TEM Matching Pipeline
 
-```
-USER QUERY
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                         TEM ENCODER                                          │
-│  Extract structural dimensions from natural language                         │
-└─────────────────────────────────────────────────────────────────────────────┘
-    │
-    ▼
-STRUCTURAL VECTOR (512 dimensions)
-[0.82, -0.34, 0.91, 0.12, ..., -0.56]
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    CASE VECTOR DATABASE                                      │
-│  Pre-computed structural vectors for all 1,523 cases                         │
-└─────────────────────────────────────────────────────────────────────────────┘
-    │
-    ▼
-COSINE SIMILARITY COMPUTATION
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    AUTHORITY WEIGHTING                                       │
-│  HCA decisions weighted 10x, Full Court 8x, Trial 6x                         │
-└─────────────────────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────────────────────┐
-│                    RECENCY ADJUSTMENT                                        │
-│  Cases from last 5 years weighted higher (law evolves)                       │
-└─────────────────────────────────────────────────────────────────────────────┘
-    │
-    ▼
-TOP 5 MATCHING CASES
+```mermaid
+flowchart TB
+    UQ[USER QUERY]
+
+    TE[TEM ENCODER<br/>Extract structural dimensions from natural language]
+
+    SV[STRUCTURAL VECTOR<br/>512 dimensions<br/>[0.82, -0.34, 0.91, 0.12, ..., -0.56]]
+
+    CVD[CASE VECTOR DATABASE<br/>Pre-computed structural vectors for all 1,523 cases]
+
+    CSC[COSINE SIMILARITY COMPUTATION]
+
+    AW[AUTHORITY WEIGHTING<br/>HCA decisions weighted 10x, Full Court 8x, Trial 6x]
+
+    RA[RECENCY ADJUSTMENT<br/>Cases from last 5 years weighted higher law evolves]
+
+    TOP[TOP 5 MATCHING CASES]
+
+    UQ --> TE --> SV --> CVD --> CSC --> AW --> RA --> TOP
+
+    style UQ fill:#e3f2fd
+    style TE fill:#fff3e0
+    style SV fill:#f1f8e9
+    style CVD fill:#fce4ec
+    style CSC fill:#e0f2f1
+    style AW fill:#fff9c4
+    style RA fill:#f3e5f5
+    style TOP fill:#c8e6c9
 ```
 
 ## Matching Dimensions
@@ -1288,35 +1297,28 @@ The system matches on 24 structural dimensions:
 
 ## Example Match Explanation
 
-```
-QUERY: "20 year marriage, I worked full time, wife stayed home with 3 kids,
-        $2M in assets including family business"
+**QUERY:** "20 year marriage, I worked full time, wife stayed home with 3 kids, $2M in assets including family business"
 
-MATCHED: *In Marriage of Ferraro* [1992] FamCA 456
+**MATCHED:** *In Marriage of Ferraro* [1992] FamCA 456
 
-MATCH EXPLANATION:
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ Dimension              │ Query Value      │ Case Value       │ Match Score │
-├────────────────────────┼──────────────────┼──────────────────┼─────────────┤
-│ relationship_duration  │ LONG (20yr)      │ LONG (22yr)      │ 0.98        │
-│ income_disparity       │ HIGH             │ HIGH             │ 1.00        │
-│ primary_carer          │ RESPONDENT       │ RESPONDENT       │ 1.00        │
-│ contribution_type      │ TRADITIONAL      │ TRADITIONAL      │ 1.00        │
-│ asset_complexity       │ BUSINESS         │ BUSINESS         │ 1.00        │
-│ children_factor        │ PRESENT (3)      │ PRESENT (2)      │ 0.92        │
-│ homemaker_present      │ YES              │ YES              │ 1.00        │
-├────────────────────────┼──────────────────┼──────────────────┼─────────────┤
-│ OVERALL STRUCTURAL SIMILARITY                                │ 0.94        │
-│ AUTHORITY WEIGHT (FamCA)                                     │ 0.60        │
-│ RECENCY (1992)                                               │ 0.45        │
-├────────────────────────┼──────────────────┼──────────────────┼─────────────┤
-│ FINAL MATCH SCORE                                            │ 0.87        │
-└─────────────────────────────────────────────────────────────────────────────┘
+**MATCH EXPLANATION:**
 
-CASE OUTCOME APPLIED:
-The Ferraro case resulted in 60-40 to the homemaker wife. Given your situation
-has nearly identical structure, a similar outcome is predicted.
-```
+| Dimension | Query Value | Case Value | Match Score |
+|-----------|-------------|------------|-------------|
+| relationship_duration | LONG (20yr) | LONG (22yr) | 0.98 |
+| income_disparity | HIGH | HIGH | 1.00 |
+| primary_carer | RESPONDENT | RESPONDENT | 1.00 |
+| contribution_type | TRADITIONAL | TRADITIONAL | 1.00 |
+| asset_complexity | BUSINESS | BUSINESS | 1.00 |
+| children_factor | PRESENT (3) | PRESENT (2) | 0.92 |
+| homemaker_present | YES | YES | 1.00 |
+| **OVERALL STRUCTURAL SIMILARITY** | | | **0.94** |
+| **AUTHORITY WEIGHT (FamCA)** | | | **0.60** |
+| **RECENCY (1992)** | | | **0.45** |
+| **FINAL MATCH SCORE** | | | **0.87** |
+
+**CASE OUTCOME APPLIED:**
+The Ferraro case resulted in 60-40 to the homemaker wife. Given your situation has nearly identical structure, a similar outcome is predicted.
 
 ---
 
