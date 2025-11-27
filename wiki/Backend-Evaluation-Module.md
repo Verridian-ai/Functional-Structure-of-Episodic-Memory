@@ -6,41 +6,26 @@ The **Evaluation Module** provides multi-judge evaluation using multiple LLM mod
 
 **Location**: `src/evaluation/`
 
-```
-┌──────────────────────────────────────────────────────┐
-│          MULTI-JUDGE EVALUATOR                        │
-├──────────────────────────────────────────────────────┤
-│                                                       │
-│  ┌────────────────────────────────────────────┐     │
-│  │         MultiJudgeEvaluator                │     │
-│  │                                            │     │
-│  │  Query + Response + Context ──────┐       │     │
-│  │                                    │       │     │
-│  │                                    ▼       │     │
-│  │     ┌──────────────────────────────────┐  │     │
-│  │     │   Parallel Judge Evaluation      │  │     │
-│  │     │                                  │  │     │
-│  │     │  ┌──────────┐  ┌──────────┐    │  │     │
-│  │     │  │  GPT-4o  │  │  Claude  │    │  │     │
-│  │     │  │  Judge   │  │  Judge   │    │  │     │
-│  │     │  └────┬─────┘  └────┬─────┘    │  │     │
-│  │     │       │             │           │  │     │
-│  │     │       │  ┌──────────┐           │  │     │
-│  │     │       └──│  Gemini  │           │  │     │
-│  │     │          │  Judge   │           │  │     │
-│  │     │          └────┬─────┘           │  │     │
-│  │     └───────────────┼──────────────────┘  │     │
-│  │                     ▼                     │     │
-│  │     ┌──────────────────────────────────┐  │     │
-│  │     │   Aggregate Results              │  │     │
-│  │     │                                  │  │     │
-│  │     │   • Mean Score                   │  │     │
-│  │     │   • Median Score                 │  │     │
-│  │     │   • Consensus Level (0-1)        │  │     │
-│  │     │   • Combined Issues/Strengths    │  │     │
-│  │     └──────────────────────────────────┘  │     │
-│  └────────────────────────────────────────────┘     │
-└──────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph MJE["Multi-Judge Evaluator"]
+        INPUT["Query + Response + Context"]
+
+        subgraph PARALLEL["Parallel Judge Evaluation"]
+            GPT["GPT-4o Judge"]
+            CLAUDE["Claude Judge"]
+            GEMINI["Gemini Judge"]
+        end
+
+        AGG["Aggregate Results<br/>• Mean Score<br/>• Median Score<br/>• Consensus Level (0-1)<br/>• Combined Issues/Strengths"]
+    end
+
+    INPUT --> GPT
+    INPUT --> CLAUDE
+    INPUT --> GEMINI
+    GPT --> AGG
+    CLAUDE --> AGG
+    GEMINI --> AGG
 ```
 
 ## Files
