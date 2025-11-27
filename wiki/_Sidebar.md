@@ -1,33 +1,74 @@
-## Navigation
+<!-- Wiki Navigation -->
 
-**[Home](Home)**
+<div align="center">
 
-### Architecture
-- [Architecture Overview](Architecture-Overview)
-- [Three-Layer System](Three-Layer-System)
-- [GSW Workspace](GSW-Global-Semantic-Workspace)
-- [Data Flow](Data-Flow)
+**VERRIDIAN AI**
 
-### Backend Modules
-- [GSW Module](Backend-GSW-Module)
-- [TEM Module](Backend-TEM-Module)
-- [VSA Module](Backend-VSA-Module)
-- [Agency Module](Backend-Agency-Module)
-- [Ingestion Module](Backend-Ingestion-Module)
-- [Agents Module](Backend-Agents-Module)
+*Brain-Inspired Legal Intelligence*
 
-### Frontend
-- [Frontend Overview](Frontend-Overview)
-- [API Routes](Frontend-API-Routes)
-- [Components](Frontend-Components)
+</div>
 
-### Guides
-- [Quick Start](Quick-Start)
-- [Development](Development-Guide)
-- [Deployment](Deployment-Guide)
+---
 
-### Reference
-- [API Reference](API-Reference)
-- [Data Schemas](Data-Schemas)
-- [Glossary](Glossary)
-- [File Index](File-Index)
+### 🏠 **[Home](Home)**
+
+---
+
+### 🏗 Architecture
+| Page | Description |
+|------|-------------|
+| [Architecture Overview](Architecture-Overview) | System design |
+| [Three-Layer System](Three-Layer-System) | TEM + Agency + VSA |
+| [GSW Workspace](GSW-Global-Semantic-Workspace) | Actor-centric memory |
+| [Data Flow](Data-Flow) | Pipeline flow |
+
+---
+
+### ⚙️ Backend Modules
+| Module | Purpose |
+|--------|---------|
+| [GSW Module](Backend-GSW-Module) | 6-task extraction |
+| [TEM Module](Backend-TEM-Module) | Navigation layer |
+| [VSA Module](Backend-VSA-Module) | Logic verification |
+| [Agency Module](Backend-Agency-Module) | Gap detection |
+| [Ingestion Module](Backend-Ingestion-Module) | Document processing |
+| [Agents Module](Backend-Agents-Module) | LangChain tools |
+
+---
+
+### 🖥 Frontend
+| Page | Description |
+|------|-------------|
+| [Frontend Overview](Frontend-Overview) | Next.js architecture |
+| [API Routes](Frontend-API-Routes) | REST endpoints |
+| [Components](Frontend-Components) | React components |
+
+---
+
+### 📘 Guides
+| Guide | Description |
+|-------|-------------|
+| [Quick Start](Quick-Start) | Get running in 10 min |
+| [Development](Development-Guide) | Dev setup |
+| [Deployment](Deployment-Guide) | Production deploy |
+| [Contributing](Contributing) | How to contribute |
+
+---
+
+### 📚 Reference
+| Reference | Description |
+|-----------|-------------|
+| [API Reference](API-Reference) | Complete API docs |
+| [Data Schemas](Data-Schemas) | Pydantic schemas |
+| [Glossary](Glossary) | Terminology |
+| [File Index](File-Index) | Codebase map |
+
+---
+
+<div align="center">
+
+[![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=flat-square)](https://arxiv.org/abs/2511.07587)
+
+[![GitHub](https://img.shields.io/badge/GitHub-Verridian--ai-181717?style=flat-square&logo=github)](https://github.com/Verridian-ai)
+
+</div>

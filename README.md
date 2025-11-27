@@ -1,51 +1,416 @@
 <div align="center">
 
-<img src="assets/images/verridian_logo.png" alt="Verridian AI" width="200">
+<!-- Logo & Title -->
+<img src="assets/images/verridian_logo.png" alt="Verridian AI" width="180">
 
 # VERRIDIAN AI
 
 ### Brain-Inspired Legal Intelligence Platform
 
-[![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=flat-square)](https://arxiv.org/abs/2511.07587)
-[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=flat-square&logo=python&logoColor=white)](https://python.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-Next.js_16-3178C6?style=flat-square&logo=typescript&logoColor=white)](ui/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-TEM+VSA-EE4C2C?style=flat-square&logo=pytorch&logoColor=white)](src/tem/)
-[![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](LICENSE)
+*Giving Language Models Human-Like Episodic Memory*
 
-[![Wiki](https://img.shields.io/badge/Documentation-Wiki-blue?style=for-the-badge)](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki)
-[![Contributing](https://img.shields.io/badge/PRs-Welcome-brightgreen?style=for-the-badge)](CONTRIBUTING.md)
+<br>
+
+<!-- Animated Badges Row 1 -->
+[![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.07587)
+[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Next.js_16-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](ui/)
+
+<!-- Badges Row 2 -->
+[![PyTorch](https://img.shields.io/badge/PyTorch-TEM+VSA-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](src/tem/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)](ui/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-V2-E92063?style=for-the-badge&logo=pydantic&logoColor=white)](src/logic/)
+[![LangChain](https://img.shields.io/badge/LangChain-Tools-121212?style=for-the-badge)](src/agents/)
+
+<br>
+
+<!-- Performance Metrics Visual -->
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                         🎯 PERFORMANCE METRICS                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    ║
+║   │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │    ║
+║   │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │  │   ▓▓▓▓▓     │    ║
+║   │   85%       │  │   56%       │  │   42x       │  │   100%      │    ║
+║   │  ACCURACY   │  │  TOKEN      │  │  FASTER     │  │  SUCCESS    │    ║
+║   │  vs 77% RAG │  │  REDUCTION  │  │  RESPONSE   │  │  RATE       │    ║
+║   └─────────────┘  └─────────────┘  └─────────────┘  └─────────────┘    ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+<br>
+
+<!-- Quick Links -->
+[📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
+[🚀 Quick Start](#-quick-start) •
+[🏗 Architecture](#-architecture) •
+[📊 Benchmarks](#-performance) •
+[🤝 Contributing](CONTRIBUTING.md)
 
 ---
-
-**85% Accuracy** · **56% Fewer Tokens** · **42x Faster** · **100% Query Success**
-
-[Quick Start](#-quick-start) · [Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) · [Architecture](#-architecture) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
+## 🧠 What is Verridian AI?
+
+<div align="center">
+<img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="GSW Episodic Memory" width="100%">
+</div>
+
+<br>
+
+Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
+
+<details>
+<summary><b>🔍 Why is this different from traditional RAG?</b></summary>
+<br>
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                    TRADITIONAL RAG vs VERRIDIAN                        │
+├────────────────────────────────┬────────────────────────────────────────┤
+│        TRADITIONAL RAG         │           VERRIDIAN AI                 │
+├────────────────────────────────┼────────────────────────────────────────┤
+│                                │                                        │
+│   Query → Search → Response    │   Query → Remember → Reason → Verify   │
+│                                │                                        │
+│   ┌──────┐                     │   ┌──────┐    ┌──────┐    ┌──────┐    │
+│   │Query │──→ Chunks ──→ LLM   │   │Query │──→ │Memory│──→ │Logic │    │
+│   └──────┘                     │   └──────┘    │ GSW  │    │ VSA  │    │
+│                                │               └──────┘    └──────┘    │
+│   ❌ No memory between queries │   ✅ Persistent actor-centric memory  │
+│   ❌ Entities lost each time   │   ✅ Tracks 5,170+ actors across time │
+│   ❌ No hallucination check    │   ✅ Logic verification layer         │
+│   ❌ ~8,000 tokens per query   │   ✅ ~3,500 tokens (56% reduction)    │
+│                                │                                        │
+└────────────────────────────────┴────────────────────────────────────────┘
+```
+
+</details>
+
+<details>
+<summary><b>📚 Core Concepts</b></summary>
+<br>
+
+| Concept | Description |
+|---------|-------------|
+| **Actor-Centric Memory** | Information organized around entities (actors) rather than events |
+| **Persistent Memory** | Memory maintained across multiple queries (vs stateless retrieval) |
+| **Structural Separation** | Distinguishing case structure from factual content |
+| **Gap Detection** | Identifying missing evidence before responding |
+| **Logic Verification** | Anti-hallucination through symbolic reasoning |
+
+</details>
+
 ---
 
-## Overview
+## 🏗 Architecture
 
-Verridian AI is a **proof-of-concept** legal intelligence system that implements a novel **brain-inspired cognitive architecture**. Unlike traditional RAG systems, Verridian maintains persistent actor-centric memory and uses symbolic logic verification to prevent hallucinations.
+<div align="center">
+
+### Three-Layer Cognitive System
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   ┌─────────────────────────────────────────────────────────────────┐    ║
+║   │              LAYER 1: NAVIGATION                                 │    ║
+║   │              ━━━━━━━━━━━━━━━━━━                                 │    ║
+║   │                                                                  │    ║
+║   │   🧭 Tolman-Eichenbaum Machine (TEM)                            │    ║
+║   │                                                                  │    ║
+║   │   ┌─────────┐      ┌─────────┐      ┌─────────┐                │    ║
+║   │   │   MEC   │ ───▶ │  HPC    │ ◀─── │   LEC   │                │    ║
+║   │   │  Grid   │      │ Memory  │      │ Sensory │                │    ║
+║   │   │  Cells  │      │ Binding │      │ Encoding│                │    ║
+║   │   └─────────┘      └─────────┘      └─────────┘                │    ║
+║   │                                                                  │    ║
+║   │   ► Separates case STRUCTURE from FACTS                         │    ║
+║   │   ► Enables zero-shot inference on new case patterns            │    ║
+║   │   ► Implementation: src/tem/model.py                            │    ║
+║   │                                                                  │    ║
+║   └─────────────────────────────────────────────────────────────────┘    ║
+║                                  │                                        ║
+║                                  ▼                                        ║
+║   ┌─────────────────────────────────────────────────────────────────┐    ║
+║   │              LAYER 2: AGENCY                                     │    ║
+║   │              ━━━━━━━━━━━━━━━                                    │    ║
+║   │                                                                  │    ║
+║   │   🎯 Active Inference Agent                                     │    ║
+║   │                                                                  │    ║
+║   │   ┌─────────────────────────────────────────────────────┐       │    ║
+║   │   │                                                      │       │    ║
+║   │   │   Variational          Expected                      │       │    ║
+║   │   │   Free Energy    +     Free Energy    =   Action    │       │    ║
+║   │   │   (Perception)         (Exploration)      Selection │       │    ║
+║   │   │                                                      │       │    ║
+║   │   └─────────────────────────────────────────────────────┘       │    ║
+║   │                                                                  │    ║
+║   │   ► Detects missing evidence and information gaps               │    ║
+║   │   ► Balances exploitation vs exploration                        │    ║
+║   │   ► Implementation: src/agency/agent.py                         │    ║
+║   │                                                                  │    ║
+║   └─────────────────────────────────────────────────────────────────┘    ║
+║                                  │                                        ║
+║                                  ▼                                        ║
+║   ┌─────────────────────────────────────────────────────────────────┐    ║
+║   │              LAYER 3: LOGIC                                      │    ║
+║   │              ━━━━━━━━━━━━━                                      │    ║
+║   │                                                                  │    ║
+║   │   🔐 Vector Symbolic Architecture (VSA)                         │    ║
+║   │                                                                  │    ║
+║   │   ┌─────────┐      ┌─────────┐      ┌─────────┐                │    ║
+║   │   │ Binding │      │Bundling │      │Permute  │                │    ║
+║   │   │  A ⊗ B  │      │  Σ(V)   │      │ ρ(V)    │                │    ║
+║   │   │         │      │         │      │         │                │    ║
+║   │   │Role-Fill│      │   Set   │      │Sequence │                │    ║
+║   │   └─────────┘      └─────────┘      └─────────┘                │    ║
+║   │                                                                  │    ║
+║   │   ► Hyperdimensional computing (D=10,000)                       │    ║
+║   │   ► Anti-hallucination verification via logic rules             │    ║
+║   │   ► Implementation: src/vsa/legal_vsa.py                        │    ║
+║   │                                                                  │    ║
+║   └─────────────────────────────────────────────────────────────────┘    ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+</div>
+
+<br>
+
+<details>
+<summary><b>🔄 Data Flow Through the System</b></summary>
+<br>
+
+```
+                           ┌──────────────────────────────────────────────┐
+                           │              📄 LEGAL DOCUMENT                │
+                           │                                              │
+                           │   "In the matter of Smith & Smith [2023]    │
+                           │    FamCA 123, the Applicant (John Smith)    │
+                           │    seeks property settlement..."            │
+                           │                                              │
+                           └──────────────────────┬───────────────────────┘
+                                                  │
+                                                  ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         📥 INGESTION LAYER                                   │
+│                                                                              │
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                 │
+│   │    Text      │───▶│    Legal     │───▶│  Reconciler  │                 │
+│   │   Chunker    │    │   Operator   │    │              │                 │
+│   │              │    │  (6 Tasks)   │    │              │                 │
+│   └──────────────┘    └──────────────┘    └──────────────┘                 │
+│                                                                              │
+│   Tasks: 1. Actor ID  2. Roles  3. States  4. Verbs  5. Questions  6. Links│
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                                  │
+                                                  ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                      🧠 GLOBAL SEMANTIC WORKSPACE (GSW)                      │
+│                                                                              │
+│   ┌─────────────────────────────────────────────────────────────────────┐   │
+│   │                                                                      │   │
+│   │  ACTOR: John Smith                                                  │   │
+│   │  ├── type: PERSON                                                   │   │
+│   │  ├── roles: [applicant, husband, father]                           │   │
+│   │  ├── aliases: [Mr Smith, the Applicant]                            │   │
+│   │  ├── states: [married(2010) → separated(2020)]                     │   │
+│   │  └── links: [Jane Smith, Family Home, Children]                    │   │
+│   │                                                                      │   │
+│   │  QUESTIONS: 7,615 predictive questions tracked                      │   │
+│   │  LINKS: 646 spatio-temporal connections                            │   │
+│   │                                                                      │   │
+│   └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                                  │
+                                                  ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                      ⚡ THREE-LAYER COGNITIVE ENGINE                         │
+│                                                                              │
+│   Query: "What are the requirements for property settlement?"               │
+│                                                                              │
+│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                 │
+│   │     TEM      │───▶│   Agency     │───▶│     VSA      │                 │
+│   │              │    │              │    │              │                 │
+│   │  Navigate    │    │  Gap Check   │    │   Verify     │                 │
+│   │  Structure   │    │  Evidence?   │    │   Logic      │                 │
+│   └──────────────┘    └──────────────┘    └──────────────┘                 │
+│                                                                              │
+│   ✓ Find similar patterns    ✓ All evidence found    ✓ No contradictions  │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                                  │
+                                                  ▼
+                           ┌──────────────────────────────────────────────┐
+                           │            ✅ VERIFIED RESPONSE               │
+                           │                                              │
+                           │   "Property settlement under the Family     │
+                           │    Law Act 1975 requires: 1) Valid marriage │
+                           │    2) Separation period..."                 │
+                           │                                              │
+                           │   📚 Citations: s79 FLA, Smith v Smith      │
+                           │   🎯 Confidence: 0.95                       │
+                           │                                              │
+                           └──────────────────────────────────────────────┘
+```
+
+</details>
+
+<details>
+<summary><b>💡 Core Innovation: Actor-Centric Memory</b></summary>
+<br>
 
 <div align="center">
 <img src="assets/images/RAG VS GSW.png" alt="RAG vs GSW Comparison" width="100%">
 </div>
 
-### Key Differentiators
+Traditional NLP uses **verb-centric triples**: `(Subject, Verb, Object)`
 
-| Feature | Traditional RAG | Verridian AI |
-|---------|----------------|--------------|
-| **Memory Model** | Document chunks | Actor-centric persistent memory |
-| **Entity Tracking** | Lost between queries | Maintained across session |
-| **Hallucination Prevention** | None | VSA logic verification |
-| **Accuracy** | 77% | **85%** |
-| **Token Usage** | ~8,000/query | **~3,500/query** |
+Verridian uses **actor-centric memory** - organizing information around entities:
+
+```python
+# Traditional Verb-Centric (loses context)
+("John", "married", "Jane")        # Who is John? Lost.
+("John", "filed", "Application")   # Same John? Unknown.
+
+# Verridian Actor-Centric (maintains context)
+Actor: {
+    name: "John Smith",
+    type: "PERSON",
+    roles: ["applicant", "husband", "father"],
+    states: [
+        {"name": "MaritalStatus", "value": "married", "when": "2010"},
+        {"name": "MaritalStatus", "value": "separated", "when": "2020"}
+    ],
+    relationships: ["Jane Smith", "Children", "Family Home"],
+    timeline: {"2010": "married", "2020": "separated", "2023": "filed"}
+}
+```
+
+This mirrors how humans actually remember - achieving **85% accuracy** vs 77% for traditional RAG.
+
+</details>
 
 ---
 
-## Documentation
+## 🚀 Quick Start
+
+<details open>
+<summary><b>📋 Prerequisites</b></summary>
+<br>
+
+| Requirement | Version | Purpose |
+|-------------|---------|---------|
+| Python | 3.10+ | Backend runtime |
+| Node.js | 18+ | Frontend runtime |
+| Git | Latest | Version control |
+| OpenRouter API Key | - | LLM access ([get one](https://openrouter.ai)) |
+
+</details>
+
+<details open>
+<summary><b>⚡ Installation (5 minutes)</b></summary>
+<br>
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory.git
+cd Functional-Structure-of-Episodic-Memory
+
+# 2️⃣ Setup Python environment
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# 3️⃣ Setup Frontend
+cd ui && npm install && cd ..
+
+# 4️⃣ Configure environment
+cp .env.example .env
+# Edit .env and add: OPENROUTER_API_KEY=sk-or-your-key-here
+
+# 5️⃣ Start the UI
+cd ui && npm run dev
+```
+
+🎉 **Open http://localhost:3000** - You're ready to go!
+
+</details>
+
+<details>
+<summary><b>🎮 Demo Scripts</b></summary>
+<br>
+
+```bash
+# Full cognitive system demo
+python run_full_system.py
+
+# Individual layer demos
+python run_vsa_demo.py      # VSA anti-hallucination
+python run_micro_tem.py     # TEM navigation
+python run_agent_demo.py    # Active inference
+```
+
+</details>
+
+---
+
+## 📊 Performance
+
+<div align="center">
+
+### Benchmark Results
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║     VERRIDIAN AI                              TRADITIONAL RAG             ║
+║                                                                           ║
+║     ████████████████████████████ 85%          ██████████████████████ 77%  ║
+║                 ACCURACY                               ACCURACY           ║
+║                                                                           ║
+║     ████████████████ 3,500                    ████████████████████████████║
+║        TOKENS/QUERY                             8,000 TOKENS/QUERY        ║
+║                                                                           ║
+║     ████ 11.83ms                              ████████████████ ~500ms     ║
+║      RESPONSE TIME                                RESPONSE TIME           ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+</div>
+
+| Metric | Verridian | Traditional RAG | Improvement |
+|--------|-----------|-----------------|-------------|
+| **Accuracy** | 85% | 77% | +10% |
+| **Token Usage** | ~3,500/query | ~8,000/query | 56% reduction |
+| **Response Time** | 11.83ms | ~500ms | 42x faster |
+| **Query Success** | 100% | ~95% | +5% |
+
+<details>
+<summary><b>📈 Knowledge Base Statistics</b></summary>
+<br>
+
+| Metric | Count |
+|--------|-------|
+| **Total Actors** | 5,170 |
+| **Predictive Questions** | 7,615 |
+| **Spatio-Temporal Links** | 646 |
+| **Family Law Cases** | 714 |
+| **Python LOC** | 14,549 |
+| **Documentation Pages** | 25+ |
+
+</details>
+
+---
+
+## 📖 Documentation
 
 <div align="center">
 
@@ -53,198 +418,166 @@ Verridian AI is a **proof-of-concept** legal intelligence system that implements
 
 </div>
 
-| Guide | Description |
-|-------|-------------|
-| [**Home**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) | Documentation overview and navigation |
-| [**Architecture Overview**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Architecture-Overview) | System design and component interactions |
-| [**Three-Layer System**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Three-Layer-System) | TEM + Agency + VSA deep dive |
-| [**Quick Start**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Quick-Start) | Get running in 10 minutes |
-| [**API Reference**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Frontend-API-Routes) | REST API documentation |
-| [**Glossary**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Glossary) | Legal AI terminology |
+<table>
+<tr>
+<td width="50%" valign="top">
 
-### Module Documentation
+### 🏗 Architecture
+- [Architecture Overview](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Architecture-Overview)
+- [Three-Layer System](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Three-Layer-System)
+- [GSW Workspace](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/GSW-Global-Semantic-Workspace)
+- [Data Flow](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Data-Flow)
 
-| Module | Description |
-|--------|-------------|
-| [**GSW Module**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-GSW-Module) | Global Semantic Workspace - 6-task extraction pipeline |
-| [**TEM Module**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-TEM-Module) | Tolman-Eichenbaum Machine - PyTorch navigation layer |
-| [**VSA Module**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-VSA-Module) | Vector Symbolic Architecture - Anti-hallucination logic |
-| [**Agency Module**](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agency-Module) | Active Inference - Gap detection and decision making |
+### ⚙️ Backend Modules
+- [GSW Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-GSW-Module)
+- [TEM Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-TEM-Module)
+- [VSA Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-VSA-Module)
+- [Agency Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agency-Module)
 
----
+</td>
+<td width="50%" valign="top">
 
-## 🏗 Architecture
+### 🖥 Frontend
+- [Frontend Overview](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Frontend-Overview)
+- [API Routes](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Frontend-API-Routes)
+- [Components](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Frontend-Components)
 
-Verridian implements a **three-layer cognitive architecture** based on neuroscience research:
+### 📘 Guides & Reference
+- [Quick Start](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Quick-Start)
+- [Development Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Development-Guide)
+- [Deployment Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Deployment-Guide)
+- [API Reference](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/API-Reference)
+- [Glossary](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Glossary)
 
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  LAYER 1: NAVIGATION (Tolman-Eichenbaum Machine)               │
-│  Separates case STRUCTURE from FACTS                            │
-│  Enables zero-shot inference on new case patterns               │
-│  Implementation: src/tem/model.py                               │
-├─────────────────────────────────────────────────────────────────┤
-│  LAYER 2: AGENCY (Active Inference)                             │
-│  Detects missing evidence and information gaps                  │
-│  Balances exploitation vs exploration                           │
-│  Implementation: src/agency/agent.py                            │
-├─────────────────────────────────────────────────────────────────┤
-│  LAYER 3: LOGIC (Vector Symbolic Architecture)                  │
-│  Hyperdimensional computing (D=10,000)                          │
-│  Anti-hallucination verification via logic rules                │
-│  Implementation: src/vsa/legal_vsa.py                           │
-└─────────────────────────────────────────────────────────────────┘
-```
-
-### Core Innovation: Actor-Centric Memory
-
-Traditional NLP uses verb-centric triples: `(Subject, Verb, Object)`
-
-Verridian uses **actor-centric memory**:
-
-```python
-Actor: {
-    name: "John Smith",
-    type: "PERSON",
-    roles: ["applicant", "husband", "father"],
-    states: ["married → separated → divorced"],
-    timeline: {"2010": "married", "2020": "separated"},
-    relationships: ["Jane Smith", "Children", "Family Home"]
-}
-```
-
-This mirrors how humans actually remember—and achieves **85% accuracy** vs 77% for traditional RAG.
-
----
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- Python 3.10+
-- Node.js 18+
-- OpenRouter API key ([get one here](https://openrouter.ai))
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory.git
-cd Functional-Structure-of-Episodic-Memory
-
-# Setup Python environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-
-# Configure environment
-cp .env.example .env
-# Add your OPENROUTER_API_KEY to .env
-
-# Start the UI
-cd ui && npm install && npm run dev
-```
-
-Open **http://localhost:3000** to access the interface.
-
-### Run Demos
-
-```bash
-python run_vsa_demo.py      # VSA anti-hallucination demo
-python run_micro_tem.py     # TEM navigation demo
-python run_agent_demo.py    # Active inference demo
-python run_full_system.py   # Full cognitive system
-```
-
----
-
-## 📊 Performance
-
-### Benchmark Results
-
-| Metric | Result |
-|--------|--------|
-| **Accuracy** | 85% (vs 77% RAG) |
-| **Token Usage** | ~3,500/query (56% reduction) |
-| **Response Time** | 11.83ms average |
-| **Query Success** | 100% |
-
-### Knowledge Base
-
-| Metric | Count |
-|--------|-------|
-| Total Actors | 5,170 |
-| Predictive Questions | 7,615 |
-| Spatio-Temporal Links | 646 |
-| Family Law Cases | 714 |
+</td>
+</tr>
+</table>
 
 ---
 
 ## 🗂 Project Structure
 
 ```
-├── src/
-│   ├── gsw/          # Global Semantic Workspace
-│   ├── tem/          # Tolman-Eichenbaum Machine (PyTorch)
-│   ├── vsa/          # Vector Symbolic Architecture
-│   ├── agency/       # Active Inference Agent
-│   ├── agents/       # LangChain Tools
-│   └── retrieval/    # Hybrid Search
-├── ui/               # Next.js 16 Frontend
-├── data/             # Knowledge Base
-├── tests/            # Test Suite
-└── docs/             # Research Papers
+📦 Functional-Structure-of-Episodic-Memory
+├── 🐍 src/                      # Python Backend (14,549 LOC)
+│   ├── gsw/                     # Global Semantic Workspace
+│   │   ├── legal_operator.py    # 6-task extraction pipeline
+│   │   ├── workspace.py         # Workspace persistence
+│   │   └── text_chunker.py      # Document chunking
+│   ├── tem/                     # Tolman-Eichenbaum Machine
+│   │   ├── model.py             # PyTorch TEM implementation
+│   │   └── action_space.py      # Legal action definitions
+│   ├── vsa/                     # Vector Symbolic Architecture
+│   │   ├── legal_vsa.py         # Hyperdimensional logic
+│   │   └── ontology.py          # Legal ontology rules
+│   ├── agency/                  # Active Inference
+│   │   ├── agent.py             # POMDP agent
+│   │   └── generative_model.py  # A,B,C,D matrices
+│   ├── agents/                  # LangChain Tools
+│   ├── ingestion/               # Document Processing
+│   └── logic/                   # Schemas & Rules
+│
+├── 🌐 ui/                       # Next.js 16 Frontend
+│   ├── src/app/                 # App Router
+│   │   ├── page.tsx             # Chat interface
+│   │   ├── visualize/           # 3D graph visualization
+│   │   └── api/                 # API routes
+│   ├── src/components/          # React components
+│   └── src/lib/                 # TypeScript libraries
+│
+├── 📊 data/                     # Knowledge Base
+│   ├── workspaces/              # GSW workspace snapshots
+│   ├── benchmarks/              # Test data
+│   └── legislation/             # Family Law Act sections
+│
+├── 📚 wiki/                     # 25+ Documentation Pages
+├── 🖼 assets/                   # Visual Assets
+└── 🧪 tests/                    # Test Suite
 ```
+
+---
+
+## 🔬 Research
+
+<div align="center">
+
+This project implements research from:
+
+[![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2511.07587)
+
+**"Functional Structure of Episodic Memory"**
+
+Based on:
+- **Tolman-Eichenbaum Machine** (Whittington et al., 2020)
+- **Active Inference** (Friston et al.)
+- **Global Workspace Theory** (Baars)
+- **Hyperdimensional Computing** (Kanerva)
+
+</div>
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md).
+We welcome contributions! See our [Contributing Guidelines](CONTRIBUTING.md).
 
 ```bash
-# Fork, clone, and create branch
+# Quick contribution workflow
 git checkout -b feature/your-feature
-
-# Make changes with tests
+# Make changes
 pytest tests/
-
-# Submit PR
+git commit -m "feat(module): description"
 git push origin feature/your-feature
+# Open Pull Request
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
+<details>
+<summary><b>📋 Contribution Areas</b></summary>
+<br>
 
----
+- 🐛 **Bug fixes** - Help squash bugs
+- ✨ **New features** - Add new capabilities
+- 📚 **Documentation** - Improve docs and examples
+- 🧪 **Tests** - Increase test coverage
+- 🎨 **UI/UX** - Enhance the frontend
 
-## 📄 Research
-
-This project implements research from:
-
-> **"Functional Structure of Episodic Memory"**
-> [arXiv:2511.07587](https://arxiv.org/abs/2511.07587)
+</details>
 
 ---
 
 ## 📜 License
 
+<div align="center">
+
 MIT License - see [LICENSE](LICENSE) for details.
 
 ---
-
-<div align="center">
 
 ### Built by [Verridian AI](https://github.com/Verridian-ai)
 
 *Cognitive AI for Legal Intelligence*
 
-[![GitHub](https://img.shields.io/badge/GitHub-Verridian--ai-181717?style=flat-square&logo=github)](https://github.com/Verridian-ai)
-[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b?style=flat-square)](https://arxiv.org/abs/2511.07587)
-[![Issues](https://img.shields.io/badge/Issues-Report-red?style=flat-square)](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues)
-[![Discussions](https://img.shields.io/badge/Discussions-Join-purple?style=flat-square)](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/discussions)
+<br>
+
+[![GitHub](https://img.shields.io/badge/GitHub-Verridian--ai-181717?style=for-the-badge&logo=github)](https://github.com/Verridian-ai)
+[![Paper](https://img.shields.io/badge/Paper-arXiv-b31b1b?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2511.07587)
+[![Issues](https://img.shields.io/badge/Issues-Report-red?style=for-the-badge&logo=github)](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues)
+[![Discussions](https://img.shields.io/badge/Discussions-Join-purple?style=for-the-badge&logo=github)](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/discussions)
 
 ---
 
-**Proof of Concept** · Production-ready architecture · Demonstration data scale
+**Proof of Concept** • Production-ready Architecture • Demonstration Data Scale
+
+<br>
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                                                                           ║
+║   "The brain doesn't search for memories - it reconstructs them."        ║
+║                                                                           ║
+║                              - Cognitive Neuroscience Principle          ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
 
 </div>
