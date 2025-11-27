@@ -32,6 +32,9 @@ except ImportError:
         return func
 
 from src.agents.family_law_knowledge import FamilyLawAgent
+from src.validation.statutory_rag import StatutoryRAGValidator, ValidationResult
+from src.evaluation.multi_judge import MultiJudgeEvaluator, JudgeModel
+from src.vsa.span_detector import SpanAlignedVSA, SpanIssue
 
 
 # ============================================================================
@@ -321,6 +324,101 @@ def get_ontology_vocabulary() -> str:
     }, indent=2)
 
 
+@tool
+def validate_against_statutes(extraction_json: str, context: str = "") -> str:
+    """
+    Validate a GSW extraction against Australian statutory sources.
+
+    Use this to check if extracted information complies with Family Law Act
+    and related legislation.
+
+    Args:
+        extraction_json: JSON string of the extraction to validate
+        context: Original document context
+
+    Returns:
+        JSON string with validation results including compliance score
+    """
+    try:
+        validator = StatutoryRAGValidator()
+        extraction = json.loads(extraction_json)
+        result = validator.validate(extraction, context)
+
+        return json.dumps({
+            "success": True,
+            "compliance_score": result.compliance_score if hasattr(result, 'compliance_score') else 0.0,
+            "validation": result.to_dict() if hasattr(result, 'to_dict') else str(result)
+        }, indent=2)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+@tool
+def detect_discrepancies(text: str, extraction_json: str = "") -> str:
+    """
+    Detect discrepancies and issues in legal text with span-level precision.
+
+    Finds numerical inconsistencies, date conflicts, party mismatches,
+    and reference errors.
+
+    Args:
+        text: The legal text to analyze
+        extraction_json: Optional extraction context
+
+    Returns:
+        JSON string with detected issues and their locations
+    """
+    try:
+        detector = SpanAlignedVSA()
+        extraction = json.loads(extraction_json) if extraction_json else None
+        issues = detector.detect(text, extraction)
+
+        return json.dumps({
+            "success": True,
+            "issue_count": len(issues) if isinstance(issues, list) else 0,
+            "issues": [issue.to_dict() if hasattr(issue, 'to_dict') else str(issue) for issue in issues] if isinstance(issues, list) else []
+        }, indent=2)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e)
+        }, indent=2)
+
+
+@tool
+def get_statutory_reference(section: str, act: str = "Family Law Act 1975") -> str:
+    """
+    Look up a specific section from Australian legislation.
+
+    Args:
+        section: Section number to look up
+        act: Name of the act (default: Family Law Act 1975)
+
+    Returns:
+        JSON string with section content and related provisions
+    """
+    try:
+        validator = StatutoryRAGValidator()
+        reference = validator.lookup_section(section, act)
+
+        return json.dumps({
+            "success": True,
+            "section": section,
+            "act": act,
+            "content": reference if isinstance(reference, dict) else {"text": str(reference)}
+        }, indent=2)
+    except Exception as e:
+        return json.dumps({
+            "success": False,
+            "error": str(e),
+            "section": section,
+            "act": act
+        }, indent=2)
+
+
 # ============================================================================
 # LANGCHAIN TOOL LIST
 # ============================================================================
@@ -352,7 +450,10 @@ def get_gsw_tools() -> List:
         find_actors_by_role,
         get_knowledge_context,
         get_workspace_stats,
-        get_ontology_vocabulary
+        get_ontology_vocabulary,
+        validate_against_statutes,
+        detect_discrepancies,
+        get_statutory_reference
     ]
 
 

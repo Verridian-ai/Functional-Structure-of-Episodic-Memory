@@ -1,0 +1,162 @@
+{
+  "act": {
+    "name": "Family Law Act 1975",
+    "jurisdiction": "Commonwealth of Australia",
+    "citation": "Family Law Act 1975 (Cth)",
+    "url": "https://www.legislation.gov.au/C2004A00275/latest/text",
+    "year_enacted": 1975,
+    "current_to": "2024"
+  },
+  "sections": [
+    {
+      "section": "4",
+      "title": "Interpretation",
+      "content": "In this Act, unless the contrary intention appears: 'child' means a child of a marriage; 'child of a marriage' includes: (a) a child adopted by the parties to the marriage, or either of them, during the marriage; (b) a child of the parties to the marriage within the meaning of the Family Law Reform Act 1995; 'matrimonial cause' means a proceeding under this Act seeking a decree of dissolution of marriage, a decree of nullity of marriage, a decree of judicial separation or a declaration in relation to the validity of a marriage; 'property' in relation to the parties to a marriage or either of them, means property to which those parties are, or that party is, as the case may be, entitled, whether in possession or reversion; 'matrimonial property' means property of the parties to a marriage or either of them.",
+      "keywords": ["definition", "interpretation", "child", "marriage", "property"]
+    },
+    {
+      "section": "43",
+      "title": "Grounds for dissolution of marriage",
+      "content": "An application under this Act by a party to a marriage for a decree of dissolution of the marriage shall be based on the ground that the marriage has broken down irretrievably. In proceedings instituted by such an application, the ground shall be held to have been established, and the decree of dissolution shall be made, if, and only if, the court is satisfied that the parties have separated and thereafter have lived separately and apart for a continuous period of not less than 12 months immediately preceding the date of the filing of the application for the decree.",
+      "keywords": ["divorce", "dissolution", "12 months separation", "irretrievable breakdown"]
+    },
+    {
+      "section": "55A",
+      "title": "Separation under the one roof",
+      "content": "Where the court is satisfied that, notwithstanding that the parties to a marriage have, during the whole or any part of any period, lived under the one roof, they nevertheless lived separately and apart during that period or that part of that period, as the case may be, the parties shall be taken, for the purposes of this Part, to have lived separately and apart during that period or that part of that period, as the case may be.",
+      "keywords": ["separation", "one roof", "living arrangements"]
+    },
+    {
+      "section": "60B",
+      "title": "Objects and principles of Part VII",
+      "content": "The objects of this Part are to ensure that children have the benefit of both of their parents having a meaningful involvement in their lives, to the maximum extent consistent with the best interests of the child; and to protect children from physical or psychological harm from being subjected to, or exposed to, abuse, neglect or family violence; and to ensure that children receive adequate and proper parenting to help them achieve their full potential; and to ensure that parents fulfil their duties, and meet their responsibilities, concerning the care, welfare and development of their children.",
+      "keywords": ["children", "best interests", "parenting", "meaningful involvement", "protection"]
+    },
+    {
+      "section": "60CC",
+      "title": "How a court determines what is in a child's best interests",
+      "content": "Subject to subsection (5), in determining what is in the child's best interests, the court must consider the matters set out in subsections (2) and (3). Primary considerations: (a) the benefit to the child of having a meaningful relationship with both of the child's parents; and (b) the need to protect the child from physical or psychological harm from being subjected to, or exposed to, abuse, neglect or family violence. Additional considerations include: (a) any views expressed by the child and any factors (such as the child's maturity or level of understanding) that the court thinks are relevant to the weight it should give to the child's views; (b) the nature of the relationship of the child with each of the child's parents and with other persons; (c) the extent to which each of the child's parents has taken, or failed to take, the opportunity to participate in making decisions about major long-term issues in relation to the child and to spend time with the child and communicate with the child; (d) the likely effect of any changes in the child's circumstances, including the likely effect on the child of any separation from either of the child's parents or any other child, or other person, with whom he or she has been living.",
+      "keywords": ["best interests", "children", "meaningful relationship", "family violence", "views of child"]
+    },
+    {
+      "section": "61DA",
+      "title": "Parental responsibility",
+      "content": "Each of the parents of a child who is not 18 has parental responsibility for the child. The only exceptions are if a parenting order allocates parental responsibility for the child otherwise than in accordance with subsection (1); or the parental responsibility of one of the parents is varied by an order under section 61B; or one of the parents is not a parent of the child because of an order under section 69VA; or the child has been adopted by someone else and the adoption order is in force.",
+      "keywords": ["parental responsibility", "children", "parents"]
+    },
+    {
+      "section": "64B",
+      "title": "Orders that may be made",
+      "content": "The court may make such parenting order as it thinks proper. Without limiting subsection (1), examples of parenting orders include: (a) an order about the person or persons with whom a child is to live; (b) an order about the time a child is to spend with another person or other persons; (c) an order about the allocation of parental responsibility for a child; (d) an order about communication that a child is to have with another person or other persons; (e) an order about maintenance of a child.",
+      "keywords": ["parenting orders", "live with", "spend time", "communication", "maintenance"]
+    },
+    {
+      "section": "65D",
+      "title": "Consent orders",
+      "content": "If the parties to proceedings lodge a copy of a proposed order with a document signed by each party, or by a person who is acting on behalf of the party, stating that the party consents to the making of the order, the court may, if it thinks it is appropriate to do so, act under subsection (2). If the order is a parenting order, the court may make the order if the order is in the best interests of the child. If the order is not a parenting order, the court may make the order without holding a hearing or making any inquiry.",
+      "keywords": ["consent orders", "agreement", "parenting", "best interests"]
+    },
+    {
+      "section": "74",
+      "title": "Maintenance of parties to a marriage",
+      "content": "The court may make such order as it considers proper for the provision to a party to a marriage by the other party to the marriage of maintenance in accordance with this Part. An order may be expressed to take effect before, on or after the date on which the order is made and before or on or after the dissolution of the marriage to which the order relates. The court must not make an order in relation to the maintenance of a party to a marriage after the death of that party or of the other party to the marriage.",
+      "keywords": ["spousal maintenance", "maintenance", "financial support"]
+    },
+    {
+      "section": "75",
+      "title": "Matters to be considered in making orders for maintenance",
+      "content": "In proceedings with respect to the maintenance of a party to a marriage, the court shall, so far as is practicable, make such orders as will finally determine the financial relationships between the parties to the marriage and avoid further proceedings between them. In considering what order (if any) should be made under section 74, the court shall have regard to: (a) the age and state of health of each of the parties; (b) the income, property and financial resources of each of the parties and the physical and mental capacity of each of them for appropriate gainful employment; (c) whether either party has the care or control of a child of the marriage who has not attained the age of 18 years; (d) commitments of each of the parties that are necessary to enable the party to support himself or herself and a child or another person that the party has a duty to maintain; (e) the responsibilities of either party to support any other person; (f) the eligibility of either party for a pension, allowance or benefit under any law of the Commonwealth, of a State or Territory or of another country; (g) a standard of living that in all the circumstances is reasonable; (h) the extent to which the payment of maintenance to the party whose maintenance is under consideration would increase the earning capacity of that party; (i) the extent to which the party whose maintenance is under consideration has contributed to the income, earning capacity, property and financial resources of the other party; (j) the duration of the marriage and the extent to which it has affected the earning capacity of the party whose maintenance is under consideration; (k) the need to protect a party who wishes to continue that party's role as a parent; (l) if the party whose maintenance is under consideration is cohabiting with another person—the financial circumstances relating to the cohabitation; (m) the terms of any order made or proposed to be made under section 79 in relation to the property of the parties; (n) any child support under the Child Support (Assessment) Act 1989 that a party to the marriage has provided, is to provide, or might be liable to provide in the future, for a child of the marriage.",
+      "keywords": ["maintenance", "financial resources", "earning capacity", "duration of marriage", "child support"]
+    },
+    {
+      "section": "79",
+      "title": "Alteration of property interests",
+      "content": "In property settlement proceedings, the court may make such order as it considers appropriate: (a) in the case of proceedings with respect to the property of the parties to a marriage or either of them—altering the interests of the parties to the marriage in the property, including: (i) by way of a settlement of property; (ii) by an order for a transfer of property; (iii) by an order for the payment of a lump sum; and (b) in the case of proceedings with respect to the vested bankruptcy property in relation to a bankrupt party to a marriage—altering the interests of the trustee and of the other party to the marriage in the vested bankruptcy property; and (c) otherwise in the nature of such a settlement or transfer.",
+      "keywords": ["property settlement", "property division", "asset split", "financial orders"]
+    },
+    {
+      "section": "79A",
+      "title": "Application for property settlement order after divorce",
+      "content": "Except as provided by subsection (2) or (3), an application to a court for an order under section 79 in relation to the parties to a marriage or either of them may only be made if: (a) a decree of dissolution of marriage is in force in relation to the marriage; and (b) the application is made within the period of 12 months after the decree becomes final. In the case of an application for an order under section 79 in relation to de facto partners, the application may only be made within the period of 2 years after the date on which the de facto relationship ended.",
+      "keywords": ["property settlement", "time limits", "12 months", "divorce"]
+    },
+    {
+      "section": "81",
+      "title": "Injunctions in property matters",
+      "content": "Where: (a) a matrimonial cause is pending; or (b) proceedings with respect to the property of the parties to a marriage or either of them, or with respect to the maintenance of a party to a marriage, are pending; the court may, on the application of a party to the marriage, grant an injunction restraining the other party to the marriage from: (c) dealing with, disposing of or diminishing the value of property; or (d) otherwise in relation to property.",
+      "keywords": ["injunction", "property preservation", "asset protection", "restraining order"]
+    },
+    {
+      "section": "90K",
+      "title": "Financial agreements binding on parties",
+      "content": "Subject to this Part, a financial agreement is binding on the parties to the agreement and, unless and until the agreement is set aside by a court, each party must comply with the agreement. A financial agreement that is binding on the parties to the agreement may cover: (a) how some or all of the property of either or both of them is to be dealt with; and (b) maintenance of either or both of them.",
+      "keywords": ["financial agreement", "binding financial agreement", "BFA", "prenuptial"]
+    },
+    {
+      "section": "90SM",
+      "title": "De facto financial matters—when applications may be made",
+      "content": "An application to a court for an order under section 90SM in relation to de facto partners may only be made within the period of 2 years after the date on which the de facto relationship ended. If the period referred to in subsection (1) has expired, the court may give leave for the application to be made if satisfied that: (a) hardship would be caused to the applicant or to a child if leave were not granted; and (b) one of more of the following circumstances exist: (i) the applicant was not aware of the right to apply for the order until a time not reasonably allowing for the application to be made within the period; (ii) the failure of the applicant to apply for the order within the period was attributable to conduct of the other person.",
+      "keywords": ["de facto", "property", "2 years", "time limit", "leave"]
+    },
+    {
+      "section": "94",
+      "title": "Costs",
+      "content": "Subject to this Part, a court shall make such orders as to costs in, or in relation to, proceedings under this Act, or any other proceedings arising out of proceedings under this Act, as the court considers just. The ordinary rule that costs follow the event shall not apply to matrimonial causes. In exercising its powers as to costs, the court may order that costs are not to be awarded against a party who is in receipt of legal aid under a legal aid scheme or program of a State or Territory.",
+      "keywords": ["costs", "legal costs", "court costs", "legal aid"]
+    },
+    {
+      "section": "106B",
+      "title": "Binding effect of undertakings",
+      "content": "If a person gives an undertaking in connection with the settlement of a matter, then: (a) the court may order that the undertaking be given effect in accordance with its terms; and (b) the person is bound by the undertaking and shall act in accordance with it. Without limiting the generality of paragraph (1)(a), the court may make an order for the enforcement of the undertaking.",
+      "keywords": ["undertaking", "binding", "settlement", "enforcement"]
+    },
+    {
+      "section": "111B",
+      "title": "Family violence orders",
+      "content": "In proceedings under this Act, the court may, of its own initiative or on the application of a party to the proceedings or a person who has an interest in those proceedings, make an order restraining a party to the proceedings from: (a) using violence against; or (b) threatening to use violence against; or (c) approaching; or (d) contacting (whether by telephone or otherwise); a person (the protected person) who is: (e) a party to the proceedings; or (f) a child; or (g) a person who has an interest in the proceedings.",
+      "keywords": ["family violence", "intervention order", "restraining order", "protection"]
+    },
+    {
+      "section": "117",
+      "title": "Restrictions on publications of court proceedings",
+      "content": "A person shall not, except with the leave of a court exercising jurisdiction under this Act, print or publish, or cause or permit to be printed or published, in a newspaper or periodical publication, by radio broadcast or television or by other electronic means, or otherwise to the public, or to a section of the public: (a) an account, or a report, of any proceedings under this Act; or (b) an account, or a report, of any part of any such proceedings; that contains: (c) a particulars likely to enable any of the parties to, or any witness in, the proceedings, or, in the case of proceedings with respect to the welfare of a child or children, the child or any of the children, to be identified.",
+      "keywords": ["publication", "privacy", "media", "identification"]
+    },
+    {
+      "section": "60CE",
+      "title": "Expert evidence",
+      "content": "In proceedings under this Act, other than proceedings under Part VIIIAA or proceedings relating to the maintenance of a spouse, evidence of a child, or evidence relating to the developmental needs of a child or the capacity of the parties to meet such needs, is not admissible unless it is given by a person who has: (a) qualifications in a relevant field of expertise (including medicine, psychiatry, psychology or social work); and (b) expertise (by virtue of training, study or experience) in matters relating to the development of children or the effects of behaviour on children or children's behaviour.",
+      "keywords": ["expert evidence", "family report", "psychologist", "social worker"]
+    },
+    {
+      "section": "65DAA",
+      "title": "Family dispute resolution",
+      "content": "Except as provided by this section, an application to a court under this Part in relation to a child must not be made unless the person making the application files in the court a certificate that is in force. A certificate is a document issued by a family dispute resolution practitioner certifying that the practitioner provided family dispute resolution to the person or persons and to the person's partner, spouse or former spouse, as the case requires; or the person attended family dispute resolution with the practitioner but the practitioner considers that it would not be appropriate to proceed with family dispute resolution.",
+      "keywords": ["family dispute resolution", "FDR", "mediation", "certificate", "section 60I"]
+    },
+    {
+      "section": "102NA",
+      "title": "Breach of parenting order",
+      "content": "If a court is satisfied beyond reasonable doubt that a person has intentionally failed to comply with an order under this Part (other than a child maintenance order), the court may: (a) where the person is a natural person: (i) order the person to enter into a bond in accordance with section 123A; or (ii) adjourn the proceedings in order to allow the person to comply with the order; or (iii) make an order requiring the person to participate in a post-separation parenting program; or (iv) order the person to pay all or some of the costs of the other party to the proceedings; or (v) impose a fine not exceeding $13,200; or (vi) order the person to be imprisoned for a period not exceeding 12 months.",
+      "keywords": ["breach", "contravention", "parenting order", "enforcement", "penalty"]
+    },
+    {
+      "section": "69ZN",
+      "title": "Subpoena",
+      "content": "In proceedings under this Act, a party or the independent children's lawyer may issue a subpoena requiring a person: (a) to attend as directed by the subpoena to give evidence; or (b) to produce specified documents or things, or documents or things in a class of document or thing specified.",
+      "keywords": ["subpoena", "evidence", "documents", "attendance"]
+    },
+    {
+      "section": "79(4)",
+      "title": "Matters court to take into account in property settlement",
+      "content": "In considering what order (if any) should be made under this section in property settlement proceedings, the court shall take into account: (a) the financial contribution made directly or indirectly by or on behalf of a party to the marriage or a child of the marriage to the acquisition, conservation or improvement of any of the property of the parties to the marriage or either of them, or otherwise in relation to any of that property, whether or not that contribution was made in money; (b) the contribution (other than a financial contribution) made directly or indirectly by or on behalf of a party to the marriage to the acquisition, conservation or improvement of any of the property of the parties to the marriage or either of them; (c) the contribution made by a party to the marriage to the welfare of the family constituted by the parties to the marriage and any children of the marriage, including any contribution made in the capacity of homemaker or parent; (d) the effect of any proposed order upon the earning capacity of either party to the marriage; (e) the matters referred to in subsection 75(2) so far as they are relevant; (f) any other order made under this Act affecting a party to the marriage or a child of the marriage; (g) any child support under the Child Support (Assessment) Act 1989 that a party to the marriage has provided, is to provide, or might be liable to provide in the future, for a child of the marriage.",
+      "keywords": ["property settlement", "contributions", "financial", "non-financial", "homemaker", "future needs"]
+    },
+    {
+      "section": "68LA",
+      "title": "Independent Children's Lawyer",
+      "content": "In proceedings under this Part or Part VII, the court may order that a person be appointed to represent the interests of a child independently of each of the parties to the proceedings. The person appointed may be known as the Independent Children's Lawyer. A person appointed under this section has the role of representing the child's best interests, and in doing so: (a) must act impartially; (b) must act in accordance with the rules of professional practice; (c) must ensure that appropriate consideration is given to any views expressed by the child.",
+      "keywords": ["independent children's lawyer", "ICL", "child representative", "best interests"]
+    }
+  ]
+}

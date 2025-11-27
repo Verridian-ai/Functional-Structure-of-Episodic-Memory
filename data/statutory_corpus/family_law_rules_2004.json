@@ -1,0 +1,108 @@
+{
+  "act": {
+    "name": "Family Law Rules 2004",
+    "jurisdiction": "Commonwealth of Australia",
+    "citation": "Family Law Rules 2004 (Cth)",
+    "url": "https://www.legislation.gov.au/F2005L00094/latest/text",
+    "year_enacted": 2004,
+    "current_to": "2024"
+  },
+  "sections": [
+    {
+      "section": "1.03",
+      "title": "Overarching purpose",
+      "content": "The overarching purpose of the Family Law Rules is to facilitate the just resolution of disputes: (a) as quickly as is practicable; and (b) as inexpensively as is practicable; and (c) as efficiently as is practicable. Each person conducting or participating in proceedings is required to take steps necessary to achieve the overarching purpose.",
+      "keywords": ["overarching purpose", "just resolution", "efficiency", "expedition"]
+    },
+    {
+      "section": "2.03",
+      "title": "Application for consent orders",
+      "content": "An application for consent orders must be made by filing: (a) an Application for Consent Orders in the approved form; and (b) minutes of the proposed consent orders; and (c) for each party to the proposed consent orders—an affidavit setting out: (i) particulars of the party's financial circumstances; and (ii) the party's consent to the making of the orders sought; and (iii) the party's understanding of whether the order is just and equitable. The application may be determined without a hearing or attendance by the parties unless the court orders otherwise.",
+      "keywords": ["consent orders", "application", "affidavit", "financial circumstances"]
+    },
+    {
+      "section": "6.01",
+      "title": "Filing of initiating application",
+      "content": "Proceedings are commenced by filing an Initiating Application in the approved form. The Initiating Application must: (a) identify the parties and their addresses for service; (b) set out the orders sought; (c) set out briefly the grounds on which the orders are sought; and (d) if an urgent hearing is required—include a notice for urgent hearing. The Initiating Application must be accompanied by the prescribed filing fee unless the party is exempt from payment.",
+      "keywords": ["initiating application", "commencement", "filing", "fee"]
+    },
+    {
+      "section": "6.02",
+      "title": "Service of initiating application",
+      "content": "The applicant must serve on each respondent: (a) a copy of the Initiating Application; and (b) a copy of any affidavit filed in support; and (c) a Notice of Child Abuse, Family Violence or Risk (if applicable); and (d) a Notice of Risk. Service must be effected within 28 days after the Initiating Application is filed or within such further time as the court allows. Service may be effected by personal service, ordinary pre-paid post, email (if the respondent consents), or in such other manner as the court directs.",
+      "keywords": ["service", "initiating application", "28 days", "personal service", "post"]
+    },
+    {
+      "section": "6.08",
+      "title": "Response to Initiating Application",
+      "content": "A respondent who wishes to oppose an order sought in an Initiating Application must file a Response in the approved form within 28 days after service of the Initiating Application. The Response must: (a) state which orders sought in the Initiating Application are consented to, not consented to, or which the respondent wishes to contest; (b) state any additional orders sought by the respondent; (c) set out briefly the grounds on which any opposition or additional orders are based. If the respondent does not file a Response, the court may make orders in the respondent's absence.",
+      "keywords": ["response", "opposition", "28 days", "default"]
+    },
+    {
+      "section": "7.03",
+      "title": "Genuine steps affidavit",
+      "content": "Before filing an Initiating Application in a case to which this rule applies, the applicant must: (a) take genuine steps to resolve the dispute; and (b) file an affidavit in the approved form stating what steps were taken and the outcome. The genuine steps may include: (i) attending family dispute resolution; (ii) participating in arbitration; (iii) participating in collaborative law or other dispute resolution process. This rule does not apply in cases involving urgent parenting matters, family violence or child abuse.",
+      "keywords": ["genuine steps", "dispute resolution", "affidavit", "mediation"]
+    },
+    {
+      "section": "8.01",
+      "title": "Family Dispute Resolution certificate",
+      "content": "Before filing an Initiating Application in a parenting case, the applicant must file a certificate issued by a family dispute resolution practitioner stating that: (a) the applicant attended family dispute resolution with the practitioner, and the other party did not attend, or did not attend a session; or (b) the applicant attended family dispute resolution with the practitioner and the other party, but the practitioner considers that it would not be appropriate to continue with family dispute resolution; or (c) the practitioner considers that it would not be appropriate to conduct, or to continue with, family dispute resolution. This requirement does not apply in cases of family violence, child abuse or urgent circumstances.",
+      "keywords": ["FDR certificate", "section 60I", "family dispute resolution", "mediation"]
+    },
+    {
+      "section": "10.14",
+      "title": "Form and content of affidavits",
+      "content": "An affidavit must: (a) be in the first person; (b) state the full name, address and occupation of the deponent; (c) be divided into numbered paragraphs; (d) have each page numbered consecutively; (e) have exhibits to the affidavit properly identified and described. The affidavit must contain only a statement of facts and circumstances to which the witness deposes. An affidavit must not contain: (i) submissions as to the law; (ii) argument; or (iii) irrelevant material.",
+      "keywords": ["affidavit", "form", "evidence", "facts"]
+    },
+    {
+      "section": "10.21",
+      "title": "Expert evidence",
+      "content": "A party may not adduce expert evidence at a trial without the leave of the court unless: (a) the party has complied with the requirements of this rule; and (b) the evidence is from a single expert witness appointed under rule 15.55; or (c) a single expert witness cannot be appointed. A party seeking to call an expert witness must file and serve: (i) a copy of the expert's report; and (ii) a statement of the expert's qualifications and experience. The expert has an overriding duty to assist the court on matters within the expert's expertise and is not an advocate for a party.",
+      "keywords": ["expert evidence", "expert report", "single expert", "leave"]
+    },
+    {
+      "section": "12.01",
+      "title": "Case management",
+      "content": "The court may make orders or give directions for the management of a case, including orders for: (a) the fixing of a timetable for the taking of steps in the proceeding; (b) the filing and service of documents; (c) the attendance of parties at conferences, mediation or other dispute resolution processes; (d) the giving of evidence; and (e) the limitation of the number of witnesses or expert witnesses. The court may make case management orders on its own initiative or on the application of a party.",
+      "keywords": ["case management", "directions", "timetable", "conferences"]
+    },
+    {
+      "section": "12.04",
+      "title": "Duty of disclosure in property cases",
+      "content": "In proceedings in relation to property or financial matters, each party must file and serve: (a) a Financial Statement in the approved form; and (b) copies of relevant documents verifying the information in the Financial Statement. The duty of disclosure is a continuing duty and parties must update their Financial Statements if there are material changes to the information previously disclosed. A party who fails to comply with the duty of disclosure may be subject to costs orders or other sanctions.",
+      "keywords": ["disclosure", "financial statement", "property", "documents"]
+    },
+    {
+      "section": "13.01",
+      "title": "Independent Children's Lawyer",
+      "content": "If the court appoints an Independent Children's Lawyer under section 68L of the Act: (a) the Independent Children's Lawyer must file a Notice of Address for Service within 7 days of the appointment; (b) the Independent Children's Lawyer may file evidence, make submissions and cross-examine witnesses; (c) the Independent Children's Lawyer must act independently and in the child's best interests; and (d) each party must serve on the Independent Children's Lawyer copies of all documents filed in the proceeding.",
+      "keywords": ["independent children's lawyer", "ICL", "appointment", "duties"]
+    },
+    {
+      "section": "14.02",
+      "title": "Attendance at court hearings",
+      "content": "A party to a proceeding must attend all court events unless: (a) the court otherwise orders or directs; or (b) the party's lawyer attends on behalf of the party and the court is satisfied that the party's attendance is not required. If a party fails to attend a court event without reasonable excuse, the court may: (i) proceed in the party's absence; (ii) adjourn the hearing; or (iii) dismiss the application or strike out the response.",
+      "keywords": ["attendance", "hearing", "default", "non-appearance"]
+    },
+    {
+      "section": "15.01",
+      "title": "Subpoenas",
+      "content": "A party or an Independent Children's Lawyer may issue a subpoena requiring a person to: (a) attend to give evidence; or (b) produce documents or things; or (c) both attend to give evidence and produce documents or things. A subpoena must: (i) be in the approved form; (ii) be filed in the court; and (iii) be served personally on the addressee. A subpoena to produce documents must specify with reasonable particularity the documents or things required to be produced.",
+      "keywords": ["subpoena", "documents", "evidence", "service"]
+    },
+    {
+      "section": "16.01",
+      "title": "Final hearing",
+      "content": "At least 28 days before the date fixed for a final hearing, each party must file and serve: (a) an Outline of Opening Submissions; (b) a list of the documents the party intends to rely upon at the hearing; (c) a list of witnesses the party intends to call; and (d) any affidavit evidence on which the party intends to rely. During the final hearing, the court will hear evidence, submissions and make final orders to determine the matter.",
+      "keywords": ["final hearing", "trial", "submissions", "evidence"]
+    },
+    {
+      "section": "17.01",
+      "title": "Orders and enforcement",
+      "content": "A court order takes effect: (a) on the day on which it is made; or (b) if the order specifies a later day—on the day so specified. The court may make orders for enforcement of its orders, including: (i) warrants for arrest; (ii) seizure and sale of property; (iii) garnishee orders; (iv) writs of execution; or (v) imprisonment for contempt. An application for enforcement must be made by filing an Application for Enforcement Order.",
+      "keywords": ["orders", "enforcement", "contempt", "compliance"]
+    }
+  ]
+}

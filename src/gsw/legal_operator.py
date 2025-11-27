@@ -37,6 +37,7 @@ from src.logic.gsw_schema import (
     SpatioTemporalLink, ChunkExtraction, QuestionType, LinkType,
     OntologyContext
 )
+from src.validation.statutory_rag import StatutoryRAGValidator, ValidationResult
 from .operator_prompts import LEGAL_OPERATOR_SYSTEM_PROMPT, LEGAL_OPERATOR_USER_PROMPT
 from .extraction_parser import ExtractionParser
 from .text_chunker import chunk_legal_text
@@ -60,7 +61,9 @@ class LegalOperator:
         self,
         model: str = "google/gemini-2.5-flash",
         api_key: Optional[str] = None,
-        use_openrouter: bool = True
+        use_openrouter: bool = True,
+        enable_validation: bool = False,
+        corpus_path: Optional[str] = None
     ):
         """
         Initialize the Legal Operator.
@@ -69,6 +72,8 @@ class LegalOperator:
             model: Model to use for extraction
             api_key: API key (or uses env var)
             use_openrouter: Whether to use OpenRouter API
+            enable_validation: Whether to enable statutory validation
+            corpus_path: Path to statutory corpus for validation
         """
         self.model = model
         self.use_openrouter = use_openrouter
@@ -86,6 +91,11 @@ class LegalOperator:
             raise ValueError("No API key found. Set OPENROUTER_API_KEY or GOOGLE_API_KEY")
 
         self._setup_client()
+
+        # Initialize validator if enabled
+        self.validator = None
+        if enable_validation:
+            self.validator = StatutoryRAGValidator(corpus_path or "data/statutory_corpus")
 
     def _setup_client(self) -> None:
         """Setup the LLM client."""
@@ -147,6 +157,16 @@ class LegalOperator:
             raw_response = self._call_llm(user_prompt)
             extraction = self._parse_response(raw_response, chunk_id, document_id)
             extraction.raw_llm_response = raw_response
+
+            # Optionally validate extraction
+            if self.validator:
+                validation_result = self.validate_extraction(extraction, text)
+                if validation_result:
+                    # Store validation result as metadata or log it
+                    print(f"[Validation] Score: {validation_result.overall_score:.2f}")
+                    if validation_result.issues:
+                        print(f"[Validation] Issues: {len(validation_result.issues)}")
+
             return extraction
 
         except Exception as e:
@@ -275,6 +295,19 @@ class LegalOperator:
             extraction.spatio_temporal_links.append(link)
 
         return extraction
+
+    def validate_extraction(
+        self,
+        extraction: ChunkExtraction,
+        original_text: str
+    ) -> Optional[ValidationResult]:
+        """Validate extraction against statutory sources."""
+        if not self.validator:
+            return None
+        return self.validator.validate_extraction(
+            extraction.model_dump(),
+            original_text
+        )
 
     def review_extraction(
         self,
