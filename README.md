@@ -46,6 +46,7 @@
 [📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
 [🚀 Quick Start](#-quick-start) •
 [🏗 Architecture](#-architecture) •
+[🔬 Research Validation](#-research-backed-validation) •
 [📊 Benchmarks](#-performance) •
 [🤝 Contributing](CONTRIBUTING.md)
 
@@ -299,6 +300,144 @@ This mirrors how humans actually remember - achieving **85% accuracy** vs 77% fo
 
 ---
 
+## 🔬 Research-Backed Validation
+
+<div align="center">
+
+### CLAUSE Paper Integration
+
+**Implementing "Better Call CLAUSE" Benchmark for Australian Family Law**
+
+[![CLAUSE Paper](https://img.shields.io/badge/Paper-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2511.00340v1)
+
+</div>
+
+Verridian AI integrates advanced validation techniques from cutting-edge legal AI research to ensure extraction accuracy and statutory compliance.
+
+<details>
+<summary><b>📊 Validation Pipeline</b></summary>
+<br>
+
+```
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                       STATUTORY VALIDATION PIPELINE                       ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║   ┌──────────┐      ┌──────────┐      ┌──────────┐      ┌──────────┐    ║
+║   │ Document │  ──▶ │   GSW    │  ──▶ │Statutory │  ──▶ │  Multi-  │    ║
+║   │          │      │Extraction│      │Validation│      │  Judge   │    ║
+║   │  Input   │      │          │      │   RAG    │      │   Eval   │    ║
+║   └──────────┘      └──────────┘      └──────────┘      └──────────┘    ║
+║                           │                  │                 │         ║
+║                           ▼                  ▼                 ▼         ║
+║                     Actors, Roles      FLA 1975         GPT-4o          ║
+║                     States, Links      CSAA 1989        Claude          ║
+║                     Questions          FLR 2004         Gemini          ║
+║                                                                           ║
+║   ✓ 10-Category Discrepancy Detection                                   ║
+║   ✓ Span-Level Issue Identification                                     ║
+║   ✓ Calibrated Confidence Scoring                                       ║
+║                                                                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+
+</details>
+
+### Key Features
+
+<table>
+<tr>
+<td width="50%" valign="top">
+
+#### 🎯 Discrepancy Detection
+- **10-Category Benchmark**
+  - 5 Legal: Payment, Liability, Termination, Jurisdiction, Warranty
+  - 5 In-text: Numbers, Dates, Party Names, References, Definitions
+- **Span-Level Precision**
+  - Pinpoints exact location of issues
+  - Character-level alignment metrics
+- **Australian Family Law Adapted**
+  - Family Law Act 1975
+  - Child Support Assessment Act 1989
+  - Family Law Rules 2004
+
+</td>
+<td width="50%" valign="top">
+
+#### ✅ Validation & Evaluation
+- **RAG Statutory Validation**
+  - Verify against legislative corpus
+  - Case law precedent checking
+  - Regulatory compliance
+- **Multi-Model Evaluation**
+  - GPT-4o, Claude Sonnet, Gemini Pro
+  - Consensus-based scoring
+  - Hallucination detection
+- **Calibrated Confidence**
+  - Location alignment metrics
+  - Evidence-based certainty
+  - Explainable results
+
+</td>
+</tr>
+</table>
+
+<details>
+<summary><b>💻 Quick Usage Example</b></summary>
+<br>
+
+```python
+from src.validation import StatutoryRAGValidator
+from src.benchmarks import FamilyLawDiscrepancyBenchmark
+from src.evaluation import MultiJudgeEvaluator
+
+# 1. Validate extraction against statutory corpus
+validator = StatutoryRAGValidator("data/statutory_corpus")
+result = validator.validate_extraction(
+    extraction=gsw_extraction,
+    context=original_document
+)
+
+# 2. Run discrepancy detection
+benchmark = FamilyLawDiscrepancyBenchmark()
+discrepancies = benchmark.detect_discrepancies(
+    document=court_judgment,
+    categories=["payment", "dates", "party_names"]
+)
+
+# 3. Multi-judge evaluation
+evaluator = MultiJudgeEvaluator(models=["gpt-4o", "claude-sonnet", "gemini-pro"])
+scores = evaluator.evaluate(
+    extraction=result,
+    ground_truth=validated_data
+)
+
+print(f"Validation Score: {scores['consensus']:.2f}")
+print(f"Confidence: {scores['calibrated_confidence']:.2f}")
+print(f"Issues Found: {len(discrepancies)}")
+```
+
+**Output:**
+```
+Validation Score: 0.94
+Confidence: 0.89
+Issues Found: 2
+
+Discrepancies:
+  [1] Payment Term (Line 45-47): Amount mismatch with s79 FLA requirements
+  [2] Date Inconsistency (Line 123): Separation date conflicts with filing date
+```
+
+</details>
+
+<div align="center">
+
+**📄 Full Technical Report**: [CLAUSE Research Application Report](docs/CLAUSE-Research-Application-Report.md)
+
+</div>
+
+---
+
 ## 🚀 Quick Start
 
 <details open>
@@ -433,6 +572,8 @@ python run_agent_demo.py    # Active inference
 - [TEM Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-TEM-Module)
 - [VSA Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-VSA-Module)
 - [Agency Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agency-Module)
+- [Agents Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agents-Module) ⭐
+- [Ingestion Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Ingestion-Module) ⭐
 
 </td>
 <td width="50%" valign="top">
@@ -447,6 +588,8 @@ python run_agent_demo.py    # Active inference
 - [Development Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Development-Guide)
 - [Deployment Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Deployment-Guide)
 - [API Reference](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/API-Reference)
+- [Data Schemas](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Data-Schemas) ⭐
+- [File Index](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/File-Index) ⭐
 - [Glossary](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Glossary)
 
 </td>

@@ -33,6 +33,10 @@
 | [Agency Module](Backend-Agency-Module) | Gap detection |
 | [Ingestion Module](Backend-Ingestion-Module) | Document processing |
 | [Agents Module](Backend-Agents-Module) | LangChain tools |
+| [Benchmarks Module](Backend-Benchmarks-Module) | Family Law Benchmark |
+| [Validation Module](Backend-Validation-Module) | Statutory RAG |
+| [Evaluation Module](Backend-Evaluation-Module) | Multi-Judge |
+| [Span Detector](Backend-Span-Detector) | Span Detection |
 
 ---
 

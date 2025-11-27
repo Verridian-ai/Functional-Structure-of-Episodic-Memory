@@ -18,7 +18,7 @@
 
 ## 👋 Welcome
 
-Welcome to the **Verridian AI** documentation. This brain-inspired legal AI system achieves **85% accuracy** on complex Australian Family Law queries using a novel cognitive architecture that gives language models human-like episodic memory.
+Welcome to the **Verridian AI** documentation. This brain-inspired legal AI system achieves **85% accuracy** on complex Australian Family Law queries using a novel cognitive architecture that gives language models human-like episodic memory. The system includes comprehensive validation capabilities through statutory RAG verification, multi-judge evaluation, and span detection for evidence extraction.
 
 ```
 ╔═══════════════════════════════════════════════════════════════════════════╗
@@ -63,6 +63,10 @@ Welcome to the **Verridian AI** documentation. This brain-inspired legal AI syst
 | [TEM Module](Backend-TEM-Module) | Navigation layer |
 | [VSA Module](Backend-VSA-Module) | Logic verification |
 | [Agency Module](Backend-Agency-Module) | Gap detection |
+| [Benchmarks Module](Backend-Benchmarks-Module) | Family Law Benchmark |
+| [Validation Module](Backend-Validation-Module) | Statutory RAG |
+| [Evaluation Module](Backend-Evaluation-Module) | Multi-Judge |
+| [Span Detector](Backend-Span-Detector) | Span Detection |
 
 ### 🖥 Frontend
 | Page | Description |
@@ -126,6 +130,8 @@ Welcome to the **Verridian AI** documentation. This brain-inspired legal AI syst
 | 🎯 **Gap Detection** | Identifies missing evidence first | Better responses |
 | 📚 **Statute Alignment** | Maps to Family Law Act sections | Legal accuracy |
 | ⚡ **Token Efficiency** | 56% fewer tokens per query | Cost savings |
+| ✅ **Multi-Judge Validation** | Comprehensive evaluation framework | Quality assurance |
+| 🔍 **Span Detection** | Precise evidence extraction | Enhanced accuracy |
 
 ---
 
@@ -172,6 +178,10 @@ Welcome to the **Verridian AI** documentation. This brain-inspired legal AI syst
 - **[Agency Module](Backend-Agency-Module)** - Active inference agent for gap detection
 - **[Ingestion Module](Backend-Ingestion-Module)** - Document processing and classification
 - **[Agents Module](Backend-Agents-Module)** - LangChain tool integration
+- **[Benchmarks Module](Backend-Benchmarks-Module)** - Family Law benchmark dataset and evaluation
+- **[Validation Module](Backend-Validation-Module)** - Statutory RAG validation system
+- **[Evaluation Module](Backend-Evaluation-Module)** - Multi-judge evaluation framework
+- **[Span Detector](Backend-Span-Detector)** - Span detection for evidence extraction
 
 ### 🖥 Frontend
 - **[Frontend Overview](Frontend-Overview)** - Next.js 16 application architecture

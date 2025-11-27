@@ -1,8 +1,12 @@
 {
-  "act_name": "Child Support (Assessment) Act 1989",
-  "jurisdiction": "Commonwealth of Australia",
-  "year_enacted": 1989,
-  "current_to": "2024",
+  "act": {
+    "name": "Child Support (Assessment) Act 1989",
+    "jurisdiction": "Commonwealth of Australia",
+    "citation": "Child Support (Assessment) Act 1989 (Cth)",
+    "url": "https://www.legislation.gov.au/C2004A00103/latest/text",
+    "year_enacted": 1989,
+    "current_to": "2024"
+  },
   "sections": [
     {
       "section": "4",

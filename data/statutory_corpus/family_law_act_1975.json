@@ -1,8 +1,12 @@
 {
-  "act_name": "Family Law Act 1975",
-  "jurisdiction": "Commonwealth of Australia",
-  "year_enacted": 1975,
-  "current_to": "2024",
+  "act": {
+    "name": "Family Law Act 1975",
+    "jurisdiction": "Commonwealth of Australia",
+    "citation": "Family Law Act 1975 (Cth)",
+    "url": "https://www.legislation.gov.au/C2004A00275/latest/text",
+    "year_enacted": 1975,
+    "current_to": "2024"
+  },
   "sections": [
     {
       "section": "4",

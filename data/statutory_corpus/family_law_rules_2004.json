@@ -1,8 +1,12 @@
 {
-  "act_name": "Family Law Rules 2004",
-  "jurisdiction": "Commonwealth of Australia",
-  "year_enacted": 2004,
-  "current_to": "2024",
+  "act": {
+    "name": "Family Law Rules 2004",
+    "jurisdiction": "Commonwealth of Australia",
+    "citation": "Family Law Rules 2004 (Cth)",
+    "url": "https://www.legislation.gov.au/F2005L00094/latest/text",
+    "year_enacted": 2004,
+    "current_to": "2024"
+  },
   "sections": [
     {
       "section": "1.03",
