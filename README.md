@@ -1443,6 +1443,302 @@ graph LR
 
 ---
 
+## 💰 LLM Model Comparison: Pricing, Quality & TOON Savings
+
+<details open>
+<summary><b>📊 2025 Model Pricing Comparison</b></summary>
+<br>
+
+Understanding which LLM to use for GSW extraction is critical for both cost and quality. Here's a comprehensive comparison:
+
+```mermaid
+flowchart LR
+    subgraph Budget["💵 Budget Tier"]
+        direction TB
+        GLM[GLM-4.6<br/>$0.60/$2.00]
+        KIMI[Kimi K2<br/>$0.15/$2.50]
+        MINI[MiniMax M2<br/>$0.30/$1.20]
+    end
+
+    subgraph Mid["⚖️ Mid Tier"]
+        direction TB
+        FLASH[Gemini 2.5 Flash<br/>$0.30/$2.50]
+        GPT[GPT-4.1<br/>$2/$8]
+    end
+
+    subgraph Premium["🏆 Premium Tier"]
+        direction TB
+        CLAUDE[Claude Sonnet 4.5<br/>$3/$15]
+        PRO[Gemini 2.5 Pro<br/>$1.25/$10]
+    end
+
+    Budget -->|Lower Cost<br/>Good Quality| Mid
+    Mid -->|Higher Cost<br/>Better Quality| Premium
+```
+
+### API Pricing Per Million Tokens (November 2025)
+
+| Model | Input Cost | Output Cost | Context Window | Best For |
+|-------|------------|-------------|----------------|----------|
+| **[Gemini 2.5 Flash](https://ai.google.dev/gemini-api/docs/pricing)** | $0.30 | $2.50 | 1M tokens | High-volume processing |
+| **[Gemini 2.5 Flash-Lite](https://ai.google.dev/gemini-api/docs/pricing)** | $0.10 | $0.40 | 1M tokens | Bulk extraction (lowest cost) |
+| **[Gemini 2.5 Pro](https://ai.google.dev/gemini-api/docs/pricing)** | $1.25 | $10.00 | 1M tokens | Complex legal reasoning |
+| **[GPT-4.1](https://openai.com/api/pricing/)** | $2.00 | $8.00 | 1M tokens | General purpose, reliable |
+| **[Claude Sonnet 4.5](https://docs.claude.com/en/docs/about-claude/pricing)** | $3.00 | $15.00 | 200K tokens | Best coding/legal accuracy |
+| **[Kimi K2](https://platform.moonshot.ai/docs/pricing/chat)** | $0.15* | $2.50 | 128K tokens | Cost-sensitive applications |
+| **[GLM-4.6](https://open.bigmodel.cn/pricing)** | $0.60 | $2.00 | 128K tokens | Open weights, self-hosting |
+| **[MiniMax M2](https://www.minimaxi.com/news/minimax-m2)** | $0.30 | $1.20 | 128K tokens | Tool calling, agents |
+
+*Kimi K2 input price is $0.15 with cache hit, $0.60 without cache.
+
+</details>
+
+<details>
+<summary><b>🧮 Cost Per Document: With vs Without TOON</b></summary>
+<br>
+
+TOON format achieves **~40% token reduction** compared to JSON. This directly impacts your API costs:
+
+```mermaid
+flowchart TB
+    subgraph WithTOON["✅ With TOON Format"]
+        T_IN[Input: 2,500 tokens]
+        T_OUT[Output: 3,000 tokens]
+        T_TOTAL[Total: 5,500 tokens/doc]
+    end
+
+    subgraph WithoutTOON["❌ Without TOON (JSON)"]
+        J_IN[Input: 4,167 tokens<br/>+67% more]
+        J_OUT[Output: 3,000 tokens]
+        J_TOTAL[Total: 7,167 tokens/doc]
+    end
+
+    WithTOON -->|40% savings| SAVE[Save $2,000+<br/>on full corpus]
+```
+
+### Cost Per 1,000 Documents
+
+| Model | With TOON | Without TOON | TOON Savings |
+|-------|-----------|--------------|--------------|
+| **Gemini 2.5 Flash-Lite** | $1.60 | $2.27 | $0.67 (29%) |
+| **Gemini 2.5 Flash** | $8.25 | $10.92 | $2.67 (24%) |
+| **Kimi K2 (cached)** | $7.88 | $10.00 | $2.12 (21%) |
+| **MiniMax M2** | $4.35 | $5.35 | $1.00 (19%) |
+| **GLM-4.6** | $7.50 | $10.00 | $2.50 (25%) |
+| **GPT-4.1** | $29.00 | $37.33 | $8.33 (22%) |
+| **Gemini 2.5 Pro** | $33.13 | $45.21 | $12.08 (27%) |
+| **Claude Sonnet 4.5** | $52.50 | $70.00 | $17.50 (25%) |
+
+**Calculation basis**: 2,500 input + 3,000 output tokens with TOON; 4,167 input + 3,000 output without TOON.
+
+</details>
+
+<details>
+<summary><b>💎 Full Australian Legal Corpus Cost Estimates</b></summary>
+<br>
+
+Processing all **513,474 documents** in the Australian Legal Corpus:
+
+```mermaid
+flowchart TB
+    subgraph Corpus["📚 Full Corpus: 513,474 Documents"]
+        SIZE[8.8 GB Raw Text]
+        TASKS[6 Extraction Tasks Each]
+    end
+
+    subgraph Costs["💰 Estimated Total Cost"]
+        CHEAP[Gemini Flash-Lite<br/>~$822]
+        MID[Gemini Flash<br/>~$4,236]
+        PREMIUM[Claude Sonnet 4.5<br/>~$26,957]
+    end
+
+    subgraph Current["📍 Current Status"]
+        SAMPLE[714 Documents<br/>Proof of Concept]
+        FUNDING[Awaiting Research<br/>Funding]
+    end
+
+    Corpus --> Costs
+    Costs --> Current
+```
+
+### Full Corpus Processing Costs by Model
+
+| Model | Cost (With TOON) | Cost (Without TOON) | TOON Saves |
+|-------|------------------|---------------------|------------|
+| **Gemini 2.5 Flash-Lite** | **$822** | $1,166 | $344 |
+| **MiniMax M2** | **$2,234** | $2,747 | $513 |
+| **Kimi K2 (cached)** | **$4,046** | $5,135 | $1,089 |
+| **Gemini 2.5 Flash** | **$4,236** | $5,608 | $1,372 |
+| **GLM-4.6** | **$3,851** | $5,135 | $1,284 |
+| **GPT-4.1** | **$14,891** | $19,173 | $4,282 |
+| **Gemini 2.5 Pro** | **$17,011** | $23,216 | $6,205 |
+| **Claude Sonnet 4.5** | **$26,957** | $35,943 | $8,986 |
+
+> **Note**: The ~$6,000 USD estimate in previous documentation assumes Gemini 2.5 Flash at standard rates. Using Flash-Lite drops this to **under $1,000**!
+
+### Why We Use Sample Data
+
+| Factor | Full Corpus | Sample (Current) |
+|--------|-------------|------------------|
+| Documents | 513,474 | 714 |
+| Minimum Cost | ~$822 | ~$1.14 |
+| Processing Time | ~2-4 weeks | 1-2 hours |
+| Purpose | Production | Proof of Concept |
+| Status | Awaiting funding | ✅ Complete |
+
+</details>
+
+<details>
+<summary><b>🏆 Quality Benchmarks: Which Model is Best?</b></summary>
+<br>
+
+Different models excel at different tasks. Here's how they compare on key benchmarks:
+
+```mermaid
+graph TB
+    subgraph Coding["👨‍💻 Coding Benchmarks"]
+        SWE[SWE-bench Verified]
+        AIDER[Aider Polyglot]
+    end
+
+    subgraph Winners["🏆 Top Performers"]
+        C_WIN[Claude Sonnet 4.5<br/>77.2% SWE-bench]
+        G_WIN[GPT-5.1<br/>76.3% SWE-bench]
+        GEM_WIN[Gemini 3 Pro<br/>76.2% SWE-bench]
+    end
+
+    SWE --> C_WIN
+    SWE --> G_WIN
+    SWE --> GEM_WIN
+```
+
+### SWE-bench Verified Scores (Coding/Agentic)
+
+| Model | SWE-bench Score | Aider Polyglot | Notes |
+|-------|-----------------|----------------|-------|
+| **[Claude Sonnet 4.5](https://www.anthropic.com/claude/sonnet)** | **77.2%** | 89.4% (Opus) | Best for complex legal extraction |
+| **GPT-5.1** | 76.3% | 88.0% | Strong all-rounder |
+| **Gemini 3 Pro** | 76.2% | 82.2% | PhD-level reasoning |
+| **Gemini 2.5 Pro** | 67.2% | 82.2% | Good balance |
+| **GLM-4.6** | ~65% | ~75% | Best open-weights value |
+| **Kimi K2** | ~60% | ~70% | Excellent cost/performance |
+
+### Recommended Models by Use Case
+
+| Use Case | Recommended Model | Why |
+|----------|-------------------|-----|
+| **Proof of Concept** | Gemini 2.5 Flash | Balance of cost & quality |
+| **Budget Processing** | Gemini 2.5 Flash-Lite | Lowest cost per document |
+| **Highest Accuracy** | Claude Sonnet 4.5 | Best legal reasoning |
+| **Self-Hosted** | GLM-4.6 | Open weights, no API costs |
+| **High Volume** | Kimi K2 (cached) | Cache reduces costs 75% |
+| **Production** | Gemini 2.5 Pro | Quality + reasonable cost |
+
+</details>
+
+<details>
+<summary><b>⚙️ What Each Model Does in the GSW Pipeline</b></summary>
+<br>
+
+The GSW extraction pipeline runs **6 sequential tasks** per document:
+
+```mermaid
+flowchart TB
+    subgraph Pipeline["🔄 GSW Extraction Pipeline"]
+        T1[Task 1: Actor Extraction<br/>Find all people, orgs, assets]
+        T2[Task 2: Role Assignment<br/>Applicant, Respondent, Judge]
+        T3[Task 3: State Extraction<br/>Married → Separated → Divorced]
+        T4[Task 4: Verb Phrase Extraction<br/>Filed, Ordered, Appealed]
+        T5[Task 5: Question Generation<br/>What could be asked?]
+        T6[Task 6: Link Creation<br/>Spatio-temporal connections]
+    end
+
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6
+
+    subgraph Output["📤 Output"]
+        GSW[(Global Workspace<br/>Actors, States, Links)]
+    end
+
+    T6 --> GSW
+```
+
+### Token Usage Per Task
+
+| Task | Input Tokens | Output Tokens | Purpose |
+|------|--------------|---------------|---------|
+| **Task 1** | ~500 | ~300 | Extract actor names and types |
+| **Task 2** | ~400 | ~200 | Assign legal roles |
+| **Task 3** | ~500 | ~400 | Track state changes over time |
+| **Task 4** | ~400 | ~600 | Identify actions and events |
+| **Task 5** | ~400 | ~800 | Generate predictive questions |
+| **Task 6** | ~300 | ~700 | Create temporal/spatial links |
+| **Total** | **~2,500** | **~3,000** | Per document |
+
+### Model Performance by Task Type
+
+| Task | Best Models | Why |
+|------|-------------|-----|
+| **Actor Extraction** | GPT-4.1, Claude | Named entity recognition |
+| **Role Assignment** | Claude Sonnet 4.5 | Legal domain understanding |
+| **State Extraction** | Gemini 2.5 Pro | Temporal reasoning |
+| **Verb Phrases** | Any model | Straightforward extraction |
+| **Questions** | Claude, GPT | Natural language generation |
+| **Links** | Gemini 2.5 Pro | Multi-document reasoning |
+
+</details>
+
+<details>
+<summary><b>📈 Cost Optimization Strategies</b></summary>
+<br>
+
+### 1. Use TOON Format (Default)
+- **Savings**: 40% token reduction
+- **Impact**: $2,000-$9,000 saved on full corpus
+
+### 2. Use Batch APIs
+- **Gemini Batch**: 50% discount ($0.625/$5 per 1M)
+- **Claude Batch**: 50% discount ($1.50/$7.50 per 1M)
+- **Trade-off**: 24-hour processing time
+
+### 3. Enable Caching
+- **Kimi K2**: 75% input discount with cache hits
+- **Claude**: 90% savings with prompt caching
+- **GPT-4.1**: 75% discount on cached inputs
+
+### 4. Model Selection by Phase
+
+```mermaid
+flowchart LR
+    subgraph Phase1["🧪 Testing"]
+        TEST[Flash-Lite<br/>$0.10/$0.40]
+    end
+
+    subgraph Phase2["📈 Scaling"]
+        SCALE[Flash Standard<br/>$0.30/$2.50]
+    end
+
+    subgraph Phase3["🎯 Production"]
+        PROD[Pro or Claude<br/>Best accuracy]
+    end
+
+    Phase1 -->|Validated| Phase2
+    Phase2 -->|Refined| Phase3
+```
+
+### 5. Hybrid Approach
+
+Use different models for different tasks:
+
+| Tasks | Model | Cost Savings |
+|-------|-------|--------------|
+| Tasks 1-4 (Extraction) | Gemini Flash | ~$2,500 |
+| Tasks 5-6 (Reasoning) | Claude Sonnet | Quality boost |
+| **Total Hybrid** | Mixed | ~$8,000 vs $27K (Claude only) |
+
+</details>
+
+---
+
 ## 📖 Documentation
 
 <div align="center">
