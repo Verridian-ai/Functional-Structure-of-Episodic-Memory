@@ -20,6 +20,11 @@
 
 <br>
 
+<!-- IMPORTANT NOTICE -->
+> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
+
+<br>
+
 <!-- Animated Badges Row 1 -->
 [![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.07587)
 [![CLAUSE](https://img.shields.io/badge/CLAUSE-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.00340v1)
