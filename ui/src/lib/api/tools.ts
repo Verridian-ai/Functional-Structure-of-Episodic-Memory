@@ -1,9 +1,18 @@
 // Tool execution handlers for GSW knowledge base integration
+import { formatResultAsToon } from '@/lib/toon';
 
 export interface ToolResult {
   success: boolean;
   data: unknown;
   error?: string;
+}
+
+/**
+ * Format tool result as TOON for compact LLM context injection
+ * Achieves ~40% token reduction compared to JSON
+ */
+export function formatToolResultAsToon(toolName: string, result: ToolResult): string {
+  return formatResultAsToon(toolName, result);
 }
 
 // Execute a tool and return the result

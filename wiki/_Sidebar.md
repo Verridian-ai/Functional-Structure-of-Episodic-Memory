@@ -64,6 +64,7 @@
 |-----------|-------------|
 | [API Reference](API-Reference) | Complete API docs |
 | [Data Schemas](Data-Schemas) | Pydantic schemas |
+| [TOON Format](TOON-Format) | Token-efficient format |
 | [Glossary](Glossary) | Terminology |
 | [File Index](File-Index) | Codebase map |
 
