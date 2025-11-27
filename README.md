@@ -47,7 +47,7 @@
 <br>
 
 <!-- UI Screenshot -->
-<img src="assets/images/LAW OS SCREEN.png" alt="LAW OS Interface" width="100%">
+<img src="assets/images/Dark Mode Law OS 1.png" alt="LAW OS Interface" width="100%">
 
 <br>
 
