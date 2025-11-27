@@ -49,6 +49,31 @@ Think of it like this:
 
 ---
 
+## UI Features Gallery
+
+**Explore the complete interface** - The Verridian UI showcases 30+ advanced features in a modern, intuitive interface:
+
+<div align="center">
+
+[![Main Interface](../assets/images/features/01-main-chat-interface.png)](Frontend-Features#main-chat-interface)
+
+**[View Complete UI Features Documentation](Frontend-Features)**
+
+</div>
+
+| Category | Features |
+|----------|----------|
+| **Chat Interface** | Streaming responses, Markdown rendering, Code highlighting, Conversation history |
+| **Admin Settings** | Model configuration, System prompts, Tools integration, MCP server config |
+| **Visual Tools** | Canvas panel, 3D visualization, Infographic generation, Document preview |
+| **Voice Features** | Speech-to-text, Real-time transcription, Voice commands |
+| **Document Tools** | PDF/DOCX generation, Code execution, Image generation |
+| **Quick Actions** | One-click templates, Pre-configured prompts, Workflow shortcuts |
+
+**[See all 30 features with screenshots](Frontend-Features)**
+
+---
+
 ## Universal Applications - Not Just Legal
 
 While I developed this using Australian Family Law as a test domain (because legal documents have clear entities, relationships, and timelines), **this cognitive architecture works for ANY domain**:
@@ -280,6 +305,7 @@ xychart-beta
 | Page | Description |
 |------|-------------|
 | [Frontend Overview](Frontend-Overview) | Next.js architecture |
+| **[Frontend Features](Frontend-Features)** | **Complete UI features gallery** |
 | [API Routes](Frontend-API-Routes) | REST endpoints |
 | [Components](Frontend-Components) | React components |
 

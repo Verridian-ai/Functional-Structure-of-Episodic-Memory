@@ -44,6 +44,7 @@
 | Page | Description |
 |------|-------------|
 | [Frontend Overview](Frontend-Overview) | Next.js architecture |
+| **[Frontend Features](Frontend-Features)** | **UI Gallery (30+ features)** |
 | [API Routes](Frontend-API-Routes) | REST endpoints |
 | [Components](Frontend-Components) | React components |
 
