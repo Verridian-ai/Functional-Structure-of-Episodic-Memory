@@ -1,0 +1,30 @@
+# CODEOWNERS file for Verridian AI
+# These owners will be automatically requested for review
+
+# Default owner for everything
+* @Verridian-ai
+
+# Backend Python code
+/src/ @Verridian-ai
+/tests/ @Verridian-ai
+
+# Core cognitive modules - require owner review
+/src/gsw/ @Verridian-ai
+/src/tem/ @Verridian-ai
+/src/vsa/ @Verridian-ai
+/src/agency/ @Verridian-ai
+
+# Frontend
+/ui/ @Verridian-ai
+
+# Documentation
+/docs/ @Verridian-ai
+/wiki/ @Verridian-ai
+*.md @Verridian-ai
+
+# Configuration files
+/.github/ @Verridian-ai
+/docker/ @Verridian-ai
+*.json @Verridian-ai
+*.yaml @Verridian-ai
+*.yml @Verridian-ai
