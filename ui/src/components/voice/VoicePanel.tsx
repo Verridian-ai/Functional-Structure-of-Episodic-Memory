@@ -123,21 +123,6 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
     };
   }, []);
 
-  // Handle listening state changes
-  useEffect(() => {
-    if (voice.isListening) {
-      try {
-        recognitionRef.current?.start();
-        startAudioVisualization();
-      } catch (e) {
-        console.error('Failed to start recognition:', e);
-      }
-    } else {
-      recognitionRef.current?.stop();
-      stopAudioVisualization();
-    }
-  }, [voice.isListening]);
-
   const startAudioVisualization = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -174,6 +159,21 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
     }
     setAudioLevel(0);
   };
+
+  // Handle listening state changes
+  useEffect(() => {
+    if (voice.isListening) {
+      try {
+        recognitionRef.current?.start();
+        startAudioVisualization();
+      } catch (e) {
+        console.error('Failed to start recognition:', e);
+      }
+    } else {
+      recognitionRef.current?.stop();
+      stopAudioVisualization();
+    }
+  }, [voice.isListening]);
 
   const toggleListening = () => {
     setVoice({ isListening: !voice.isListening, transcript: '' });

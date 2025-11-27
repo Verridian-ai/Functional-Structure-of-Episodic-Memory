@@ -65,6 +65,9 @@ export async function executeTool(
       case 'execute_code':
         return await executeCode(args.code as string);
 
+      case 'generate_infographic':
+        return await generateInfographic(args);
+
       default:
         return { success: false, data: null, error: `Unknown tool: ${toolName}` };
     }
@@ -101,6 +104,82 @@ async function callGSW(
       success: false,
       data: null,
       error: error instanceof Error ? error.message : 'GSW request failed',
+    };
+  }
+}
+
+// Generate infographic using NanoBanaPro via OpenRouter
+async function generateInfographic(args: Record<string, unknown>): Promise<ToolResult> {
+  try {
+    const {
+      prompt,
+      infographic_type,
+      aspect_ratio = '16:9',
+      document_type = 'general',
+      content_to_visualize,
+    } = args;
+
+    // Build enhanced prompt based on infographic type
+    const typePrompts: Record<string, string> = {
+      timeline: 'a horizontal timeline with key events and dates connected by lines',
+      process: 'a step-by-step process flow with numbered stages and arrows',
+      comparison: 'a side-by-side comparison layout with clear visual distinction',
+      statistics: 'a data visualization with charts, key numbers, and icons',
+      hierarchy: 'an organizational hierarchy or tree structure with connected boxes',
+      list: 'a visually organized list with icons and grouped items',
+      flowchart: 'a decision flowchart with clear yes/no branches',
+      'pie-chart': 'a pie or donut chart showing proportional distribution',
+      'bar-chart': 'a bar chart comparing values across categories',
+    };
+
+    const enhancedPrompt = `Create ${typePrompts[infographic_type as string] || 'a professional infographic'}.
+
+${prompt}
+
+${content_to_visualize ? `\nContent to visualize:\n${content_to_visualize}` : ''}
+
+Requirements:
+- Professional ${document_type} style
+- Minimal text, maximum visual clarity
+- Clear hierarchy and flow
+- Cohesive color scheme`;
+
+    const response = await fetch('/api/generate-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: enhancedPrompt,
+        aspectRatio: aspect_ratio,
+        documentType: document_type,
+        context: content_to_visualize,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        data: null,
+        error: data.error || 'Infographic generation failed',
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        image: data.image,
+        type: infographic_type,
+        aspectRatio: aspect_ratio,
+        text: data.text,
+        message: `Successfully generated ${infographic_type} infographic`,
+      },
+    };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : 'Infographic generation failed',
     };
   }
 }
@@ -338,6 +417,29 @@ export function formatToolResult(toolName: string, result: ToolResult): string {
           output += '\n';
         });
       }
+
+      return output;
+    }
+
+    case 'generate_infographic': {
+      const infographicData = data as {
+        image: string;
+        type: string;
+        aspectRatio: string;
+        text?: string;
+        message: string;
+      };
+
+      let output = `**INFOGRAPHIC GENERATED**\n\n`;
+      output += `Type: ${infographicData.type}\n`;
+      output += `Aspect Ratio: ${infographicData.aspectRatio}\n\n`;
+      output += `${infographicData.message}\n\n`;
+      if (infographicData.text) {
+        output += `Model Notes: ${infographicData.text}\n\n`;
+      }
+      // The image data URL is included for the UI to render
+      output += `[Infographic Image Generated - View in Canvas]\n`;
+      output += `\n![Generated Infographic](${infographicData.image})`;
 
       return output;
     }

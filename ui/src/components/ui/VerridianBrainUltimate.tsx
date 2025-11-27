@@ -177,7 +177,7 @@ function BrainParticles({ analyserRef, dataArrayRef, particleCount }: { analyser
     // Audio Reactivity: Scale
     let scale = 1;
     if (analyserRef.current && dataArrayRef.current) {
-      analyserRef.current.getByteFrequencyData(dataArrayRef.current);
+      analyserRef.current.getByteFrequencyData(dataArrayRef.current as Uint8Array<ArrayBuffer>);
       // Calculate average volume
       const avg = dataArrayRef.current.reduce((a, b) => a + b, 0) / dataArrayRef.current.length;
       // Map 0-255 to scale factor (e.g., 1.0 to 1.2)
@@ -219,12 +219,14 @@ function BrainParticles({ analyserRef, dataArrayRef, particleCount }: { analyser
             count={positions.length / 3}
             array={positions}
             itemSize={3}
+            args={[positions, 3] as const}
           />
           <bufferAttribute
             attach="attributes-color"
             count={colors.length / 3}
             array={colors}
             itemSize={3}
+            args={[colors, 3] as const}
           />
         </bufferGeometry>
         <pointsMaterial
@@ -246,6 +248,7 @@ function BrainParticles({ analyserRef, dataArrayRef, particleCount }: { analyser
             count={linePositions.length / 3}
             array={linePositions}
             itemSize={3}
+            args={[linePositions, 3] as const}
           />
         </bufferGeometry>
         <lineBasicMaterial

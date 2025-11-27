@@ -8,11 +8,54 @@ import {
 import { useStore } from '@/lib/store';
 import type { Artifact, ArtifactSection } from '@/types';
 
-// Mock NanoBanana Pro Image Generation
-const generateImage = async (prompt: string): Promise<string> => {
-  // In a real app, call /api/generate-image
-  // For demo, return a placeholder based on the prompt hash or similar
-  return `https://placehold.co/600x400/1e1e1e/06b6d4?text=${encodeURIComponent(prompt.slice(0, 20))}`;
+// NanoBanana Pro Image Generation via OpenRouter
+interface GenerateImageOptions {
+  prompt: string;
+  aspectRatio?: string;
+  context?: string;
+  documentType?: string;
+}
+
+interface GenerateImageResult {
+  success: boolean;
+  image?: string;
+  text?: string;
+  error?: string;
+}
+
+const generateImage = async (options: GenerateImageOptions): Promise<GenerateImageResult> => {
+  try {
+    const response = await fetch('/api/generate-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: options.prompt,
+        aspectRatio: options.aspectRatio || '16:9',
+        context: options.context,
+        documentType: options.documentType,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Image generation failed',
+      };
+    }
+
+    return {
+      success: true,
+      image: data.image,
+      text: data.text,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Network error',
+    };
+  }
 };
 
 export function CanvasPanel() {
@@ -40,6 +83,9 @@ export function CanvasPanel() {
     const [highlighterMode, setHighlighterMode] = useState(false);
     const [imagePrompt, setImagePrompt] = useState('');
     const [showImageModal, setShowImageModal] = useState(false);
+    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+    const [imageError, setImageError] = useState<string | null>(null);
+    const [selectedAspectRatio, setSelectedAspectRatio] = useState('16:9');
 
     const activeArtifact = artifacts.find(a => a.id === activeArtifactId);
 
@@ -186,17 +232,44 @@ export function CanvasPanel() {
   };
 
   const handleAddImage = async () => {
-      if (!activeArtifact) return;
-      const url = await generateImage(imagePrompt);
-      
-      // For now, append markdown image to content
-      const imageMarkdown = `\n\n![${imagePrompt}](${url})\n\n`;
-      
-      updateArtifact(activeArtifact.id, { 
-          content: (activeArtifact.content || '') + imageMarkdown
-      });
-      setShowImageModal(false);
-      setImagePrompt('');
+      if (!activeArtifact || !imagePrompt.trim()) return;
+
+      setIsGeneratingImage(true);
+      setImageError(null);
+
+      try {
+        // Detect document type from artifact structure
+        const documentType = activeArtifact.structure?.layout || 'standard';
+
+        const result = await generateImage({
+          prompt: imagePrompt,
+          aspectRatio: selectedAspectRatio,
+          context: activeArtifact.content?.slice(0, 500), // Provide context from document
+          documentType,
+        });
+
+        if (!result.success) {
+          setImageError(result.error || 'Failed to generate image');
+          return;
+        }
+
+        if (result.image) {
+          // Insert base64 image directly into content
+          const imageMarkdown = `\n\n![${imagePrompt}](${result.image})\n\n`;
+
+          updateArtifact(activeArtifact.id, {
+            content: (activeArtifact.content || '') + imageMarkdown
+          });
+
+          setShowImageModal(false);
+          setImagePrompt('');
+          setSelectedAspectRatio('16:9');
+        }
+      } catch (error) {
+        setImageError(error instanceof Error ? error.message : 'Unknown error');
+      } finally {
+        setIsGeneratingImage(false);
+      }
   };
 
   return (
@@ -410,35 +483,88 @@ export function CanvasPanel() {
         {activeArtifact ? (
           <div className="h-full">
               
-            {/* NanoBanana Modal */}
+            {/* NanoBanana Pro Modal */}
             {showImageModal && (
                 <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
-                    <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/30 rounded-xl p-4 shadow-2xl shadow-yellow-500/10">
-                        <h3 className="text-lg font-bold text-yellow-400 mb-2 flex items-center gap-2">
+                    <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/30 rounded-xl p-5 shadow-2xl shadow-yellow-500/10">
+                        <h3 className="text-lg font-bold text-yellow-400 mb-1 flex items-center gap-2">
                             <ImageIcon className="w-5 h-5" />
-                            NanoBanana Pro
+                            NanoBanana Pro - Infographic Generator
                         </h3>
-                        <p className="text-sm text-zinc-400 mb-4">Describe the image you want to generate for this document.</p>
-                        <textarea 
-                            value={imagePrompt}
-                            onChange={(e) => setImagePrompt(e.target.value)}
-                            className="w-full h-24 bg-black/50 border border-zinc-700 rounded-lg p-3 text-white mb-4 focus:border-yellow-500/50 outline-none resize-none"
-                            placeholder="A professional legal letterhead with a scale of justice logo..."
-                        />
-                        <div className="flex justify-end gap-2">
-                            <button 
-                                onClick={() => setShowImageModal(false)}
-                                className="px-4 py-2 text-zinc-400 hover:text-white transition"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                onClick={handleAddImage}
-                                disabled={!imagePrompt}
-                                className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Generate
-                            </button>
+                        <p className="text-xs text-zinc-500 mb-4">Powered by Gemini 3 Pro via OpenRouter</p>
+
+                        <div className="space-y-4">
+                          {/* Prompt Input */}
+                          <div>
+                            <label className="text-xs text-zinc-400 mb-1 block">Describe your infographic</label>
+                            <textarea
+                                value={imagePrompt}
+                                onChange={(e) => setImagePrompt(e.target.value)}
+                                className="w-full h-24 bg-black/50 border border-zinc-700 rounded-lg p-3 text-white focus:border-yellow-500/50 outline-none resize-none"
+                                placeholder="An infographic showing the timeline of family court proceedings with key milestones..."
+                                disabled={isGeneratingImage}
+                            />
+                          </div>
+
+                          {/* Aspect Ratio Selection */}
+                          <div>
+                            <label className="text-xs text-zinc-400 mb-2 block">Aspect Ratio</label>
+                            <div className="flex gap-2 flex-wrap">
+                              {['1:1', '16:9', '4:3', '9:16', '3:2'].map((ratio) => (
+                                <button
+                                  key={ratio}
+                                  onClick={() => setSelectedAspectRatio(ratio)}
+                                  className={`px-3 py-1.5 text-xs rounded-lg border transition ${
+                                    selectedAspectRatio === ratio
+                                      ? 'bg-yellow-600/20 border-yellow-500 text-yellow-400'
+                                      : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'
+                                  }`}
+                                  disabled={isGeneratingImage}
+                                >
+                                  {ratio}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Error Message */}
+                          {imageError && (
+                            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                              <p className="text-sm text-red-400">{imageError}</p>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex justify-end gap-2 pt-2">
+                              <button
+                                  onClick={() => {
+                                    setShowImageModal(false);
+                                    setImageError(null);
+                                    setImagePrompt('');
+                                  }}
+                                  className="px-4 py-2 text-zinc-400 hover:text-white transition"
+                                  disabled={isGeneratingImage}
+                              >
+                                  Cancel
+                              </button>
+                              <button
+                                  onClick={handleAddImage}
+                                  disabled={!imagePrompt.trim() || isGeneratingImage}
+                                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                              >
+                                  {isGeneratingImage ? (
+                                    <>
+                                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                      </svg>
+                                      Generating...
+                                    </>
+                                  ) : (
+                                    'Generate Infographic'
+                                  )}
+                              </button>
+                          </div>
                         </div>
                     </div>
                 </div>

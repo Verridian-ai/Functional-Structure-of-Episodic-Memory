@@ -88,7 +88,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       if (e.code === 'Space' && !e.repeat) {
         // Check if focused element is an input/textarea
         const activeTag = document.activeElement?.tagName.toLowerCase();
-        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || document.activeElement?.isContentEditable;
+        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement as HTMLElement)?.isContentEditable;
 
         if (!isInputActive && !voice.isListening && !isGenerating && !disabled) {
           e.preventDefault(); // Prevent scrolling
@@ -207,8 +207,8 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   ];
 
   return (
-    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl z-20 safe-area-pb">
-      <div className="w-full">
+    <div className="flex-shrink-0 absolute bottom-0 left-0 right-0 p-4 md:bottom-6 z-20 safe-area-pb flex justify-center">
+      <div className="w-full max-w-3xl px-4 md:px-6">
         {/* Starter Prompts - Floating above input */}
         {messages.length === 0 && !input && (
             <div className="flex items-center justify-center gap-2 mb-4 animate-fade-in-up">

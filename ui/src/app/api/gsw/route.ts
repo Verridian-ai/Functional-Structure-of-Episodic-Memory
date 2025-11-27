@@ -726,22 +726,26 @@ export async function POST(request: NextRequest) {
           return true;
         }).slice(0, limit);
 
-        const results = uniqueResults.map(sc => ({
-          citation: sc.case.citation,
-          date: sc.case.date,
-          jurisdiction: sc.case.jurisdiction,
-          source: sc.case.source,
-          url: sc.case.url,
-          category: sc.case._classification?.primary_category || 'Unknown',
-          relevance_score: sc.score,
-          match_type: sc.type,
-          structural_reasoning: sc.reasoning,
-          summary: extractCaseSummary(sc.case.text),
-          outcome: extractOutcome(sc.case.text),
-          matched_keywords: keywords.filter(kw =>
-            sc.case.text.toLowerCase().includes(kw)
-          ),
-        }));
+        const results = uniqueResults.map(sc => {
+          const reasoning = 'reasoning' in sc ? (sc.reasoning as string) : '';
+          return {
+            citation: sc.case.citation,
+            date: sc.case.date,
+            jurisdiction: sc.case.jurisdiction,
+            source: sc.case.source,
+            url: sc.case.url,
+            category: sc.case._classification?.primary_category || 'Unknown',
+            relevance_score: sc.score,
+            match_type: sc.type,
+            reasoning: reasoning || '',
+            structural_reasoning: reasoning,
+            summary: extractCaseSummary(sc.case.text),
+            outcome: extractOutcome(sc.case.text),
+            matched_keywords: keywords.filter(kw =>
+              sc.case.text.toLowerCase().includes(kw)
+            ),
+          };
+        });
 
         return NextResponse.json({
           results,

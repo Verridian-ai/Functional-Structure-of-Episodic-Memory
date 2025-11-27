@@ -1,5 +1,13 @@
 # Large data files (exceed GitHub's 100MB limit)
 corpus.jsonl
+data/processed/graph/spcnet_nodes.jsonl
+data/processed/graph/spcnet_edges.jsonl
+data/processed/graph/spcnet_nodes_reduced.jsonl
+data/processed/graph/spcnet_edges_reduced.jsonl
+
+# Keep demo graph files (small enough for GitHub)
+!data/processed/graph/spcnet_nodes_demo.jsonl
+!data/processed/graph/spcnet_edges_demo.jsonl
 
 # Old folders (reorganized into new structure)
 GWK LAW/

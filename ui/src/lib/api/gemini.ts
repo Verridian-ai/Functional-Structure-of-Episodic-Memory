@@ -261,6 +261,42 @@ export const TOOL_DEFINITIONS = [
       },
     },
   },
+  {
+    type: 'function' as const,
+    function: {
+      name: 'generate_infographic',
+      description: 'Generate a professional infographic using NanoBanaPro (Gemini 3 Pro). Use this to visualize data, processes, timelines, comparisons, or any content that would benefit from visual representation. Great for transforming text-heavy sections into engaging visuals for legal documents, business reports, or any professional content.',
+      parameters: {
+        type: 'object',
+        properties: {
+          prompt: {
+            type: 'string',
+            description: 'Detailed description of the infographic to generate. Include what data/content to visualize and the desired style.',
+          },
+          infographic_type: {
+            type: 'string',
+            enum: ['timeline', 'process', 'comparison', 'statistics', 'hierarchy', 'list', 'flowchart', 'pie-chart', 'bar-chart'],
+            description: 'Type of infographic to generate',
+          },
+          aspect_ratio: {
+            type: 'string',
+            enum: ['1:1', '16:9', '4:3', '9:16', '3:2'],
+            description: 'Aspect ratio for the infographic (default: 16:9)',
+          },
+          document_type: {
+            type: 'string',
+            enum: ['legal', 'business', 'report', 'newsletter', 'general'],
+            description: 'Type of document to style the infographic for',
+          },
+          content_to_visualize: {
+            type: 'string',
+            description: 'The actual content/data to be transformed into the infographic',
+          },
+        },
+        required: ['prompt', 'infographic_type'],
+      },
+    },
+  },
 ];
 
 // Convert messages to OpenAI format

@@ -2,7 +2,21 @@
   "permissions": {
     "allow": [
       "Bash(dir:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "WebFetch(domain:github.com)",
+      "Bash(go version:*)",
+      "Bash(winget install:*)",
+      "Bash(\"C:\\Program Files\\Go\\bin\\go.exe\" install:*)",
+      "Bash(\"C:\\Program Files\\Go\\bin\\go.exe\" env GOPATH)",
+      "Bash(git config:*)",
+      "Bash(test:*)",
+      "Bash(git appraise:*)",
+      "Bash(mkdir:*)",
+      "Bash(git clone:*)",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__list_pages",
+      "WebFetch(domain:openrouter.ai)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
