@@ -5,9 +5,18 @@
 
 # VERRIDIAN AI
 
-### Brain-Inspired Legal Intelligence Platform
+### Created by Daniel Fleuren
+
+**A Universal Cognitive Brain for Any Domain**
 
 *Giving Language Models Human-Like Episodic Memory*
+
+*Legal • Medical • Business • Personal Knowledge • Research • Any Data*
+
+<br>
+
+<!-- IMPORTANT NOTICE -->
+> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
 
 <br>
 
@@ -1084,9 +1093,23 @@ This project implements research from:
 
 ---
 
-## 🤝 Contributing
+## 🤝 Call for Contributors
 
-We welcome contributions! See our [Contributing Guidelines](CONTRIBUTING.md).
+**I'm looking for contributors who share my vision: achieving 100% accuracy in cognitive retrieval.**
+
+Current AI systems hallucinate, miss connections, and fail to understand context. The architecture in this repository is a significant step toward solving these problems, but there's more work to be done:
+
+| Area | What We Need |
+|------|--------------|
+| **Entity Resolution** | Improving entity matching across documents |
+| **Domain Expansion** | Adapting to medical, business, and other domains |
+| **Algorithm Optimization** | Enhancing cognitive navigation performance |
+| **Evaluation Frameworks** | Building better benchmark suites |
+| **Data Integration** | Supporting additional data sources |
+
+**If you believe AI should truly understand information rather than just pattern-match against it, join me.**
+
+See our [Contributing Guidelines](CONTRIBUTING.md) for how to get involved.
 
 ```bash
 # Quick contribution workflow
@@ -1098,14 +1121,6 @@ git push origin feature/your-feature
 # Open Pull Request
 ```
 
-### 📋 Contribution Areas
-
-- 🐛 **Bug fixes** - Help squash bugs
-- ✨ **New features** - Add new capabilities
-- 📚 **Documentation** - Improve docs and examples
-- 🧪 **Tests** - Increase test coverage
-- 🎨 **UI/UX** - Enhance the frontend
-
 ---
 
 ## 📜 License
@@ -1114,11 +1129,39 @@ git push origin feature/your-feature
 
 MIT License - see [LICENSE](LICENSE) for details.
 
+</div>
+
 ---
 
-### Built by [Verridian AI](https://github.com/Verridian-ai)
+## 🔮 Future Research: BRAINS
 
-*Cognitive AI for Legal Intelligence*
+> **Coming Soon: BRAINS (Bio-Inspired Regulatory AI Neural System)**
+>
+> I'm developing a new system for AI safety based on how the fruit fly brain works. Here's the insight: when a fruit fly senses something, it doesn't just process information - it doses its *entire brain* with positive or negative hormones based on what it experiences.
+>
+> Humans have morality and conscience about lying and doing wrong because of *chemical reactions*. We don't just logically decide what's right - our brains physically respond to our choices. This chemical feedback loop is what makes us trustworthy.
+>
+> **What if we could simulate this in AI?**
+>
+> The BRAINS system I'm developing would:
+> - Monitor neural network behavior across all layers
+> - Simulate "hormonal" feedback based on output quality
+> - Inject "positive hormones" (reinforcement signals) when the AI stays truthful
+> - Enable system shutdown if the AI acts in unsafe ways
+>
+> Instead of trying to align AI through just training and prompting, we could give it something analogous to a conscience - a system-wide chemical response to its own behavior.
+>
+> **I'll be releasing a detailed research paper on this in the coming months.**
+>
+> This work builds on the cognitive architecture in this repository, adding a regulatory layer that could be key to unlocking safe, truthful AI.
+
+---
+
+<div align="center">
+
+### Created by Daniel Fleuren | [Verridian AI](https://github.com/Verridian-ai)
+
+*Building Cognitive AI That Actually Understands*
 
 <br>
 
@@ -1129,6 +1172,8 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
+**Open to collaboration, research partnerships, and contributors who want to push the boundaries of what AI can understand.**
+
 **Proof of Concept** • Production-ready Architecture • Sample Data (714 documents)
 
 <br>
@@ -1136,5 +1181,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 > *"The brain doesn't search for memories - it reconstructs them."*
 >
 > — Cognitive Neuroscience Principle
+
+*Contact: [GitHub Issues](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues) or contribute directly via Pull Request*
 
 </div>
