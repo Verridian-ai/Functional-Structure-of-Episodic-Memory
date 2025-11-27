@@ -20,11 +20,6 @@
 
 <br>
 
-<!-- IMPORTANT NOTICE -->
-> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
-
-<br>
-
 <!-- Animated Badges Row 1 -->
 [![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.07587)
 [![CLAUSE](https://img.shields.io/badge/CLAUSE-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.00340v1)
@@ -1137,23 +1132,32 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 > **Coming Soon: BRAINS (Bio-Inspired Regulatory AI Neural System)**
 >
-> I'm developing a new system for AI safety based on how the fruit fly brain works. Here's the insight: when a fruit fly senses something, it doesn't just process information - it doses its *entire brain* with positive or negative hormones based on what it experiences.
+> I am developing a novel architecture for AI safety inspired by the regulatory mechanisms observed in the fruit fly (*Drosophila*) brain.
 >
-> Humans have morality and conscience about lying and doing wrong because of *chemical reactions*. We don't just logically decide what's right - our brains physically respond to our choices. This chemical feedback loop is what makes us trustworthy.
+> ### The Insight: Neuromodulation as Regulation
 >
-> **What if we could simulate this in AI?**
+> The key insight comes from how biological brains regulate behavior. When a fruit fly experiences a stimulus, it doesn't merely process the information locally. Specialized neurons release neuromodulators (such as dopamine or octopamine). These chemicals deliver widespread valence signals—positive or negative—that globally influence neural activity and synaptic plasticity. This system-wide feedback allows the organism to rapidly adapt its behavior based on experience.
 >
-> The BRAINS system I'm developing would:
-> - Monitor neural network behavior across all layers
-> - Simulate "hormonal" feedback based on output quality
-> - Inject "positive hormones" (reinforcement signals) when the AI stays truthful
-> - Enable system shutdown if the AI acts in unsafe ways
+> ### The Role of Neurochemistry in Behavior
 >
-> Instead of trying to align AI through just training and prompting, we could give it something analogous to a conscience - a system-wide chemical response to its own behavior.
+> In humans, complex processes like morality and ethical decision-making are similarly underpinned by intricate neurochemical pathways. We don't make decisions based purely on abstract logic; our choices are deeply intertwined with physiological feedback loops. This interplay between cognition and neurochemistry is fundamental to how we learn and regulate behavior within social and ethical constraints.
 >
-> **I'll be releasing a detailed research paper on this in the coming months.**
+> ### Simulating Neuromodulation in AI
 >
-> This work builds on the cognitive architecture in this repository, adding a regulatory layer that could be key to unlocking safe, truthful AI.
+> **What if we could adapt these biological principles for AI alignment?**
+>
+> The BRAINS system utilizes a simulated neuromodulation architecture designed to:
+>
+> - **Monitor Internal States**: Observe network activity and latent representations across all layers, not just the final output
+> - **Implement Global Feedback**: Introduce system-wide reinforcement signals based on the quality, safety, and truthfulness of the AI's processes and outputs
+> - **Dynamic Regulation**: Apply positive modulation (strengthening pathways) when the AI adheres to behavioral constraints, and negative modulation (dampening pathways) when it deviates
+> - **Safety Integration**: Incorporate fail-safe protocols, including behavioral suppression or system shutdown, if the AI deviates into unsafe patterns
+>
+> ### A New Layer of Alignment
+>
+> Rather than relying exclusively on training data and prompting for alignment, BRAINS introduces a dynamic, system-wide regulatory mechanism analogous to the biological systems that shape adaptive behavior. This approach aims to provide an intrinsic feedback loop for regulating AI actions in real-time.
+>
+> This work builds on the cognitive architecture in this repository, adding a crucial regulatory layer inspired by neuroscience to advance the development of safe, reliable, and truthful AI. I look forward to releasing a detailed research paper outlining the architecture and initial findings in the coming months.
 
 ---
 
