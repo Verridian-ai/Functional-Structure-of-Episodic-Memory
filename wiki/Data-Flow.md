@@ -462,6 +462,46 @@ When a user query arrives, it flows through the three cognitive layers:
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
+### TOON Compression
+
+**TOON (Token-Oriented Object Notation)** reduces token usage by ~40% with 73.9% parsing accuracy.
+
+**File**: `src/utils/toon.py`
+
+```mermaid
+graph LR
+    JSON[JSON Data] --> TE[ToonEncoder]
+    TE --> TOON[TOON Format]
+    TOON --> LLM[LLM Context]
+    LLM --> TD[ToonDecoder]
+    TD --> JSON2[JSON Response]
+```
+
+**Example Transformation**:
+
+```python
+# JSON format (~127 tokens)
+{
+    "actors": [
+        {"id": "a1", "name": "John Smith", "type": "person", "roles": ["Applicant", "Father"]}
+    ]
+}
+
+# TOON format (~76 tokens - 40% reduction)
+Actors[1]{id,name,type,roles}
+a1,John Smith,person,Applicant|Father
+```
+
+**Integration Points**:
+| Layer | TOON Usage |
+|-------|------------|
+| GSW | Ontology context, entity reconciliation |
+| TEM | Case graph serialization |
+| Agency | Gap representation encoding |
+| API | Response format option |
+
+See [TOON-Format](TOON-Format) for complete documentation.
+
 ---
 
 ## API Data Flow

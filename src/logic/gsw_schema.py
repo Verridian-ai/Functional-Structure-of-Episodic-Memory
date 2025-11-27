@@ -430,3 +430,19 @@ class OntologyContext(BaseModel):
             ", ".join(self.get_top_n("verb_types", 15)),
         ]
         return "\n".join(lines)
+
+    def to_toon(self) -> str:
+        """
+        Convert ontology context to TOON format (~40% token reduction).
+
+        Output format:
+        Vocabulary{roles,states,actions}
+        role1|role2|role3,state1|state2,action1|action2
+        """
+        roles = self.get_top_n("role_types", 15)
+        states = self.get_top_n("state_names", 15)
+        verbs = self.get_top_n("verb_types", 15)
+
+        header = "Vocabulary[1]{roles,states,actions}"
+        data = f"{"|".join(roles)},{"|".join(states)},{"|".join(verbs)}"
+        return f"{header}\n{data}"

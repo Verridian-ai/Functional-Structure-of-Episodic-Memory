@@ -27,12 +27,12 @@ export function ChatMessage({ message }: ChatMessageProps) {
   };
 
   return (
-    <div className={`group px-4 py-6 transition-colors ${
-      isUser 
-        ? 'bg-transparent' 
-        : 'mx-4 md:mx-auto max-w-4xl rounded-2xl bg-zinc-900/40 backdrop-blur-md border border-white/5 shadow-sm'
+    <div className={`group py-5 transition-colors ${
+      isUser
+        ? 'bg-transparent'
+        : 'rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-4'
     }`}>
-      <div className="max-w-4xl mx-auto flex gap-4">
+      <div className="flex gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-lg ${

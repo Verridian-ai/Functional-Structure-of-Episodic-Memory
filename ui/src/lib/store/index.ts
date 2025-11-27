@@ -2,6 +2,15 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Message, Conversation, Artifact, AgentConfig, VoiceState, UserSettings } from '@/types';
 
+// Infographic generation state
+interface InfographicState {
+  isGenerating: boolean;
+  pendingGenerations: string[]; // IDs of pending generations
+  completedGenerations: string[]; // IDs of completed generations
+  autoSuggestEnabled: boolean;
+  lastGeneratedImage: string | null;
+}
+
 interface AppState {
   // Conversations
   conversations: Conversation[];
@@ -26,6 +35,9 @@ interface AppState {
   // Settings
   settings: UserSettings;
 
+  // Infographics
+  infographic: InfographicState;
+
   // Actions
   addMessage: (message: Message) => void;
   updateMessage: (id: string, updates: Partial<Message>) => void;
@@ -47,6 +59,13 @@ interface AppState {
   toggleAdmin: () => void;
 
   updateSettings: (settings: Partial<UserSettings>) => void;
+
+  // Infographic actions
+  setInfographicGenerating: (isGenerating: boolean) => void;
+  addPendingGeneration: (id: string) => void;
+  completeGeneration: (id: string) => void;
+  setLastGeneratedImage: (image: string | null) => void;
+  toggleAutoSuggest: () => void;
 
   clearMessages: () => void;
 }
@@ -103,7 +122,8 @@ When asked to draft a document, letter, or brief:
 - **get_case_details**: Get full case details
 - **create_artifact**: Create high-quality documents (Letters, Briefs, Affidavits, Smart Canvas)
 - **update_canvas_section**: Update specific sections of a Smart Canvas
-- **execute_code**: Run calculations or logic`,
+- **execute_code**: Run calculations or logic
+- **generate_infographic**: Generate professional infographics using NanoBanaPro (Gemini 3 Pro). Transform text-heavy content into visual representations like timelines, process flows, comparisons, statistics charts, and more. Ideal for legal documents, business reports, and professional presentations.`,
   model: 'google/gemini-2.0-flash-001',
   temperature: 0.7,
   maxTokens: 8192,
@@ -120,7 +140,8 @@ When asked to draft a document, letter, or brief:
     'get_knowledge_context',
     'create_artifact',
     'update_canvas_section',
-    'execute_code'
+    'execute_code',
+    'generate_infographic'
   ],
   mcpServers: []
 };
@@ -139,6 +160,14 @@ const defaultVoice: VoiceState = {
   audioLevel: 0,
 };
 
+const defaultInfographic: InfographicState = {
+  isGenerating: false,
+  pendingGenerations: [],
+  completedGenerations: [],
+  autoSuggestEnabled: true,
+  lastGeneratedImage: null,
+};
+
 export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
@@ -154,6 +183,7 @@ export const useStore = create<AppState>()(
       agentConfig: defaultAgentConfig,
       showAdmin: false,
       settings: defaultSettings,
+      infographic: defaultInfographic,
 
       // Message actions
       addMessage: (message) => set((state) => ({
@@ -239,8 +269,39 @@ export const useStore = create<AppState>()(
         settings: { ...state.settings, ...settings }
       })),
 
+      // Infographic actions
+      setInfographicGenerating: (isGenerating) => set((state) => ({
+        infographic: { ...state.infographic, isGenerating }
+      })),
+
+      addPendingGeneration: (id) => set((state) => ({
+        infographic: {
+          ...state.infographic,
+          pendingGenerations: [...state.infographic.pendingGenerations, id]
+        }
+      })),
+
+      completeGeneration: (id) => set((state) => ({
+        infographic: {
+          ...state.infographic,
+          pendingGenerations: state.infographic.pendingGenerations.filter(g => g !== id),
+          completedGenerations: [...state.infographic.completedGenerations, id]
+        }
+      })),
+
+      setLastGeneratedImage: (image) => set((state) => ({
+        infographic: { ...state.infographic, lastGeneratedImage: image }
+      })),
+
+      toggleAutoSuggest: () => set((state) => ({
+        infographic: {
+          ...state.infographic,
+          autoSuggestEnabled: !state.infographic.autoSuggestEnabled
+        }
+      })),
+
       // Utility
-      clearMessages: () => set({ messages: [], artifacts: [] }),
+      clearMessages: () => set({ messages: [], artifacts: [], infographic: defaultInfographic }),
     }),
     {
       name: 'legal-ai-storage',
