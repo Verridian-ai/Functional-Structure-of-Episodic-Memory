@@ -650,13 +650,17 @@ This project implements research from:
 
 **"Functional Structure of Episodic Memory"**
 
-Based on:
-- **Tolman-Eichenbaum Machine** (Whittington et al., 2020)
-- **Active Inference** (Friston et al.)
-- **Global Workspace Theory** (Baars)
-- **Hyperdimensional Computing** (Kanerva)
-
 </div>
+
+### Foundational Research Papers
+
+| Theory | Paper | Authors |
+|--------|-------|---------|
+| **Tolman-Eichenbaum Machine** | [The Tolman-Eichenbaum Machine: Unifying Space and Relational Memory through Generalization in the Hippocampal Formation](https://www.cell.com/cell/fulltext/S0092-8674(20)31388-X) | Whittington et al., 2020 |
+| **Clone-Structured Cognitive Graphs** | [Clone-structured graph representations enable flexible learning and vicarious evaluation of cognitive maps](https://www.biorxiv.org/content/10.1101/770495v2.full.pdf) | George et al., 2021 |
+| **Active Inference** | [Active Inference: A Process Theory](https://www.fil.ion.ucl.ac.uk/~karl/Active%20Inference%20A%20Process%20Theory.pdf) | Friston et al., 2017 |
+| **Hyperdimensional Computing** | [Hyperdimensional Computing: An Introduction to Computing in Distributed Representation with High-Dimensional Random Vectors](https://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf) | Kanerva, 2009 |
+| **Global Workspace Theory** | [Global Workspace Theory of Consciousness](https://tilde.ini.uzh.ch/~kiper/Baars_1.pdf) | Baars, 1997 |
 
 ---
 
