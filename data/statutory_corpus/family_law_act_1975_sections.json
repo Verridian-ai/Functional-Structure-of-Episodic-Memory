@@ -1,0 +1,289 @@
+{
+  "act": {
+    "name": "Family Law Act 1975",
+    "jurisdiction": "Commonwealth",
+    "citation": "Family Law Act 1975 (Cth)",
+    "url": "https://www.legislation.gov.au/C2004A00275/latest/text",
+    "version": "2024-current"
+  },
+  "sections": [
+    {
+      "section": "4",
+      "title": "Interpretation",
+      "legal_test": "Definitions",
+      "keywords": ["definition", "child", "parent", "family", "marriage"],
+      "summary": "Defines key terms used throughout the Act including 'child', 'parent', 'family violence', 'de facto relationship'"
+    },
+    {
+      "section": "60B",
+      "title": "Objects of Part VII and principles underlying it",
+      "legal_test": "Best Interests of the Child",
+      "keywords": ["best interests", "child", "parenting", "relationship", "protection"],
+      "summary": "Sets out that the objects are to ensure children have meaningful relationships with both parents and are protected from harm"
+    },
+    {
+      "section": "60CA",
+      "title": "Child's best interests paramount consideration",
+      "legal_test": "Best Interests Paramount",
+      "keywords": ["best interests", "paramount", "child", "welfare"],
+      "summary": "In deciding whether to make a particular parenting order, a court must regard the best interests of the child as the paramount consideration"
+    },
+    {
+      "section": "60CC",
+      "title": "How a court determines what is in a child's best interests",
+      "legal_test": "Best Interests Factors",
+      "keywords": ["best interests", "factors", "safety", "meaningful relationship", "views of child"],
+      "summary": "Lists primary considerations (safety, meaningful relationship) and additional considerations (views of child, nature of relationship, capacity of parents)",
+      "required_elements": [
+        {
+          "element": "safety",
+          "keywords": ["safe", "safety", "harm", "risk", "abuse", "violence", "family violence"],
+          "weight": 0.95,
+          "description": "Paramount consideration: safety from harm"
+        },
+        {
+          "element": "meaningful_relationship",
+          "keywords": ["meaningful", "relationship", "contact", "time", "benefit"],
+          "weight": 0.90,
+          "description": "Benefit of meaningful relationship with both parents"
+        },
+        {
+          "element": "views_of_child",
+          "keywords": ["views", "wishes", "maturity", "express", "opinion"],
+          "weight": 0.75,
+          "description": "Views expressed by the child"
+        },
+        {
+          "element": "parenting_capacity",
+          "keywords": ["capacity", "parent", "care", "provide", "needs"],
+          "weight": 0.80,
+          "description": "Capacity of each parent"
+        }
+      ],
+      "threshold": 0.6,
+      "minimum_elements": 2
+    },
+    {
+      "section": "61DA",
+      "title": "Equal shared parental responsibility",
+      "legal_test": "Equal Shared Parental Responsibility Presumption",
+      "keywords": ["equal shared", "parental responsibility", "major decisions", "presumption"],
+      "summary": "When making a parenting order, the court must apply a presumption that it is in the best interests of the child for parents to have equal shared parental responsibility"
+    },
+    {
+      "section": "65DAA",
+      "title": "Court to consider spending equal time or substantial and significant time with each parent",
+      "legal_test": "Equal Time Consideration",
+      "keywords": ["equal time", "substantial time", "significant time", "parenting"],
+      "summary": "If presumption of equal shared parental responsibility applies, court must consider whether equal time or substantial and significant time is reasonably practicable and in child's best interests"
+    },
+    {
+      "section": "67ZBB",
+      "title": "Informing court about family violence",
+      "legal_test": "Family Violence Disclosure",
+      "keywords": ["family violence", "disclosure", "safety", "child abuse"],
+      "summary": "Parties must inform the court of any family violence or child abuse allegations"
+    },
+    {
+      "section": "69ZN",
+      "title": "Principles for conducting child-related proceedings",
+      "legal_test": "Child-Related Proceedings Principles",
+      "keywords": ["child-related", "proceedings", "principles", "less adversarial"],
+      "summary": "Sets out principles including that proceedings should be conducted in a way that safeguards children and promotes cooperative parenting"
+    },
+    {
+      "section": "4AB",
+      "title": "Definition of family violence",
+      "legal_test": "Family Violence Definition",
+      "keywords": ["family violence", "coercion", "control", "abuse", "threat"],
+      "summary": "Defines family violence as violent, threatening or other behaviour that coerces or controls a family member or causes fear"
+    },
+    {
+      "section": "4",
+      "subsection": "1AB",
+      "title": "Definition of abuse in relation to a child",
+      "legal_test": "Child Abuse Definition",
+      "keywords": ["child abuse", "assault", "sexual abuse", "psychological harm"],
+      "summary": "Defines abuse to include assault, sexual abuse, serious psychological harm, and serious neglect"
+    },
+    {
+      "section": "79",
+      "title": "Alteration of property interests",
+      "legal_test": "Property Settlement",
+      "keywords": ["property", "alteration", "contribution", "asset pool", "settlement"],
+      "summary": "Court may make orders altering the interests of parties in property - the foundation of property settlement"
+    },
+    {
+      "section": "79(4)",
+      "title": "Property - matters to be taken into account",
+      "legal_test": "Property Contribution Factors",
+      "keywords": ["contribution", "financial", "non-financial", "homemaker", "parent"],
+      "summary": "Court must consider (a) financial contributions, (b) non-financial contributions, (c) contributions as homemaker or parent, (d) future needs factors",
+      "required_elements": [
+        {
+          "element": "financial_contributions",
+          "keywords": ["financial", "money", "income", "purchase", "funds", "deposit"],
+          "weight": 0.85,
+          "description": "Direct financial contributions to acquisition/maintenance of property"
+        },
+        {
+          "element": "non_financial_contributions",
+          "keywords": ["non-financial", "renovation", "improvement", "labor", "work"],
+          "weight": 0.80,
+          "description": "Non-financial contributions to property"
+        },
+        {
+          "element": "homemaker_parent",
+          "keywords": ["homemaker", "parent", "cooking", "cleaning", "raising", "care"],
+          "weight": 0.85,
+          "description": "Contributions to welfare of family as homemaker or parent"
+        }
+      ],
+      "threshold": 0.5,
+      "minimum_elements": 1
+    },
+    {
+      "section": "75(2)",
+      "title": "Matters to be taken into account - future needs",
+      "legal_test": "Section 75(2) Factors / Future Needs",
+      "keywords": ["future needs", "earning capacity", "health", "age", "children"],
+      "summary": "Factors including age, health, income, earning capacity, care of children under 18, standard of living, needs of children"
+    },
+    {
+      "section": "90SM",
+      "title": "Alteration of property interests - de facto relationships",
+      "legal_test": "De Facto Property Settlement",
+      "keywords": ["de facto", "property", "alteration", "contribution"],
+      "summary": "Equivalent to s79 for de facto relationships - court may alter property interests"
+    },
+    {
+      "section": "81",
+      "title": "Duty of court to end financial relations",
+      "legal_test": "Clean Break Principle",
+      "keywords": ["clean break", "finality", "financial relations", "end"],
+      "summary": "Court must make orders that will finally determine the financial relationships between the parties and avoid further proceedings"
+    },
+    {
+      "section": "55A",
+      "title": "Application for decree of dissolution of marriage",
+      "legal_test": "Divorce Application",
+      "keywords": ["divorce", "dissolution", "marriage", "separation", "12 months"],
+      "summary": "Application for divorce may be made where parties separated for at least 12 months and there is no reasonable likelihood of cohabitation"
+    },
+    {
+      "section": "48",
+      "title": "Irretrievable breakdown of marriage",
+      "legal_test": "No-Fault Divorce Ground",
+      "keywords": ["irretrievable breakdown", "12 months separation", "divorce"],
+      "summary": "The sole ground for divorce is irretrievable breakdown established by 12 months separation"
+    },
+    {
+      "section": "66L",
+      "title": "Child support - court orders",
+      "legal_test": "Child Support Orders",
+      "keywords": ["child support", "maintenance", "financial support", "children"],
+      "summary": "Court may make orders for child maintenance in certain circumstances"
+    },
+    {
+      "section": "65D",
+      "title": "Parenting orders - what they are",
+      "legal_test": "Parenting Order Definition",
+      "keywords": ["parenting order", "live with", "spend time", "communicate"],
+      "summary": "A parenting order may deal with the person(s) with whom a child is to live, spend time, communicate, parental responsibility allocation"
+    },
+    {
+      "section": "65DAC",
+      "title": "Effect of parenting order that provides for shared parental responsibility",
+      "legal_test": "Shared Parental Responsibility Effect",
+      "keywords": ["shared parental responsibility", "major long-term issues", "joint decision"],
+      "summary": "Each parent must consult and make genuine effort to reach joint decision on major long-term issues"
+    },
+    {
+      "section": "65G",
+      "title": "Obligations created by parenting orders",
+      "legal_test": "Parenting Order Obligations",
+      "keywords": ["obligations", "compliance", "contravention", "parenting order"],
+      "summary": "Parenting orders create obligations that must be complied with"
+    },
+    {
+      "section": "70NAE",
+      "title": "Contravention of parenting orders",
+      "legal_test": "Parenting Order Contravention",
+      "keywords": ["contravention", "breach", "parenting order", "penalty"],
+      "summary": "Consequences for contravening parenting orders without reasonable excuse"
+    },
+    {
+      "section": "117",
+      "title": "Costs",
+      "legal_test": "Costs Orders",
+      "keywords": ["costs", "legal costs", "party", "order"],
+      "summary": "Each party bears own costs unless court orders otherwise - costs follow the event is NOT the rule"
+    },
+    {
+      "section": "65AA",
+      "title": "Child's right to spend time with other persons",
+      "legal_test": "Grandparent/Other Time",
+      "keywords": ["grandparent", "relative", "significant person", "spend time"],
+      "summary": "Children have a right to spend time with grandparents and other significant persons on a regular basis"
+    },
+    {
+      "section": "60I",
+      "title": "Family dispute resolution",
+      "legal_test": "FDR Requirement",
+      "keywords": ["family dispute resolution", "mediation", "certificate", "FDR"],
+      "summary": "Parties must attempt family dispute resolution before filing parenting applications, subject to exceptions"
+    },
+    {
+      "section": "60I(9)",
+      "title": "Exceptions to FDR requirement",
+      "legal_test": "FDR Exceptions",
+      "keywords": ["family violence", "child abuse", "urgency", "exception"],
+      "summary": "FDR not required where family violence, child abuse, urgency, or other prescribed circumstances"
+    },
+    {
+      "section": "65DAE",
+      "title": "Court to have regard to parenting plans",
+      "legal_test": "Parenting Plan Consideration",
+      "keywords": ["parenting plan", "agreement", "consideration"],
+      "summary": "Court must have regard to terms of most recent parenting plan between parties"
+    },
+    {
+      "section": "69ZW",
+      "title": "Evidence of family consultants",
+      "legal_test": "Family Consultant Evidence",
+      "keywords": ["family consultant", "report", "expert", "assessment"],
+      "summary": "Court may order family consultant to provide a report or give evidence about matters relevant to the child"
+    },
+    {
+      "section": "102NA",
+      "title": "Location and recovery orders",
+      "legal_test": "Recovery Order",
+      "keywords": ["recovery order", "location", "child", "return"],
+      "summary": "Court may make orders for location and return of a child"
+    },
+    {
+      "section": "112AP",
+      "title": "Relocation",
+      "legal_test": "Relocation (Interstate/International)",
+      "keywords": ["relocation", "interstate", "international", "move", "travel"],
+      "summary": "Considerations when a parent seeks to relocate with a child"
+    }
+  ],
+  "related_legislation": [
+    {
+      "name": "Family Law Rules 2004",
+      "citation": "Family Law Rules 2004 (Cth)",
+      "relevance": "Procedural rules for Federal Circuit and Family Court"
+    },
+    {
+      "name": "Child Support (Assessment) Act 1989",
+      "citation": "Child Support (Assessment) Act 1989 (Cth)",
+      "relevance": "Assessment and calculation of child support"
+    },
+    {
+      "name": "Federal Circuit and Family Court of Australia Act 2021",
+      "citation": "Federal Circuit and Family Court of Australia Act 2021 (Cth)",
+      "relevance": "Establishes the court structure for family law matters"
+    }
+  ]
+}

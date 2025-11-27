@@ -1,0 +1,98 @@
+{
+  "act_name": "Child Support (Assessment) Act 1989",
+  "jurisdiction": "Commonwealth of Australia",
+  "year_enacted": 1989,
+  "current_to": "2024",
+  "sections": [
+    {
+      "section": "4",
+      "title": "Interpretation",
+      "content": "In this Act, unless the contrary intention appears: 'child' means a person who: (a) is under 18 years of age; or (b) is 18 or more years of age and: (i) is in full-time education and is not financially independent; or (ii) has a mental or physical disability that prevents the person from being financially independent; 'child support' means financial support under this Act, including periodic amounts and non-periodic amounts, to be paid by a parent for a child; 'child support period' means the period for which child support is payable under an administrative assessment; 'adjusted taxable income' means adjusted taxable income worked out under section 43; 'costs of the child' means the costs of the child worked out under section 55C.",
+      "keywords": ["definition", "interpretation", "child", "child support", "adjusted taxable income"]
+    },
+    {
+      "section": "5",
+      "title": "Meaning of parent",
+      "content": "For the purposes of this Act, the parents of a child include: (a) a person who is a parent of the child within the meaning of the Family Law Act 1975; and (b) a person who is a parent of the child because of section 60H of the Family Law Act 1975 (including because of the application of that section in accordance with section 60HA of that Act); and (c) a person who is a parent of the child because of an order under section 69VA of the Family Law Act 1975; and (d) a person who is a parent of the child by operation of a State or Territory law of this jurisdiction.",
+      "keywords": ["parent", "definition", "family law", "parentage"]
+    },
+    {
+      "section": "24",
+      "title": "Liable to pay child support",
+      "content": "If: (a) a child support assessment is in force in relation to a child; and (b) a parent of the child is assessed in respect of the costs of the child; then the parent is liable to pay to the other parent, for each day in the child support period, the annual rate of child support that is payable by the parent for the child. The annual rate of child support is worked out using the Formula in Part 5 of this Act.",
+      "keywords": ["liability", "assessment", "payment", "annual rate"]
+    },
+    {
+      "section": "35",
+      "title": "Formula for child support",
+      "content": "The annual rate of child support payable by a parent for a child for a day in a child support period is calculated using the basic formula, the multi-case formula or the complex case formula set out in this Part. The costs of the child for a child support period are worked out under section 55C using the Costs of the Children Table. Each parent's income percentage is worked out under section 55D. Each parent's child support percentage is worked out under section 55E. Each parent's cost percentage is worked out under section 55F.",
+      "keywords": ["formula", "assessment", "calculation", "costs of child"]
+    },
+    {
+      "section": "43",
+      "title": "Adjusted taxable income",
+      "content": "For the purposes of this Act, a person's adjusted taxable income for a year of income is the sum of: (a) the person's taxable income for that year of income; and (b) the person's target foreign income for that year of income; and (c) the person's total net investment loss for that year of income; and (d) the person's reportable fringe benefits total for that year of income; and (e) any amount of tax free pension or benefit that the person receives in that year of income; and (f) the person's reportable superannuation contributions for that year of income; less any amount of child support paid or payable by the person, or received by the person, as worked out under this Part.",
+      "keywords": ["adjusted taxable income", "ATI", "income", "assessment", "reportable fringe benefits"]
+    },
+    {
+      "section": "48",
+      "title": "Care percentage",
+      "content": "A parent's care percentage for a child for a day in a child support period is determined according to the percentage of care that the parent has of the child. The care percentage is worked out by reference to the number of nights in a care period that the child is in the care of the parent. Where a parent cares for a child: (a) less than 14% of nights—care percentage is 0%; (b) at least 14% but less than 35% of nights—care percentage is 24%; (c) at least 35% but less than 48% of nights—care percentage is 35%; (d) at least 48% but not more than 52% of nights—care percentage is 50%; (e) more than 52% but not more than 65% of nights—care percentage is 65%; (f) more than 65% but not more than 86% of nights—care percentage is 76%; (g) more than 86% of nights—care percentage is 100%.",
+      "keywords": ["care percentage", "care arrangements", "nights", "percentage of care"]
+    },
+    {
+      "section": "51",
+      "title": "Costs of the Children Table",
+      "content": "The Costs of the Children Table is used to work out the costs of children in a child support case. The costs are based on the combined child support income of the parents and the age of the child. The Table sets out annual costs for children in different age groups: (a) 0-12 years; (b) 13-15 years; (c) 16-17 years. The costs increase with the combined parental income and are divided between the parents according to their respective income percentages.",
+      "keywords": ["costs of children", "table", "age groups", "combined income"]
+    },
+    {
+      "section": "55C",
+      "title": "Costs of the child",
+      "content": "The costs of a child for a child support period is worked out using the Costs of the Children Table, which takes into account: (a) the combined child support income of the parents; and (b) the age of the child; and (c) the number of children in the child support case. The costs of the child represent the amount considered reasonable to meet the costs of caring for a child based on research into household expenditure patterns.",
+      "keywords": ["costs", "expenditure", "child support income", "table"]
+    },
+    {
+      "section": "55D",
+      "title": "Income percentage",
+      "content": "Each parent's income percentage is worked out by dividing the parent's child support income by the combined child support income of both parents. The income percentage represents the proportion of the combined parental income that is attributable to each parent. If a parent's income percentage is greater than the parent's care percentage, the parent will generally be liable to pay child support.",
+      "keywords": ["income percentage", "child support income", "proportion"]
+    },
+    {
+      "section": "55E",
+      "title": "Child support percentage",
+      "content": "Each parent's child support percentage is worked out by: (a) if the parent's cost percentage is more than the parent's income percentage—subtracting the parent's income percentage from the parent's cost percentage; (b) otherwise—0. The child support percentage determines the proportion of the costs of the child for which each parent is responsible, taking into account both their income and the care they provide.",
+      "keywords": ["child support percentage", "cost percentage", "liability"]
+    },
+    {
+      "section": "56",
+      "title": "Self-support amount",
+      "content": "A parent's child support income is reduced by the self-support amount. The self-support amount is an amount equal to one-third of Male Total Average Weekly Earnings (MTAWE). This ensures that parents retain sufficient income to support themselves. If a parent's income is below the self-support amount, they are not required to pay child support beyond a minimum annual rate.",
+      "keywords": ["self-support", "MTAWE", "minimum income", "protected earnings"]
+    },
+    {
+      "section": "65A",
+      "title": "Minimum annual rate",
+      "content": "If: (a) a parent's child support income is not more than the self-support amount; and (b) the parent's cost percentage is less than 100%; then the annual rate of child support payable by the parent is the minimum annual rate. The minimum annual rate is a prescribed amount that ensures all parents who do not have 100% care make some contribution to the costs of their children, regardless of income level.",
+      "keywords": ["minimum rate", "minimum payment", "low income"]
+    },
+    {
+      "section": "98S",
+      "title": "Change of assessment—special circumstances",
+      "content": "Either parent, or the non-parent carer, may apply to the Registrar for a change of assessment in relation to a child support assessment on the ground that, in the special circumstances of the case, the assessment is unjust and inequitable. Special circumstances may include: (a) the income, earning capacity, property and financial resources of either parent; (b) the special needs of the child; (c) the cost of contact between the child and the parent; (d) the parents having separated following a period of caring for the child; (e) a parent's responsibility to maintain a child from another relationship; (f) high child care costs of a parent; (g) high costs in enabling a parent to spend time with or communicate with a child.",
+      "keywords": ["change of assessment", "special circumstances", "variation", "unjust and inequitable"]
+    },
+    {
+      "section": "117",
+      "title": "Registrar may refuse to make assessment",
+      "content": "The Registrar may refuse to make a child support assessment for a child if the Registrar is satisfied that: (a) the applicant has failed to take reasonable steps to establish the parentage of the child; or (b) the applicant has failed to provide sufficient information to enable the Registrar to properly make the assessment; or (c) the child is not a child within the meaning of the Act.",
+      "keywords": ["refusal", "assessment", "parentage", "requirements"]
+    },
+    {
+      "section": "151",
+      "title": "Objections to assessments",
+      "content": "A person who is dissatisfied with a decision of the Registrar relating to a child support assessment may object to the decision. The objection must: (a) be in the approved form; (b) set out the grounds of the objection; and (c) be lodged at an office of the Department within 28 days after the decision is made, or within such further period as the Registrar allows. The Registrar must consider the objection and may affirm, vary or set aside the decision.",
+      "keywords": ["objection", "review", "appeal", "28 days"]
+    }
+  ]
+}
