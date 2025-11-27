@@ -46,8 +46,13 @@
 
 <br>
 
+<!-- LAW OS Logo -->
+<img src="assets/images/Light Mode Law OS.png" alt="LAW OS" width="400">
+
+<br>
+
 <!-- UI Screenshot -->
-<img src="assets/images/Dark Mode Law OS 1.png" alt="LAW OS Interface" width="100%">
+<img src="assets/images/OS SCreenshot.png" alt="LAW OS Interface - 3D Knowledge Graph" width="100%">
 
 <br>
 
