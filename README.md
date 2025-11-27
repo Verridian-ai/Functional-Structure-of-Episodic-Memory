@@ -903,6 +903,495 @@ python run_agent_demo.py    # Active inference
 
 ---
 
+## 📚 Australian Legal Corpus: Complete Setup Guide
+
+<div align="center">
+
+### ⚠️ Why This Repository Contains Only a Sample
+
+</div>
+
+This repository includes a **sample dataset** rather than the full Australian Legal Corpus. Here's why:
+
+```mermaid
+flowchart LR
+    subgraph Cost["💰 Full Corpus Processing Cost"]
+        DOCS[513,474 Documents<br/>8.8 GB Raw Text]
+        API[LLM API Calls<br/>~6 per document]
+        TOTAL[Estimated Cost<br/>$6,000 USD]
+    end
+
+    subgraph Sample["✅ Included Sample"]
+        SAMPLE[714 Family Law Cases<br/>Proof of Concept]
+        FREE[No Additional Cost<br/>Ready to Use]
+    end
+
+    DOCS --> API --> TOTAL
+    SAMPLE --> FREE
+```
+
+| Aspect | Full Corpus | Sample (Included) |
+|--------|-------------|-------------------|
+| **Documents** | 513,474 | 714 |
+| **Size** | 8.8 GB | ~50 MB |
+| **Processing Cost** | ~$6,000 USD | $0 (pre-processed) |
+| **Processing Time** | ~2 weeks | Instant |
+| **Purpose** | Production | Proof of Concept |
+
+> **Note**: The sample data demonstrates that the architecture works. Full corpus processing awaits research funding. If you're interested in sponsoring full corpus extraction, please [open an issue](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues).
+
+---
+
+<details open>
+<summary><b>📥 Step 1: Download the Australian Legal Corpus</b></summary>
+<br>
+
+The corpus is available from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face.
+
+### Option A: Using Hugging Face CLI (Recommended)
+
+```bash
+# 1️⃣ Install Hugging Face CLI
+pip install huggingface_hub
+
+# 2️⃣ Login to Hugging Face (free account required)
+huggingface-cli login
+
+# 3️⃣ Download the corpus (8.8 GB - may take 30+ minutes)
+huggingface-cli download UMARV-FoE/Open-Australian-Legal-Corpus \
+    --local-dir ./corpus-download \
+    --repo-type dataset
+```
+
+### Option B: Direct Download
+
+```bash
+# Download directly with wget/curl
+wget https://huggingface.co/datasets/UMARV-FoE/Open-Australian-Legal-Corpus/resolve/main/corpus.jsonl
+```
+
+### Option C: Python Script
+
+```python
+from huggingface_hub import hf_hub_download
+
+# Download corpus.jsonl
+file_path = hf_hub_download(
+    repo_id="UMARV-FoE/Open-Australian-Legal-Corpus",
+    filename="corpus.jsonl",
+    repo_type="dataset",
+    local_dir="./corpus-download"
+)
+print(f"Downloaded to: {file_path}")
+```
+
+```mermaid
+flowchart TB
+    subgraph Download["📥 Download Options"]
+        HF[Hugging Face CLI<br/>Recommended]
+        WGET[wget/curl<br/>Direct Link]
+        PY[Python Script<br/>Programmatic]
+    end
+
+    subgraph Result["📁 Result"]
+        FILE[corpus.jsonl<br/>8.8 GB, 513,474 docs]
+    end
+
+    HF --> FILE
+    WGET --> FILE
+    PY --> FILE
+```
+
+### Corpus File Format
+
+Each line in `corpus.jsonl` is a JSON object:
+
+```json
+{
+    "version_id": "federal_court:2023/fca/123",
+    "type": "decision",
+    "jurisdiction": "federal_court",
+    "source": "federal_court",
+    "date": "2023-05-15",
+    "citation": "Smith v Jones [2023] FCA 123",
+    "url": "https://...",
+    "text": "Full text of the legal document..."
+}
+```
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `version_id` | Unique identifier | `federal_court:2023/fca/123` |
+| `type` | Document type | `decision`, `primary_legislation`, `secondary_legislation` |
+| `jurisdiction` | Court/jurisdiction | `federal_court`, `family_court`, `high_court` |
+| `citation` | Legal citation | `Smith v Jones [2023] FCA 123` |
+| `text` | Full document text | (up to 100KB per document) |
+
+</details>
+
+<details>
+<summary><b>⚙️ Step 2: Domain Classification (Split by Legal Area)</b></summary>
+<br>
+
+Before GSW extraction, the corpus must be split into legal domains:
+
+```mermaid
+flowchart TB
+    subgraph Input["📥 Input"]
+        CORPUS[corpus.jsonl<br/>513,474 documents]
+    end
+
+    subgraph Classification["🏷️ Domain Classifier"]
+        KW[Keyword Analysis]
+        CIT[Citation Patterns]
+        JURIS[Jurisdiction Check]
+    end
+
+    subgraph Output["📁 Output Domains"]
+        FAM[family.jsonl<br/>~50,000 docs]
+        CRIM[criminal.jsonl<br/>~80,000 docs]
+        COMM[commercial.jsonl<br/>~60,000 docs]
+        ADMIN[administrative.jsonl<br/>~40,000 docs]
+        OTHER[other domains...]
+    end
+
+    CORPUS --> KW
+    CORPUS --> CIT
+    CORPUS --> JURIS
+    KW --> FAM
+    KW --> CRIM
+    KW --> COMM
+    KW --> ADMIN
+    KW --> OTHER
+    CIT --> FAM
+    CIT --> CRIM
+    JURIS --> FAM
+    JURIS --> CRIM
+```
+
+### Run Domain Extraction
+
+```bash
+# 1️⃣ Place corpus.jsonl in parent directory
+mv corpus.jsonl ../
+
+# 2️⃣ Run domain extraction (streaming - RAM safe)
+python gsw_pipeline.py extract --input ../corpus.jsonl
+
+# 3️⃣ With progress reporting every 1000 docs
+python gsw_pipeline.py extract --input ../corpus.jsonl --progress 1000
+
+# 4️⃣ Resume if interrupted
+python gsw_pipeline.py extract --input ../corpus.jsonl --resume
+```
+
+### Alternative: Direct Module Call
+
+```bash
+python -m src.ingestion.corpus_domain_extractor \
+    --input ../corpus.jsonl \
+    --output data/processed/domains \
+    --progress 5000
+```
+
+### Output Structure
+
+```
+data/processed/domains/
+├── family.jsonl              # Family Law cases
+├── criminal.jsonl            # Criminal Law
+├── commercial.jsonl          # Commercial Law
+├── administrative.jsonl      # Administrative Law
+├── property.jsonl            # Property Law
+├── employment.jsonl          # Employment Law
+├── migration.jsonl           # Migration Law
+├── taxation.jsonl            # Tax Law
+├── tort.jsonl               # Tort/Negligence
+├── constitutional.jsonl      # Constitutional Law
+├── legislation_other.jsonl   # Uncategorized legislation
+├── unclassified.jsonl        # Unclassified documents
+└── extraction_statistics.json # Processing stats
+```
+
+### Supported Legal Domains (14 Categories)
+
+| Domain | Keywords | Typical Sources |
+|--------|----------|-----------------|
+| **Family** | divorce, custody, parenting, property settlement | FamCA, FamCAFC, FCWA |
+| **Criminal** | prosecution, sentence, offence, conviction | CCA, District Courts |
+| **Commercial** | contract, corporation, insolvency, trade | FCA, Supreme Courts |
+| **Administrative** | tribunal, review, decision, minister | AAT, ACAT |
+| **Migration** | visa, refugee, deportation, citizenship | FCA, AAT |
+| **Employment** | dismissal, workplace, award, enterprise | FWC, FCA |
+| **Property** | land, title, easement, conveyancing | Supreme Courts |
+| **Taxation** | tax, GST, deduction, ATO | FCA, AAT |
+
+</details>
+
+<details>
+<summary><b>🧠 Step 3: GSW Extraction (Build the Memory)</b></summary>
+<br>
+
+This is where the AI extracts actors, states, relationships, and questions from legal documents.
+
+```mermaid
+flowchart TB
+    subgraph Input["📄 Input"]
+        DOMAIN[family.jsonl<br/>One domain file]
+    end
+
+    subgraph Extraction["🧠 GSW Extraction (LegalOperator)"]
+        direction TB
+        T1[Task 1: Extract Actors<br/>People, Orgs, Assets]
+        T2[Task 2: Assign Roles<br/>Applicant, Respondent]
+        T3[Task 3: Extract States<br/>Married → Separated]
+        T4[Task 4: Extract Verb Phrases<br/>Filed, Ordered, Appealed]
+        T5[Task 5: Generate Questions<br/>Who? What? When?]
+        T6[Task 6: Create Links<br/>Spatio-temporal]
+    end
+
+    subgraph Output["💾 Output"]
+        GSW[(Global Workspace<br/>JSON)]
+        STATS[Statistics<br/>JSON]
+        COSTS[Cost Report<br/>JSON]
+    end
+
+    DOMAIN --> T1
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6
+    T6 --> GSW
+    T6 --> STATS
+    T6 --> COSTS
+```
+
+### Run GSW Processing
+
+```bash
+# ⚠️ IMPORTANT: Requires OPENROUTER_API_KEY in .env file
+# Each document costs approximately $0.01-0.02 in API calls
+
+# 1️⃣ Test with 10 documents first (recommended)
+python gsw_pipeline.py process --domain family --limit 10
+
+# 2️⃣ Process 100 documents (~$1-2 cost)
+python gsw_pipeline.py process --domain family --limit 100
+
+# 3️⃣ Process 1000 documents (~$10-20 cost)
+python gsw_pipeline.py process --domain family --limit 1000
+
+# 4️⃣ Resume processing if interrupted
+python gsw_pipeline.py process --domain family --limit 1000 --resume
+
+# 5️⃣ Calibration mode (no save, for testing)
+python gsw_pipeline.py process --domain family --limit 5 --calibration
+```
+
+### Cost Breakdown per Document
+
+```mermaid
+flowchart LR
+    subgraph PerDoc["💵 Cost per Document"]
+        T1[Task 1: $0.002]
+        T2[Task 2: $0.001]
+        T3[Task 3: $0.002]
+        T4[Task 4: $0.002]
+        T5[Task 5: $0.002]
+        T6[Task 6: $0.001]
+    end
+
+    subgraph Total["📊 Totals"]
+        DOC[Per Document: ~$0.01]
+        K1[1,000 docs: ~$10]
+        K10[10,000 docs: ~$100]
+        FULL[513,474 docs: ~$6,000]
+    end
+
+    T1 --> DOC
+    T2 --> DOC
+    T3 --> DOC
+    T4 --> DOC
+    T5 --> DOC
+    T6 --> DOC
+    DOC --> K1 --> K10 --> FULL
+```
+
+### Output Files
+
+```
+data/workspaces/
+├── family_workspace.json     # The Global Semantic Workspace
+├── family_state.json         # Processing checkpoint
+└── family_costs.json         # API cost tracking
+```
+
+### What Gets Extracted
+
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **Actors** | People, organizations, assets | "John Smith" (person), "Family Court" (org) |
+| **States** | Time-varying conditions | MaritalStatus: "married" → "separated" |
+| **Verb Phrases** | Actions with agents/patients | "John filed application" |
+| **Questions** | What could be asked | "When did parties separate?" |
+| **Links** | Spatio-temporal connections | "Both present at hearing on 2023-05-15" |
+
+</details>
+
+<details>
+<summary><b>📊 Step 4: Analysis & Reports</b></summary>
+<br>
+
+Generate analysis reports after extraction:
+
+```bash
+# Generate domain analysis reports
+python gsw_pipeline.py analyze
+
+# Generate entity summaries (for people)
+python gsw_pipeline.py summary --domain family
+```
+
+```mermaid
+flowchart TB
+    subgraph Input["📥 Input"]
+        WS[family_workspace.json]
+        DOMAINS[Domain JSONL files]
+    end
+
+    subgraph Analysis["📊 Analysis"]
+        STATS[Statistics Generator]
+        REPORT[Report Generator]
+        MASTER[Master Report]
+    end
+
+    subgraph Output["📁 Reports"]
+        DOM_REPORT[domain_report.md]
+        MASTER_REPORT[master_report.md]
+        CHARTS[Statistics Charts]
+    end
+
+    WS --> STATS
+    DOMAINS --> REPORT
+    STATS --> DOM_REPORT
+    REPORT --> MASTER
+    MASTER --> MASTER_REPORT
+    STATS --> CHARTS
+```
+
+### Output Reports
+
+```
+reports/domain_analysis/
+├── family_report.md          # Per-domain analysis
+├── criminal_report.md
+├── commercial_report.md
+├── master_report.md          # Combined statistics
+└── charts/                   # Visualization assets
+```
+
+</details>
+
+<details>
+<summary><b>🔄 Step 5: Full Pipeline (All Steps Together)</b></summary>
+<br>
+
+Run the complete pipeline in one command:
+
+```bash
+# Full pipeline: Extract → Process → Analyze
+python gsw_pipeline.py full --input ../corpus.jsonl --domain family --limit 100
+```
+
+```mermaid
+flowchart TB
+    subgraph Phase1["Phase 1: Domain Extraction"]
+        CORPUS[corpus.jsonl] --> CLASSIFY[Classify Documents]
+        CLASSIFY --> DOMAINS[Domain Files]
+    end
+
+    subgraph Phase2["Phase 2: GSW Processing"]
+        DOMAINS --> CHUNK[Chunk Text]
+        CHUNK --> EXTRACT[Extract with LLM]
+        EXTRACT --> RECONCILE[Reconcile Entities]
+        RECONCILE --> GSW[(Workspace)]
+    end
+
+    subgraph Phase3["Phase 3: Analysis"]
+        GSW --> REPORTS[Generate Reports]
+        REPORTS --> SUMMARY[Entity Summaries]
+    end
+
+    subgraph Phase4["Phase 4: Ready to Use"]
+        SUMMARY --> UI[Web UI]
+        SUMMARY --> API[API Queries]
+        SUMMARY --> EXPORT[Export Data]
+    end
+```
+
+### Complete Command Reference
+
+| Command | Description | Estimated Cost |
+|---------|-------------|----------------|
+| `gsw_pipeline.py extract` | Split corpus into domains | Free (local) |
+| `gsw_pipeline.py process --limit 10` | Test extraction | ~$0.10 |
+| `gsw_pipeline.py process --limit 100` | Small batch | ~$1-2 |
+| `gsw_pipeline.py process --limit 1000` | Medium batch | ~$10-20 |
+| `gsw_pipeline.py analyze` | Generate reports | Free (local) |
+| `gsw_pipeline.py summary` | Entity summaries | ~$0.01/entity |
+| `gsw_pipeline.py full --limit 100` | Complete pipeline | ~$2-3 |
+
+</details>
+
+<details>
+<summary><b>💡 Tips & Troubleshooting</b></summary>
+<br>
+
+### API Key Setup
+
+```bash
+# Create .env file
+echo "OPENROUTER_API_KEY=sk-or-your-key-here" > .env
+echo "GOOGLE_API_KEY=your-google-key-here" >> .env
+```
+
+### Memory Management
+
+The corpus extractor uses **streaming** - safe for any corpus size:
+
+```python
+# Processes line-by-line, never loads full file
+with open("corpus.jsonl") as f:
+    for line in f:  # Only one line in memory at a time
+        process(json.loads(line))
+```
+
+### Resume After Interruption
+
+```bash
+# All commands support --resume flag
+python gsw_pipeline.py extract --resume
+python gsw_pipeline.py process --domain family --resume
+```
+
+### Rate Limiting
+
+The pipeline includes automatic rate limiting:
+- 0.5 second delay between documents
+- Checkpoint saves every 10 documents
+- Graceful handling of API errors
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| `corpus.jsonl not found` | Move file to parent directory or use `--input` flag |
+| `OPENROUTER_API_KEY not set` | Add to `.env` file |
+| `Rate limit exceeded` | Wait 60 seconds, resume with `--resume` |
+| `Out of memory` | Use streaming (default) - shouldn't happen |
+| `Checkpoint corrupted` | Delete `*_state.json` and restart |
+
+</details>
+
+---
+
 ## 📊 Performance
 
 <div align="center">
@@ -949,6 +1438,302 @@ graph LR
 | **Family Law Cases** | 714 |
 | **Python LOC** | 14,549 |
 | **Documentation Pages** | 25+ |
+
+</details>
+
+---
+
+## 💰 LLM Model Comparison: Pricing, Quality & TOON Savings
+
+<details open>
+<summary><b>📊 2025 Model Pricing Comparison</b></summary>
+<br>
+
+Understanding which LLM to use for GSW extraction is critical for both cost and quality. Here's a comprehensive comparison:
+
+```mermaid
+flowchart LR
+    subgraph Budget["💵 Budget Tier"]
+        direction TB
+        GLM[GLM-4.6<br/>$0.60/$2.00]
+        KIMI[Kimi K2<br/>$0.15/$2.50]
+        MINI[MiniMax M2<br/>$0.30/$1.20]
+    end
+
+    subgraph Mid["⚖️ Mid Tier"]
+        direction TB
+        FLASH[Gemini 2.5 Flash<br/>$0.30/$2.50]
+        GPT[GPT-4.1<br/>$2/$8]
+    end
+
+    subgraph Premium["🏆 Premium Tier"]
+        direction TB
+        CLAUDE[Claude Sonnet 4.5<br/>$3/$15]
+        PRO[Gemini 2.5 Pro<br/>$1.25/$10]
+    end
+
+    Budget -->|Lower Cost<br/>Good Quality| Mid
+    Mid -->|Higher Cost<br/>Better Quality| Premium
+```
+
+### API Pricing Per Million Tokens (November 2025)
+
+| Model | Input Cost | Output Cost | Context Window | Best For |
+|-------|------------|-------------|----------------|----------|
+| **[Gemini 2.5 Flash](https://ai.google.dev/gemini-api/docs/pricing)** | $0.30 | $2.50 | 1M tokens | High-volume processing |
+| **[Gemini 2.5 Flash-Lite](https://ai.google.dev/gemini-api/docs/pricing)** | $0.10 | $0.40 | 1M tokens | Bulk extraction (lowest cost) |
+| **[Gemini 2.5 Pro](https://ai.google.dev/gemini-api/docs/pricing)** | $1.25 | $10.00 | 1M tokens | Complex legal reasoning |
+| **[GPT-4.1](https://openai.com/api/pricing/)** | $2.00 | $8.00 | 1M tokens | General purpose, reliable |
+| **[Claude Sonnet 4.5](https://docs.claude.com/en/docs/about-claude/pricing)** | $3.00 | $15.00 | 200K tokens | Best coding/legal accuracy |
+| **[Kimi K2](https://platform.moonshot.ai/docs/pricing/chat)** | $0.15* | $2.50 | 128K tokens | Cost-sensitive applications |
+| **[GLM-4.6](https://open.bigmodel.cn/pricing)** | $0.60 | $2.00 | 128K tokens | Open weights, self-hosting |
+| **[MiniMax M2](https://www.minimaxi.com/news/minimax-m2)** | $0.30 | $1.20 | 128K tokens | Tool calling, agents |
+
+*Kimi K2 input price is $0.15 with cache hit, $0.60 without cache.
+
+</details>
+
+<details>
+<summary><b>🧮 Cost Per Document: With vs Without TOON</b></summary>
+<br>
+
+TOON format achieves **~40% token reduction** compared to JSON. This directly impacts your API costs:
+
+```mermaid
+flowchart TB
+    subgraph WithTOON["✅ With TOON Format"]
+        T_IN[Input: 2,500 tokens]
+        T_OUT[Output: 3,000 tokens]
+        T_TOTAL[Total: 5,500 tokens/doc]
+    end
+
+    subgraph WithoutTOON["❌ Without TOON (JSON)"]
+        J_IN[Input: 4,167 tokens<br/>+67% more]
+        J_OUT[Output: 3,000 tokens]
+        J_TOTAL[Total: 7,167 tokens/doc]
+    end
+
+    WithTOON -->|40% savings| SAVE[Save $2,000+<br/>on full corpus]
+```
+
+### Cost Per 1,000 Documents
+
+| Model | With TOON | Without TOON | TOON Savings |
+|-------|-----------|--------------|--------------|
+| **Gemini 2.5 Flash-Lite** | $1.60 | $2.27 | $0.67 (29%) |
+| **Gemini 2.5 Flash** | $8.25 | $10.92 | $2.67 (24%) |
+| **Kimi K2 (cached)** | $7.88 | $10.00 | $2.12 (21%) |
+| **MiniMax M2** | $4.35 | $5.35 | $1.00 (19%) |
+| **GLM-4.6** | $7.50 | $10.00 | $2.50 (25%) |
+| **GPT-4.1** | $29.00 | $37.33 | $8.33 (22%) |
+| **Gemini 2.5 Pro** | $33.13 | $45.21 | $12.08 (27%) |
+| **Claude Sonnet 4.5** | $52.50 | $70.00 | $17.50 (25%) |
+
+**Calculation basis**: 2,500 input + 3,000 output tokens with TOON; 4,167 input + 3,000 output without TOON.
+
+</details>
+
+<details>
+<summary><b>💎 Full Australian Legal Corpus Cost Estimates</b></summary>
+<br>
+
+Processing all **513,474 documents** in the Australian Legal Corpus:
+
+```mermaid
+flowchart TB
+    subgraph Corpus["📚 Full Corpus: 513,474 Documents"]
+        SIZE[8.8 GB Raw Text]
+        TASKS[6 Extraction Tasks Each]
+    end
+
+    subgraph Costs["💰 Estimated Total Cost"]
+        CHEAP[Gemini Flash-Lite<br/>~$822]
+        MID[Gemini Flash<br/>~$4,236]
+        PREMIUM[Claude Sonnet 4.5<br/>~$26,957]
+    end
+
+    subgraph Current["📍 Current Status"]
+        SAMPLE[714 Documents<br/>Proof of Concept]
+        FUNDING[Awaiting Research<br/>Funding]
+    end
+
+    Corpus --> Costs
+    Costs --> Current
+```
+
+### Full Corpus Processing Costs by Model
+
+| Model | Cost (With TOON) | Cost (Without TOON) | TOON Saves |
+|-------|------------------|---------------------|------------|
+| **Gemini 2.5 Flash-Lite** | **$822** | $1,166 | $344 |
+| **MiniMax M2** | **$2,234** | $2,747 | $513 |
+| **Kimi K2 (cached)** | **$4,046** | $5,135 | $1,089 |
+| **Gemini 2.5 Flash** | **$4,236** | $5,608 | $1,372 |
+| **GLM-4.6** | **$3,851** | $5,135 | $1,284 |
+| **GPT-4.1** | **$14,891** | $19,173 | $4,282 |
+| **Gemini 2.5 Pro** | **$17,011** | $23,216 | $6,205 |
+| **Claude Sonnet 4.5** | **$26,957** | $35,943 | $8,986 |
+
+> **Note**: The ~$6,000 USD estimate in previous documentation assumes Gemini 2.5 Flash at standard rates. Using Flash-Lite drops this to **under $1,000**!
+
+### Why We Use Sample Data
+
+| Factor | Full Corpus | Sample (Current) |
+|--------|-------------|------------------|
+| Documents | 513,474 | 714 |
+| Minimum Cost | ~$822 | ~$1.14 |
+| Processing Time | ~2-4 weeks | 1-2 hours |
+| Purpose | Production | Proof of Concept |
+| Status | Awaiting funding | ✅ Complete |
+
+</details>
+
+<details>
+<summary><b>🏆 Quality Benchmarks: Which Model is Best?</b></summary>
+<br>
+
+Different models excel at different tasks. Here's how they compare on key benchmarks:
+
+```mermaid
+graph TB
+    subgraph Coding["👨‍💻 Coding Benchmarks"]
+        SWE[SWE-bench Verified]
+        AIDER[Aider Polyglot]
+    end
+
+    subgraph Winners["🏆 Top Performers"]
+        C_WIN[Claude Sonnet 4.5<br/>77.2% SWE-bench]
+        G_WIN[GPT-5.1<br/>76.3% SWE-bench]
+        GEM_WIN[Gemini 3 Pro<br/>76.2% SWE-bench]
+    end
+
+    SWE --> C_WIN
+    SWE --> G_WIN
+    SWE --> GEM_WIN
+```
+
+### SWE-bench Verified Scores (Coding/Agentic)
+
+| Model | SWE-bench Score | Aider Polyglot | Notes |
+|-------|-----------------|----------------|-------|
+| **[Claude Sonnet 4.5](https://www.anthropic.com/claude/sonnet)** | **77.2%** | 89.4% (Opus) | Best for complex legal extraction |
+| **GPT-5.1** | 76.3% | 88.0% | Strong all-rounder |
+| **Gemini 3 Pro** | 76.2% | 82.2% | PhD-level reasoning |
+| **Gemini 2.5 Pro** | 67.2% | 82.2% | Good balance |
+| **GLM-4.6** | ~65% | ~75% | Best open-weights value |
+| **Kimi K2** | ~60% | ~70% | Excellent cost/performance |
+
+### Recommended Models by Use Case
+
+| Use Case | Recommended Model | Why |
+|----------|-------------------|-----|
+| **Proof of Concept** | Gemini 2.5 Flash | Balance of cost & quality |
+| **Budget Processing** | Gemini 2.5 Flash-Lite | Lowest cost per document |
+| **Highest Accuracy** | Claude Sonnet 4.5 | Best legal reasoning |
+| **Self-Hosted** | GLM-4.6 | Open weights, no API costs |
+| **High Volume** | Kimi K2 (cached) | Cache reduces costs 75% |
+| **Production** | Gemini 2.5 Pro | Quality + reasonable cost |
+
+</details>
+
+<details>
+<summary><b>⚙️ What Each Model Does in the GSW Pipeline</b></summary>
+<br>
+
+The GSW extraction pipeline runs **6 sequential tasks** per document:
+
+```mermaid
+flowchart TB
+    subgraph Pipeline["🔄 GSW Extraction Pipeline"]
+        T1[Task 1: Actor Extraction<br/>Find all people, orgs, assets]
+        T2[Task 2: Role Assignment<br/>Applicant, Respondent, Judge]
+        T3[Task 3: State Extraction<br/>Married → Separated → Divorced]
+        T4[Task 4: Verb Phrase Extraction<br/>Filed, Ordered, Appealed]
+        T5[Task 5: Question Generation<br/>What could be asked?]
+        T6[Task 6: Link Creation<br/>Spatio-temporal connections]
+    end
+
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6
+
+    subgraph Output["📤 Output"]
+        GSW[(Global Workspace<br/>Actors, States, Links)]
+    end
+
+    T6 --> GSW
+```
+
+### Token Usage Per Task
+
+| Task | Input Tokens | Output Tokens | Purpose |
+|------|--------------|---------------|---------|
+| **Task 1** | ~500 | ~300 | Extract actor names and types |
+| **Task 2** | ~400 | ~200 | Assign legal roles |
+| **Task 3** | ~500 | ~400 | Track state changes over time |
+| **Task 4** | ~400 | ~600 | Identify actions and events |
+| **Task 5** | ~400 | ~800 | Generate predictive questions |
+| **Task 6** | ~300 | ~700 | Create temporal/spatial links |
+| **Total** | **~2,500** | **~3,000** | Per document |
+
+### Model Performance by Task Type
+
+| Task | Best Models | Why |
+|------|-------------|-----|
+| **Actor Extraction** | GPT-4.1, Claude | Named entity recognition |
+| **Role Assignment** | Claude Sonnet 4.5 | Legal domain understanding |
+| **State Extraction** | Gemini 2.5 Pro | Temporal reasoning |
+| **Verb Phrases** | Any model | Straightforward extraction |
+| **Questions** | Claude, GPT | Natural language generation |
+| **Links** | Gemini 2.5 Pro | Multi-document reasoning |
+
+</details>
+
+<details>
+<summary><b>📈 Cost Optimization Strategies</b></summary>
+<br>
+
+### 1. Use TOON Format (Default)
+- **Savings**: 40% token reduction
+- **Impact**: $2,000-$9,000 saved on full corpus
+
+### 2. Use Batch APIs
+- **Gemini Batch**: 50% discount ($0.625/$5 per 1M)
+- **Claude Batch**: 50% discount ($1.50/$7.50 per 1M)
+- **Trade-off**: 24-hour processing time
+
+### 3. Enable Caching
+- **Kimi K2**: 75% input discount with cache hits
+- **Claude**: 90% savings with prompt caching
+- **GPT-4.1**: 75% discount on cached inputs
+
+### 4. Model Selection by Phase
+
+```mermaid
+flowchart LR
+    subgraph Phase1["🧪 Testing"]
+        TEST[Flash-Lite<br/>$0.10/$0.40]
+    end
+
+    subgraph Phase2["📈 Scaling"]
+        SCALE[Flash Standard<br/>$0.30/$2.50]
+    end
+
+    subgraph Phase3["🎯 Production"]
+        PROD[Pro or Claude<br/>Best accuracy]
+    end
+
+    Phase1 -->|Validated| Phase2
+    Phase2 -->|Refined| Phase3
+```
+
+### 5. Hybrid Approach
+
+Use different models for different tasks:
+
+| Tasks | Model | Cost Savings |
+|-------|-------|--------------|
+| Tasks 1-4 (Extraction) | Gemini Flash | ~$2,500 |
+| Tasks 5-6 (Reasoning) | Claude Sonnet | Quality boost |
+| **Total Hybrid** | Mixed | ~$8,000 vs $27K (Claude only) |
 
 </details>
 
