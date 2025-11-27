@@ -9,8 +9,8 @@ Documentation for the Next.js API routes that power the Verridian UI.
 ```mermaid
 graph TB
     subgraph "API Routes"
-        Chat[/api/chat<br/>POST]
-        Memory[/api/memory/add<br/>POST]
+        Chat["/api/chat<br/>POST"]
+        Memory["/api/memory/add<br/>POST"]
     end
 
     subgraph "External Services"
