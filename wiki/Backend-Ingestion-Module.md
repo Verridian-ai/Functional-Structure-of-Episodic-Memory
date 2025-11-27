@@ -24,6 +24,45 @@ graph TB
     LO --> GSW[Global Workspace]
 ```
 
+---
+
+## Ingestion Pipeline
+
+```mermaid
+flowchart LR
+    subgraph Input
+        RAW[Raw Documents]
+        JSONL[Corpus JSONL]
+    end
+
+    subgraph Classification
+        DC[Domain Classifier]
+        CC[Court Classifier]
+        FF[Family Filter]
+    end
+
+    subgraph Extraction
+        OP[TheOperator]
+        REC[Reconciler]
+    end
+
+    subgraph Storage
+        GSW[Global Workspace]
+        JSON[JSON Files]
+    end
+
+    RAW --> DC
+    JSONL --> DC
+    DC --> CC
+    CC --> FF
+    FF --> OP
+    OP --> REC
+    REC --> GSW
+    GSW --> JSON
+```
+
+---
+
 ## Files
 
 | File | Purpose | Lines |
@@ -46,6 +85,23 @@ graph TB
 **File**: `src/ingestion/legal_operator.py`
 
 The Operator is the "Episodic Legal Observer" that extracts structured data from legal text.
+
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant O as TheOperator
+    participant G as Gemini API
+    participant S as Schema Parser
+
+    C->>O: extract_timeline(text)
+    O->>G: Send prompt + text
+    G->>O: JSON response
+    O->>S: Parse to LegalCase
+    S->>O: Validated LegalCase
+    O->>C: Return LegalCase
+```
+
+### Usage Example
 
 ```python
 from src.ingestion.legal_operator import TheOperator
@@ -79,11 +135,30 @@ LegalCase:
 
 ## Domain Classification
 
+### Classification Flow
+
+```mermaid
+flowchart TD
+    DOC[Document Text] --> KW[Keyword Analysis]
+    DOC --> CT[Citation Check]
+    DOC --> LLM[LLM Classification]
+
+    KW --> SCORE[Score Aggregation]
+    CT --> SCORE
+    LLM --> SCORE
+
+    SCORE --> DOMAIN{Domain Decision}
+
+    DOMAIN -->|family| FAM[Family Law]
+    DOMAIN -->|criminal| CRIM[Criminal Law]
+    DOMAIN -->|commercial| COMM[Commercial Law]
+    DOMAIN -->|property| PROP[Property Law]
+    DOMAIN -->|employment| EMP[Employment Law]
+```
+
 ### Domain Splitter
 
 **File**: `src/ingestion/domain_splitter.py`
-
-Classifies documents into legal domains:
 
 ```python
 from src.ingestion.domain_splitter import DomainSplitter
@@ -109,7 +184,19 @@ domain = splitter.classify(document_text)
 
 **File**: `src/ingestion/court_code_classifier.py`
 
-Identifies court and jurisdiction from case citations:
+```mermaid
+graph LR
+    CIT[Citation String] --> REGEX[Regex Parser]
+    REGEX --> CODE{Court Code}
+
+    CODE -->|FamCA| FC[Family Court of Australia]
+    CODE -->|FamCAFC| FFC[Family Court Full Court]
+    CODE -->|FCWA| WA[Family Court WA]
+    CODE -->|HCA| HC[High Court]
+    CODE -->|FCA| FED[Federal Court]
+```
+
+### Usage
 
 ```python
 from src.ingestion.court_code_classifier import classify_court
@@ -120,21 +207,53 @@ result = classify_court("[2023] FamCA 123")
 
 ### Supported Courts
 
-- FamCA - Family Court of Australia
-- FamCAFC - Family Court Full Court
-- FCWA - Family Court of Western Australia
-- HCA - High Court of Australia
-- FCA - Federal Court of Australia
+| Code | Court | Jurisdiction |
+|------|-------|--------------|
+| FamCA | Family Court of Australia | Federal |
+| FamCAFC | Family Court Full Court | Federal |
+| FCWA | Family Court of Western Australia | State |
+| HCA | High Court of Australia | Federal |
+| FCA | Federal Court of Australia | Federal |
 
 ---
 
 ## Corpus Processing
 
+### Bulk Processing Pipeline
+
+```mermaid
+flowchart LR
+    subgraph Input
+        DIR[Input Directory]
+        JSONL[corpus.jsonl]
+    end
+
+    subgraph Processing
+        LOOP[For Each Document]
+        CLASS[Classify Domain]
+        FILT[Apply Filters]
+        EXT[Extract Structure]
+    end
+
+    subgraph Output
+        BY_DOM[By Domain/]
+        BY_LAB[By Label/]
+        STATS[Statistics]
+    end
+
+    DIR --> LOOP
+    JSONL --> LOOP
+    LOOP --> CLASS
+    CLASS --> FILT
+    FILT --> EXT
+    EXT --> BY_DOM
+    EXT --> BY_LAB
+    EXT --> STATS
+```
+
 ### Bulk Domain Extraction
 
 **File**: `src/ingestion/corpus_domain_extractor.py`
-
-Process entire corpus and classify documents:
 
 ```python
 from src.ingestion.corpus_domain_extractor import process_corpus
@@ -154,8 +273,6 @@ print(f"Family Law: {results['family']}")
 
 **File**: `src/ingestion/corpus_label_splitter.py`
 
-Organize corpus by extracted labels:
-
 ```python
 from src.ingestion.corpus_label_splitter import organize_by_labels
 
@@ -172,7 +289,20 @@ organize_by_labels(
 
 **File**: `src/ingestion/filter_family_law.py`
 
-Filter corpus for Family Law documents:
+```mermaid
+flowchart TD
+    DOC[Document] --> CHECK1{Court Code?}
+
+    CHECK1 -->|FamCA/FCWA| PASS[Include]
+    CHECK1 -->|Other| CHECK2{Keywords?}
+
+    CHECK2 -->|Family Law Act| PASS
+    CHECK2 -->|parenting orders| PASS
+    CHECK2 -->|property settlement| PASS
+    CHECK2 -->|None| REJECT[Exclude]
+```
+
+### Usage
 
 ```python
 from src.ingestion.filter_family_law import filter_family_law
@@ -188,9 +318,9 @@ print(f"Family Law documents: {filtered}")
 
 ### Filter Criteria
 
-- Court codes: FamCA, FamCAFC, FCWA
-- Keywords: "Family Law Act", "parenting orders", "property settlement"
-- Case types: parenting, property, divorce, maintenance
+- **Court codes**: FamCA, FamCAFC, FCWA
+- **Keywords**: "Family Law Act", "parenting orders", "property settlement"
+- **Case types**: parenting, property, divorce, maintenance
 
 ---
 
@@ -198,7 +328,37 @@ print(f"Family Law documents: {filtered}")
 
 **File**: `src/ingestion/reconciler.py`
 
-Merge entities across multiple extractions:
+```mermaid
+flowchart LR
+    subgraph Extractions
+        E1[Extraction 1]
+        E2[Extraction 2]
+        E3[Extraction 3]
+    end
+
+    subgraph Matching
+        FM[Fuzzy Name Match]
+        AR[Alias Resolution]
+        RM[Role Merging]
+    end
+
+    subgraph Output
+        MA[Merged Actors]
+        MS[Merged States]
+        MQ[Merged Questions]
+    end
+
+    E1 --> FM
+    E2 --> FM
+    E3 --> FM
+    FM --> AR
+    AR --> RM
+    RM --> MA
+    RM --> MS
+    RM --> MQ
+```
+
+### Usage
 
 ```python
 from src.ingestion.reconciler import EntityReconciler
@@ -215,10 +375,12 @@ merged_actors = reconciler.get_merged_actors()
 
 ### Reconciliation Rules
 
-1. **Name matching**: Fuzzy match on actor names
-2. **Alias resolution**: Map aliases to canonical names
-3. **Role merging**: Combine roles from multiple sources
-4. **Timeline ordering**: Sort states chronologically
+| Step | Operation | Description |
+|------|-----------|-------------|
+| 1 | Name matching | Fuzzy match on actor names |
+| 2 | Alias resolution | Map aliases to canonical names |
+| 3 | Role merging | Combine roles from multiple sources |
+| 4 | Timeline ordering | Sort states chronologically |
 
 ---
 
@@ -238,9 +400,32 @@ CLASSIFICATION_CONFIG = {
 
 ---
 
-## Pipeline Example
+## Full Pipeline Example
 
-### Full Ingestion Pipeline
+```mermaid
+sequenceDiagram
+    participant C as Client
+    participant S as DomainSplitter
+    participant O as TheOperator
+    participant R as Reconciler
+    participant W as WorkspaceManager
+
+    C->>S: classify(text)
+    S->>C: "family"
+
+    C->>O: extract_timeline(text)
+    O->>C: LegalCase
+
+    C->>R: add_extraction(case)
+    R->>R: Match entities
+    R->>C: Merged entities
+
+    C->>W: add_actors(actors)
+    W->>W: Persist to JSON
+    W->>C: Success
+```
+
+### Code Example
 
 ```python
 import asyncio
