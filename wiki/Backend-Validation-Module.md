@@ -6,40 +6,21 @@ The **Validation Module** provides statutory RAG (Retrieval-Augmented Generation
 
 **Location**: `src/validation/`
 
-```
-┌────────────────────────────────────────────────────┐
-│           STATUTORY RAG VALIDATOR                   │
-├────────────────────────────────────────────────────┤
-│                                                     │
-│  ┌──────────────────┐      ┌─────────────────┐    │
-│  │  CorpusLoader    │◀─────│ Statutory       │    │
-│  │                  │      │ Corpus (JSON)   │    │
-│  │ • Load acts      │      │                 │    │
-│  │ • Index sections │      │ • Family Law    │    │
-│  │ • Search by text │      │ • Evidence Acts │    │
-│  │ • Search by tags │      │ • Marriage Act  │    │
-│  └────────┬─────────┘      └─────────────────┘    │
-│           │                                         │
-│           ▼                                         │
-│  ┌──────────────────────────────────────────┐     │
-│  │  StatutoryRAGValidator                   │     │
-│  │                                          │     │
-│  │  1. Extract claims from input           │     │
-│  │  2. Retrieve relevant statutes          │     │
-│  │  3. Check compliance                    │     │
-│  │  4. Detect conflicts                    │     │
-│  │  5. Generate recommendations            │     │
-│  └──────────────────────────────────────────┘     │
-│           │                                         │
-│           ▼                                         │
-│  ┌──────────────────────────────────────────┐     │
-│  │         ValidationResult                 │     │
-│  │  • Compliance score (0.0-1.0)           │     │
-│  │  • Supporting citations                  │     │
-│  │  • Conflicts list                        │     │
-│  │  • Recommendations                       │     │
-│  └──────────────────────────────────────────┘     │
-└────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph SRV["Statutory RAG Validator"]
+        CORPUS["Statutory Corpus (JSON)<br/>• Family Law<br/>• Evidence Acts<br/>• Marriage Act"]
+
+        CL["CorpusLoader<br/>• Load acts<br/>• Index sections<br/>• Search by text<br/>• Search by tags"]
+
+        VAL["StatutoryRAGValidator<br/>1. Extract claims from input<br/>2. Retrieve relevant statutes<br/>3. Check compliance<br/>4. Detect conflicts<br/>5. Generate recommendations"]
+
+        RESULT["ValidationResult<br/>• Compliance score (0.0-1.0)<br/>• Supporting citations<br/>• Conflicts list<br/>• Recommendations"]
+    end
+
+    CORPUS --> CL
+    CL --> VAL
+    VAL --> RESULT
 ```
 
 ## Files
@@ -409,62 +390,28 @@ if section:
 
 ## Validation Flow Diagram
 
-```
-┌─────────────┐
-│ Extraction  │
-│   Input     │
-└──────┬──────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Extract Claims            │
-│  • Text fields             │
-│  • Requirements            │
-│  • Findings                │
-│  • Legal tests             │
-└──────┬─────────────────────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Retrieve Statutes         │
-│  • Search by text          │
-│  • Search by keywords      │
-│  • Rank by relevance       │
-└──────┬─────────────────────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Check Compliance          │
-│  • Term overlap analysis   │
-│  • Required elements check │
-│  • Calculate score         │
-└──────┬─────────────────────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Detect Conflicts          │
-│  • Missing elements        │
-│  • Contradictions          │
-│  • Threshold violations    │
-└──────┬─────────────────────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Generate Recommendations  │
-│  • Address missing items   │
-│  • Resolve conflicts       │
-│  • Improve compliance      │
-└──────┬─────────────────────┘
-       │
-       ▼
-┌────────────────────────────┐
-│  Return ValidationResult   │
-│  • is_valid                │
-│  • compliance_score        │
-│  • citations               │
-│  • conflicts               │
-│  • recommendations         │
-└────────────────────────────┘
+```mermaid
+flowchart TB
+    INPUT["Extraction Input"]
+
+    EXTRACT["Extract Claims<br/>• Text fields<br/>• Requirements<br/>• Findings<br/>• Legal tests"]
+
+    RETRIEVE["Retrieve Statutes<br/>• Search by text<br/>• Search by keywords<br/>• Rank by relevance"]
+
+    COMPLY["Check Compliance<br/>• Term overlap analysis<br/>• Required elements check<br/>• Calculate score"]
+
+    CONFLICTS["Detect Conflicts<br/>• Missing elements<br/>• Contradictions<br/>• Threshold violations"]
+
+    RECOMMEND["Generate Recommendations<br/>• Address missing items<br/>• Resolve conflicts<br/>• Improve compliance"]
+
+    RESULT["Return ValidationResult<br/>• is_valid<br/>• compliance_score<br/>• citations<br/>• conflicts<br/>• recommendations"]
+
+    INPUT --> EXTRACT
+    EXTRACT --> RETRIEVE
+    RETRIEVE --> COMPLY
+    COMPLY --> CONFLICTS
+    CONFLICTS --> RECOMMEND
+    RECOMMEND --> RESULT
 ```
 
 ---
