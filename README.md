@@ -11,8 +11,14 @@
 
 <br>
 
+<!-- IMPORTANT NOTICE -->
+> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
+
+<br>
+
 <!-- Animated Badges Row 1 -->
 [![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.07587)
+[![CLAUSE](https://img.shields.io/badge/CLAUSE-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.00340v1)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Next.js_16-3178C6?style=for-the-badge&logo=typescript&logoColor=white)](ui/)
@@ -36,7 +42,7 @@
 [📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
 [🚀 Quick Start](#-quick-start) •
 [🏗 Architecture](#-architecture) •
-[🔬 Research Validation](#-research-backed-validation) •
+[🔬 Research Validation](#-research-backed-validation-clause-benchmark) •
 [📊 Benchmarks](#-performance) •
 [🤝 Contributing](CONTRIBUTING.md)
 
@@ -54,9 +60,7 @@
 
 Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
-<details>
-<summary><b>🔍 Why is this different from traditional RAG?</b></summary>
-<br>
+### 🔍 Why is this different from traditional RAG?
 
 ```mermaid
 flowchart LR
@@ -76,11 +80,7 @@ flowchart LR
 | Hallucination | ❌ No verification | ✅ Logic verification layer |
 | Tokens | ❌ ~8,000 per query | ✅ ~3,500 (56% reduction) |
 
-</details>
-
-<details>
-<summary><b>📚 Core Concepts</b></summary>
-<br>
+### 📚 Core Concepts
 
 | Concept | Description |
 |---------|-------------|
@@ -90,17 +90,11 @@ flowchart LR
 | **Gap Detection** | Identifying missing evidence before responding |
 | **Logic Verification** | Anti-hallucination through symbolic reasoning |
 
-</details>
-
 ---
 
 ## 🧩 How It Works: Deep Dive (For Everyone)
 
-<details open>
-<summary><b>🎯 The Big Picture: What Problem Are We Solving?</b></summary>
-<br>
-
-### The Problem with Current AI
+### 🎯 The Big Picture: What Problem Are We Solving?
 
 Imagine asking your AI assistant: *"What happened with John Smith's custody case?"*
 
@@ -132,22 +126,15 @@ flowchart LR
     end
 ```
 
-</details>
-
 ---
 
 ## 🧠 The Five Building Blocks (Explained Simply)
 
-<details open>
-<summary><b>🗄️ 1. Global Semantic Workspace (GSW) — The Memory Palace</b></summary>
-<br>
+### 🗄️ 1. Global Semantic Workspace (GSW) — The Memory Palace
 
-### 🎯 Technical Definition
-The Global Semantic Workspace is a persistent, actor-centric knowledge graph that stores extracted entities, their relationships, states, and temporal links across all processed documents.
+**Technical Definition**: The Global Semantic Workspace is a persistent, actor-centric knowledge graph that stores extracted entities, their relationships, states, and temporal links across all processed documents.
 
-### 🏠 Simple Analogy: Your Brain's Filing Cabinet
-
-Imagine your brain's memory as a **giant filing cabinet**. Most AI systems organize files by **event** (what happened). Verridian organizes files by **person** (who was involved).
+**Simple Analogy - Your Brain's Filing Cabinet**: Imagine your brain's memory as a **giant filing cabinet**. Most AI systems organize files by **event** (what happened). Verridian organizes files by **person** (who was involved).
 
 ```mermaid
 flowchart TB
@@ -169,13 +156,12 @@ flowchart TB
     end
 ```
 
-### 🤔 Why Does This Matter?
+**Why Does This Matter?**
 
-**Traditional approach**: Ask "Who is John?" - AI has to search through every event to piece together the answer.
+- **Traditional approach**: Ask "Who is John?" - AI has to search through every event to piece together the answer.
+- **Verridian approach**: Ask "Who is John?" - The answer is already organized: "John Smith: Applicant, Father, married 2010, separated 2020, works as accountant..."
 
-**Verridian approach**: Ask "Who is John?" - The answer is already organized: "John Smith: Applicant, Father, married 2010, separated 2020, works as accountant..."
-
-### 📦 What's Inside the GSW?
+**What's Inside the GSW?**
 
 | Component | What It Stores | Real Example |
 |-----------|---------------|--------------|
@@ -185,25 +171,15 @@ flowchart TB
 | **Questions** | Things we might need to know | "When did separation occur?" |
 | **Links** | Connections in time and space | "John and Jane were both present on Date X" |
 
-### 🔢 By the Numbers
+**By the Numbers**: 5,170 actors tracked • 7,615 questions answerable • 646 temporal links
 
-- **5,170 actors** tracked across all cases
-- **7,615 questions** that can be answered
-- **646 temporal links** connecting events in time
+---
 
-</details>
+### 🗺️ 2. TEM Layer — The Mental GPS
 
-<details>
-<summary><b>🗺️ 2. TEM Layer — The Mental GPS</b></summary>
-<br>
+**Technical Definition**: The Tolman-Eichenbaum Machine (TEM) is a neural architecture inspired by the hippocampal formation that learns to separate structural knowledge from sensory details, enabling generalization across similar situations.
 
-### 🎯 Technical Definition
-The Tolman-Eichenbaum Machine (TEM) is a neural architecture inspired by the hippocampal formation that learns to separate structural knowledge from sensory details, enabling generalization across similar situations.
-
-### 🧭 Simple Analogy: Google Maps for Your Brain
-
-Think of TEM like **Google Maps for information**:
-
+**Simple Analogy - Google Maps for Your Brain**: Think of TEM like **Google Maps for information**:
 - **Grid Cells (MEC)** = The underlying map structure (streets, intersections)
 - **Place Cells (HPC)** = Specific locations you remember (your home, office)
 - **Sensory Input (LEC)** = What you see right now (the actual buildings)
@@ -231,14 +207,7 @@ flowchart TB
     end
 ```
 
-### 🤔 Why Does This Matter?
-
-**The key insight**: Just like you can navigate a new city because you understand how cities work (streets, intersections, buildings), TEM lets the AI understand NEW legal cases because it knows how legal cases are STRUCTURED.
-
-**Without TEM**: AI treats every case as completely unique - can't learn patterns
-**With TEM**: AI says "Ah, this is a custody dispute - I know the typical structure!"
-
-### 🎓 The Neuroscience Behind It
+**The Neuroscience Behind It**:
 
 | Brain Region | Function | Legal AI Equivalent |
 |--------------|----------|---------------------|
@@ -247,29 +216,13 @@ flowchart TB
 | **Border Cells** | Detect boundaries | Legal deadlines, jurisdictions |
 | **Head Direction** | Know which way you're facing | Know where you are in case timeline |
 
-### 💡 Example in Action
+---
 
-```
-Human Brain:                          Verridian TEM:
--------------------                   -------------------
-"I'm at an intersection"      →       "This is a custody dispute"
-"There are 4 streets"         →       "There are 2 parents involved"
-"I need to go north"          →       "I need to find separation date"
-"I see a coffee shop"         →       "I see: 'Parties separated June 2020'"
-```
+### 🔍 3. Active Inference — The Smart Detective
 
-</details>
+**Technical Definition**: Active Inference is a framework from computational neuroscience where agents minimize "free energy" by either updating beliefs (perception) or taking actions (exploration) to reduce uncertainty about their environment.
 
-<details>
-<summary><b>🔍 3. Active Inference — The Smart Detective</b></summary>
-<br>
-
-### 🎯 Technical Definition
-Active Inference is a framework from computational neuroscience where agents minimize "free energy" by either updating beliefs (perception) or taking actions (exploration) to reduce uncertainty about their environment.
-
-### 🕵️ Simple Analogy: A Detective Who Knows What Questions to Ask
-
-Imagine a **brilliant detective** who:
+**Simple Analogy - A Detective Who Knows What Questions to Ask**: Imagine a brilliant detective who:
 1. Knows what they DON'T know yet
 2. Asks the right questions to fill gaps
 3. Updates their theory as new evidence arrives
@@ -310,62 +263,20 @@ flowchart TB
     end
 ```
 
-### 🤔 Why Does This Matter?
-
-**Traditional AI** is like a student who guesses when they don't know:
-- Sees a question they can't answer
-- Makes something up (hallucination!)
-- Sounds confident but is wrong
-
-**Verridian with Active Inference** is like a careful professional:
-- Sees a question they can't fully answer
-- Says "I need to find X before I can answer this"
-- Either finds the info OR tells you what's missing
-
-### ⚡ The Two Types of "Energy" It Minimizes
+**The Two Types of "Energy" It Minimizes**:
 
 | Energy Type | What It Means | Example |
 |-------------|---------------|---------|
 | **Variational Free Energy** (VFE) | How surprised am I by what I see? | "I expected a separation date but didn't find one - that's surprising!" |
 | **Expected Free Energy** (EFE) | What action will reduce my uncertainty the most? | "I should look in paragraph 3 for dates" |
 
-### 💡 Example in Action
+---
 
-```
-User asks: "What is John's income?"
+### 🛡️ 4. VSA Layer — The Fact-Checker
 
-Traditional AI:                       Verridian (Active Inference):
------------------                     ----------------------------
-"John earns $85,000"                  "Let me check...
-(just guessed!)                       - I found John is 'employed'
-                                      - I found John is an 'accountant'
-                                      - I did NOT find a specific salary
+**Technical Definition**: Vector Symbolic Architecture (VSA) uses high-dimensional vectors (D=10,000) with three operations—binding, bundling, and permutation—to represent and verify symbolic relationships in a way that's robust to noise and supports similarity-based reasoning.
 
-                                      Answer: John's specific income is
-                                      not stated, but he is employed as
-                                      an accountant."
-```
-
-### 🎮 The POMDP Agent
-
-The system uses a "Partially Observable Markov Decision Process" (POMDP). Don't worry about the name - it just means:
-
-- **Partially Observable**: Can't see everything at once (like a detective with limited clues)
-- **Markov**: Current state depends only on recent past
-- **Decision Process**: Makes smart choices about what to investigate next
-
-</details>
-
-<details>
-<summary><b>🛡️ 4. VSA Layer — The Fact-Checker</b></summary>
-<br>
-
-### 🎯 Technical Definition
-Vector Symbolic Architecture (VSA) uses high-dimensional vectors (D=10,000) with three operations—binding, bundling, and permutation—to represent and verify symbolic relationships in a way that's robust to noise and supports similarity-based reasoning.
-
-### ✅ Simple Analogy: A Lie Detector for Information
-
-Imagine a **super-powered fact-checker** that can instantly verify if statements are consistent with everything it knows:
+**Simple Analogy - A Lie Detector for Information**: Imagine a super-powered fact-checker that can instantly verify if statements are consistent with everything it knows:
 
 ```mermaid
 flowchart LR
@@ -391,16 +302,7 @@ flowchart LR
     Score --> Low
 ```
 
-### 🤔 Why Does This Matter?
-
-**The problem**: LLMs can "hallucinate" - confidently state things that aren't true.
-
-**The solution**: VSA acts like a mathematical truth-checker:
-- Every fact is converted to a special mathematical representation
-- Checking consistency is just math (very fast and reliable!)
-- If something doesn't match, it gets flagged before being shown to you
-
-### 🔧 The Three Magic Operations
+**The Three Magic Operations**:
 
 | Operation | Symbol | What It Does | Analogy |
 |-----------|--------|--------------|---------|
@@ -408,31 +310,7 @@ flowchart LR
 | **Bundling** | Σ | Combines multiple things | Putting items in the same bag |
 | **Permutation** | ρ | Creates sequences/order | Numbering items 1st, 2nd, 3rd |
 
-### 💡 Example: How VSA Catches Lies
-
-```
-Known facts in VSA:
-  - John married Jane (2010) → Vector A
-  - Jane married John (2010) → Vector B
-  - Similarity(A, B) = 0.97 ✅ (Consistent!)
-
-New claim: "John married Mary in 2010"
-  - John married Mary (2010) → Vector C
-  - Similarity(C, A) = 0.12 ❌ (Conflict!)
-
-System says: "Warning: This conflicts with existing records
-              showing John married Jane in 2010"
-```
-
-### 🔢 Why 10,000 Dimensions?
-
-The vectors have 10,000 dimensions (numbers). This seems crazy, but there's a reason:
-
-- **More dimensions = more room** for different concepts to be distinct
-- Like how a city with more streets can have more unique addresses
-- At 10,000 dimensions, billions of different concepts can coexist without confusion
-
-### 📊 Anti-Hallucination in Numbers
+**Anti-Hallucination Results**:
 
 | Scenario | Without VSA | With VSA |
 |----------|-------------|----------|
@@ -440,30 +318,13 @@ The vectors have 10,000 dimensions (numbers). This seems crazy, but there's a re
 | False alarms | 15% | 3% |
 | Response confidence | Unknown | Quantified (0-1 score) |
 
-</details>
+---
 
-<details>
-<summary><b>📝 5. TOON Format — The Efficient Messenger</b></summary>
-<br>
+### 📝 5. TOON Format — The Efficient Messenger
 
-### 🎯 Technical Definition
-Token-Oriented Object Notation (TOON) is a compact serialization format optimized for LLM context efficiency, achieving ~40% token reduction compared to JSON while maintaining 73.9% parsing accuracy.
+**Technical Definition**: Token-Oriented Object Notation (TOON) is a compact serialization format optimized for LLM context efficiency, achieving ~40% token reduction compared to JSON while maintaining 73.9% parsing accuracy.
 
-### 📱 Simple Analogy: Text Messaging vs. Formal Letters
-
-When you text a friend, you don't write:
-```
-Dear Friend,
-I hope this message finds you well. I wanted to inform you that
-I am currently located at the coffee establishment on Main Street
-and would be delighted if you could join me.
-Warm regards,
-Your Friend
-```
-
-You write: `@ coffee main st. come hang?`
-
-**TOON does the same thing for AI communication!**
+**Simple Analogy - Text Messaging vs. Formal Letters**: When you text a friend, you don't write a formal letter. You write: `@ coffee main st. come hang?` — TOON does the same thing for AI communication!
 
 ```mermaid
 flowchart LR
@@ -483,51 +344,13 @@ a2,Jane"]
     JSON --> |Same info, 40% smaller| TOON
 ```
 
-### 🤔 Why Does This Matter?
-
-**Every token costs money and time!**
+**Cost Impact**:
 
 | Metric | JSON | TOON | Savings |
 |--------|------|------|---------|
 | **Tokens per actor** | 45 | 27 | 40% |
 | **Cost per 1000 queries** | $50 | $30 | $20 |
 | **Context space used** | 100% | 60% | 40% more room for actual data |
-
-### 📐 The Format
-
-```
-EntityType[count]{column1,column2,column3}
-value1,value2,value3
-value1,value2,value3
-```
-
-### 💡 Real Example
-
-**JSON (127 tokens):**
-```json
-{
-  "actors": [
-    {"id": "a1", "name": "John Smith", "type": "person", "roles": ["Applicant", "Father"]},
-    {"id": "a2", "name": "Jane Smith", "type": "person", "roles": ["Respondent", "Mother"]}
-  ]
-}
-```
-
-**TOON (76 tokens - 40% reduction):**
-```
-Actors[2]{id,name,type,roles}
-a1,John Smith,person,Applicant|Father
-a2,Jane Smith,person,Respondent|Mother
-```
-
-### 🎯 When to Use Each
-
-| Format | Best For |
-|--------|----------|
-| **JSON** | Human-readable output, APIs, debugging |
-| **TOON** | Sending context to AI, internal processing |
-
-</details>
 
 ---
 
@@ -639,11 +462,7 @@ flowchart TB
 
 </div>
 
-<br>
-
-<details>
-<summary><b>🔄 Data Flow Through the System</b></summary>
-<br>
+### 🔄 Data Flow Through the System
 
 ```mermaid
 flowchart TB
@@ -674,11 +493,7 @@ flowchart TB
 
 **6 Extraction Tasks**: Actor ID → Roles → States → Verbs → Questions → Links
 
-</details>
-
-<details>
-<summary><b>💡 Core Innovation: Actor-Centric Memory</b></summary>
-<br>
+### 💡 Core Innovation: Actor-Centric Memory
 
 <div align="center">
 <img src="assets/images/RAG VS GSW.png" alt="RAG vs GSW Comparison" width="100%">
@@ -709,27 +524,23 @@ Actor: {
 
 This mirrors how humans actually remember - achieving **85% accuracy** vs 77% for traditional RAG.
 
-</details>
-
 ---
 
-## 🔬 Research-Backed Validation
+## 🔬 Research-Backed Validation (CLAUSE Benchmark)
 
 <div align="center">
 
-### CLAUSE Paper Integration
-
-**Implementing "Better Call CLAUSE" Benchmark for Australian Family Law**
+### Implementing "Better Call CLAUSE" Benchmark for Australian Family Law
 
 [![CLAUSE Paper](https://img.shields.io/badge/Paper-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv)](https://arxiv.org/abs/2511.00340v1)
 
+**📄 Full Technical Report**: [CLAUSE Research Application Report](docs/CLAUSE-Research-Application-Report.md)
+
 </div>
 
-Verridian AI integrates advanced validation techniques from cutting-edge legal AI research to ensure extraction accuracy and statutory compliance.
+Verridian AI integrates advanced validation techniques from the CLAUSE benchmark research to ensure extraction accuracy and statutory compliance.
 
-<details>
-<summary><b>📊 Validation Pipeline</b></summary>
-<br>
+### CLAUSE Benchmark Framework
 
 ```mermaid
 flowchart LR
@@ -742,52 +553,81 @@ flowchart LR
     EVAL --> C[GPT-4o<br/>Claude<br/>Gemini]
 ```
 
-**Validation Features**: 10-Category Discrepancy Detection • Span-Level Issue ID • Calibrated Confidence
+### 10-Category Discrepancy Detection
 
-</details>
+The CLAUSE benchmark introduces comprehensive discrepancy detection adapted for Australian Family Law:
 
-### Key Features
+**5 Legal Discrepancies**:
+| Category | Description | Family Law Example |
+|----------|-------------|-------------------|
+| Property Pool Alterations | Incorrect asset valuations | Wrong contribution percentages |
+| Parenting Order Contradictions | Conflicting custody arrangements | Inconsistent contact schedules |
+| Spousal Maintenance Errors | Wrong income figures | Incorrect duration periods |
+| Child Support Calculation Flaws | Income percentage errors | Care percentage conflicts |
+| Consent Order Violations | Terms contradicting Family Law Act | Unenforceable provisions |
+
+**5 In-Text Discrepancies**:
+| Category | Description | Example |
+|----------|-------------|---------|
+| Date Inconsistencies | Separation date conflicts | Timeline contradictions |
+| Party Name Mismatches | Applicant/Respondent confusion | Children name errors |
+| Asset Reference Errors | Property address mismatches | Account number conflicts |
+| Numerical Inconsistencies | Dollar amount conflicts | Percentage calculation errors |
+| Order Reference Conflicts | Paragraph cross-reference errors | Schedule reference mismatches |
+
+### Validation Features
 
 <table>
 <tr>
 <td width="50%" valign="top">
 
-#### 🎯 Discrepancy Detection
-- **10-Category Benchmark**
-  - 5 Legal: Payment, Liability, Termination, Jurisdiction, Warranty
-  - 5 In-text: Numbers, Dates, Party Names, References, Definitions
-- **Span-Level Precision**
-  - Pinpoints exact location of issues
-  - Character-level alignment metrics
-- **Australian Family Law Adapted**
-  - Family Law Act 1975
-  - Child Support Assessment Act 1989
-  - Family Law Rules 2004
+#### 🎯 Span-Level Detection
+Current validation returns span-level precision:
+```json
+{
+  "valid": false,
+  "issues": [{
+    "type": "numerical_inconsistency",
+    "span_start": 38,
+    "span_end": 43,
+    "flagged_text": "$500k",
+    "expected": "$450k",
+    "confidence": 0.92,
+    "source": "Previous valuation in paragraph 3"
+  }]
+}
+```
 
 </td>
 <td width="50%" valign="top">
 
-#### ✅ Validation & Evaluation
-- **RAG Statutory Validation**
-  - Verify against legislative corpus
-  - Case law precedent checking
-  - Regulatory compliance
-- **Multi-Model Evaluation**
-  - GPT-4o, Claude Sonnet, Gemini Pro
-  - Consensus-based scoring
-  - Hallucination detection
-- **Calibrated Confidence**
-  - Location alignment metrics
-  - Evidence-based certainty
-  - Explainable results
+#### ✅ Statutory RAG Validation
+- **Family Law Act 1975 (Cth)**
+- **Child Support Assessment Act 1989**
+- **Family Law Rules 2004**
+- **Federal Circuit Court Rules 2001**
+- **Key Family Court Judgments (AustLII)**
 
 </td>
 </tr>
 </table>
 
-<details>
-<summary><b>💻 Quick Usage Example</b></summary>
-<br>
+### Multi-Judge Evaluation System
+
+```mermaid
+flowchart TB
+    RESPONSE[GSW Response] --> GPT[Judge 1<br/>GPT-4o]
+    RESPONSE --> CLAUDE[Judge 2<br/>Claude]
+    RESPONSE --> GEMINI[Judge 3<br/>Gemini]
+
+    GPT --> AGG[Aggregated Score]
+    CLAUDE --> AGG
+    GEMINI --> AGG
+
+    AGG --> RESULT[Consensus: 8.0/10<br/>Agreement: 2/3]
+```
+
+### Quick Usage Example
 
 ```python
 from src.validation import StatutoryRAGValidator
@@ -831,21 +671,11 @@ Discrepancies:
   [2] Date Inconsistency (Line 123): Separation date conflicts with filing date
 ```
 
-</details>
-
-<div align="center">
-
-**📄 Full Technical Report**: [CLAUSE Research Application Report](docs/CLAUSE-Research-Application-Report.md)
-
-</div>
-
 ---
 
 ## 🚀 Quick Start
 
-<details open>
-<summary><b>📋 Prerequisites</b></summary>
-<br>
+### 📋 Prerequisites
 
 | Requirement | Version | Purpose |
 |-------------|---------|---------|
@@ -854,11 +684,7 @@ Discrepancies:
 | Git | Latest | Version control |
 | OpenRouter API Key | - | LLM access ([get one](https://openrouter.ai)) |
 
-</details>
-
-<details open>
-<summary><b>⚡ Installation (5 minutes)</b></summary>
-<br>
+### ⚡ Installation (5 minutes)
 
 ```bash
 # 1️⃣ Clone the repository
@@ -883,11 +709,7 @@ cd ui && npm run dev
 
 🎉 **Open http://localhost:3000** - You're ready to go!
 
-</details>
-
-<details>
-<summary><b>🎮 Demo Scripts</b></summary>
-<br>
+### 🎮 Demo Scripts
 
 ```bash
 # Full cognitive system demo
@@ -898,8 +720,6 @@ python run_vsa_demo.py      # VSA anti-hallucination
 python run_micro_tem.py     # TEM navigation
 python run_agent_demo.py    # Active inference
 ```
-
-</details>
 
 ---
 
@@ -918,7 +738,7 @@ flowchart LR
     subgraph Cost["💰 Full Corpus Processing Cost"]
         DOCS[513,474 Documents<br/>8.8 GB Raw Text]
         API[LLM API Calls<br/>~6 per document]
-        TOTAL[Estimated Cost<br/>$6,000 USD]
+        TOTAL[Estimated Cost<br/>$822 - $6,000 USD]
     end
 
     subgraph Sample["✅ Included Sample"]
@@ -934,21 +754,17 @@ flowchart LR
 |--------|-------------|-------------------|
 | **Documents** | 513,474 | 714 |
 | **Size** | 8.8 GB | ~50 MB |
-| **Processing Cost** | ~$6,000 USD | $0 (pre-processed) |
-| **Processing Time** | ~2 weeks | Instant |
+| **Processing Cost** | $822-$6,000 USD | $0 (pre-processed) |
+| **Processing Time** | ~2-4 weeks | Instant |
 | **Purpose** | Production | Proof of Concept |
 
 > **Note**: The sample data demonstrates that the architecture works. Full corpus processing awaits research funding. If you're interested in sponsoring full corpus extraction, please [open an issue](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues).
 
----
-
-<details open>
-<summary><b>📥 Step 1: Download the Australian Legal Corpus</b></summary>
-<br>
+### 📥 Step 1: Download the Australian Legal Corpus
 
 The corpus is available from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face.
 
-### Option A: Using Hugging Face CLI (Recommended)
+**Option A: Using Hugging Face CLI (Recommended)**
 
 ```bash
 # 1️⃣ Install Hugging Face CLI
@@ -963,19 +779,17 @@ huggingface-cli download UMARV-FoE/Open-Australian-Legal-Corpus \
     --repo-type dataset
 ```
 
-### Option B: Direct Download
+**Option B: Direct Download**
 
 ```bash
-# Download directly with wget/curl
 wget https://huggingface.co/datasets/UMARV-FoE/Open-Australian-Legal-Corpus/resolve/main/corpus.jsonl
 ```
 
-### Option C: Python Script
+**Option C: Python Script**
 
 ```python
 from huggingface_hub import hf_hub_download
 
-# Download corpus.jsonl
 file_path = hf_hub_download(
     repo_id="UMARV-FoE/Open-Australian-Legal-Corpus",
     filename="corpus.jsonl",
@@ -985,410 +799,37 @@ file_path = hf_hub_download(
 print(f"Downloaded to: {file_path}")
 ```
 
-```mermaid
-flowchart TB
-    subgraph Download["📥 Download Options"]
-        HF[Hugging Face CLI<br/>Recommended]
-        WGET[wget/curl<br/>Direct Link]
-        PY[Python Script<br/>Programmatic]
-    end
-
-    subgraph Result["📁 Result"]
-        FILE[corpus.jsonl<br/>8.8 GB, 513,474 docs]
-    end
-
-    HF --> FILE
-    WGET --> FILE
-    PY --> FILE
-```
-
-### Corpus File Format
-
-Each line in `corpus.jsonl` is a JSON object:
-
-```json
-{
-    "version_id": "federal_court:2023/fca/123",
-    "type": "decision",
-    "jurisdiction": "federal_court",
-    "source": "federal_court",
-    "date": "2023-05-15",
-    "citation": "Smith v Jones [2023] FCA 123",
-    "url": "https://...",
-    "text": "Full text of the legal document..."
-}
-```
-
-| Field | Description | Example |
-|-------|-------------|---------|
-| `version_id` | Unique identifier | `federal_court:2023/fca/123` |
-| `type` | Document type | `decision`, `primary_legislation`, `secondary_legislation` |
-| `jurisdiction` | Court/jurisdiction | `federal_court`, `family_court`, `high_court` |
-| `citation` | Legal citation | `Smith v Jones [2023] FCA 123` |
-| `text` | Full document text | (up to 100KB per document) |
-
-</details>
-
-<details>
-<summary><b>⚙️ Step 2: Domain Classification (Split by Legal Area)</b></summary>
-<br>
-
-Before GSW extraction, the corpus must be split into legal domains:
-
-```mermaid
-flowchart TB
-    subgraph Input["📥 Input"]
-        CORPUS[corpus.jsonl<br/>513,474 documents]
-    end
-
-    subgraph Classification["🏷️ Domain Classifier"]
-        KW[Keyword Analysis]
-        CIT[Citation Patterns]
-        JURIS[Jurisdiction Check]
-    end
-
-    subgraph Output["📁 Output Domains"]
-        FAM[family.jsonl<br/>~50,000 docs]
-        CRIM[criminal.jsonl<br/>~80,000 docs]
-        COMM[commercial.jsonl<br/>~60,000 docs]
-        ADMIN[administrative.jsonl<br/>~40,000 docs]
-        OTHER[other domains...]
-    end
-
-    CORPUS --> KW
-    CORPUS --> CIT
-    CORPUS --> JURIS
-    KW --> FAM
-    KW --> CRIM
-    KW --> COMM
-    KW --> ADMIN
-    KW --> OTHER
-    CIT --> FAM
-    CIT --> CRIM
-    JURIS --> FAM
-    JURIS --> CRIM
-```
-
-### Run Domain Extraction
+### ⚙️ Step 2: Domain Classification
 
 ```bash
-# 1️⃣ Place corpus.jsonl in parent directory
-mv corpus.jsonl ../
-
-# 2️⃣ Run domain extraction (streaming - RAM safe)
+# Run domain extraction (streaming - RAM safe)
 python gsw_pipeline.py extract --input ../corpus.jsonl
 
-# 3️⃣ With progress reporting every 1000 docs
+# With progress reporting every 1000 docs
 python gsw_pipeline.py extract --input ../corpus.jsonl --progress 1000
-
-# 4️⃣ Resume if interrupted
-python gsw_pipeline.py extract --input ../corpus.jsonl --resume
 ```
 
-### Alternative: Direct Module Call
+### 🧠 Step 3: GSW Extraction
 
 ```bash
-python -m src.ingestion.corpus_domain_extractor \
-    --input ../corpus.jsonl \
-    --output data/processed/domains \
-    --progress 5000
-```
+# ⚠️ Requires OPENROUTER_API_KEY in .env file
 
-### Output Structure
-
-```
-data/processed/domains/
-├── family.jsonl              # Family Law cases
-├── criminal.jsonl            # Criminal Law
-├── commercial.jsonl          # Commercial Law
-├── administrative.jsonl      # Administrative Law
-├── property.jsonl            # Property Law
-├── employment.jsonl          # Employment Law
-├── migration.jsonl           # Migration Law
-├── taxation.jsonl            # Tax Law
-├── tort.jsonl               # Tort/Negligence
-├── constitutional.jsonl      # Constitutional Law
-├── legislation_other.jsonl   # Uncategorized legislation
-├── unclassified.jsonl        # Unclassified documents
-└── extraction_statistics.json # Processing stats
-```
-
-### Supported Legal Domains (14 Categories)
-
-| Domain | Keywords | Typical Sources |
-|--------|----------|-----------------|
-| **Family** | divorce, custody, parenting, property settlement | FamCA, FamCAFC, FCWA |
-| **Criminal** | prosecution, sentence, offence, conviction | CCA, District Courts |
-| **Commercial** | contract, corporation, insolvency, trade | FCA, Supreme Courts |
-| **Administrative** | tribunal, review, decision, minister | AAT, ACAT |
-| **Migration** | visa, refugee, deportation, citizenship | FCA, AAT |
-| **Employment** | dismissal, workplace, award, enterprise | FWC, FCA |
-| **Property** | land, title, easement, conveyancing | Supreme Courts |
-| **Taxation** | tax, GST, deduction, ATO | FCA, AAT |
-
-</details>
-
-<details>
-<summary><b>🧠 Step 3: GSW Extraction (Build the Memory)</b></summary>
-<br>
-
-This is where the AI extracts actors, states, relationships, and questions from legal documents.
-
-```mermaid
-flowchart TB
-    subgraph Input["📄 Input"]
-        DOMAIN[family.jsonl<br/>One domain file]
-    end
-
-    subgraph Extraction["🧠 GSW Extraction (LegalOperator)"]
-        direction TB
-        T1[Task 1: Extract Actors<br/>People, Orgs, Assets]
-        T2[Task 2: Assign Roles<br/>Applicant, Respondent]
-        T3[Task 3: Extract States<br/>Married → Separated]
-        T4[Task 4: Extract Verb Phrases<br/>Filed, Ordered, Appealed]
-        T5[Task 5: Generate Questions<br/>Who? What? When?]
-        T6[Task 6: Create Links<br/>Spatio-temporal]
-    end
-
-    subgraph Output["💾 Output"]
-        GSW[(Global Workspace<br/>JSON)]
-        STATS[Statistics<br/>JSON]
-        COSTS[Cost Report<br/>JSON]
-    end
-
-    DOMAIN --> T1
-    T1 --> T2 --> T3 --> T4 --> T5 --> T6
-    T6 --> GSW
-    T6 --> STATS
-    T6 --> COSTS
-```
-
-### Run GSW Processing
-
-```bash
-# ⚠️ IMPORTANT: Requires OPENROUTER_API_KEY in .env file
-# Each document costs approximately $0.01-0.02 in API calls
-
-# 1️⃣ Test with 10 documents first (recommended)
+# Test with 10 documents first (recommended)
 python gsw_pipeline.py process --domain family --limit 10
 
-# 2️⃣ Process 100 documents (~$1-2 cost)
+# Process 100 documents (~$1-2 cost)
 python gsw_pipeline.py process --domain family --limit 100
 
-# 3️⃣ Process 1000 documents (~$10-20 cost)
+# Process 1000 documents (~$10-20 cost)
 python gsw_pipeline.py process --domain family --limit 1000
-
-# 4️⃣ Resume processing if interrupted
-python gsw_pipeline.py process --domain family --limit 1000 --resume
-
-# 5️⃣ Calibration mode (no save, for testing)
-python gsw_pipeline.py process --domain family --limit 5 --calibration
 ```
 
-### Cost Breakdown per Document
-
-```mermaid
-flowchart LR
-    subgraph PerDoc["💵 Cost per Document"]
-        T1[Task 1: $0.002]
-        T2[Task 2: $0.001]
-        T3[Task 3: $0.002]
-        T4[Task 4: $0.002]
-        T5[Task 5: $0.002]
-        T6[Task 6: $0.001]
-    end
-
-    subgraph Total["📊 Totals"]
-        DOC[Per Document: ~$0.01]
-        K1[1,000 docs: ~$10]
-        K10[10,000 docs: ~$100]
-        FULL[513,474 docs: ~$6,000]
-    end
-
-    T1 --> DOC
-    T2 --> DOC
-    T3 --> DOC
-    T4 --> DOC
-    T5 --> DOC
-    T6 --> DOC
-    DOC --> K1 --> K10 --> FULL
-```
-
-### Output Files
-
-```
-data/workspaces/
-├── family_workspace.json     # The Global Semantic Workspace
-├── family_state.json         # Processing checkpoint
-└── family_costs.json         # API cost tracking
-```
-
-### What Gets Extracted
-
-| Component | Description | Example |
-|-----------|-------------|---------|
-| **Actors** | People, organizations, assets | "John Smith" (person), "Family Court" (org) |
-| **States** | Time-varying conditions | MaritalStatus: "married" → "separated" |
-| **Verb Phrases** | Actions with agents/patients | "John filed application" |
-| **Questions** | What could be asked | "When did parties separate?" |
-| **Links** | Spatio-temporal connections | "Both present at hearing on 2023-05-15" |
-
-</details>
-
-<details>
-<summary><b>📊 Step 4: Analysis & Reports</b></summary>
-<br>
-
-Generate analysis reports after extraction:
+### 📊 Step 4: Analysis & Reports
 
 ```bash
-# Generate domain analysis reports
 python gsw_pipeline.py analyze
-
-# Generate entity summaries (for people)
 python gsw_pipeline.py summary --domain family
 ```
-
-```mermaid
-flowchart TB
-    subgraph Input["📥 Input"]
-        WS[family_workspace.json]
-        DOMAINS[Domain JSONL files]
-    end
-
-    subgraph Analysis["📊 Analysis"]
-        STATS[Statistics Generator]
-        REPORT[Report Generator]
-        MASTER[Master Report]
-    end
-
-    subgraph Output["📁 Reports"]
-        DOM_REPORT[domain_report.md]
-        MASTER_REPORT[master_report.md]
-        CHARTS[Statistics Charts]
-    end
-
-    WS --> STATS
-    DOMAINS --> REPORT
-    STATS --> DOM_REPORT
-    REPORT --> MASTER
-    MASTER --> MASTER_REPORT
-    STATS --> CHARTS
-```
-
-### Output Reports
-
-```
-reports/domain_analysis/
-├── family_report.md          # Per-domain analysis
-├── criminal_report.md
-├── commercial_report.md
-├── master_report.md          # Combined statistics
-└── charts/                   # Visualization assets
-```
-
-</details>
-
-<details>
-<summary><b>🔄 Step 5: Full Pipeline (All Steps Together)</b></summary>
-<br>
-
-Run the complete pipeline in one command:
-
-```bash
-# Full pipeline: Extract → Process → Analyze
-python gsw_pipeline.py full --input ../corpus.jsonl --domain family --limit 100
-```
-
-```mermaid
-flowchart TB
-    subgraph Phase1["Phase 1: Domain Extraction"]
-        CORPUS[corpus.jsonl] --> CLASSIFY[Classify Documents]
-        CLASSIFY --> DOMAINS[Domain Files]
-    end
-
-    subgraph Phase2["Phase 2: GSW Processing"]
-        DOMAINS --> CHUNK[Chunk Text]
-        CHUNK --> EXTRACT[Extract with LLM]
-        EXTRACT --> RECONCILE[Reconcile Entities]
-        RECONCILE --> GSW[(Workspace)]
-    end
-
-    subgraph Phase3["Phase 3: Analysis"]
-        GSW --> REPORTS[Generate Reports]
-        REPORTS --> SUMMARY[Entity Summaries]
-    end
-
-    subgraph Phase4["Phase 4: Ready to Use"]
-        SUMMARY --> UI[Web UI]
-        SUMMARY --> API[API Queries]
-        SUMMARY --> EXPORT[Export Data]
-    end
-```
-
-### Complete Command Reference
-
-| Command | Description | Estimated Cost |
-|---------|-------------|----------------|
-| `gsw_pipeline.py extract` | Split corpus into domains | Free (local) |
-| `gsw_pipeline.py process --limit 10` | Test extraction | ~$0.10 |
-| `gsw_pipeline.py process --limit 100` | Small batch | ~$1-2 |
-| `gsw_pipeline.py process --limit 1000` | Medium batch | ~$10-20 |
-| `gsw_pipeline.py analyze` | Generate reports | Free (local) |
-| `gsw_pipeline.py summary` | Entity summaries | ~$0.01/entity |
-| `gsw_pipeline.py full --limit 100` | Complete pipeline | ~$2-3 |
-
-</details>
-
-<details>
-<summary><b>💡 Tips & Troubleshooting</b></summary>
-<br>
-
-### API Key Setup
-
-```bash
-# Create .env file
-echo "OPENROUTER_API_KEY=sk-or-your-key-here" > .env
-echo "GOOGLE_API_KEY=your-google-key-here" >> .env
-```
-
-### Memory Management
-
-The corpus extractor uses **streaming** - safe for any corpus size:
-
-```python
-# Processes line-by-line, never loads full file
-with open("corpus.jsonl") as f:
-    for line in f:  # Only one line in memory at a time
-        process(json.loads(line))
-```
-
-### Resume After Interruption
-
-```bash
-# All commands support --resume flag
-python gsw_pipeline.py extract --resume
-python gsw_pipeline.py process --domain family --resume
-```
-
-### Rate Limiting
-
-The pipeline includes automatic rate limiting:
-- 0.5 second delay between documents
-- Checkpoint saves every 10 documents
-- Graceful handling of API errors
-
-### Common Issues
-
-| Issue | Solution |
-|-------|----------|
-| `corpus.jsonl not found` | Move file to parent directory or use `--input` flag |
-| `OPENROUTER_API_KEY not set` | Add to `.env` file |
-| `Rate limit exceeded` | Wait 60 seconds, resume with `--resume` |
-| `Out of memory` | Use streaming (default) - shouldn't happen |
-| `Checkpoint corrupted` | Delete `*_state.json` and restart |
-
-</details>
 
 ---
 
@@ -1426,9 +867,7 @@ graph LR
 | **Response Time** | 11.83ms | ~500ms | 42x faster |
 | **Query Success** | 100% | ~95% | +5% |
 
-<details>
-<summary><b>📈 Knowledge Base Statistics</b></summary>
-<br>
+### 📈 Knowledge Base Statistics
 
 | Metric | Count |
 |--------|-------|
@@ -1439,17 +878,13 @@ graph LR
 | **Python LOC** | 14,549 |
 | **Documentation Pages** | 25+ |
 
-</details>
-
 ---
 
 ## 💰 LLM Model Comparison: Pricing, Quality & TOON Savings
 
-<details open>
-<summary><b>📊 2025 Model Pricing Comparison</b></summary>
-<br>
+Understanding which LLM to use for GSW extraction is critical for both cost and quality.
 
-Understanding which LLM to use for GSW extraction is critical for both cost and quality. Here's a comprehensive comparison:
+### 📊 2025 Model Pricing Comparison
 
 ```mermaid
 flowchart LR
@@ -1491,77 +926,9 @@ flowchart LR
 
 *Kimi K2 input price is $0.15 with cache hit, $0.60 without cache.
 
-</details>
+### 💎 Full Australian Legal Corpus Cost Estimates
 
-<details>
-<summary><b>🧮 Cost Per Document: With vs Without TOON</b></summary>
-<br>
-
-TOON format achieves **~40% token reduction** compared to JSON. This directly impacts your API costs:
-
-```mermaid
-flowchart TB
-    subgraph WithTOON["✅ With TOON Format"]
-        T_IN[Input: 2,500 tokens]
-        T_OUT[Output: 3,000 tokens]
-        T_TOTAL[Total: 5,500 tokens/doc]
-    end
-
-    subgraph WithoutTOON["❌ Without TOON (JSON)"]
-        J_IN[Input: 4,167 tokens<br/>+67% more]
-        J_OUT[Output: 3,000 tokens]
-        J_TOTAL[Total: 7,167 tokens/doc]
-    end
-
-    WithTOON -->|40% savings| SAVE[Save $2,000+<br/>on full corpus]
-```
-
-### Cost Per 1,000 Documents
-
-| Model | With TOON | Without TOON | TOON Savings |
-|-------|-----------|--------------|--------------|
-| **Gemini 2.5 Flash-Lite** | $1.60 | $2.27 | $0.67 (29%) |
-| **Gemini 2.5 Flash** | $8.25 | $10.92 | $2.67 (24%) |
-| **Kimi K2 (cached)** | $7.88 | $10.00 | $2.12 (21%) |
-| **MiniMax M2** | $4.35 | $5.35 | $1.00 (19%) |
-| **GLM-4.6** | $7.50 | $10.00 | $2.50 (25%) |
-| **GPT-4.1** | $29.00 | $37.33 | $8.33 (22%) |
-| **Gemini 2.5 Pro** | $33.13 | $45.21 | $12.08 (27%) |
-| **Claude Sonnet 4.5** | $52.50 | $70.00 | $17.50 (25%) |
-
-**Calculation basis**: 2,500 input + 3,000 output tokens with TOON; 4,167 input + 3,000 output without TOON.
-
-</details>
-
-<details>
-<summary><b>💎 Full Australian Legal Corpus Cost Estimates</b></summary>
-<br>
-
-Processing all **513,474 documents** in the Australian Legal Corpus:
-
-```mermaid
-flowchart TB
-    subgraph Corpus["📚 Full Corpus: 513,474 Documents"]
-        SIZE[8.8 GB Raw Text]
-        TASKS[6 Extraction Tasks Each]
-    end
-
-    subgraph Costs["💰 Estimated Total Cost"]
-        CHEAP[Gemini Flash-Lite<br/>~$822]
-        MID[Gemini Flash<br/>~$4,236]
-        PREMIUM[Claude Sonnet 4.5<br/>~$26,957]
-    end
-
-    subgraph Current["📍 Current Status"]
-        SAMPLE[714 Documents<br/>Proof of Concept]
-        FUNDING[Awaiting Research<br/>Funding]
-    end
-
-    Corpus --> Costs
-    Costs --> Current
-```
-
-### Full Corpus Processing Costs by Model
+Processing all **513,474 documents**:
 
 | Model | Cost (With TOON) | Cost (Without TOON) | TOON Saves |
 |-------|------------------|---------------------|------------|
@@ -1574,56 +941,9 @@ flowchart TB
 | **Gemini 2.5 Pro** | **$17,011** | $23,216 | $6,205 |
 | **Claude Sonnet 4.5** | **$26,957** | $35,943 | $8,986 |
 
-> **Note**: The ~$6,000 USD estimate in previous documentation assumes Gemini 2.5 Flash at standard rates. Using Flash-Lite drops this to **under $1,000**!
+> **Note**: Using Gemini 2.5 Flash-Lite with TOON format, the full corpus costs **under $1,000**!
 
-### Why We Use Sample Data
-
-| Factor | Full Corpus | Sample (Current) |
-|--------|-------------|------------------|
-| Documents | 513,474 | 714 |
-| Minimum Cost | ~$822 | ~$1.14 |
-| Processing Time | ~2-4 weeks | 1-2 hours |
-| Purpose | Production | Proof of Concept |
-| Status | Awaiting funding | ✅ Complete |
-
-</details>
-
-<details>
-<summary><b>🏆 Quality Benchmarks: Which Model is Best?</b></summary>
-<br>
-
-Different models excel at different tasks. Here's how they compare on key benchmarks:
-
-```mermaid
-graph TB
-    subgraph Coding["👨‍💻 Coding Benchmarks"]
-        SWE[SWE-bench Verified]
-        AIDER[Aider Polyglot]
-    end
-
-    subgraph Winners["🏆 Top Performers"]
-        C_WIN[Claude Sonnet 4.5<br/>77.2% SWE-bench]
-        G_WIN[GPT-5.1<br/>76.3% SWE-bench]
-        GEM_WIN[Gemini 3 Pro<br/>76.2% SWE-bench]
-    end
-
-    SWE --> C_WIN
-    SWE --> G_WIN
-    SWE --> GEM_WIN
-```
-
-### SWE-bench Verified Scores (Coding/Agentic)
-
-| Model | SWE-bench Score | Aider Polyglot | Notes |
-|-------|-----------------|----------------|-------|
-| **[Claude Sonnet 4.5](https://www.anthropic.com/claude/sonnet)** | **77.2%** | 89.4% (Opus) | Best for complex legal extraction |
-| **GPT-5.1** | 76.3% | 88.0% | Strong all-rounder |
-| **Gemini 3 Pro** | 76.2% | 82.2% | PhD-level reasoning |
-| **Gemini 2.5 Pro** | 67.2% | 82.2% | Good balance |
-| **GLM-4.6** | ~65% | ~75% | Best open-weights value |
-| **Kimi K2** | ~60% | ~70% | Excellent cost/performance |
-
-### Recommended Models by Use Case
+### 🏆 Recommended Models by Use Case
 
 | Use Case | Recommended Model | Why |
 |----------|-------------------|-----|
@@ -1633,109 +953,6 @@ graph TB
 | **Self-Hosted** | GLM-4.6 | Open weights, no API costs |
 | **High Volume** | Kimi K2 (cached) | Cache reduces costs 75% |
 | **Production** | Gemini 2.5 Pro | Quality + reasonable cost |
-
-</details>
-
-<details>
-<summary><b>⚙️ What Each Model Does in the GSW Pipeline</b></summary>
-<br>
-
-The GSW extraction pipeline runs **6 sequential tasks** per document:
-
-```mermaid
-flowchart TB
-    subgraph Pipeline["🔄 GSW Extraction Pipeline"]
-        T1[Task 1: Actor Extraction<br/>Find all people, orgs, assets]
-        T2[Task 2: Role Assignment<br/>Applicant, Respondent, Judge]
-        T3[Task 3: State Extraction<br/>Married → Separated → Divorced]
-        T4[Task 4: Verb Phrase Extraction<br/>Filed, Ordered, Appealed]
-        T5[Task 5: Question Generation<br/>What could be asked?]
-        T6[Task 6: Link Creation<br/>Spatio-temporal connections]
-    end
-
-    T1 --> T2 --> T3 --> T4 --> T5 --> T6
-
-    subgraph Output["📤 Output"]
-        GSW[(Global Workspace<br/>Actors, States, Links)]
-    end
-
-    T6 --> GSW
-```
-
-### Token Usage Per Task
-
-| Task | Input Tokens | Output Tokens | Purpose |
-|------|--------------|---------------|---------|
-| **Task 1** | ~500 | ~300 | Extract actor names and types |
-| **Task 2** | ~400 | ~200 | Assign legal roles |
-| **Task 3** | ~500 | ~400 | Track state changes over time |
-| **Task 4** | ~400 | ~600 | Identify actions and events |
-| **Task 5** | ~400 | ~800 | Generate predictive questions |
-| **Task 6** | ~300 | ~700 | Create temporal/spatial links |
-| **Total** | **~2,500** | **~3,000** | Per document |
-
-### Model Performance by Task Type
-
-| Task | Best Models | Why |
-|------|-------------|-----|
-| **Actor Extraction** | GPT-4.1, Claude | Named entity recognition |
-| **Role Assignment** | Claude Sonnet 4.5 | Legal domain understanding |
-| **State Extraction** | Gemini 2.5 Pro | Temporal reasoning |
-| **Verb Phrases** | Any model | Straightforward extraction |
-| **Questions** | Claude, GPT | Natural language generation |
-| **Links** | Gemini 2.5 Pro | Multi-document reasoning |
-
-</details>
-
-<details>
-<summary><b>📈 Cost Optimization Strategies</b></summary>
-<br>
-
-### 1. Use TOON Format (Default)
-- **Savings**: 40% token reduction
-- **Impact**: $2,000-$9,000 saved on full corpus
-
-### 2. Use Batch APIs
-- **Gemini Batch**: 50% discount ($0.625/$5 per 1M)
-- **Claude Batch**: 50% discount ($1.50/$7.50 per 1M)
-- **Trade-off**: 24-hour processing time
-
-### 3. Enable Caching
-- **Kimi K2**: 75% input discount with cache hits
-- **Claude**: 90% savings with prompt caching
-- **GPT-4.1**: 75% discount on cached inputs
-
-### 4. Model Selection by Phase
-
-```mermaid
-flowchart LR
-    subgraph Phase1["🧪 Testing"]
-        TEST[Flash-Lite<br/>$0.10/$0.40]
-    end
-
-    subgraph Phase2["📈 Scaling"]
-        SCALE[Flash Standard<br/>$0.30/$2.50]
-    end
-
-    subgraph Phase3["🎯 Production"]
-        PROD[Pro or Claude<br/>Best accuracy]
-    end
-
-    Phase1 -->|Validated| Phase2
-    Phase2 -->|Refined| Phase3
-```
-
-### 5. Hybrid Approach
-
-Use different models for different tasks:
-
-| Tasks | Model | Cost Savings |
-|-------|-------|--------------|
-| Tasks 1-4 (Extraction) | Gemini Flash | ~$2,500 |
-| Tasks 5-6 (Reasoning) | Claude Sonnet | Quality boost |
-| **Total Hybrid** | Mixed | ~$8,000 vs $27K (Claude only) |
-
-</details>
 
 ---
 
@@ -1762,8 +979,6 @@ Use different models for different tasks:
 - [TEM Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-TEM-Module)
 - [VSA Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-VSA-Module)
 - [Agency Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agency-Module)
-- [Agents Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Agents-Module) ⭐
-- [Ingestion Module](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Backend-Ingestion-Module) ⭐
 
 </td>
 <td width="50%" valign="top">
@@ -1775,11 +990,8 @@ Use different models for different tasks:
 
 ### 📘 Guides & Reference
 - [Quick Start](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Quick-Start)
-- [Development Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Development-Guide)
-- [Deployment Guide](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Deployment-Guide)
 - [API Reference](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/API-Reference)
-- [Data Schemas](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Data-Schemas) ⭐
-- [File Index](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/File-Index) ⭐
+- [Data Schemas](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Data-Schemas)
 - [Glossary](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Glossary)
 
 </td>
@@ -1831,8 +1043,7 @@ graph TB
     AGENCY --> |agent.py| AGENTS
 ```
 
-<details>
-<summary><b>📁 Detailed File Structure</b></summary>
+### 📁 Detailed File Structure
 
 | Directory | Key Files | Purpose |
 |-----------|-----------|---------|
@@ -1846,8 +1057,6 @@ graph TB
 | **ui/src/app/** | `page.tsx`, `api/` routes | Chat interface, visualizations |
 | **ui/src/components/** | React components | UI building blocks |
 | **data/** | JSON workspaces | Knowledge base storage |
-
-</details>
 
 ---
 
@@ -1867,10 +1076,10 @@ This project implements research from:
 
 | Theory | Paper | Authors |
 |--------|-------|---------|
-| **Tolman-Eichenbaum Machine** | [The Tolman-Eichenbaum Machine: Unifying Space and Relational Memory through Generalization in the Hippocampal Formation](https://www.cell.com/cell/fulltext/S0092-8674(20)31388-X) | Whittington et al., 2020 |
-| **Clone-Structured Cognitive Graphs** | [Clone-structured graph representations enable flexible learning and vicarious evaluation of cognitive maps](https://www.biorxiv.org/content/10.1101/770495v2.full.pdf) | George et al., 2021 |
+| **Tolman-Eichenbaum Machine** | [The Tolman-Eichenbaum Machine: Unifying Space and Relational Memory](https://www.cell.com/cell/fulltext/S0092-8674(20)31388-X) | Whittington et al., 2020 |
+| **Clone-Structured Cognitive Graphs** | [Clone-structured graph representations enable flexible learning](https://www.biorxiv.org/content/10.1101/770495v2.full.pdf) | George et al., 2021 |
 | **Active Inference** | [Active Inference: A Process Theory](https://www.fil.ion.ucl.ac.uk/~karl/Active%20Inference%20A%20Process%20Theory.pdf) | Friston et al., 2017 |
-| **Hyperdimensional Computing** | [Hyperdimensional Computing: An Introduction to Computing in Distributed Representation with High-Dimensional Random Vectors](https://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf) | Kanerva, 2009 |
+| **Hyperdimensional Computing** | [Hyperdimensional Computing: An Introduction](https://www.rctn.org/vs265/kanerva09-hyperdimensional.pdf) | Kanerva, 2009 |
 | **Global Workspace Theory** | [Global Workspace Theory of Consciousness](https://tilde.ini.uzh.ch/~kiper/Baars_1.pdf) | Baars, 1997 |
 
 ---
@@ -1889,17 +1098,13 @@ git push origin feature/your-feature
 # Open Pull Request
 ```
 
-<details>
-<summary><b>📋 Contribution Areas</b></summary>
-<br>
+### 📋 Contribution Areas
 
 - 🐛 **Bug fixes** - Help squash bugs
 - ✨ **New features** - Add new capabilities
 - 📚 **Documentation** - Improve docs and examples
 - 🧪 **Tests** - Increase test coverage
 - 🎨 **UI/UX** - Enhance the frontend
-
-</details>
 
 ---
 
@@ -1924,7 +1129,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
-**Proof of Concept** • Production-ready Architecture • Demonstration Data Scale
+**Proof of Concept** • Production-ready Architecture • Sample Data (714 documents)
 
 <br>
 
