@@ -46,6 +46,11 @@
 
 <br>
 
+<!-- UI Screenshot -->
+<img src="assets/images/LAW OS SCREEN.png" alt="LAW OS Interface" width="100%">
+
+<br>
+
 <!-- Quick Links -->
 [📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
 [🚀 Quick Start](#-quick-start) •
