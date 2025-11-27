@@ -46,8 +46,11 @@
 
 <br>
 
+<!-- LAW OS Logo -->
+<img src="assets/images/Light Mode Law OS.png" alt="LAW OS Logo" width="400">
+
 <!-- UI Screenshot -->
-<img src="assets/images/LAW OS SCREEN.png" alt="LAW OS Interface" width="100%">
+<img src="assets/images/Dark Mode Law OS 1.png" alt="LAW OS Interface" width="100%">
 
 <br>
 
