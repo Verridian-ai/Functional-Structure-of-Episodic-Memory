@@ -20,6 +20,10 @@
 
 <br>
 
+> **📚 NEW TO VERRIDIAN?** Explore our comprehensive **[Wiki Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki)** for detailed guides, architecture explanations, and module references. The Wiki provides in-depth coverage of every component.
+
+<br>
+
 <!-- Animated Badges Row 1 -->
 [![arXiv](https://img.shields.io/badge/arXiv-2511.07587-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.07587)
 [![CLAUSE](https://img.shields.io/badge/CLAUSE-arXiv:2511.00340-b31b1b?style=for-the-badge&logo=arxiv&logoColor=white)](https://arxiv.org/abs/2511.00340v1)
