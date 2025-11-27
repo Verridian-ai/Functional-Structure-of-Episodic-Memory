@@ -6,27 +6,17 @@ The **Benchmarks Module** provides comprehensive discrepancy detection evaluatio
 
 **Location**: `src/benchmarks/`
 
-```
-┌─────────────────────────────────────────────────────┐
-│              BENCHMARKS MODULE                       │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│  ┌──────────────────┐    ┌────────────────────┐    │
-│  │ FamilyLawBenchmark│───▶│  BenchmarkRunner   │    │
-│  │                   │    │                    │    │
-│  │ • Generate perturb│    │ • Run evaluations  │    │
-│  │ • 10 discrepancy  │    │ • Aggregate metrics│    │
-│  │   categories      │    │ • Report generation│    │
-│  └──────────────────┘    └────────────────────┘    │
-│          │                        │                 │
-│          ▼                        ▼                 │
-│  ┌──────────────────────────────────────────┐      │
-│  │       Evaluation Metrics                 │      │
-│  │ • Precision / Recall / F1                │      │
-│  │ • Span Accuracy                          │      │
-│  │ • Per-Category Performance               │      │
-│  └──────────────────────────────────────────┘      │
-└─────────────────────────────────────────────────────┘
+```mermaid
+graph TB
+    subgraph BM["Benchmarks Module"]
+        FLB["FamilyLawBenchmark<br/>• Generate perturbations<br/>• 10 discrepancy categories"]
+        BR["BenchmarkRunner<br/>• Run evaluations<br/>• Aggregate metrics<br/>• Report generation"]
+        EM["Evaluation Metrics<br/>• Precision / Recall / F1<br/>• Span Accuracy<br/>• Per-Category Performance"]
+    end
+
+    FLB --> BR
+    FLB --> EM
+    BR --> EM
 ```
 
 ## Files
@@ -251,49 +241,25 @@ The benchmark calculates comprehensive metrics:
 
 ## Benchmark Flow Diagram
 
-```
-┌─────────────┐
-│  Document   │
-│   Corpus    │
-└──────┬──────┘
-       │
-       ▼
-┌──────────────────────────────┐
-│  Generate Perturbations      │
-│  • Date inconsistencies      │
-│  • Party mismatches          │
-│  • Numerical errors          │
-│  • Asset conflicts           │
-│  • Order reference errors    │
-└──────┬───────────────────────┘
-       │
-       ▼
-┌──────────────────────────────┐
-│  Apply Perturbations         │
-│  (Create test documents)     │
-└──────┬───────────────────────┘
-       │
-       ▼
-┌──────────────────────────────┐
-│  Run Detection System        │
-│  (Your implementation)       │
-└──────┬───────────────────────┘
-       │
-       ▼
-┌──────────────────────────────┐
-│  Evaluate Predictions        │
-│  • Match to ground truth     │
-│  • Calculate IoU for spans   │
-│  • Compute metrics           │
-└──────┬───────────────────────┘
-       │
-       ▼
-┌──────────────────────────────┐
-│  Generate Report             │
-│  • Precision, Recall, F1     │
-│  • Per-category breakdown    │
-│  • Detailed JSON export      │
-└──────────────────────────────┘
+```mermaid
+flowchart TB
+    CORPUS["Document Corpus"]
+
+    PERTURB["Generate Perturbations<br/>• Date inconsistencies<br/>• Party mismatches<br/>• Numerical errors<br/>• Asset conflicts<br/>• Order reference errors"]
+
+    APPLY["Apply Perturbations<br/>(Create test documents)"]
+
+    DETECT["Run Detection System<br/>(Your implementation)"]
+
+    EVAL["Evaluate Predictions<br/>• Match to ground truth<br/>• Calculate IoU for spans<br/>• Compute metrics"]
+
+    REPORT["Generate Report<br/>• Precision, Recall, F1<br/>• Per-category breakdown<br/>• Detailed JSON export"]
+
+    CORPUS --> PERTURB
+    PERTURB --> APPLY
+    APPLY --> DETECT
+    DETECT --> EVAL
+    EVAL --> REPORT
 ```
 
 ---
