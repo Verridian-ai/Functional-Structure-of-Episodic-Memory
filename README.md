@@ -903,6 +903,495 @@ python run_agent_demo.py    # Active inference
 
 ---
 
+## 📚 Australian Legal Corpus: Complete Setup Guide
+
+<div align="center">
+
+### ⚠️ Why This Repository Contains Only a Sample
+
+</div>
+
+This repository includes a **sample dataset** rather than the full Australian Legal Corpus. Here's why:
+
+```mermaid
+flowchart LR
+    subgraph Cost["💰 Full Corpus Processing Cost"]
+        DOCS[513,474 Documents<br/>8.8 GB Raw Text]
+        API[LLM API Calls<br/>~6 per document]
+        TOTAL[Estimated Cost<br/>$6,000 USD]
+    end
+
+    subgraph Sample["✅ Included Sample"]
+        SAMPLE[714 Family Law Cases<br/>Proof of Concept]
+        FREE[No Additional Cost<br/>Ready to Use]
+    end
+
+    DOCS --> API --> TOTAL
+    SAMPLE --> FREE
+```
+
+| Aspect | Full Corpus | Sample (Included) |
+|--------|-------------|-------------------|
+| **Documents** | 513,474 | 714 |
+| **Size** | 8.8 GB | ~50 MB |
+| **Processing Cost** | ~$6,000 USD | $0 (pre-processed) |
+| **Processing Time** | ~2 weeks | Instant |
+| **Purpose** | Production | Proof of Concept |
+
+> **Note**: The sample data demonstrates that the architecture works. Full corpus processing awaits research funding. If you're interested in sponsoring full corpus extraction, please [open an issue](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues).
+
+---
+
+<details open>
+<summary><b>📥 Step 1: Download the Australian Legal Corpus</b></summary>
+<br>
+
+The corpus is available from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face.
+
+### Option A: Using Hugging Face CLI (Recommended)
+
+```bash
+# 1️⃣ Install Hugging Face CLI
+pip install huggingface_hub
+
+# 2️⃣ Login to Hugging Face (free account required)
+huggingface-cli login
+
+# 3️⃣ Download the corpus (8.8 GB - may take 30+ minutes)
+huggingface-cli download UMARV-FoE/Open-Australian-Legal-Corpus \
+    --local-dir ./corpus-download \
+    --repo-type dataset
+```
+
+### Option B: Direct Download
+
+```bash
+# Download directly with wget/curl
+wget https://huggingface.co/datasets/UMARV-FoE/Open-Australian-Legal-Corpus/resolve/main/corpus.jsonl
+```
+
+### Option C: Python Script
+
+```python
+from huggingface_hub import hf_hub_download
+
+# Download corpus.jsonl
+file_path = hf_hub_download(
+    repo_id="UMARV-FoE/Open-Australian-Legal-Corpus",
+    filename="corpus.jsonl",
+    repo_type="dataset",
+    local_dir="./corpus-download"
+)
+print(f"Downloaded to: {file_path}")
+```
+
+```mermaid
+flowchart TB
+    subgraph Download["📥 Download Options"]
+        HF[Hugging Face CLI<br/>Recommended]
+        WGET[wget/curl<br/>Direct Link]
+        PY[Python Script<br/>Programmatic]
+    end
+
+    subgraph Result["📁 Result"]
+        FILE[corpus.jsonl<br/>8.8 GB, 513,474 docs]
+    end
+
+    HF --> FILE
+    WGET --> FILE
+    PY --> FILE
+```
+
+### Corpus File Format
+
+Each line in `corpus.jsonl` is a JSON object:
+
+```json
+{
+    "version_id": "federal_court:2023/fca/123",
+    "type": "decision",
+    "jurisdiction": "federal_court",
+    "source": "federal_court",
+    "date": "2023-05-15",
+    "citation": "Smith v Jones [2023] FCA 123",
+    "url": "https://...",
+    "text": "Full text of the legal document..."
+}
+```
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `version_id` | Unique identifier | `federal_court:2023/fca/123` |
+| `type` | Document type | `decision`, `primary_legislation`, `secondary_legislation` |
+| `jurisdiction` | Court/jurisdiction | `federal_court`, `family_court`, `high_court` |
+| `citation` | Legal citation | `Smith v Jones [2023] FCA 123` |
+| `text` | Full document text | (up to 100KB per document) |
+
+</details>
+
+<details>
+<summary><b>⚙️ Step 2: Domain Classification (Split by Legal Area)</b></summary>
+<br>
+
+Before GSW extraction, the corpus must be split into legal domains:
+
+```mermaid
+flowchart TB
+    subgraph Input["📥 Input"]
+        CORPUS[corpus.jsonl<br/>513,474 documents]
+    end
+
+    subgraph Classification["🏷️ Domain Classifier"]
+        KW[Keyword Analysis]
+        CIT[Citation Patterns]
+        JURIS[Jurisdiction Check]
+    end
+
+    subgraph Output["📁 Output Domains"]
+        FAM[family.jsonl<br/>~50,000 docs]
+        CRIM[criminal.jsonl<br/>~80,000 docs]
+        COMM[commercial.jsonl<br/>~60,000 docs]
+        ADMIN[administrative.jsonl<br/>~40,000 docs]
+        OTHER[other domains...]
+    end
+
+    CORPUS --> KW
+    CORPUS --> CIT
+    CORPUS --> JURIS
+    KW --> FAM
+    KW --> CRIM
+    KW --> COMM
+    KW --> ADMIN
+    KW --> OTHER
+    CIT --> FAM
+    CIT --> CRIM
+    JURIS --> FAM
+    JURIS --> CRIM
+```
+
+### Run Domain Extraction
+
+```bash
+# 1️⃣ Place corpus.jsonl in parent directory
+mv corpus.jsonl ../
+
+# 2️⃣ Run domain extraction (streaming - RAM safe)
+python gsw_pipeline.py extract --input ../corpus.jsonl
+
+# 3️⃣ With progress reporting every 1000 docs
+python gsw_pipeline.py extract --input ../corpus.jsonl --progress 1000
+
+# 4️⃣ Resume if interrupted
+python gsw_pipeline.py extract --input ../corpus.jsonl --resume
+```
+
+### Alternative: Direct Module Call
+
+```bash
+python -m src.ingestion.corpus_domain_extractor \
+    --input ../corpus.jsonl \
+    --output data/processed/domains \
+    --progress 5000
+```
+
+### Output Structure
+
+```
+data/processed/domains/
+├── family.jsonl              # Family Law cases
+├── criminal.jsonl            # Criminal Law
+├── commercial.jsonl          # Commercial Law
+├── administrative.jsonl      # Administrative Law
+├── property.jsonl            # Property Law
+├── employment.jsonl          # Employment Law
+├── migration.jsonl           # Migration Law
+├── taxation.jsonl            # Tax Law
+├── tort.jsonl               # Tort/Negligence
+├── constitutional.jsonl      # Constitutional Law
+├── legislation_other.jsonl   # Uncategorized legislation
+├── unclassified.jsonl        # Unclassified documents
+└── extraction_statistics.json # Processing stats
+```
+
+### Supported Legal Domains (14 Categories)
+
+| Domain | Keywords | Typical Sources |
+|--------|----------|-----------------|
+| **Family** | divorce, custody, parenting, property settlement | FamCA, FamCAFC, FCWA |
+| **Criminal** | prosecution, sentence, offence, conviction | CCA, District Courts |
+| **Commercial** | contract, corporation, insolvency, trade | FCA, Supreme Courts |
+| **Administrative** | tribunal, review, decision, minister | AAT, ACAT |
+| **Migration** | visa, refugee, deportation, citizenship | FCA, AAT |
+| **Employment** | dismissal, workplace, award, enterprise | FWC, FCA |
+| **Property** | land, title, easement, conveyancing | Supreme Courts |
+| **Taxation** | tax, GST, deduction, ATO | FCA, AAT |
+
+</details>
+
+<details>
+<summary><b>🧠 Step 3: GSW Extraction (Build the Memory)</b></summary>
+<br>
+
+This is where the AI extracts actors, states, relationships, and questions from legal documents.
+
+```mermaid
+flowchart TB
+    subgraph Input["📄 Input"]
+        DOMAIN[family.jsonl<br/>One domain file]
+    end
+
+    subgraph Extraction["🧠 GSW Extraction (LegalOperator)"]
+        direction TB
+        T1[Task 1: Extract Actors<br/>People, Orgs, Assets]
+        T2[Task 2: Assign Roles<br/>Applicant, Respondent]
+        T3[Task 3: Extract States<br/>Married → Separated]
+        T4[Task 4: Extract Verb Phrases<br/>Filed, Ordered, Appealed]
+        T5[Task 5: Generate Questions<br/>Who? What? When?]
+        T6[Task 6: Create Links<br/>Spatio-temporal]
+    end
+
+    subgraph Output["💾 Output"]
+        GSW[(Global Workspace<br/>JSON)]
+        STATS[Statistics<br/>JSON]
+        COSTS[Cost Report<br/>JSON]
+    end
+
+    DOMAIN --> T1
+    T1 --> T2 --> T3 --> T4 --> T5 --> T6
+    T6 --> GSW
+    T6 --> STATS
+    T6 --> COSTS
+```
+
+### Run GSW Processing
+
+```bash
+# ⚠️ IMPORTANT: Requires OPENROUTER_API_KEY in .env file
+# Each document costs approximately $0.01-0.02 in API calls
+
+# 1️⃣ Test with 10 documents first (recommended)
+python gsw_pipeline.py process --domain family --limit 10
+
+# 2️⃣ Process 100 documents (~$1-2 cost)
+python gsw_pipeline.py process --domain family --limit 100
+
+# 3️⃣ Process 1000 documents (~$10-20 cost)
+python gsw_pipeline.py process --domain family --limit 1000
+
+# 4️⃣ Resume processing if interrupted
+python gsw_pipeline.py process --domain family --limit 1000 --resume
+
+# 5️⃣ Calibration mode (no save, for testing)
+python gsw_pipeline.py process --domain family --limit 5 --calibration
+```
+
+### Cost Breakdown per Document
+
+```mermaid
+flowchart LR
+    subgraph PerDoc["💵 Cost per Document"]
+        T1[Task 1: $0.002]
+        T2[Task 2: $0.001]
+        T3[Task 3: $0.002]
+        T4[Task 4: $0.002]
+        T5[Task 5: $0.002]
+        T6[Task 6: $0.001]
+    end
+
+    subgraph Total["📊 Totals"]
+        DOC[Per Document: ~$0.01]
+        K1[1,000 docs: ~$10]
+        K10[10,000 docs: ~$100]
+        FULL[513,474 docs: ~$6,000]
+    end
+
+    T1 --> DOC
+    T2 --> DOC
+    T3 --> DOC
+    T4 --> DOC
+    T5 --> DOC
+    T6 --> DOC
+    DOC --> K1 --> K10 --> FULL
+```
+
+### Output Files
+
+```
+data/workspaces/
+├── family_workspace.json     # The Global Semantic Workspace
+├── family_state.json         # Processing checkpoint
+└── family_costs.json         # API cost tracking
+```
+
+### What Gets Extracted
+
+| Component | Description | Example |
+|-----------|-------------|---------|
+| **Actors** | People, organizations, assets | "John Smith" (person), "Family Court" (org) |
+| **States** | Time-varying conditions | MaritalStatus: "married" → "separated" |
+| **Verb Phrases** | Actions with agents/patients | "John filed application" |
+| **Questions** | What could be asked | "When did parties separate?" |
+| **Links** | Spatio-temporal connections | "Both present at hearing on 2023-05-15" |
+
+</details>
+
+<details>
+<summary><b>📊 Step 4: Analysis & Reports</b></summary>
+<br>
+
+Generate analysis reports after extraction:
+
+```bash
+# Generate domain analysis reports
+python gsw_pipeline.py analyze
+
+# Generate entity summaries (for people)
+python gsw_pipeline.py summary --domain family
+```
+
+```mermaid
+flowchart TB
+    subgraph Input["📥 Input"]
+        WS[family_workspace.json]
+        DOMAINS[Domain JSONL files]
+    end
+
+    subgraph Analysis["📊 Analysis"]
+        STATS[Statistics Generator]
+        REPORT[Report Generator]
+        MASTER[Master Report]
+    end
+
+    subgraph Output["📁 Reports"]
+        DOM_REPORT[domain_report.md]
+        MASTER_REPORT[master_report.md]
+        CHARTS[Statistics Charts]
+    end
+
+    WS --> STATS
+    DOMAINS --> REPORT
+    STATS --> DOM_REPORT
+    REPORT --> MASTER
+    MASTER --> MASTER_REPORT
+    STATS --> CHARTS
+```
+
+### Output Reports
+
+```
+reports/domain_analysis/
+├── family_report.md          # Per-domain analysis
+├── criminal_report.md
+├── commercial_report.md
+├── master_report.md          # Combined statistics
+└── charts/                   # Visualization assets
+```
+
+</details>
+
+<details>
+<summary><b>🔄 Step 5: Full Pipeline (All Steps Together)</b></summary>
+<br>
+
+Run the complete pipeline in one command:
+
+```bash
+# Full pipeline: Extract → Process → Analyze
+python gsw_pipeline.py full --input ../corpus.jsonl --domain family --limit 100
+```
+
+```mermaid
+flowchart TB
+    subgraph Phase1["Phase 1: Domain Extraction"]
+        CORPUS[corpus.jsonl] --> CLASSIFY[Classify Documents]
+        CLASSIFY --> DOMAINS[Domain Files]
+    end
+
+    subgraph Phase2["Phase 2: GSW Processing"]
+        DOMAINS --> CHUNK[Chunk Text]
+        CHUNK --> EXTRACT[Extract with LLM]
+        EXTRACT --> RECONCILE[Reconcile Entities]
+        RECONCILE --> GSW[(Workspace)]
+    end
+
+    subgraph Phase3["Phase 3: Analysis"]
+        GSW --> REPORTS[Generate Reports]
+        REPORTS --> SUMMARY[Entity Summaries]
+    end
+
+    subgraph Phase4["Phase 4: Ready to Use"]
+        SUMMARY --> UI[Web UI]
+        SUMMARY --> API[API Queries]
+        SUMMARY --> EXPORT[Export Data]
+    end
+```
+
+### Complete Command Reference
+
+| Command | Description | Estimated Cost |
+|---------|-------------|----------------|
+| `gsw_pipeline.py extract` | Split corpus into domains | Free (local) |
+| `gsw_pipeline.py process --limit 10` | Test extraction | ~$0.10 |
+| `gsw_pipeline.py process --limit 100` | Small batch | ~$1-2 |
+| `gsw_pipeline.py process --limit 1000` | Medium batch | ~$10-20 |
+| `gsw_pipeline.py analyze` | Generate reports | Free (local) |
+| `gsw_pipeline.py summary` | Entity summaries | ~$0.01/entity |
+| `gsw_pipeline.py full --limit 100` | Complete pipeline | ~$2-3 |
+
+</details>
+
+<details>
+<summary><b>💡 Tips & Troubleshooting</b></summary>
+<br>
+
+### API Key Setup
+
+```bash
+# Create .env file
+echo "OPENROUTER_API_KEY=sk-or-your-key-here" > .env
+echo "GOOGLE_API_KEY=your-google-key-here" >> .env
+```
+
+### Memory Management
+
+The corpus extractor uses **streaming** - safe for any corpus size:
+
+```python
+# Processes line-by-line, never loads full file
+with open("corpus.jsonl") as f:
+    for line in f:  # Only one line in memory at a time
+        process(json.loads(line))
+```
+
+### Resume After Interruption
+
+```bash
+# All commands support --resume flag
+python gsw_pipeline.py extract --resume
+python gsw_pipeline.py process --domain family --resume
+```
+
+### Rate Limiting
+
+The pipeline includes automatic rate limiting:
+- 0.5 second delay between documents
+- Checkpoint saves every 10 documents
+- Graceful handling of API errors
+
+### Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| `corpus.jsonl not found` | Move file to parent directory or use `--input` flag |
+| `OPENROUTER_API_KEY not set` | Add to `.env` file |
+| `Rate limit exceeded` | Wait 60 seconds, resume with `--resume` |
+| `Out of memory` | Use streaming (default) - shouldn't happen |
+| `Checkpoint corrupted` | Delete `*_state.json` and restart |
+
+</details>
+
+---
+
 ## 📊 Performance
 
 <div align="center">
