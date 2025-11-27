@@ -1005,43 +1005,64 @@ graph LR
 
 ## 🗂 Project Structure
 
+```mermaid
+graph TB
+    subgraph Root["📦 Functional-Structure-of-Episodic-Memory"]
+        direction TB
+
+        subgraph Backend["🐍 src/ - Python Backend (14,549 LOC)"]
+            direction TB
+            GSW[gsw/<br/>Global Semantic Workspace]
+            TEM[tem/<br/>Tolman-Eichenbaum Machine]
+            VSA_DIR[vsa/<br/>Vector Symbolic Architecture]
+            AGENCY[agency/<br/>Active Inference]
+            AGENTS[agents/<br/>LangChain Tools]
+            INGEST[ingestion/<br/>Document Processing]
+            LOGIC[logic/<br/>Schemas & Rules]
+        end
+
+        subgraph Frontend["🌐 ui/ - Next.js 16 Frontend"]
+            direction TB
+            APP[src/app/<br/>App Router]
+            COMP[src/components/<br/>React Components]
+            LIB[src/lib/<br/>TypeScript Libraries]
+        end
+
+        subgraph Data["📊 data/ - Knowledge Base"]
+            direction TB
+            WS[workspaces/<br/>GSW Snapshots]
+            BENCH[benchmarks/<br/>Test Data]
+            LEG[legislation/<br/>Family Law Act]
+        end
+
+        WIKI[📚 wiki/<br/>25+ Doc Pages]
+        ASSETS[🖼 assets/<br/>Visual Assets]
+        TESTS[🧪 tests/<br/>Test Suite]
+    end
+
+    GSW --> |legal_operator.py| TEM
+    TEM --> |model.py| VSA_DIR
+    VSA_DIR --> |legal_vsa.py| AGENCY
+    AGENCY --> |agent.py| AGENTS
 ```
-📦 Functional-Structure-of-Episodic-Memory
-├── 🐍 src/                      # Python Backend (14,549 LOC)
-│   ├── gsw/                     # Global Semantic Workspace
-│   │   ├── legal_operator.py    # 6-task extraction pipeline
-│   │   ├── workspace.py         # Workspace persistence
-│   │   └── text_chunker.py      # Document chunking
-│   ├── tem/                     # Tolman-Eichenbaum Machine
-│   │   ├── model.py             # PyTorch TEM implementation
-│   │   └── action_space.py      # Legal action definitions
-│   ├── vsa/                     # Vector Symbolic Architecture
-│   │   ├── legal_vsa.py         # Hyperdimensional logic
-│   │   └── ontology.py          # Legal ontology rules
-│   ├── agency/                  # Active Inference
-│   │   ├── agent.py             # POMDP agent
-│   │   └── generative_model.py  # A,B,C,D matrices
-│   ├── agents/                  # LangChain Tools
-│   ├── ingestion/               # Document Processing
-│   └── logic/                   # Schemas & Rules
-│
-├── 🌐 ui/                       # Next.js 16 Frontend
-│   ├── src/app/                 # App Router
-│   │   ├── page.tsx             # Chat interface
-│   │   ├── visualize/           # 3D graph visualization
-│   │   └── api/                 # API routes
-│   ├── src/components/          # React components
-│   └── src/lib/                 # TypeScript libraries
-│
-├── 📊 data/                     # Knowledge Base
-│   ├── workspaces/              # GSW workspace snapshots
-│   ├── benchmarks/              # Test data
-│   └── legislation/             # Family Law Act sections
-│
-├── 📚 wiki/                     # 25+ Documentation Pages
-├── 🖼 assets/                   # Visual Assets
-└── 🧪 tests/                    # Test Suite
-```
+
+<details>
+<summary><b>📁 Detailed File Structure</b></summary>
+
+| Directory | Key Files | Purpose |
+|-----------|-----------|---------|
+| **src/gsw/** | `legal_operator.py`, `workspace.py`, `text_chunker.py` | 6-task extraction pipeline, persistence |
+| **src/tem/** | `model.py`, `action_space.py` | PyTorch TEM, legal action definitions |
+| **src/vsa/** | `legal_vsa.py`, `ontology.py` | Hyperdimensional logic, legal rules |
+| **src/agency/** | `agent.py`, `generative_model.py` | POMDP agent, A/B/C/D matrices |
+| **src/agents/** | Various tools | LangChain integration |
+| **src/ingestion/** | Operators, classifiers | Document processing |
+| **src/logic/** | Schemas | Pydantic models |
+| **ui/src/app/** | `page.tsx`, `api/` routes | Chat interface, visualizations |
+| **ui/src/components/** | React components | UI building blocks |
+| **data/** | JSON workspaces | Knowledge base storage |
+
+</details>
 
 ---
 
