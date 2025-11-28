@@ -78,6 +78,12 @@
 
 Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
+<div align="center">
+<img src="assets/images/slides/INside A Brain Inspired AI Architecture.png" alt="Beyond RAG: Inside a Brain-Inspired AI Architecture" width="100%">
+
+*The complete cognitive architecture: Building memory (GSW) and processing queries through a three-layer cognitive engine (TEM, Agency, VSA)*
+</div>
+
 ### 🔍 Why is this different from traditional RAG?
 
 ```mermaid
@@ -150,6 +156,12 @@ flowchart LR
 
 ### 🗄️ 1. Global Semantic Workspace (GSW) — The Memory Palace
 
+<div align="center">
+<img src="assets/images/slides/slide 2.png" alt="The Foundation: Building a Structured, Actor-Centric Memory" width="100%">
+
+*GSW 6-Task Extraction Pipeline: From raw documents to structured actor-centric memory*
+</div>
+
 **Technical Definition**: The Global Semantic Workspace is a persistent, actor-centric knowledge graph that stores extracted entities, their relationships, states, and temporal links across all processed documents.
 
 **Simple Analogy - Your Brain's Filing Cabinet**: Imagine your brain's memory as a **giant filing cabinet**. Most AI systems organize files by **event** (what happened). Verridian organizes files by **person** (who was involved).
@@ -195,6 +207,12 @@ flowchart TB
 
 ### 🗺️ 2. TEM Layer — The Mental GPS
 
+<div align="center">
+<img src="assets/images/slides/Slide 3.png" alt="Layer 1: How the AI Navigates its Memory" width="100%">
+
+*TEM separates structural knowledge (MEC) from sensory details (LEC) for generalization*
+</div>
+
 **Technical Definition**: The Tolman-Eichenbaum Machine (TEM) is a neural architecture inspired by the hippocampal formation that learns to separate structural knowledge from sensory details, enabling generalization across similar situations.
 
 **Simple Analogy - Google Maps for Your Brain**: Think of TEM like **Google Maps for information**:
@@ -237,6 +255,12 @@ flowchart TB
 ---
 
 ### 🔍 3. Active Inference — The Smart Detective
+
+<div align="center">
+<img src="assets/images/slides/Slide 4.png" alt="Layer 2: How the AI Knows What It Doesn't Know" width="100%">
+
+*Active Inference minimizes uncertainty through VFE (perception) and EFE (exploration)*
+</div>
 
 **Technical Definition**: Active Inference is a framework from computational neuroscience where agents minimize "free energy" by either updating beliefs (perception) or taking actions (exploration) to reduce uncertainty about their environment.
 
@@ -288,9 +312,33 @@ flowchart TB
 | **Variational Free Energy** (VFE) | How surprised am I by what I see? | "I expected a separation date but didn't find one - that's surprising!" |
 | **Expected Free Energy** (EFE) | What action will reduce my uncertainty the most? | "I should look in paragraph 3 for dates" |
 
+<details>
+<summary><strong>🔬 Deep Dive: The Generative Model Matrices (A/B/C/D)</strong></summary>
+
+<div align="center">
+<img src="assets/images/slides/Slide 8.png" alt="Deep Dive: The Generative Model for Active Inference" width="100%">
+
+*The four key matrices that define the agent's understanding of its environment*
+</div>
+
+| Matrix | Name | Function |
+|--------|------|----------|
+| **A** | Observation Likelihood | P(observation \| hidden state) - Maps states to observations |
+| **B** | Transition Dynamics | P(next state \| current state, action) - How actions change states |
+| **C** | Preferences | Log preferences over observations - What the agent "wants" to see |
+| **D** | Prior Beliefs | P(initial state) - Starting beliefs before evidence |
+
+</details>
+
 ---
 
 ### 🛡️ 4. VSA Layer — The Fact-Checker
+
+<div align="center">
+<img src="assets/images/slides/Slide 5.png" alt="Layer 3: How the AI Verifies Its Own Logic" width="100%">
+
+*VSA uses binding, bundling, and permutation operations for anti-hallucination verification*
+</div>
 
 **Technical Definition**: Vector Symbolic Architecture (VSA) uses high-dimensional vectors (D=10,000) with three operations—binding, bundling, and permutation—to represent and verify symbolic relationships in a way that's robust to noise and supports similarity-based reasoning.
 
@@ -429,6 +477,12 @@ flowchart TB
 ```
 
 ### 🏃 The Journey of a Question
+
+<div align="center">
+<img src="assets/images/slides/Slide 7.png" alt="A Legal Query in Action: Child Support Assessment" width="100%">
+
+*End-to-end example: How all layers work together to answer a legal query*
+</div>
 
 Let's follow what happens when you ask: *"When did John and Jane separate?"*
 
@@ -855,6 +909,10 @@ python gsw_pipeline.py summary --domain family
 
 <div align="center">
 
+<img src="assets/images/slides/Slide 6.png" alt="The Result: A Demonstrable Leap in Performance" width="100%">
+
+*Verridian Cognitive AI vs Traditional RAG: 85% accuracy, 42x faster, 56% token reduction*
+
 ### Benchmark Results
 
 ```mermaid
@@ -1143,6 +1201,12 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 ## 🔮 Future Research: BRAINS
+
+<div align="center">
+<img src="assets/images/slides/Slide 9.png" alt="The Next Frontier: From Cognitive Architecture to AI Regulation" width="100%">
+
+*BRAINS: Bio-Inspired Regulatory AI Neural System with neuromodulation layer*
+</div>
 
 > **Coming Soon: BRAINS (Bio-Inspired Regulatory AI Neural System)**
 >
