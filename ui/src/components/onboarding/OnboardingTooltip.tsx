@@ -280,7 +280,7 @@ export function OnboardingTooltip() {
       <div
         ref={tooltipRef}
         className={`
-          fixed z-[10000] w-[380px] max-w-[calc(100vw-32px)]
+          fixed z-[10000] w-[380px] max-w-[calc(100vw-48px)] mx-4 sm:mx-0
           transition-all duration-300 ease-out
           ${isAnimating ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}
         `}
@@ -318,10 +318,10 @@ export function OnboardingTooltip() {
           />
 
           {/* Content */}
-          <div className="relative p-6">
+          <div className="relative p-5 sm:p-6 md:p-7">
             {/* Header */}
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
+            <div className="flex items-start justify-between mb-4 sm:mb-5">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <div
                   className="w-10 h-10 rounded-xl flex items-center justify-center"
                   style={{
