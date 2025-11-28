@@ -52,8 +52,12 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+# Python lib (not ui/src/lib)
+/lib/
 lib64/
+
+# Allow UI library files
+!ui/src/lib/
 parts/
 sdist/
 var/
