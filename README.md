@@ -5,13 +5,30 @@
 
 # VERRIDIAN AI
 
-### Created by Daniel Fleuren
+## A Universal Cognitive Brain for Any Domain
 
-**A Universal Cognitive Brain for Any Domain**
+### Created by Daniel Fleuren
 
 *Giving Language Models Human-Like Episodic Memory*
 
 *Legal • Medical • Business • Personal Knowledge • Research • Any Data*
+
+<br>
+
+<!-- Standing on the Shoulders of Giants -->
+> **🙏 Standing on the Shoulders of Giants**
+>
+> This architecture integrates foundational research from neuroscience and cognitive science. We gratefully acknowledge:
+>
+> **[Tolman-Eichenbaum Machine](https://www.cell.com/cell/fulltext/S0092-8674(20)31388-X)** — *Whittington, Muller, Mark, Chen, Barry, Burgess & Behrens* (Cell, 2020)
+>
+> **[Active Inference](https://direct.mit.edu/neco/article/29/1/1/8207/Active-Inference-A-Process-Theory)** — *Friston, FitzGerald, Rigoli, Schwartenbeck & Pezzulo* (Neural Computation, 2017)
+>
+> **[Clone-Structured Cognitive Graphs](https://www.nature.com/articles/s41467-021-22559-5)** — *George, Rikhye, Gothoskar, Guntupalli, Dedieu & Lázaro-Gredilla* (Nature Communications, 2021)
+>
+> **[Hyperdimensional Computing](https://link.springer.com/article/10.1007/s12559-009-9009-8)** — *Kanerva* (Cognitive Computation, 2009)
+>
+> **[Global Workspace Theory](https://bernardbaars.com/)** — *Baars* (1988, 1997)
 
 <br>
 
@@ -42,7 +59,7 @@
 <!-- Performance Metrics Visual -->
 | 🎯 85% Accuracy | 📉 56% Token Reduction | ⚡ 42x Faster | ✅ 100% Success |
 |:---:|:---:|:---:|:---:|
-| vs 77% RAG | ~3,500 tokens | 11.83ms response | Query completion |
+| vs [34-63% RAG](https://arxiv.org/abs/2406.04744) | ~3,500 tokens | 11.83ms response | Query completion |
 
 <br>
 
@@ -60,6 +77,7 @@
 [📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
 [🚀 Quick Start](#-quick-start) •
 [🏗 Architecture](#-architecture) •
+[🖥 UI Features](#-ui-features--screenshots) •
 [🔬 Research Validation](#-research-backed-validation-clause-benchmark) •
 [📊 Benchmarks](#-performance) •
 [🤝 Contributing](CONTRIBUTING.md)
@@ -68,7 +86,7 @@
 
 </div>
 
-## 🧠 What is Verridian AI?
+## 🧠 A Universal Cognitive Brain for Any Domain
 
 <div align="center">
 <img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="GSW Episodic Memory" width="100%">
@@ -76,7 +94,9 @@
 
 <br>
 
-Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
+**The Problem with RAG:** Traditional Retrieval-Augmented Generation (RAG) systems achieve only [34-44% accuracy](https://arxiv.org/html/2406.04744v2) on complex question-answering tasks. Even state-of-the-art industry solutions like Copilot Pro reach just [~63% accuracy](https://arxiv.org/html/2406.04744v2) on the [CRAG benchmark](https://arxiv.org/abs/2406.04744). In the legal domain, [LegalBench-RAG](https://arxiv.org/html/2408.10343v1) shows precision as low as 2.65-14.38%.
+
+**The Verridian Solution:** A **brain-inspired cognitive architecture** that goes beyond retrieval. By integrating neuroscience principles from the hippocampal formation (TEM), active inference (Agency), and hyperdimensional computing (VSA), Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
 <div align="center">
 <img src="assets/images/slides/INside A Brain Inspired AI Architecture.png" alt="Beyond RAG: Inside a Brain-Inspired AI Architecture" width="100%">
