@@ -40,9 +40,9 @@
 <br>
 
 <!-- Performance Metrics Visual -->
-| 🎯 85% Accuracy | 📉 56% Token Reduction | ⚡ 42x Faster | ✅ 100% Success |
+| 🎯 85% F1 Score | 📉 51% Token Reduction | ⚡ 42x Faster | ✅ 100% Success |
 |:---:|:---:|:---:|:---:|
-| vs [34-63% RAG](https://arxiv.org/abs/2406.04744) | ~3,500 tokens | 11.83ms response | Query completion |
+| vs [77% RAG](https://arxiv.org/abs/2511.07587) | ~3,587 tokens | 11.83ms response | Query completion |
 
 <br>
 
@@ -84,12 +84,6 @@
 </div>
 
 ## 🧠 A Universal Cognitive Brain for Any Domain
-
-<div align="center">
-<img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="GSW Episodic Memory" width="100%">
-</div>
-
-<br>
 
 Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
