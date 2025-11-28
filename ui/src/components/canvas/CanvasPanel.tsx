@@ -274,37 +274,37 @@ export function CanvasPanel() {
 
   return (
     <div className="h-full flex flex-col bg-zinc-950/40 backdrop-blur-xl border-l border-white/5">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-        <div className="flex items-center gap-3">
+      {/* Header - Responsive */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={toggleCanvas}
-            className="p-1.5 hover:bg-white/5 rounded-lg transition"
+            className="p-1.5 sm:p-1.5 hover:bg-white/5 active:bg-white/5 rounded-lg transition touch-target"
           >
             <ChevronRight className="w-5 h-5 text-zinc-400" />
           </button>
-          <h2 className="font-semibold text-white">Canvas</h2>
-          <span className="px-2 py-0.5 text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10">
-            {artifacts.length} items
+          <h2 className="font-semibold text-white text-sm sm:text-base">Canvas</h2>
+          <span className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10">
+            {artifacts.length}
           </span>
         </div>
 
         {activeArtifact && (
-          <div className="flex items-center gap-2">
-            
-            {/* NanoBanana Image Gen Button */}
+          <div className="flex items-center gap-1 sm:gap-2">
+
+            {/* NanoBanana Image Gen Button - Hidden on very small screens */}
              <button
                 onClick={() => setShowImageModal(true)}
-                className="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-lg transition"
+                className="hidden sm:flex p-2 hover:bg-yellow-500/20 active:bg-yellow-500/20 text-yellow-400 rounded-lg transition touch-target"
                 title="Generate Image (NanoBanana Pro)"
               >
                 <ImageIcon className="w-4 h-4" />
               </button>
 
-            {/* Highlighter Toggle */}
+            {/* Highlighter Toggle - Hidden on mobile */}
              <button
                 onClick={() => setHighlighterMode(!highlighterMode)}
-                className={`p-2 rounded-lg transition ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`hidden sm:flex p-2 rounded-lg transition touch-target ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Highlighter Pen"
               >
                 <Highlighter className="w-4 h-4" />
@@ -314,14 +314,14 @@ export function CanvasPanel() {
             <div className="relative">
               <button
                 onClick={() => setShowLayoutMenu(!showLayoutMenu)}
-                className={`p-2 rounded-lg transition ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`p-2 rounded-lg transition touch-target ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Layout & Templates"
               >
                 <Layout className="w-4 h-4" />
               </button>
 
               {showLayoutMenu && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50">
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-zinc-800 bg-black/20">
                         <h3 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -404,7 +404,7 @@ export function CanvasPanel() {
             {isEditing ? (
               <button
                 onClick={handleSave}
-                className="p-2 hover:bg-green-500/20 text-green-400 rounded-lg transition"
+                className="p-2 hover:bg-green-500/20 active:bg-green-500/20 text-green-400 rounded-lg transition touch-target"
                 title="Save changes"
               >
                 <Save className="w-4 h-4" />
@@ -412,7 +412,7 @@ export function CanvasPanel() {
             ) : (
               <button
                 onClick={handleEdit}
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
                 title="Edit"
               >
                 <Edit3 className="w-4 h-4" />
@@ -420,25 +420,25 @@ export function CanvasPanel() {
             )}
             <button
               onClick={handleCopy}
-              className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+              className="hidden sm:flex p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
               title="Copy"
             >
               <Copy className="w-4 h-4" />
             </button>
-            
+
             {/* Export Menu */}
             <div className="relative group">
               <button
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
                 title="Export"
               >
                 <Download className="w-4 h-4" />
               </button>
               <div className="absolute right-0 top-full mt-1 w-32 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <button onClick={handleDownloadDOCX} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                <button onClick={handleDownloadDOCX} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   Word (.docx)
                 </button>
-                <button onClick={handleDownloadPDF} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                <button onClick={handleDownloadPDF} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   PDF (.pdf)
                 </button>
                 <button onClick={() => {
@@ -448,7 +448,7 @@ export function CanvasPanel() {
                     a.href = url;
                     a.download = `${activeArtifact.title.replace(/\s+/g, '_')}.txt`;
                     a.click();
-                }} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                }} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   Text (.txt)
                 </button>
               </div>
@@ -458,21 +458,21 @@ export function CanvasPanel() {
         )}
       </div>
 
-      {/* Tabs */}
+      {/* Tabs - Scrollable on mobile */}
       {artifacts.length > 0 && (
-        <div className="flex items-center gap-1 px-2 py-2 border-b border-white/5 overflow-x-auto">
+        <div className="flex items-center gap-1 px-2 py-1.5 sm:py-2 border-b border-white/5 overflow-x-auto scrollbar-hide">
           {artifacts.map((artifact) => (
             <button
               key={artifact.id}
               onClick={() => setActiveArtifact(artifact.id)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-1.5 rounded-lg text-xs sm:text-sm whitespace-nowrap transition touch-target ${
                 artifact.id === activeArtifactId
                   ? 'bg-white/10 text-white border border-white/10 shadow-sm'
-                  : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                  : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
               }`}
             >
               {getArtifactIcon(artifact)}
-              <span className="max-w-[120px] truncate">{artifact.title}</span>
+              <span className="max-w-[80px] sm:max-w-[120px] truncate">{artifact.title}</span>
             </button>
           ))}
         </div>
@@ -483,41 +483,42 @@ export function CanvasPanel() {
         {activeArtifact ? (
           <div className="h-full">
               
-            {/* NanoBanana Pro Modal */}
+            {/* NanoBanana Pro Modal - Mobile optimized */}
             {showImageModal && (
-                <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
-                    <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/30 rounded-xl p-5 shadow-2xl shadow-yellow-500/10">
-                        <h3 className="text-lg font-bold text-yellow-400 mb-1 flex items-center gap-2">
-                            <ImageIcon className="w-5 h-5" />
-                            NanoBanana Pro - Infographic Generator
+                <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6">
+                    <div className="w-full sm:max-w-md bg-zinc-900 border-t sm:border border-yellow-500/30 rounded-t-2xl sm:rounded-xl p-4 sm:p-5 shadow-2xl shadow-yellow-500/10 max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-base sm:text-lg font-bold text-yellow-400 mb-1 flex items-center gap-2">
+                            <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span className="hidden sm:inline">NanoBanana Pro - Infographic Generator</span>
+                            <span className="sm:hidden">Image Generator</span>
                         </h3>
-                        <p className="text-xs text-zinc-500 mb-4">Powered by Gemini 3 Pro via OpenRouter</p>
+                        <p className="text-[10px] sm:text-xs text-zinc-500 mb-3 sm:mb-4">Powered by Gemini 3 Pro via OpenRouter</p>
 
-                        <div className="space-y-4">
+                        <div className="space-y-3 sm:space-y-4">
                           {/* Prompt Input */}
                           <div>
-                            <label className="text-xs text-zinc-400 mb-1 block">Describe your infographic</label>
+                            <label className="text-[10px] sm:text-xs text-zinc-400 mb-1 block">Describe your infographic</label>
                             <textarea
                                 value={imagePrompt}
                                 onChange={(e) => setImagePrompt(e.target.value)}
-                                className="w-full h-24 bg-black/50 border border-zinc-700 rounded-lg p-3 text-white focus:border-yellow-500/50 outline-none resize-none"
-                                placeholder="An infographic showing the timeline of family court proceedings with key milestones..."
+                                className="w-full h-20 sm:h-24 bg-black/50 border border-zinc-700 rounded-lg p-2.5 sm:p-3 text-sm sm:text-base text-white focus:border-yellow-500/50 outline-none resize-none"
+                                placeholder="An infographic showing the timeline of family court proceedings..."
                                 disabled={isGeneratingImage}
                             />
                           </div>
 
                           {/* Aspect Ratio Selection */}
                           <div>
-                            <label className="text-xs text-zinc-400 mb-2 block">Aspect Ratio</label>
-                            <div className="flex gap-2 flex-wrap">
+                            <label className="text-[10px] sm:text-xs text-zinc-400 mb-1.5 sm:mb-2 block">Aspect Ratio</label>
+                            <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                               {['1:1', '16:9', '4:3', '9:16', '3:2'].map((ratio) => (
                                 <button
                                   key={ratio}
                                   onClick={() => setSelectedAspectRatio(ratio)}
-                                  className={`px-3 py-1.5 text-xs rounded-lg border transition ${
+                                  className={`px-2.5 sm:px-3 py-1.5 text-xs rounded-lg border transition touch-target ${
                                     selectedAspectRatio === ratio
                                       ? 'bg-yellow-600/20 border-yellow-500 text-yellow-400'
-                                      : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'
+                                      : 'border-zinc-700 text-zinc-400 hover:border-zinc-500 active:border-zinc-500'
                                   }`}
                                   disabled={isGeneratingImage}
                                 >
@@ -529,8 +530,8 @@ export function CanvasPanel() {
 
                           {/* Error Message */}
                           {imageError && (
-                            <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
-                              <p className="text-sm text-red-400">{imageError}</p>
+                            <div className="p-2.5 sm:p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                              <p className="text-xs sm:text-sm text-red-400">{imageError}</p>
                             </div>
                           )}
 
@@ -542,7 +543,7 @@ export function CanvasPanel() {
                                     setImageError(null);
                                     setImagePrompt('');
                                   }}
-                                  className="px-4 py-2 text-zinc-400 hover:text-white transition"
+                                  className="px-3 sm:px-4 py-2 text-zinc-400 hover:text-white active:text-white transition touch-target"
                                   disabled={isGeneratingImage}
                               >
                                   Cancel
@@ -550,7 +551,7 @@ export function CanvasPanel() {
                               <button
                                   onClick={handleAddImage}
                                   disabled={!imagePrompt.trim() || isGeneratingImage}
-                                  className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                  className="px-3 sm:px-4 py-2 bg-yellow-600 hover:bg-yellow-500 active:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 touch-target text-sm sm:text-base"
                               >
                                   {isGeneratingImage ? (
                                     <>
@@ -558,10 +559,14 @@ export function CanvasPanel() {
                                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
                                       </svg>
-                                      Generating...
+                                      <span className="hidden sm:inline">Generating...</span>
+                                      <span className="sm:hidden">...</span>
                                     </>
                                   ) : (
-                                    'Generate Infographic'
+                                    <>
+                                      <span className="hidden sm:inline">Generate Infographic</span>
+                                      <span className="sm:hidden">Generate</span>
+                                    </>
                                   )}
                               </button>
                           </div>

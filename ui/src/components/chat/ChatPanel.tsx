@@ -178,13 +178,13 @@ export function ChatPanel() {
 
   return (
     <div className="flex flex-col h-full relative">
-      {/* Messages - Centered container matching input width */}
-      <div className="flex-1 overflow-y-auto pb-32 flex justify-center">
-        <div className="w-full max-w-3xl px-4 md:px-6">
+      {/* Messages - Centered container matching input width, mobile-optimized padding */}
+      <div className="flex-1 overflow-y-auto pb-28 sm:pb-32 flex justify-center">
+        <div className="w-full max-w-3xl px-2 sm:px-4 md:px-6">
           {messages.length === 0 ? (
             <WelcomeScreen onSuggestionClick={handleSend} />
           ) : (
-            <div className="space-y-4 py-4">
+            <div className="space-y-3 sm:space-y-4 py-3 sm:py-4">
               {messages.map((message, index) => (
                 <div
                   key={message.id}
