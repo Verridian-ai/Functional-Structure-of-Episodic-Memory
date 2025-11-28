@@ -42,7 +42,7 @@
 <!-- Performance Metrics Visual -->
 | 🎯 85% Accuracy | 📉 56% Token Reduction | ⚡ 42x Faster | ✅ 100% Success |
 |:---:|:---:|:---:|:---:|
-| vs 77% RAG | ~3,500 tokens | 11.83ms response | Query completion |
+| vs [34-63% RAG](https://arxiv.org/abs/2406.04744) | ~3,500 tokens | 11.83ms response | Query completion |
 
 <br>
 
@@ -67,9 +67,23 @@
 
 ---
 
+> **🙏 Standing on the Shoulders of Giants**
+>
+> This architecture integrates foundational research from neuroscience and cognitive science. We gratefully acknowledge:
+>
+> **[Tolman-Eichenbaum Machine](https://www.cell.com/cell/fulltext/S0092-8674(20)31388-X)** — *Whittington, Muller, Mark, Chen, Barry, Burgess & Behrens* (Cell, 2020)
+>
+> **[Active Inference](https://direct.mit.edu/neco/article/29/1/1/8207/Active-Inference-A-Process-Theory)** — *Friston, FitzGerald, Rigoli, Schwartenbeck & Pezzulo* (Neural Computation, 2017)
+>
+> **[Clone-Structured Cognitive Graphs](https://www.nature.com/articles/s41467-021-22559-5)** — *George, Rikhye, Gothoskar, Guntupalli, Dedieu & Lázaro-Gredilla* (Nature Communications, 2021)
+>
+> **[Hyperdimensional Computing](https://link.springer.com/article/10.1007/s12559-009-9009-8)** — *Kanerva* (Cognitive Computation, 2009)
+>
+> **[Global Workspace Theory](https://bernardbaars.com/)** — *Baars* (1988, 1997)
+
 </div>
 
-## 🧠 What is Verridian AI?
+## 🧠 A Universal Cognitive Brain for Any Domain
 
 <div align="center">
 <img src="assets/images/GSW Giving Language Model a Human Like Episodic Memory.png" alt="GSW Episodic Memory" width="100%">
