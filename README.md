@@ -60,6 +60,7 @@
 [📖 Documentation](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki) •
 [🚀 Quick Start](#-quick-start) •
 [🏗 Architecture](#-architecture) •
+[🖥 UI Features](#-ui-features--screenshots) •
 [🔬 Research Validation](#-research-backed-validation-clause-benchmark) •
 [📊 Benchmarks](#-performance) •
 [🤝 Contributing](CONTRIBUTING.md)
@@ -77,6 +78,12 @@
 <br>
 
 Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
+
+<div align="center">
+<img src="assets/images/slides/INside A Brain Inspired AI Architecture.png" alt="Beyond RAG: Inside a Brain-Inspired AI Architecture" width="100%">
+
+*The complete cognitive architecture: Building memory (GSW) and processing queries through a three-layer cognitive engine (TEM, Agency, VSA)*
+</div>
 
 ### 🔍 Why is this different from traditional RAG?
 
@@ -150,6 +157,12 @@ flowchart LR
 
 ### 🗄️ 1. Global Semantic Workspace (GSW) — The Memory Palace
 
+<div align="center">
+<img src="assets/images/slides/slide 2.png" alt="The Foundation: Building a Structured, Actor-Centric Memory" width="100%">
+
+*GSW 6-Task Extraction Pipeline: From raw documents to structured actor-centric memory*
+</div>
+
 **Technical Definition**: The Global Semantic Workspace is a persistent, actor-centric knowledge graph that stores extracted entities, their relationships, states, and temporal links across all processed documents.
 
 **Simple Analogy - Your Brain's Filing Cabinet**: Imagine your brain's memory as a **giant filing cabinet**. Most AI systems organize files by **event** (what happened). Verridian organizes files by **person** (who was involved).
@@ -195,6 +208,12 @@ flowchart TB
 
 ### 🗺️ 2. TEM Layer — The Mental GPS
 
+<div align="center">
+<img src="assets/images/slides/Slide 3.png" alt="Layer 1: How the AI Navigates its Memory" width="100%">
+
+*TEM separates structural knowledge (MEC) from sensory details (LEC) for generalization*
+</div>
+
 **Technical Definition**: The Tolman-Eichenbaum Machine (TEM) is a neural architecture inspired by the hippocampal formation that learns to separate structural knowledge from sensory details, enabling generalization across similar situations.
 
 **Simple Analogy - Google Maps for Your Brain**: Think of TEM like **Google Maps for information**:
@@ -237,6 +256,12 @@ flowchart TB
 ---
 
 ### 🔍 3. Active Inference — The Smart Detective
+
+<div align="center">
+<img src="assets/images/slides/Slide 4.png" alt="Layer 2: How the AI Knows What It Doesn't Know" width="100%">
+
+*Active Inference minimizes uncertainty through VFE (perception) and EFE (exploration)*
+</div>
 
 **Technical Definition**: Active Inference is a framework from computational neuroscience where agents minimize "free energy" by either updating beliefs (perception) or taking actions (exploration) to reduce uncertainty about their environment.
 
@@ -288,9 +313,33 @@ flowchart TB
 | **Variational Free Energy** (VFE) | How surprised am I by what I see? | "I expected a separation date but didn't find one - that's surprising!" |
 | **Expected Free Energy** (EFE) | What action will reduce my uncertainty the most? | "I should look in paragraph 3 for dates" |
 
+<details>
+<summary><strong>🔬 Deep Dive: The Generative Model Matrices (A/B/C/D)</strong></summary>
+
+<div align="center">
+<img src="assets/images/slides/Slide 8.png" alt="Deep Dive: The Generative Model for Active Inference" width="100%">
+
+*The four key matrices that define the agent's understanding of its environment*
+</div>
+
+| Matrix | Name | Function |
+|--------|------|----------|
+| **A** | Observation Likelihood | P(observation \| hidden state) - Maps states to observations |
+| **B** | Transition Dynamics | P(next state \| current state, action) - How actions change states |
+| **C** | Preferences | Log preferences over observations - What the agent "wants" to see |
+| **D** | Prior Beliefs | P(initial state) - Starting beliefs before evidence |
+
+</details>
+
 ---
 
 ### 🛡️ 4. VSA Layer — The Fact-Checker
+
+<div align="center">
+<img src="assets/images/slides/Slide 5.png" alt="Layer 3: How the AI Verifies Its Own Logic" width="100%">
+
+*VSA uses binding, bundling, and permutation operations for anti-hallucination verification*
+</div>
 
 **Technical Definition**: Vector Symbolic Architecture (VSA) uses high-dimensional vectors (D=10,000) with three operations—binding, bundling, and permutation—to represent and verify symbolic relationships in a way that's robust to noise and supports similarity-based reasoning.
 
@@ -430,6 +479,12 @@ flowchart TB
 
 ### 🏃 The Journey of a Question
 
+<div align="center">
+<img src="assets/images/slides/Slide 7.png" alt="A Legal Query in Action: Child Support Assessment" width="100%">
+
+*End-to-end example: How all layers work together to answer a legal query*
+</div>
+
 Let's follow what happens when you ask: *"When did John and Jane separate?"*
 
 | Step | System | What Happens |
@@ -541,6 +596,111 @@ Actor: {
 ```
 
 This mirrors how humans actually remember - achieving **85% accuracy** vs 77% for traditional RAG.
+
+---
+
+## 🖥 UI Features & Screenshots
+
+<div align="center">
+
+### Modern Next.js 16 / React 19 Frontend
+
+The Verridian AI interface is built with the latest web technologies, featuring a responsive, intuitive design that makes complex cognitive operations accessible. Built on Next.js 16's App Router with React 19, the frontend provides real-time interactions with the brain-inspired backend architecture.
+
+</div>
+
+### 💬 Chat Interface
+
+#### Main Chat Interface
+<img src="assets/images/features/01-main-chat-interface.png" alt="Main Chat Interface" width="100%">
+
+The primary interface for interacting with Verridian AI. Features a clean, distraction-free design with quick access to settings, canvas, and voice controls.
+
+#### Active Conversation
+<img src="assets/images/features/02-chat-with-messages.png" alt="Chat with Messages" width="100%">
+
+Real-time chat with the GSW-powered AI system. Messages display actor-centric memory retrieval, TEM navigation insights, and VSA verification scores. Each response includes confidence metrics and references to source actors in the knowledge graph.
+
+### ⚙️ Admin Settings
+
+#### System Prompt Configuration
+<img src="assets/images/features/03-settings-panel-prompt.png" alt="Settings Panel - Prompt" width="100%">
+
+Configure the core system prompts that guide the AI's behavior. Customize how the system interprets legal queries, applies active inference, and formats responses.
+
+#### Model Configuration
+<img src="assets/images/features/04-settings-model-config.png" alt="Settings - Model Config" width="100%">
+
+Select and configure LLM models from OpenRouter. Supports all major providers including Claude Sonnet 4.5, GPT-4.1, Gemini 2.5 Pro/Flash, and specialized models like GLM-4.6 and Kimi K2. Configure temperature, top-p, and context window settings.
+
+#### Tools Configuration
+<img src="assets/images/features/05-settings-tools-config.png" alt="Settings - Tools Config" width="100%">
+
+Enable/disable LangChain tools and cognitive modules. Control which agents have access to GSW queries, TEM navigation, VSA verification, document generation, and external integrations.
+
+#### MCP (Model Context Protocol) Configuration
+<img src="assets/images/features/06-settings-mcp-config.png" alt="Settings - MCP Config" width="100%">
+
+Configure Model Context Protocol servers for extended capabilities. Connect to external knowledge sources, databases, and specialized tools through standardized MCP interfaces.
+
+### 📄 Canvas & Documents
+
+#### Canvas Panel
+<img src="assets/images/features/07-canvas-panel.png" alt="Canvas Panel" width="100%">
+
+Visual workspace for exploring case structures, actor relationships, and temporal links. Provides a graphical representation of the GSW knowledge graph with interactive navigation through the TEM layer.
+
+#### Document Generation Workflow
+<img src="assets/images/features/10-document-generation-workflow.png" alt="Document Generation Workflow" width="100%">
+
+Automated legal document generation using the GSW knowledge base. Create briefs, summaries, and case analyses with actor-centric information automatically populated from persistent memory.
+
+### 🎤 Voice Input
+
+#### Voice Input Active
+<img src="assets/images/features/08-voice-input-active.png" alt="Voice Input Active" width="100%">
+
+Real-time voice input with speech-to-text integration. Ask questions naturally and receive spoken responses. Voice panel shows active listening status, transcription progress, and audio waveform visualization.
+
+### 🌐 3D Visualization
+
+#### Knowledge Graph Visualization
+<img src="assets/images/features/09-3d-visualization.png" alt="3D Visualization" width="100%">
+
+Interactive 3D visualization of the GSW knowledge graph using Three.js. Explore actors, relationships, temporal links, and states in a dynamic force-directed graph. Navigate through the cognitive space with TEM-guided pathfinding.
+
+**Features:**
+- Real-time graph updates as new documents are processed
+- Color-coded nodes by actor type (Person, Organization, Asset)
+- Interactive edges showing relationships and temporal links
+- Zoom, pan, and rotate controls for exploration
+- Node selection reveals actor details and connected entities
+
+### 🚀 Quick Actions
+
+#### Quick Action Buttons
+<img src="assets/images/features/11-quick-action-buttons.png" alt="Quick Action Buttons" width="100%">
+
+One-click access to common operations: new workspace creation, GSW queries, document uploads, VSA verification tests, and TEM navigation demos.
+
+### 📐 Full Page Layout
+
+#### Complete Interface Overview
+<img src="assets/images/features/12-full-page-layout.png" alt="Full Page Layout" width="100%">
+
+The complete Verridian AI interface showing all panels: chat, settings sidebar, canvas workspace, 3D visualization, and status indicators. Responsive design adapts to different screen sizes while maintaining cognitive workflow efficiency.
+
+### 🎨 Technical Stack
+
+| Technology | Purpose | Version |
+|------------|---------|---------|
+| **Next.js** | App Router & Server Components | 16 |
+| **React** | UI Framework | 19 |
+| **TypeScript** | Type Safety | 5.3+ |
+| **Tailwind CSS** | Styling System | 3.4+ |
+| **Three.js** | 3D Visualization | Latest |
+| **Zustand** | State Management | Latest |
+| **Radix UI** | Accessible Components | Latest |
 
 ---
 
@@ -855,6 +1015,10 @@ python gsw_pipeline.py summary --domain family
 
 <div align="center">
 
+<img src="assets/images/slides/Slide 6.png" alt="The Result: A Demonstrable Leap in Performance" width="100%">
+
+*Verridian Cognitive AI vs Traditional RAG: 85% accuracy, 42x faster, 56% token reduction*
+
 ### Benchmark Results
 
 ```mermaid
@@ -1143,6 +1307,12 @@ MIT License - see [LICENSE](LICENSE) for details.
 ---
 
 ## 🔮 Future Research: BRAINS
+
+<div align="center">
+<img src="assets/images/slides/Slide 9.png" alt="The Next Frontier: From Cognitive Architecture to AI Regulation" width="100%">
+
+*BRAINS: Bio-Inspired Regulatory AI Neural System with neuromodulation layer*
+</div>
 
 > **Coming Soon: BRAINS (Bio-Inspired Regulatory AI Neural System)**
 >
