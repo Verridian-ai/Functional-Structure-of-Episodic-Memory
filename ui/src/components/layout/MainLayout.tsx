@@ -104,7 +104,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         `}
       >
         {/* Sidebar Header Section */}
-        <div className="flex-shrink-0 px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 border-b border-white/5">
+        <div className="flex-shrink-0 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 border-b border-white/5" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
             <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex items-center justify-center hover:scale-105 transition-transform duration-300">
               <Image
@@ -117,49 +117,48 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
             </div>
           </div>
 
-          {/* New Chat Button - Touch-friendly 48px min height on mobile */}
+          {/* New Chat Button - Compact size */}
           <button
             id="new-project-button"
             onClick={() => {
                 onNewChat();
                 if (window.innerWidth < 768) setSidebarOpen(false);
             }}
-            className="group w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 min-h-[48px] h-[48px] sm:h-[52px] bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-xl font-medium shadow-lg transition-all active:scale-[0.98] touch-target"
+            className="group flex items-center gap-2.5 px-3 h-10 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium shadow-lg transition-all active:scale-[0.98]"
           >
-            <div className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-white/5 rounded-lg group-hover:bg-white/10 transition-colors flex-shrink-0">
-                <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-white stroke-[2.5]" />
+            <div className="w-6 h-6 flex items-center justify-center bg-white/5 rounded-md group-hover:bg-white/10 transition-colors flex-shrink-0">
+                <Plus className="w-3.5 h-3.5 text-white stroke-[2.5]" />
             </div>
-            <span className="tracking-wide text-sm sm:text-[15px]">New Project</span>
+            <span className="tracking-wide text-sm">New Project</span>
           </button>
         </div>
 
-        {/* Search Section - Responsive padding */}
-        <div className="flex-shrink-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 border-b border-white/5 bg-white/[0.02]">
-          <div className="relative group flex items-center">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search projects..."
-              className="w-full h-11 sm:h-12 px-4 sm:px-5 bg-black/40 border border-zinc-800 rounded-xl text-sm sm:text-[15px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
-            />
-          </div>
+        {/* Search Section - Compact */}
+        <div className="flex-shrink-0 py-3 border-b border-white/5 bg-white/[0.02]" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search projects..."
+            className="h-9 px-3 bg-black/40 border border-zinc-800 rounded-lg text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
+            style={{ width: '180px' }}
+          />
         </div>
 
-        {/* Recent Activity Label - Responsive spacing */}
-        <div className="px-4 sm:px-6 md:px-8 pt-4 sm:pt-6 pb-3 sm:pb-4 flex items-center justify-between border-b border-white/5 bg-white/[0.02] mt-1 sm:mt-2">
-            <span className="text-[10px] sm:text-xs font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
-            <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-2 py-0.5 rounded-md">{filteredConversations.length}</span>
+        {/* Recent Activity Label - Compact */}
+        <div className="pt-3 pb-2 flex items-center justify-between border-b border-white/5 bg-white/[0.02]" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+            <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
+            <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{filteredConversations.length}</span>
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 pb-4 space-y-1 sm:space-y-2 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           {filteredConversations.length === 0 ? (
-            <div className="text-center py-10 sm:py-16 px-3 sm:px-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-xl sm:rounded-2xl bg-zinc-900/50 border border-dashed border-zinc-800 flex items-center justify-center">
-                <MessageSquare className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-700" />
+            <div className="text-center py-8 px-3">
+              <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-zinc-900/50 border border-dashed border-zinc-800 flex items-center justify-center">
+                <MessageSquare className="w-4 h-4 text-zinc-700" />
               </div>
-              <p className="text-xs sm:text-sm text-zinc-600 font-medium">
+              <p className="text-xs text-zinc-600 font-medium">
                 {searchQuery ? 'No matches found' : 'No history yet'}
               </p>
             </div>
@@ -219,34 +218,33 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
           )}
         </div>
 
-        {/* Sidebar Footer - Responsive padding */}
-        <div className="flex-shrink-0 p-4 sm:p-6 md:p-8 border-t border-white/10 bg-black/20 safe-area-pb">
-            <div className="space-y-1.5 sm:space-y-2">
+        {/* Sidebar Footer - Compact */}
+        <div className="flex-shrink-0 py-3 border-t border-white/10 bg-black/20 safe-area-pb" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+            <div className="flex items-center gap-2">
                 <button
                     id="canvas-toggle-button"
                     onClick={() => {
                         toggleCanvas();
                         if (window.innerWidth < 768) setSidebarOpen(false);
                     }}
-                    className={`group w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 min-h-[48px] h-12 sm:h-14 rounded-xl sm:rounded-2xl text-sm sm:text-[15px] font-medium transition-all touch-target ${
+                    className={`group flex items-center gap-2 px-3 h-9 rounded-lg text-sm font-medium transition-all ${
                     showCanvas
                         ? 'bg-white/10 text-white border border-white/10'
-                        : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                        : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
                     }`}
                 >
-                    <FileText className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.5] flex-shrink-0" />
-                    <span className="flex-1 text-left">Canvas</span>
-                    <div className={`w-2 h-2 rounded-full transition-colors ${showCanvas ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]' : 'bg-zinc-800 group-hover:bg-zinc-700'}`} />
+                    <FileText className="w-4 h-4 stroke-[1.5] flex-shrink-0" />
+                    <span>Canvas</span>
                 </button>
 
                 <button
                     onClick={toggleAdmin}
-                    className="w-full flex items-center gap-3 sm:gap-4 px-3 sm:px-4 min-h-[48px] h-12 sm:h-14 rounded-xl sm:rounded-2xl text-sm sm:text-[15px] font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 active:bg-white/5 border border-transparent transition-all touch-target"
+                    className="flex items-center gap-2 px-3 h-9 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent transition-all"
                 >
-                    <Settings className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.5] flex-shrink-0" />
-                    <span className="flex-1 text-left">Settings</span>
+                    <Settings className="w-4 h-4 stroke-[1.5] flex-shrink-0" />
+                    <span>Settings</span>
                 </button>
-          </div>
+            </div>
         </div>
       </aside>
 
