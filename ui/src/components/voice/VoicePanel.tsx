@@ -1,8 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import { Mic, MicOff, Volume2, VolumeX, Settings2, X } from 'lucide-react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
+import { Mic, MicOff, Volume2, VolumeX, Settings2, X, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { useStore } from '@/lib/store';
+
+// Permission state type
+type PermissionState = 'prompt' | 'granted' | 'denied' | 'unknown';
 
 // Web Speech API types
 interface SpeechRecognitionEvent extends Event {
@@ -60,10 +63,31 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
   const { voice, setVoice, settings, updateSettings } = useStore();
   const [audioLevel, setAudioLevel] = useState(0);
   const [showSettings, setShowSettings] = useState(false);
+  const [showConsentDialog, setShowConsentDialog] = useState(false);
+  const [micPermission, setMicPermission] = useState<PermissionState>('unknown');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
   const animationRef = useRef<number | null>(null);
+
+  // Check microphone permission on mount
+  useEffect(() => {
+    const checkPermission = async () => {
+      if (typeof navigator !== 'undefined' && navigator.permissions) {
+        try {
+          const result = await navigator.permissions.query({ name: 'microphone' as PermissionName });
+          setMicPermission(result.state as PermissionState);
+          result.onchange = () => setMicPermission(result.state as PermissionState);
+        } catch {
+          // Permissions API not fully supported
+          setMicPermission('unknown');
+        }
+      }
+    };
+    checkPermission();
+  }, []);
 
   // Initialize speech recognition
   useEffect(() => {
@@ -138,9 +162,10 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
     }
   }, [voice.isListening]);
 
-  const startAudioVisualization = async () => {
+  const startAudioVisualization = useCallback(async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
       audioContextRef.current = new AudioContext();
       analyserRef.current = audioContextRef.current.createAnalyser();
       const source = audioContextRef.current.createMediaStreamSource(stream);
@@ -160,29 +185,128 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
       };
 
       updateLevel();
+      setMicPermission('granted');
+      setErrorMessage(null);
     } catch (e) {
       console.error('Failed to access microphone:', e);
+      setMicPermission('denied');
+      setErrorMessage('Microphone access was denied. Please enable it in your browser settings.');
+      setVoice({ isListening: false });
     }
-  };
+  }, [setVoice]);
 
-  const stopAudioVisualization = () => {
+  const stopAudioVisualization = useCallback(() => {
     if (animationRef.current) {
       cancelAnimationFrame(animationRef.current);
+      animationRef.current = null;
+    }
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current = null;
     }
     if (audioContextRef.current) {
       audioContextRef.current.close();
+      audioContextRef.current = null;
     }
     setAudioLevel(0);
-  };
+  }, []);
 
-  const toggleListening = () => {
-    setVoice({ isListening: !voice.isListening, transcript: '' });
-  };
+  // Request microphone permission with consent
+  const requestMicrophoneAccess = useCallback(async () => {
+    setShowConsentDialog(false);
+    setErrorMessage(null);
+    setVoice({ isListening: true, transcript: '' });
+  }, [setVoice]);
+
+  const toggleListening = useCallback(() => {
+    if (voice.isListening) {
+      // Stop listening
+      setVoice({ isListening: false, transcript: '' });
+    } else {
+      // Check if we need to show consent dialog
+      if (micPermission === 'prompt' || micPermission === 'unknown') {
+        setShowConsentDialog(true);
+      } else if (micPermission === 'denied') {
+        setErrorMessage('Microphone access was previously denied. Please enable it in your browser settings.');
+      } else {
+        // Permission already granted
+        setVoice({ isListening: true, transcript: '' });
+      }
+    }
+  }, [voice.isListening, micPermission, setVoice]);
 
   if (!settings.voiceEnabled) return null;
 
   return (
     <>
+      {/* Microphone Permission Consent Dialog */}
+      {showConsentDialog && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+          <div className="w-full max-w-md bg-zinc-900 rounded-2xl border border-cyan-500/30 p-6 shadow-2xl shadow-cyan-500/10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
+                <Mic className="w-6 h-6 text-cyan-400" />
+              </div>
+              <div>
+                <h3 id="consent-title" className="text-lg font-semibold text-white">Microphone Access Required</h3>
+                <p className="text-sm text-zinc-400">For voice input feature</p>
+              </div>
+            </div>
+
+            <div className="bg-zinc-800/50 rounded-xl p-4 mb-4 space-y-2">
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-zinc-300">Your voice data is processed locally in your browser</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-zinc-300">No audio recordings are stored or transmitted</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-sm text-zinc-300">You can revoke access at any time in browser settings</p>
+              </div>
+            </div>
+
+            <p className="text-sm text-zinc-400 mb-6">
+              Clicking &ldquo;Allow&rdquo; will prompt your browser to request microphone permission.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConsentDialog(false)}
+                className="flex-1 px-4 py-3 rounded-xl border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={requestMicrophoneAccess}
+                className="flex-1 px-4 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-medium transition"
+              >
+                Allow Microphone
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Error Message Toast */}
+      {errorMessage && (
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 max-w-md">
+          <div className="flex items-center gap-3 px-4 py-3 bg-red-900/90 border border-red-700 rounded-xl shadow-lg">
+            <AlertTriangle className="w-5 h-5 text-red-400 flex-shrink-0" />
+            <p className="text-sm text-white">{errorMessage}</p>
+            <button
+              onClick={() => setErrorMessage(null)}
+              className="p-1 hover:bg-red-800 rounded transition"
+              aria-label="Dismiss error"
+            >
+              <X className="w-4 h-4 text-red-300" />
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Floating Voice Button */}
       {voice.isListening && (
         <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40">

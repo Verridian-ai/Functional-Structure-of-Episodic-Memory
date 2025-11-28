@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  X, Download, Copy, Edit3, Save, FileText, Code, File,
-  ChevronLeft, ChevronRight, Trash2, Plus, ExternalLink, Highlighter, Layout, Image as ImageIcon, Type, Grid, Scale
+  Download, Copy, Edit3, Save, FileText, Code, File,
+  ChevronRight, Highlighter, Layout, Image as ImageIcon, Scale
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
-import type { Artifact, ArtifactSection } from '@/types';
+import type { Artifact } from '@/types';
+import { SafeHtmlProse } from '@/components/ui/SafeHtml';
+
+// Generate unique ID for artifacts (outside component to avoid purity issues)
+let artifactCounter = 0;
+const generateArtifactId = () => `artifact_${++artifactCounter}_${Date.now()}`;
 
 // Mock NanoBanana Pro Image Generation
 const generateImage = async (prompt: string): Promise<string> => {
@@ -52,9 +57,18 @@ export function CanvasPanel() {
 
     const createFromTemplate = (templateId: string) => {
       const templateName = TEMPLATES.find(t => t.id === templateId)?.name || 'Document';
-      
-      const structure: Artifact['structure'] = {
-          layout: templateId as any,
+
+      // Map template IDs to layout types
+      const layoutMap: Record<string, 'standard' | 'report' | 'newsletter' | 'legal-brief'> = {
+        'legal': 'legal-brief',
+        'newsletter': 'newsletter',
+        'report': 'report',
+        'standard': 'standard',
+      };
+      const layout = layoutMap[templateId] || 'standard';
+
+      const structure: NonNullable<Artifact['structure']> = {
+          layout,
           sections: []
       };
 
@@ -76,16 +90,17 @@ export function CanvasPanel() {
            ];
       }
 
+      const now = new Date();
       const newArtifact: Artifact = {
-          id: `artifact_${Date.now()}`,
+          id: generateArtifactId(),
           type: 'smart-canvas',
           title: `New ${templateName}`,
           content: '',
           structure,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
       };
-      
+
       addArtifact(newArtifact);
       setShowLayoutMenu(false);
     };
@@ -500,16 +515,17 @@ function SmartCanvasRenderer({ artifact }: { artifact: Artifact }) {
                         relative border border-transparent hover:border-zinc-300 transition-all group p-4
                         ${getSectionClass(section.region)}
                     `}
-                    style={section.style as any}
+                    style={section.style as React.CSSProperties}
                 >
                     <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-zinc-100 text-zinc-800 text-[10px] px-1 uppercase font-bold">
                         {section.region}
                     </div>
                     
                     {section.type === 'image' ? (
-                        <img src={section.content} alt={section.title} className="max-w-full h-auto" />
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={section.content} alt={section.title || 'Document image'} className="max-w-full h-auto" loading="lazy" />
                     ) : (
-                         <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                         <SafeHtmlProse content={section.content} dark={false} />
                     )}
                 </div>
             ))}
@@ -552,9 +568,9 @@ function ArtifactContent({ artifact, highlighterMode }: { artifact: Artifact, hi
   if (artifact.type === 'html') {
     return (
       <div className="h-full overflow-auto p-4">
-        <div
-          className={`prose prose-invert prose-sm max-w-none ${highlighterMode ? 'cursor-text selection:bg-yellow-500/50' : ''}`}
-          dangerouslySetInnerHTML={{ __html: content }}
+        <SafeHtmlProse
+          content={content}
+          className={highlighterMode ? 'cursor-text selection:bg-yellow-500/50' : ''}
         />
       </div>
     );
@@ -584,17 +600,3 @@ function getArtifactIcon(artifact: Artifact) {
   }
 }
 
-function getFileExtension(artifact: Artifact): string {
-  switch (artifact.type) {
-    case 'code':
-      return artifact.language === 'python' ? '.py' :
-             artifact.language === 'javascript' ? '.js' :
-             artifact.language === 'typescript' ? '.ts' : '.txt';
-    case 'html':
-      return '.html';
-    case 'markdown':
-      return '.md';
-    default:
-      return '.txt';
-  }
-}

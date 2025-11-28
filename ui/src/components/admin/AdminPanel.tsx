@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   X, Settings, Key, Sliders, Zap, Server, Plus, Trash2, Save, RotateCcw,
-  Brain, MessageSquare, Code, FileText, Check
+  Brain, MessageSquare, Check, AlertTriangle, ShieldAlert, Eye, EyeOff
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { MODELS } from '@/lib/api/gemini';
@@ -372,23 +372,101 @@ function SettingsTab({
   settings: UserSettings;
   onUpdate: (updates: Partial<UserSettings>) => void;
 }) {
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [apiKeyError, setApiKeyError] = useState<string | null>(null);
+
+  // Validate API key format
+  const validateApiKey = useCallback((key: string) => {
+    if (!key) {
+      setApiKeyError(null);
+      return;
+    }
+    // OpenRouter keys typically start with 'sk-or-'
+    if (!key.startsWith('sk-or-') && !key.startsWith('sk-')) {
+      setApiKeyError('API key should start with "sk-or-" or "sk-"');
+    } else if (key.length < 20) {
+      setApiKeyError('API key appears too short');
+    } else {
+      setApiKeyError(null);
+    }
+  }, []);
+
+  const handleApiKeyChange = useCallback((value: string) => {
+    validateApiKey(value);
+    onUpdate({ apiKey: value });
+  }, [onUpdate, validateApiKey]);
+
   return (
     <div className="space-y-6">
+      {/* Security Warning */}
+      <div className="flex items-start gap-3 p-4 bg-amber-900/20 border border-amber-700/50 rounded-xl">
+        <ShieldAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+        <div className="text-sm">
+          <p className="font-medium text-amber-300 mb-1">Security Notice</p>
+          <p className="text-amber-200/80">
+            API keys are stored locally in your browser. Never share your API key or enter it on untrusted devices.
+            For production use, consider using environment variables instead.
+          </p>
+        </div>
+      </div>
+
       {/* API Key */}
       <div>
-        <label className="block text-sm font-medium text-white mb-2">
-          <Key className="w-4 h-4 inline mr-2" />
+        <label
+          htmlFor="api-key-input"
+          className="block text-sm font-medium text-white mb-2"
+        >
+          <Key className="w-4 h-4 inline mr-2" aria-hidden="true" />
           OpenRouter API Key
         </label>
-        <input
-          type="password"
-          value={settings.apiKey || ''}
-          onChange={(e) => onUpdate({ apiKey: e.target.value })}
-          placeholder="sk-or-..."
-          className="w-full p-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-cyan-500 transition"
-        />
-        <p className="text-xs text-zinc-500 mt-2">
-          Get your API key from <a href="https://openrouter.ai/keys" target="_blank" className="text-cyan-400 hover:underline">openrouter.ai/keys</a>
+        <div className="relative">
+          <input
+            id="api-key-input"
+            type={showApiKey ? 'text' : 'password'}
+            value={settings.apiKey || ''}
+            onChange={(e) => handleApiKeyChange(e.target.value)}
+            placeholder="sk-or-..."
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
+            aria-describedby={apiKeyError ? 'api-key-error' : 'api-key-help'}
+            aria-invalid={!!apiKeyError}
+            className={`w-full p-3 pr-12 bg-zinc-800 border rounded-xl text-white placeholder:text-zinc-500 focus:outline-none transition ${
+              apiKeyError
+                ? 'border-red-500 focus:border-red-400'
+                : 'border-zinc-700 focus:border-cyan-500'
+            }`}
+          />
+          <button
+            type="button"
+            onClick={() => setShowApiKey(!showApiKey)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-zinc-700 rounded transition"
+            aria-label={showApiKey ? 'Hide API key' : 'Show API key'}
+          >
+            {showApiKey ? (
+              <EyeOff className="w-5 h-5 text-zinc-400" />
+            ) : (
+              <Eye className="w-5 h-5 text-zinc-400" />
+            )}
+          </button>
+        </div>
+        {apiKeyError && (
+          <p id="api-key-error" className="flex items-center gap-1 text-xs text-red-400 mt-2" role="alert">
+            <AlertTriangle className="w-3 h-3" />
+            {apiKeyError}
+          </p>
+        )}
+        <p id="api-key-help" className="text-xs text-zinc-500 mt-2">
+          Get your API key from{' '}
+          <a
+            href="https://openrouter.ai/keys"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-cyan-400 hover:underline"
+          >
+            openrouter.ai/keys
+          </a>
         </p>
       </div>
 
