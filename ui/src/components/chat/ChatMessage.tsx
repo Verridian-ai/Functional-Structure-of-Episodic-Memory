@@ -27,35 +27,35 @@ export function ChatMessage({ message }: ChatMessageProps) {
   };
 
   return (
-    <div className={`group py-5 transition-colors ${
+    <div className={`group py-3 sm:py-5 transition-colors ${
       isUser
         ? 'bg-transparent'
-        : 'rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-4'
+        : 'rounded-xl sm:rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-3 sm:px-4'
     }`}>
-      <div className="flex gap-4">
+      <div className="flex gap-2.5 sm:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className={`w-9 h-9 rounded-xl flex items-center justify-center shadow-lg ${
+          <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg ${
             isUser
               ? 'bg-zinc-800 text-zinc-400'
               : 'bg-emerald-600 text-white'
           }`}>
             {isUser ? (
-              <User className="w-5 h-5" />
+              <User className="w-4 h-4 sm:w-5 sm:h-5" />
             ) : (
-              <BrainCircuit className="w-5 h-5" />
+              <BrainCircuit className="w-4 h-4 sm:w-5 sm:h-5" />
             )}
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-w-0 space-y-3">
+        <div className="flex-1 min-w-0 space-y-2 sm:space-y-3">
           {/* Header */}
-          <div className="flex items-center gap-2">
-            <span className="font-medium text-sm text-zinc-200">
-              {isUser ? 'You' : 'Legal AI Assistant'}
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+            <span className="font-medium text-xs sm:text-sm text-zinc-200">
+              {isUser ? 'You' : 'Legal AI'}
             </span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-[10px] sm:text-xs text-zinc-500">
               {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
@@ -70,11 +70,11 @@ export function ChatMessage({ message }: ChatMessageProps) {
           )}
 
           {/* Message Content */}
-          <div className="prose prose-invert prose-sm max-w-none">
+          <div className="prose prose-invert prose-sm max-w-none text-sm sm:text-base">
             {message.isStreaming && !message.content ? (
-              <div className="flex items-center gap-3 text-zinc-400 py-2">
+              <div className="flex items-center gap-2 sm:gap-3 text-zinc-400 py-1.5 sm:py-2">
                 <SynapseLoader size="sm" />
-                <span className="text-sm animate-pulse">Neural Processing...</span>
+                <span className="text-xs sm:text-sm animate-pulse">Processing...</span>
               </div>
             ) : (
               <ReactMarkdown
@@ -181,31 +181,31 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
           {/* Artifacts */}
           {message.artifacts && message.artifacts.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1.5 sm:pt-2">
               {message.artifacts.map((artifact) => (
                 <button
                   key={artifact.id}
                   onClick={() => handleArtifactClick(artifact)}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-zinc-900/50 rounded-xl border border-white/10 hover:border-emerald-500/30 transition-all group/artifact"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 bg-zinc-900/50 rounded-lg sm:rounded-xl border border-white/10 hover:border-emerald-500/30 active:border-emerald-500/30 transition-all group/artifact touch-target"
                 >
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center ${
                     artifact.type === 'code'
                       ? 'bg-emerald-900/20'
                       : 'bg-zinc-800'
                   }`}>
                     {artifact.type === 'code' ? (
-                      <Code className="w-4 h-4 text-emerald-400" />
+                      <Code className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
                     ) : (
-                      <FileText className="w-4 h-4 text-zinc-400 group-hover/artifact:text-emerald-400 transition-colors" />
+                      <FileText className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-400 group-hover/artifact:text-emerald-400 transition-colors" />
                     )}
                   </div>
                   <div className="text-left">
-                    <div className="text-sm font-medium text-zinc-200 group-hover/artifact:text-emerald-300 transition-colors">
+                    <div className="text-xs sm:text-sm font-medium text-zinc-200 group-hover/artifact:text-emerald-300 transition-colors truncate max-w-[100px] sm:max-w-none">
                       {artifact.title}
                     </div>
-                    <div className="text-xs text-zinc-500">{artifact.type}</div>
+                    <div className="text-[10px] sm:text-xs text-zinc-500">{artifact.type}</div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-zinc-600 group-hover/artifact:text-emerald-400 ml-2 transition-colors" />
+                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-600 group-hover/artifact:text-emerald-400 ml-1 sm:ml-2 transition-colors flex-shrink-0" />
                 </button>
               ))}
             </div>
@@ -222,13 +222,13 @@ function ToolCallDisplay({ toolCall }: { toolCall: ToolCall }) {
   const getStatusIcon = () => {
     switch (toolCall.status) {
       case 'running':
-        return <Loader2 className="w-4 h-4 text-emerald-400 animate-spin" />;
+        return <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 animate-spin" />;
       case 'completed':
-        return <CheckCircle2 className="w-4 h-4 text-emerald-400" />;
+        return <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />;
       case 'error':
-        return <AlertCircle className="w-4 h-4 text-red-400" />;
+        return <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />;
       default:
-        return <Clock className="w-4 h-4 text-zinc-500" />;
+        return <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-500" />;
     }
   };
 
@@ -246,28 +246,28 @@ function ToolCallDisplay({ toolCall }: { toolCall: ToolCall }) {
   };
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5 sm:space-y-2">
       <button
         onClick={() => toolCall.result && setExpanded(!expanded)}
-        className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl border text-sm ${getStatusColor()} ${toolCall.result ? 'cursor-pointer hover:bg-white/5' : ''}`}
+        className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border text-xs sm:text-sm ${getStatusColor()} ${toolCall.result ? 'cursor-pointer hover:bg-white/5 active:bg-white/5' : ''} touch-target`}
       >
         {getStatusIcon()}
-        <span className="text-emerald-400 font-medium">{toolCall.name}</span>
+        <span className="text-emerald-400 font-medium truncate max-w-[120px] sm:max-w-none">{toolCall.name}</span>
         {toolCall.arguments && Object.keys(toolCall.arguments).length > 0 && (
-          <span className="text-zinc-500 text-xs">
+          <span className="text-zinc-500 text-[10px] sm:text-xs hidden sm:inline">
             ({Object.entries(toolCall.arguments).slice(0, 2).map(([k, v]) =>
               `${k}: ${String(v).slice(0, 20)}${String(v).length > 20 ? '...' : ''}`
             ).join(', ')})
           </span>
         )}
         {toolCall.result && (
-          <span className="text-zinc-500 text-xs ml-1">
+          <span className="text-zinc-500 text-[10px] sm:text-xs ml-0.5 sm:ml-1">
             {expanded ? '▼' : '▶'}
           </span>
         )}
       </button>
       {expanded && toolCall.result && (
-        <div className="ml-4 p-3 bg-black/40 rounded-lg border border-white/10 text-sm text-zinc-300 whitespace-pre-wrap font-mono max-h-48 overflow-auto">
+        <div className="ml-2 sm:ml-4 p-2 sm:p-3 bg-black/40 rounded-lg border border-white/10 text-xs sm:text-sm text-zinc-300 whitespace-pre-wrap font-mono max-h-32 sm:max-h-48 overflow-auto">
           {toolCall.result}
         </div>
       )}

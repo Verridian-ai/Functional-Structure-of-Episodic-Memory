@@ -183,9 +183,9 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
 
   return (
     <>
-      {/* Floating Voice Button */}
+      {/* Floating Voice Button - Mobile optimized positioning */}
       {voice.isListening && (
-        <div className="fixed bottom-32 left-1/2 -translate-x-1/2 z-40">
+        <div className="fixed bottom-24 sm:bottom-32 left-1/2 -translate-x-1/2 z-40">
           <div className="relative">
             {/* Animated rings */}
             <div
@@ -197,71 +197,71 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
               style={{ transform: `scale(${1 + audioLevel * 0.3})` }}
             />
 
-            {/* Main button */}
+            {/* Main button - Touch-friendly */}
             <button
               onClick={toggleListening}
-              className="relative w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg shadow-red-500/30 hover:shadow-red-500/50 transition"
+              className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-red-500 to-pink-600 flex items-center justify-center shadow-lg shadow-red-500/30 hover:shadow-red-500/50 active:shadow-red-500/50 transition touch-target"
             >
-              <Mic className="w-8 h-8 text-white" />
+              <Mic className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
             </button>
           </div>
 
-          {/* Transcript display */}
+          {/* Transcript display - Mobile optimized width */}
           {voice.transcript && (
-            <div className="absolute top-full mt-4 left-1/2 -translate-x-1/2 w-80 p-4 bg-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-xl shadow-cyan-500/10">
-              <div className="flex items-center gap-2 mb-2">
+            <div className="absolute top-full mt-3 sm:mt-4 left-1/2 -translate-x-1/2 w-[calc(100vw-2rem)] sm:w-80 max-w-80 p-3 sm:p-4 bg-black/80 backdrop-blur-xl border border-cyan-500/30 rounded-xl shadow-xl shadow-cyan-500/10">
+              <div className="flex items-center gap-2 mb-1.5 sm:mb-2">
                 <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-xs text-cyan-300">Listening...</span>
+                <span className="text-[10px] sm:text-xs text-cyan-300">Listening...</span>
               </div>
-              <p className="text-white">{voice.transcript}</p>
+              <p className="text-sm sm:text-base text-white">{voice.transcript}</p>
             </div>
           )}
         </div>
       )}
 
-      {/* Voice Settings Modal */}
+      {/* Voice Settings Modal - Mobile optimized */}
       {showSettings && (
-        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-          <div className="w-full max-w-md bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-semibold text-white">Voice Settings</h3>
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-end sm:items-center justify-center p-0 sm:p-4">
+          <div className="w-full sm:max-w-md bg-zinc-900 rounded-t-2xl sm:rounded-2xl border-t sm:border border-zinc-800 p-4 sm:p-6 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h3 className="text-base sm:text-lg font-semibold text-white">Voice Settings</h3>
               <button
                 onClick={() => setShowSettings(false)}
-                className="p-2 hover:bg-zinc-800 rounded-lg transition"
+                className="p-2 hover:bg-zinc-800 active:bg-zinc-800 rounded-lg transition touch-target"
               >
                 <X className="w-5 h-5 text-zinc-400" />
               </button>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <label className="block text-sm font-medium text-white mb-2">Language</label>
-                <select className="w-full p-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-cyan-500">
+                <label className="block text-xs sm:text-sm font-medium text-white mb-1.5 sm:mb-2">Language</label>
+                <select className="w-full p-2.5 sm:p-3 bg-zinc-800 border border-zinc-700 rounded-lg sm:rounded-xl text-sm sm:text-base text-white focus:outline-none focus:border-cyan-500 touch-target">
                   <option value="en-US">English (US)</option>
                   <option value="en-GB">English (UK)</option>
                   <option value="en-AU">English (Australia)</option>
                 </select>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-zinc-800 rounded-xl">
-                <div>
-                  <div className="font-medium text-white">Auto-send on pause</div>
-                  <div className="text-sm text-zinc-400">Send message when you stop speaking</div>
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-zinc-800 rounded-lg sm:rounded-xl">
+                <div className="flex-1 pr-3">
+                  <div className="font-medium text-sm sm:text-base text-white">Auto-send on pause</div>
+                  <div className="text-xs sm:text-sm text-zinc-400">Send message when you stop speaking</div>
                 </div>
-                <button 
+                <button
                   onClick={() => updateSettings({ voiceAutoSend: !settings.voiceAutoSend })}
-                  className={`w-12 h-6 rounded-full transition-colors ${settings.voiceAutoSend ? 'bg-cyan-600' : 'bg-zinc-600'}`}
+                  className={`flex-shrink-0 w-11 sm:w-12 h-6 rounded-full transition-colors touch-target ${settings.voiceAutoSend ? 'bg-cyan-600' : 'bg-zinc-600'}`}
                 >
-                  <div className={`w-5 h-5 bg-white rounded-full transition-transform ${settings.voiceAutoSend ? 'translate-x-6' : 'translate-x-1'}`} />
+                  <div className={`w-5 h-5 bg-white rounded-full transition-transform ${settings.voiceAutoSend ? 'translate-x-5 sm:translate-x-6' : 'translate-x-0.5 sm:translate-x-1'}`} />
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-zinc-800 rounded-xl">
-                <div>
-                  <div className="font-medium text-white">Voice response</div>
-                  <div className="text-sm text-zinc-400">AI speaks responses aloud</div>
+              <div className="flex items-center justify-between p-3 sm:p-4 bg-zinc-800 rounded-lg sm:rounded-xl">
+                <div className="flex-1 pr-3">
+                  <div className="font-medium text-sm sm:text-base text-white">Voice response</div>
+                  <div className="text-xs sm:text-sm text-zinc-400">AI speaks responses aloud</div>
                 </div>
-                <button className="w-12 h-6 rounded-full bg-zinc-600">
+                <button className="flex-shrink-0 w-11 sm:w-12 h-6 rounded-full bg-zinc-600 touch-target">
                   <div className="w-5 h-5 bg-white rounded-full translate-x-0.5" />
                 </button>
               </div>

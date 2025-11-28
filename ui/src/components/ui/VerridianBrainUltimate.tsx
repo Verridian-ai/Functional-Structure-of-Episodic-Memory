@@ -296,7 +296,7 @@ export function VerridianBrainUltimate() {
   const { particleCount, enableBloom } = useAdaptiveSettings();
 
   return (
-    <div className="fixed inset-0 z-0 bg-black overflow-hidden">
+    <div id="brain-visualization" className="fixed inset-0 z-0 bg-black overflow-hidden">
       <Canvas dpr={[1, 2]} gl={{ antialias: false, toneMapping: THREE.NoToneMapping }}>
         <PerspectiveCamera makeDefault position={[0, 0, 12]} fov={45} />
         
