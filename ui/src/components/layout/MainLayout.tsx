@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   MessageSquare, FileText, Settings, Menu, Plus,
-  ChevronLeft, Trash2, Search, Brain, Database
+  ChevronLeft, Trash2, Brain
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { VerridianBrainUltimate } from '@/components/ui/VerridianBrainUltimate';
@@ -136,13 +136,12 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         {/* Search Section - Responsive padding */}
         <div className="flex-shrink-0 px-4 sm:px-6 md:px-8 py-4 sm:py-6 border-b border-white/5 bg-white/[0.02]">
           <div className="relative group flex items-center">
-            <Search className="absolute left-3 sm:left-4 w-4 h-4 sm:w-5 sm:h-5 text-zinc-500 group-focus-within:text-zinc-200 transition-colors stroke-[2] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search"
-              className="w-full h-11 sm:h-12 pl-10 sm:pl-14 pr-3 sm:pr-4 bg-black/40 border border-zinc-800 rounded-xl text-sm sm:text-[15px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
+              placeholder="Search projects..."
+              className="w-full h-11 sm:h-12 px-4 sm:px-5 bg-black/40 border border-zinc-800 rounded-xl text-sm sm:text-[15px] text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
             />
           </div>
         </div>
