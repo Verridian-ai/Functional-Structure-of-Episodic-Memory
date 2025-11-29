@@ -215,29 +215,30 @@ export function CanvasPanel() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950/40 backdrop-blur-xl border-l border-white/5">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/5">
-        <div className="flex items-center gap-3">
+    <div className="fixed inset-0 md:relative md:inset-auto h-full flex flex-col bg-zinc-950 md:bg-zinc-950/40 backdrop-blur-xl md:border-l border-white/5 z-40 md:z-auto">
+      {/* Header - Mobile optimized */}
+      <div className="flex items-center justify-between px-3 md:px-4 py-3 border-b border-white/5 safe-area-pt">
+        <div className="flex items-center gap-2 md:gap-3">
           <button
             onClick={toggleCanvas}
-            className="p-1.5 hover:bg-white/5 rounded-lg transition"
+            className="p-2 md:p-1.5 hover:bg-white/5 rounded-lg transition"
+            aria-label="Close canvas"
           >
             <ChevronRight className="w-5 h-5 text-zinc-400" />
           </button>
-          <h2 className="font-semibold text-white">Canvas</h2>
-          <span className="px-2 py-0.5 text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10">
+          <h2 className="font-semibold text-white text-sm md:text-base">Canvas</h2>
+          <span className="px-2 py-0.5 text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10 hidden sm:inline-flex">
             {artifacts.length} items
           </span>
         </div>
 
         {activeArtifact && (
-          <div className="flex items-center gap-2">
-            
+          <div className="flex items-center gap-1 md:gap-2 overflow-x-auto scrollbar-hide">
+
             {/* NanoBanana Image Gen Button */}
              <button
                 onClick={() => setShowImageModal(true)}
-                className="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-lg transition"
+                className="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-lg transition flex-shrink-0"
                 title="Generate Image (NanoBanana Pro)"
               >
                 <ImageIcon className="w-4 h-4" />
@@ -246,14 +247,14 @@ export function CanvasPanel() {
             {/* Highlighter Toggle */}
              <button
                 onClick={() => setHighlighterMode(!highlighterMode)}
-                className={`p-2 rounded-lg transition ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`p-2 rounded-lg transition flex-shrink-0 ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Highlighter Pen"
               >
                 <Highlighter className="w-4 h-4" />
               </button>
 
             {/* Layout/Grid Toggle */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowLayoutMenu(!showLayoutMenu)}
                 className={`p-2 rounded-lg transition ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
@@ -263,7 +264,7 @@ export function CanvasPanel() {
               </button>
 
               {showLayoutMenu && (
-                <div className="absolute right-0 top-full mt-2 w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                <div className="fixed inset-x-4 top-20 md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 w-auto md:w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50 max-h-[70vh] md:max-h-[60vh]">
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-zinc-800 bg-black/20">
                         <h3 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -346,7 +347,7 @@ export function CanvasPanel() {
             {isEditing ? (
               <button
                 onClick={handleSave}
-                className="p-2 hover:bg-green-500/20 text-green-400 rounded-lg transition"
+                className="p-2 hover:bg-green-500/20 text-green-400 rounded-lg transition flex-shrink-0"
                 title="Save changes"
               >
                 <Save className="w-4 h-4" />
@@ -354,7 +355,7 @@ export function CanvasPanel() {
             ) : (
               <button
                 onClick={handleEdit}
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition flex-shrink-0"
                 title="Edit"
               >
                 <Edit3 className="w-4 h-4" />
@@ -362,14 +363,14 @@ export function CanvasPanel() {
             )}
             <button
               onClick={handleCopy}
-              className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+              className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition flex-shrink-0 hidden sm:flex"
               title="Copy"
             >
               <Copy className="w-4 h-4" />
             </button>
-            
+
             {/* Export Menu */}
-            <div className="relative group">
+            <div className="relative group flex-shrink-0">
               <button
                 className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
                 title="Export"

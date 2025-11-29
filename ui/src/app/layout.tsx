@@ -13,6 +13,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: "#000000",
+  viewportFit: "cover", // Enable safe area insets for notched devices
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
