@@ -177,14 +177,14 @@ export function ChatPanel() {
   }, [setGenerating]);
 
   return (
-    <div className="flex flex-col h-full relative">
-      {/* Messages - Centered container matching input width, mobile-optimized padding */}
-      <div className="flex-1 overflow-y-auto pb-28 sm:pb-32 flex justify-center">
-        <div className="w-full max-w-3xl px-2 sm:px-4 md:px-6">
+    <div className="flex flex-col h-full relative overflow-hidden">
+      {/* Messages - Flex child that takes remaining space */}
+      <div className="flex-1 overflow-y-auto scroll-smooth">
+        <div className="w-full max-w-3xl mx-auto px-2 sm:px-4 md:px-6 py-4 pb-4">
           {messages.length === 0 ? (
             <WelcomeScreen onSuggestionClick={handleSend} />
           ) : (
-            <div className="space-y-3 sm:space-y-4 py-3 sm:py-4">
+            <div className="space-y-3 sm:space-y-4">
               {messages.map((message, index) => (
                 <div
                   key={message.id}
@@ -194,18 +194,25 @@ export function ChatPanel() {
                   <ChatMessage message={message} />
                 </div>
               ))}
+              {/* Spacer to ensure last message isn't hidden behind "absolute" elements if we had them, 
+                  but now we act as flex col. Still good to have breathing room. */}
+              <div className="h-4" /> 
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
       </div>
 
-      {/* Input */}
-      <ChatInput
-        onSend={handleSend}
-        onStop={handleStop}
-        disabled={isGenerating}
-      />
+      {/* Input - Flex child that stays at bottom */}
+      <div className="flex-shrink-0 w-full border-t border-white/5 bg-zinc-950/80 backdrop-blur-md p-2 sm:p-4 z-10">
+        <div className="max-w-3xl mx-auto">
+          <ChatInput
+            onSend={handleSend}
+            onStop={handleStop}
+            disabled={isGenerating}
+          />
+        </div>
+      </div>
     </div>
   );
 }
