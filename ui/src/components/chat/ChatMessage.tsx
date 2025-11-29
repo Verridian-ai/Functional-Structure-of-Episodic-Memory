@@ -1,9 +1,9 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { User, Sparkles, Code, FileText, Loader2, CheckCircle2, AlertCircle, Clock, ExternalLink, Copy, BrainCircuit } from 'lucide-react';
+import { User, Code, FileText, Loader2, CheckCircle2, AlertCircle, Clock, ExternalLink, Copy, BrainCircuit, Check } from 'lucide-react';
 import type { Message, Artifact, ToolCall } from '@/types';
 import { useStore } from '@/lib/store';
 import { SynapseLoader } from '../ui/SynapseLoader';
@@ -12,19 +12,28 @@ interface ChatMessageProps {
   message: Message;
 }
 
-export function ChatMessage({ message }: ChatMessageProps) {
+export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMessageProps) {
   const { addArtifact, setActiveArtifact, toggleCanvas } = useStore();
+  const [copiedId, setCopiedId] = useState<string | null>(null);
   const isUser = message.role === 'user';
 
-  const handleArtifactClick = (artifact: Artifact) => {
+  const handleArtifactClick = useCallback((artifact: Artifact) => {
     addArtifact(artifact);
     setActiveArtifact(artifact.id);
     toggleCanvas();
-  };
+  }, [addArtifact, setActiveArtifact, toggleCanvas]);
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-  };
+  const copyToClipboard = useCallback(async (text: string, id?: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      if (id) {
+        setCopiedId(id);
+        setTimeout(() => setCopiedId(null), 2000);
+      }
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  }, []);
 
   return (
     <div className={`group px-4 py-6 transition-colors ${
@@ -93,6 +102,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
                       );
                     }
 
+                    const codeId = `code-${message.id}-${match[1]}`;
+                    const isCopied = copiedId === codeId;
+
                     return (
                       <div className="relative group/code my-4">
                         {/* Header */}
@@ -100,11 +112,21 @@ export function ChatMessage({ message }: ChatMessageProps) {
                           <span className="text-xs text-zinc-400 font-medium">{match[1]}</span>
                           <div className="flex items-center gap-1 opacity-0 group-hover/code:opacity-100 transition-opacity">
                             <button
-                              onClick={() => copyToClipboard(codeContent)}
-                              className="p-1.5 hover:bg-white/5 rounded-lg transition-colors"
-                              title="Copy code"
+                              onClick={() => copyToClipboard(codeContent, codeId)}
+                              className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${
+                                isCopied ? 'bg-emerald-500/20 text-emerald-400' : 'hover:bg-white/5 text-zinc-400'
+                              }`}
+                              title={isCopied ? 'Copied!' : 'Copy code'}
+                              aria-label={isCopied ? 'Copied to clipboard' : 'Copy code to clipboard'}
                             >
-                              <Copy className="w-3.5 h-3.5 text-zinc-400" />
+                              {isCopied ? (
+                                <>
+                                  <Check className="w-3.5 h-3.5" />
+                                  <span className="text-xs">Copied!</span>
+                                </>
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
                             </button>
                             <button
                               onClick={() => handleArtifactClick({
@@ -118,6 +140,7 @@ export function ChatMessage({ message }: ChatMessageProps) {
                               })}
                               className="p-1.5 hover:bg-white/5 rounded-lg transition-colors"
                               title="Open in Canvas"
+                              aria-label="Open code in Canvas"
                             >
                               <ExternalLink className="w-3.5 h-3.5 text-zinc-400" />
                             </button>
