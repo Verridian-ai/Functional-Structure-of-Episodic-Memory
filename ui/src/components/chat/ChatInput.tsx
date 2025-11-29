@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic, MicOff, Paperclip, Code, FileText, StopCircle, Sparkles, AudioLines, PlusCircle, ArrowUp, Scale, ScrollText, Gavel, BookOpen, X } from 'lucide-react';
+import { Mic, FileText, AudioLines, PlusCircle, ArrowUp, ScrollText, Gavel, BookOpen, X } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useSound } from '@/hooks/useSound';
 
@@ -22,11 +22,13 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isGenerating, voice, setVoice, settings, updateSettings, messages } = useStore();
+  const { isGenerating, voice, setVoice, settings, messages } = useStore();
   const { play } = useSound();
   const prevListening = useRef(voice.isListening);
   // Track the input state *before* the current voice session started
   const inputBeforeListening = useRef('');
+  // Ref to hold handleSend for use in effects
+  const handleSendRef = useRef<() => void>(() => {});
 
   // Auto-resize textarea
   useEffect(() => {
@@ -64,7 +66,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       // We just need to check auto-send.
       
       if (settings.voiceAutoSend && input.trim()) {
-        handleSend();
+        handleSendRef.current();
       }
       
       // Reset base input for next time? 
@@ -87,8 +89,10 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       
       if (e.code === 'Space' && !e.repeat) {
         // Check if focused element is an input/textarea
-        const activeTag = document.activeElement?.tagName.toLowerCase();
-        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement as HTMLElement)?.isContentEditable;
+        const activeElement = document.activeElement;
+        const activeTag = activeElement?.tagName.toLowerCase();
+        const isContentEditable = activeElement instanceof HTMLElement && activeElement.isContentEditable;
+        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || isContentEditable;
 
         if (!isInputActive && !voice.isListening && !isGenerating && !disabled) {
           e.preventDefault(); // Prevent scrolling
@@ -119,7 +123,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   }, [voice.isListening, isGenerating, disabled, setVoice]);
 
 
-  const handleSend = () => {
+  const handleSend = React.useCallback(() => {
     if ((input.trim() || attachedFiles.length > 0) && !disabled && !isGenerating) {
       play('send');
       const files = attachedFiles.map(af => af.file);
@@ -127,7 +131,12 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       setInput('');
       setAttachedFiles([]);
     }
-  };
+  }, [input, attachedFiles, disabled, isGenerating, play, onSend]);
+
+  // Keep ref updated for use in effects
+  useEffect(() => {
+    handleSendRef.current = handleSend;
+  }, [handleSend]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -207,8 +216,8 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   ];
 
   return (
-    <div className="flex-shrink-0 absolute bottom-0 left-0 right-0 p-2 sm:p-4 md:bottom-6 z-20 safe-area-pb flex justify-center">
-      <div className="w-full max-w-3xl px-2 sm:px-4 md:px-6">
+    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-2 sm:p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl z-20 safe-area-pb">
+      <div className="w-full px-2 sm:px-4 md:px-0">
         {/* Starter Prompts - Scrollable on mobile, wrapped on larger screens */}
         {messages.length === 0 && !input && (
             <div id="quick-actions-container" className="flex items-center gap-2 mb-3 sm:mb-4 animate-fade-in-up overflow-x-auto scrollbar-hide pb-1 sm:pb-0 sm:flex-wrap sm:justify-center -mx-2 px-2 sm:mx-0 sm:px-0">

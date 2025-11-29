@@ -13,14 +13,25 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: "#000000",
+  viewportFit: "cover", // Enable safe area insets for notched devices
+  colorScheme: "dark",
 };
 
 export const metadata: Metadata = {
   title: "Verridian LAW OS",
   description: "AI-powered legal assistant with episodic memory",
+  manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
+    apple: "/icon-192.png",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Verridian",
+  },
+  applicationName: "Verridian LAW OS",
+  keywords: ["legal", "AI", "assistant", "law", "productivity"],
 };
 
 export default function RootLayout({

@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
-  X, Download, Copy, Edit3, Save, FileText, Code, File,
-  ChevronLeft, ChevronRight, Trash2, Plus, ExternalLink, Highlighter, Layout, Image as ImageIcon, Type, Grid, Scale
+  Download, Copy, Edit3, Save, FileText, Code, File,
+  ChevronRight, Highlighter, Layout, Image as ImageIcon, Scale
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
-import type { Artifact, ArtifactSection } from '@/types';
+import type { Artifact } from '@/types';
+import { SafeHtmlProse } from '@/components/ui/SafeHtml';
+
+// Generate unique ID for artifacts (outside component to avoid purity issues)
+let artifactCounter = 0;
+const generateArtifactId = () => `artifact_${++artifactCounter}_${Date.now()}`;
 
 // NanoBanana Pro Image Generation via OpenRouter
 interface GenerateImageOptions {
@@ -98,9 +103,18 @@ export function CanvasPanel() {
 
     const createFromTemplate = (templateId: string) => {
       const templateName = TEMPLATES.find(t => t.id === templateId)?.name || 'Document';
-      
-      const structure: Artifact['structure'] = {
-          layout: templateId as any,
+
+      // Map template IDs to layout types
+      const layoutMap: Record<string, 'standard' | 'report' | 'newsletter' | 'legal-brief'> = {
+        'legal': 'legal-brief',
+        'newsletter': 'newsletter',
+        'report': 'report',
+        'standard': 'standard',
+      };
+      const layout = layoutMap[templateId] || 'standard';
+
+      const structure: NonNullable<Artifact['structure']> = {
+          layout,
           sections: []
       };
 
@@ -122,16 +136,17 @@ export function CanvasPanel() {
            ];
       }
 
+      const now = new Date();
       const newArtifact: Artifact = {
-          id: `artifact_${Date.now()}`,
+          id: generateArtifactId(),
           type: 'smart-canvas',
           title: `New ${templateName}`,
           content: '',
           structure,
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          createdAt: now,
+          updatedAt: now,
       };
-      
+
       addArtifact(newArtifact);
       setShowLayoutMenu(false);
     };
@@ -273,29 +288,30 @@ export function CanvasPanel() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950/40 backdrop-blur-xl border-l border-white/5">
-      {/* Header - Responsive */}
-      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5">
+    <div className="fixed inset-0 md:relative md:inset-auto h-full flex flex-col bg-zinc-950 md:bg-zinc-950/40 backdrop-blur-xl md:border-l border-white/5 z-40 md:z-auto">
+      {/* Header - Mobile optimized */}
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5 safe-area-pt">
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={toggleCanvas}
-            className="p-1.5 sm:p-1.5 hover:bg-white/5 active:bg-white/5 rounded-lg transition touch-target"
+            className="p-2 md:p-1.5 hover:bg-white/5 active:bg-white/5 rounded-lg transition touch-target"
+            aria-label="Close canvas"
           >
             <ChevronRight className="w-5 h-5 text-zinc-400" />
           </button>
           <h2 className="font-semibold text-white text-sm sm:text-base">Canvas</h2>
-          <span className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10">
-            {artifacts.length}
+          <span className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10 hidden sm:inline-flex">
+            {artifacts.length} items
           </span>
         </div>
 
         {activeArtifact && (
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide">
 
             {/* NanoBanana Image Gen Button - Hidden on very small screens */}
              <button
                 onClick={() => setShowImageModal(true)}
-                className="hidden sm:flex p-2 hover:bg-yellow-500/20 active:bg-yellow-500/20 text-yellow-400 rounded-lg transition touch-target"
+                className="hidden sm:flex p-2 hover:bg-yellow-500/20 active:bg-yellow-500/20 text-yellow-400 rounded-lg transition touch-target flex-shrink-0"
                 title="Generate Image (NanoBanana Pro)"
               >
                 <ImageIcon className="w-4 h-4" />
@@ -304,14 +320,14 @@ export function CanvasPanel() {
             {/* Highlighter Toggle - Hidden on mobile */}
              <button
                 onClick={() => setHighlighterMode(!highlighterMode)}
-                className={`hidden sm:flex p-2 rounded-lg transition touch-target ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`hidden sm:flex p-2 rounded-lg transition touch-target flex-shrink-0 ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Highlighter Pen"
               >
                 <Highlighter className="w-4 h-4" />
               </button>
 
             {/* Layout/Grid Toggle */}
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowLayoutMenu(!showLayoutMenu)}
                 className={`p-2 rounded-lg transition touch-target ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white'}`}
@@ -321,7 +337,7 @@ export function CanvasPanel() {
               </button>
 
               {showLayoutMenu && (
-                <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 max-w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50">
+                <div className="fixed inset-x-4 top-20 md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 w-auto md:w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50 max-h-[70vh] md:max-h-[60vh]">
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-zinc-800 bg-black/20">
                         <h3 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -404,7 +420,7 @@ export function CanvasPanel() {
             {isEditing ? (
               <button
                 onClick={handleSave}
-                className="p-2 hover:bg-green-500/20 active:bg-green-500/20 text-green-400 rounded-lg transition touch-target"
+                className="p-2 hover:bg-green-500/20 active:bg-green-500/20 text-green-400 rounded-lg transition touch-target flex-shrink-0"
                 title="Save changes"
               >
                 <Save className="w-4 h-4" />
@@ -412,7 +428,7 @@ export function CanvasPanel() {
             ) : (
               <button
                 onClick={handleEdit}
-                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
+                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target flex-shrink-0"
                 title="Edit"
               >
                 <Edit3 className="w-4 h-4" />
@@ -420,14 +436,14 @@ export function CanvasPanel() {
             )}
             <button
               onClick={handleCopy}
-              className="hidden sm:flex p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
+              className="hidden sm:flex p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target flex-shrink-0"
               title="Copy"
             >
               <Copy className="w-4 h-4" />
             </button>
 
             {/* Export Menu */}
-            <div className="relative group">
+            <div className="relative group flex-shrink-0">
               <button
                 className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
                 title="Export"
@@ -631,16 +647,17 @@ function SmartCanvasRenderer({ artifact }: { artifact: Artifact }) {
                         relative border border-transparent hover:border-zinc-300 transition-all group p-4
                         ${getSectionClass(section.region)}
                     `}
-                    style={section.style as any}
+                    style={section.style as React.CSSProperties}
                 >
                     <div className="absolute top-0 right-0 opacity-0 group-hover:opacity-100 bg-zinc-100 text-zinc-800 text-[10px] px-1 uppercase font-bold">
                         {section.region}
                     </div>
                     
                     {section.type === 'image' ? (
-                        <img src={section.content} alt={section.title} className="max-w-full h-auto" />
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={section.content} alt={section.title || 'Document image'} className="max-w-full h-auto" loading="lazy" />
                     ) : (
-                         <div className="prose max-w-none" dangerouslySetInnerHTML={{ __html: section.content }} />
+                         <SafeHtmlProse content={section.content} dark={false} />
                     )}
                 </div>
             ))}
@@ -683,9 +700,9 @@ function ArtifactContent({ artifact, highlighterMode }: { artifact: Artifact, hi
   if (artifact.type === 'html') {
     return (
       <div className="h-full overflow-auto p-4">
-        <div
-          className={`prose prose-invert prose-sm max-w-none ${highlighterMode ? 'cursor-text selection:bg-yellow-500/50' : ''}`}
-          dangerouslySetInnerHTML={{ __html: content }}
+        <SafeHtmlProse
+          content={content}
+          className={highlighterMode ? 'cursor-text selection:bg-yellow-500/50' : ''}
         />
       </div>
     );
@@ -715,17 +732,3 @@ function getArtifactIcon(artifact: Artifact) {
   }
 }
 
-function getFileExtension(artifact: Artifact): string {
-  switch (artifact.type) {
-    case 'code':
-      return artifact.language === 'python' ? '.py' :
-             artifact.language === 'javascript' ? '.js' :
-             artifact.language === 'typescript' ? '.ts' : '.txt';
-    case 'html':
-      return '.html';
-    case 'markdown':
-      return '.md';
-    default:
-      return '.txt';
-  }
-}
