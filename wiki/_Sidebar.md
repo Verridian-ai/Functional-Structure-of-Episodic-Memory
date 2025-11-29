@@ -44,6 +44,7 @@
 | Page | Description |
 |------|-------------|
 | [Frontend Overview](Frontend-Overview) | Next.js architecture |
+| **[Frontend Features](Frontend-Features)** | **UI Gallery (30+ features)** |
 | [API Routes](Frontend-API-Routes) | REST endpoints |
 | [Components](Frontend-Components) | React components |
 
@@ -64,6 +65,7 @@
 |-----------|-------------|
 | [API Reference](API-Reference) | Complete API docs |
 | [Data Schemas](Data-Schemas) | Pydantic schemas |
+| [TOON Format](TOON-Format) | Token-efficient format |
 | [Glossary](Glossary) | Terminology |
 | [File Index](File-Index) | Codebase map |
 

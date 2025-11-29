@@ -49,7 +49,7 @@ async function executePythonCode(code: string): Promise<string> {
     // Simulate print statements
     const printMatch = trimmed.match(/^print\s*\((.*)\)\s*$/);
     if (printMatch) {
-      let content = printMatch[1];
+      const content = printMatch[1];
       // Handle string literals
       if ((content.startsWith('"') && content.endsWith('"')) ||
           (content.startsWith("'") && content.endsWith("'"))) {

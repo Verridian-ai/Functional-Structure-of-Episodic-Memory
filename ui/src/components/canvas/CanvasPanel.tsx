@@ -13,11 +13,54 @@ import { SafeHtmlProse } from '@/components/ui/SafeHtml';
 let artifactCounter = 0;
 const generateArtifactId = () => `artifact_${++artifactCounter}_${Date.now()}`;
 
-// Mock NanoBanana Pro Image Generation
-const generateImage = async (prompt: string): Promise<string> => {
-  // In a real app, call /api/generate-image
-  // For demo, return a placeholder based on the prompt hash or similar
-  return `https://placehold.co/600x400/1e1e1e/06b6d4?text=${encodeURIComponent(prompt.slice(0, 20))}`;
+// NanoBanana Pro Image Generation via OpenRouter
+interface GenerateImageOptions {
+  prompt: string;
+  aspectRatio?: string;
+  context?: string;
+  documentType?: string;
+}
+
+interface GenerateImageResult {
+  success: boolean;
+  image?: string;
+  text?: string;
+  error?: string;
+}
+
+const generateImage = async (options: GenerateImageOptions): Promise<GenerateImageResult> => {
+  try {
+    const response = await fetch('/api/generate-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: options.prompt,
+        aspectRatio: options.aspectRatio || '16:9',
+        context: options.context,
+        documentType: options.documentType,
+      }),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return {
+        success: false,
+        error: data.error || 'Image generation failed',
+      };
+    }
+
+    return {
+      success: true,
+      image: data.image,
+      text: data.text,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Network error',
+    };
+  }
 };
 
 export function CanvasPanel() {
@@ -45,6 +88,9 @@ export function CanvasPanel() {
     const [highlighterMode, setHighlighterMode] = useState(false);
     const [imagePrompt, setImagePrompt] = useState('');
     const [showImageModal, setShowImageModal] = useState(false);
+    const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+    const [imageError, setImageError] = useState<string | null>(null);
+    const [selectedAspectRatio, setSelectedAspectRatio] = useState('16:9');
 
     const activeArtifact = artifacts.find(a => a.id === activeArtifactId);
 
@@ -201,53 +247,80 @@ export function CanvasPanel() {
   };
 
   const handleAddImage = async () => {
-      if (!activeArtifact) return;
-      const url = await generateImage(imagePrompt);
-      
-      // For now, append markdown image to content
-      const imageMarkdown = `\n\n![${imagePrompt}](${url})\n\n`;
-      
-      updateArtifact(activeArtifact.id, { 
-          content: (activeArtifact.content || '') + imageMarkdown
-      });
-      setShowImageModal(false);
-      setImagePrompt('');
+      if (!activeArtifact || !imagePrompt.trim()) return;
+
+      setIsGeneratingImage(true);
+      setImageError(null);
+
+      try {
+        // Detect document type from artifact structure
+        const documentType = activeArtifact.structure?.layout || 'standard';
+
+        const result = await generateImage({
+          prompt: imagePrompt,
+          aspectRatio: selectedAspectRatio,
+          context: activeArtifact.content?.slice(0, 500), // Provide context from document
+          documentType,
+        });
+
+        if (!result.success) {
+          setImageError(result.error || 'Failed to generate image');
+          return;
+        }
+
+        if (result.image) {
+          // Insert base64 image directly into content
+          const imageMarkdown = `\n\n![${imagePrompt}](${result.image})\n\n`;
+
+          updateArtifact(activeArtifact.id, {
+            content: (activeArtifact.content || '') + imageMarkdown
+          });
+
+          setShowImageModal(false);
+          setImagePrompt('');
+          setSelectedAspectRatio('16:9');
+        }
+      } catch (error) {
+        setImageError(error instanceof Error ? error.message : 'Unknown error');
+      } finally {
+        setIsGeneratingImage(false);
+      }
   };
 
   return (
     <div className="fixed inset-0 md:relative md:inset-auto h-full flex flex-col bg-zinc-950 md:bg-zinc-950/40 backdrop-blur-xl md:border-l border-white/5 z-40 md:z-auto">
       {/* Header - Mobile optimized */}
-      <div className="flex items-center justify-between px-3 md:px-4 py-3 border-b border-white/5 safe-area-pt">
-        <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5 safe-area-pt">
+        <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={toggleCanvas}
-            className="p-2 md:p-1.5 hover:bg-white/5 rounded-lg transition"
+            className="p-2 md:p-1.5 hover:bg-white/5 active:bg-white/5 rounded-lg transition touch-target"
             aria-label="Close canvas"
           >
             <ChevronRight className="w-5 h-5 text-zinc-400" />
           </button>
-          <h2 className="font-semibold text-white text-sm md:text-base">Canvas</h2>
-          <span className="px-2 py-0.5 text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10 hidden sm:inline-flex">
+          <h2 className="font-semibold text-white text-sm sm:text-base">Canvas</h2>
+          <span className="px-1.5 sm:px-2 py-0.5 text-[10px] sm:text-xs bg-white/5 rounded-full text-zinc-400 border border-white/10 hidden sm:inline-flex">
             {artifacts.length} items
           </span>
         </div>
 
         {activeArtifact && (
-          <div className="flex items-center gap-1 md:gap-2 overflow-x-auto scrollbar-hide">
+          <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto scrollbar-hide">
 
-            {/* NanoBanana Image Gen Button */}
+            {/* NanoBanana Image Gen Button - Hidden on very small screens */}
              <button
                 onClick={() => setShowImageModal(true)}
-                className="p-2 hover:bg-yellow-500/20 text-yellow-400 rounded-lg transition flex-shrink-0"
+                className="hidden sm:flex p-2 hover:bg-yellow-500/20 active:bg-yellow-500/20 text-yellow-400 rounded-lg transition touch-target flex-shrink-0"
                 title="Generate Image (NanoBanana Pro)"
               >
                 <ImageIcon className="w-4 h-4" />
               </button>
 
-            {/* Highlighter Toggle */}
+            {/* Highlighter Toggle - Hidden on mobile */}
              <button
                 onClick={() => setHighlighterMode(!highlighterMode)}
-                className={`p-2 rounded-lg transition flex-shrink-0 ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`hidden sm:flex p-2 rounded-lg transition touch-target flex-shrink-0 ${highlighterMode ? 'bg-yellow-500/20 text-yellow-400' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Highlighter Pen"
               >
                 <Highlighter className="w-4 h-4" />
@@ -257,7 +330,7 @@ export function CanvasPanel() {
             <div className="relative flex-shrink-0">
               <button
                 onClick={() => setShowLayoutMenu(!showLayoutMenu)}
-                className={`p-2 rounded-lg transition ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 text-zinc-400 hover:text-white'}`}
+                className={`p-2 rounded-lg transition touch-target ${showLayoutMenu ? 'bg-white/10 text-white' : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white'}`}
                 title="Layout & Templates"
               >
                 <Layout className="w-4 h-4" />
@@ -347,7 +420,7 @@ export function CanvasPanel() {
             {isEditing ? (
               <button
                 onClick={handleSave}
-                className="p-2 hover:bg-green-500/20 text-green-400 rounded-lg transition flex-shrink-0"
+                className="p-2 hover:bg-green-500/20 active:bg-green-500/20 text-green-400 rounded-lg transition touch-target flex-shrink-0"
                 title="Save changes"
               >
                 <Save className="w-4 h-4" />
@@ -355,7 +428,7 @@ export function CanvasPanel() {
             ) : (
               <button
                 onClick={handleEdit}
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition flex-shrink-0"
+                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target flex-shrink-0"
                 title="Edit"
               >
                 <Edit3 className="w-4 h-4" />
@@ -363,7 +436,7 @@ export function CanvasPanel() {
             )}
             <button
               onClick={handleCopy}
-              className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition flex-shrink-0 hidden sm:flex"
+              className="hidden sm:flex p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target flex-shrink-0"
               title="Copy"
             >
               <Copy className="w-4 h-4" />
@@ -372,16 +445,16 @@ export function CanvasPanel() {
             {/* Export Menu */}
             <div className="relative group flex-shrink-0">
               <button
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition"
+                className="p-2 hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition touch-target"
                 title="Export"
               >
                 <Download className="w-4 h-4" />
               </button>
               <div className="absolute right-0 top-full mt-1 w-32 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                <button onClick={handleDownloadDOCX} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                <button onClick={handleDownloadDOCX} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   Word (.docx)
                 </button>
-                <button onClick={handleDownloadPDF} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                <button onClick={handleDownloadPDF} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   PDF (.pdf)
                 </button>
                 <button onClick={() => {
@@ -391,7 +464,7 @@ export function CanvasPanel() {
                     a.href = url;
                     a.download = `${activeArtifact.title.replace(/\s+/g, '_')}.txt`;
                     a.click();
-                }} className="w-full px-3 py-2 text-left text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition">
+                }} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   Text (.txt)
                 </button>
               </div>
@@ -401,21 +474,21 @@ export function CanvasPanel() {
         )}
       </div>
 
-      {/* Tabs */}
+      {/* Tabs - Scrollable on mobile */}
       {artifacts.length > 0 && (
-        <div className="flex items-center gap-1 px-2 py-2 border-b border-white/5 overflow-x-auto">
+        <div className="flex items-center gap-1 px-2 py-1.5 sm:py-2 border-b border-white/5 overflow-x-auto scrollbar-hide">
           {artifacts.map((artifact) => (
             <button
               key={artifact.id}
               onClick={() => setActiveArtifact(artifact.id)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm whitespace-nowrap transition ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-1.5 rounded-lg text-xs sm:text-sm whitespace-nowrap transition touch-target ${
                 artifact.id === activeArtifactId
                   ? 'bg-white/10 text-white border border-white/10 shadow-sm'
-                  : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
+                  : 'hover:bg-white/5 active:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
               }`}
             >
               {getArtifactIcon(artifact)}
-              <span className="max-w-[120px] truncate">{artifact.title}</span>
+              <span className="max-w-[80px] sm:max-w-[120px] truncate">{artifact.title}</span>
             </button>
           ))}
         </div>
@@ -426,35 +499,93 @@ export function CanvasPanel() {
         {activeArtifact ? (
           <div className="h-full">
               
-            {/* NanoBanana Modal */}
+            {/* NanoBanana Pro Modal - Mobile optimized */}
             {showImageModal && (
-                <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-6">
-                    <div className="w-full max-w-md bg-zinc-900 border border-yellow-500/30 rounded-xl p-4 shadow-2xl shadow-yellow-500/10">
-                        <h3 className="text-lg font-bold text-yellow-400 mb-2 flex items-center gap-2">
-                            <ImageIcon className="w-5 h-5" />
-                            NanoBanana Pro
+                <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6">
+                    <div className="w-full sm:max-w-md bg-zinc-900 border-t sm:border border-yellow-500/30 rounded-t-2xl sm:rounded-xl p-4 sm:p-5 shadow-2xl shadow-yellow-500/10 max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-base sm:text-lg font-bold text-yellow-400 mb-1 flex items-center gap-2">
+                            <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                            <span className="hidden sm:inline">NanoBanana Pro - Infographic Generator</span>
+                            <span className="sm:hidden">Image Generator</span>
                         </h3>
-                        <p className="text-sm text-zinc-400 mb-4">Describe the image you want to generate for this document.</p>
-                        <textarea 
-                            value={imagePrompt}
-                            onChange={(e) => setImagePrompt(e.target.value)}
-                            className="w-full h-24 bg-black/50 border border-zinc-700 rounded-lg p-3 text-white mb-4 focus:border-yellow-500/50 outline-none resize-none"
-                            placeholder="A professional legal letterhead with a scale of justice logo..."
-                        />
-                        <div className="flex justify-end gap-2">
-                            <button 
-                                onClick={() => setShowImageModal(false)}
-                                className="px-4 py-2 text-zinc-400 hover:text-white transition"
-                            >
-                                Cancel
-                            </button>
-                            <button 
-                                onClick={handleAddImage}
-                                disabled={!imagePrompt}
-                                className="px-4 py-2 bg-yellow-600 hover:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                Generate
-                            </button>
+                        <p className="text-[10px] sm:text-xs text-zinc-500 mb-3 sm:mb-4">Powered by Gemini 3 Pro via OpenRouter</p>
+
+                        <div className="space-y-3 sm:space-y-4">
+                          {/* Prompt Input */}
+                          <div>
+                            <label className="text-[10px] sm:text-xs text-zinc-400 mb-1 block">Describe your infographic</label>
+                            <textarea
+                                value={imagePrompt}
+                                onChange={(e) => setImagePrompt(e.target.value)}
+                                className="w-full h-20 sm:h-24 bg-black/50 border border-zinc-700 rounded-lg p-2.5 sm:p-3 text-sm sm:text-base text-white focus:border-yellow-500/50 outline-none resize-none"
+                                placeholder="An infographic showing the timeline of family court proceedings..."
+                                disabled={isGeneratingImage}
+                            />
+                          </div>
+
+                          {/* Aspect Ratio Selection */}
+                          <div>
+                            <label className="text-[10px] sm:text-xs text-zinc-400 mb-1.5 sm:mb-2 block">Aspect Ratio</label>
+                            <div className="flex gap-1.5 sm:gap-2 flex-wrap">
+                              {['1:1', '16:9', '4:3', '9:16', '3:2'].map((ratio) => (
+                                <button
+                                  key={ratio}
+                                  onClick={() => setSelectedAspectRatio(ratio)}
+                                  className={`px-2.5 sm:px-3 py-1.5 text-xs rounded-lg border transition touch-target ${
+                                    selectedAspectRatio === ratio
+                                      ? 'bg-yellow-600/20 border-yellow-500 text-yellow-400'
+                                      : 'border-zinc-700 text-zinc-400 hover:border-zinc-500 active:border-zinc-500'
+                                  }`}
+                                  disabled={isGeneratingImage}
+                                >
+                                  {ratio}
+                                </button>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Error Message */}
+                          {imageError && (
+                            <div className="p-2.5 sm:p-3 bg-red-500/10 border border-red-500/30 rounded-lg">
+                              <p className="text-xs sm:text-sm text-red-400">{imageError}</p>
+                            </div>
+                          )}
+
+                          {/* Action Buttons */}
+                          <div className="flex justify-end gap-2 pt-2">
+                              <button
+                                  onClick={() => {
+                                    setShowImageModal(false);
+                                    setImageError(null);
+                                    setImagePrompt('');
+                                  }}
+                                  className="px-3 sm:px-4 py-2 text-zinc-400 hover:text-white active:text-white transition touch-target"
+                                  disabled={isGeneratingImage}
+                              >
+                                  Cancel
+                              </button>
+                              <button
+                                  onClick={handleAddImage}
+                                  disabled={!imagePrompt.trim() || isGeneratingImage}
+                                  className="px-3 sm:px-4 py-2 bg-yellow-600 hover:bg-yellow-500 active:bg-yellow-500 text-black font-semibold rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 touch-target text-sm sm:text-base"
+                              >
+                                  {isGeneratingImage ? (
+                                    <>
+                                      <svg className="animate-spin w-4 h-4" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                      </svg>
+                                      <span className="hidden sm:inline">Generating...</span>
+                                      <span className="sm:hidden">...</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <span className="hidden sm:inline">Generate Infographic</span>
+                                      <span className="sm:hidden">Generate</span>
+                                    </>
+                                  )}
+                              </button>
+                          </div>
                         </div>
                     </div>
                 </div>

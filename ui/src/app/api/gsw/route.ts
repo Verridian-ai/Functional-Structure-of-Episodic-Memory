@@ -6,6 +6,7 @@ import path from 'path';
 import { TEMFactorizer, ZeroShotLegalReasoner } from '@/lib/tem/caseFactorizer';
 import { LegalEvidenceDetector } from '@/lib/active_inference/evidenceDetector';
 import { LegalVSA } from '@/lib/vsa/legalVSA';
+import { ToonEncoder } from '@/lib/toon';
 
 // TEM Singleton
 let legalReasoner: ZeroShotLegalReasoner | null = null;
@@ -575,7 +576,7 @@ export async function POST(request: NextRequest) {
       }
 
       case 'get_knowledge_context': {
-        const { query, max_actors = 5, max_questions = 10 } = params || {};
+        const { query, max_actors = 5, max_questions = 10, format = 'json' } = params || {};
 
         // Get relevant actors
         const actors = Object.entries(ws.actors)
@@ -609,11 +610,27 @@ export async function POST(request: NextRequest) {
             answered: q.answerable && q.answer_text !== null,
           }));
 
+        const total_actors = Object.keys(ws.actors).length;
+        const total_questions = Object.keys(ws.questions).length;
+
+        // Return TOON format if requested (~40% token reduction)
+        if (format === 'toon') {
+          const toonOutput = ToonEncoder.encodeKnowledgeContext({
+            actors,
+            questions,
+            total_actors,
+            total_questions,
+          });
+          return new NextResponse(toonOutput, {
+            headers: { 'Content-Type': 'text/plain' },
+          });
+        }
+
         return NextResponse.json({
           actors,
           questions,
-          total_actors: Object.keys(ws.actors).length,
-          total_questions: Object.keys(ws.questions).length,
+          total_actors,
+          total_questions,
         });
       }
 
@@ -709,22 +726,26 @@ export async function POST(request: NextRequest) {
           return true;
         }).slice(0, limit);
 
-        const results = uniqueResults.map(sc => ({
-          citation: sc.case.citation,
-          date: sc.case.date,
-          jurisdiction: sc.case.jurisdiction,
-          source: sc.case.source,
-          url: sc.case.url,
-          category: sc.case._classification?.primary_category || 'Unknown',
-          relevance_score: sc.score,
-          match_type: sc.type,
-          structural_reasoning: sc.reasoning,
-          summary: extractCaseSummary(sc.case.text),
-          outcome: extractOutcome(sc.case.text),
-          matched_keywords: keywords.filter(kw =>
-            sc.case.text.toLowerCase().includes(kw)
-          ),
-        }));
+        const results = uniqueResults.map(sc => {
+          const reasoning = 'reasoning' in sc ? (sc.reasoning as string) : '';
+          return {
+            citation: sc.case.citation,
+            date: sc.case.date,
+            jurisdiction: sc.case.jurisdiction,
+            source: sc.case.source,
+            url: sc.case.url,
+            category: sc.case._classification?.primary_category || 'Unknown',
+            relevance_score: sc.score,
+            match_type: sc.type,
+            reasoning: reasoning || '',
+            structural_reasoning: reasoning,
+            summary: extractCaseSummary(sc.case.text),
+            outcome: extractOutcome(sc.case.text),
+            matched_keywords: keywords.filter(kw =>
+              sc.case.text.toLowerCase().includes(kw)
+            ),
+          };
+        });
 
         return NextResponse.json({
           results,

@@ -6,49 +6,32 @@ The **Span Detector** provides span-level issue detection for the VSA system, id
 
 **Location**: `src/vsa/span_detector.py`
 
-```
-┌──────────────────────────────────────────────────────┐
-│           SPAN-ALIGNED VSA DETECTOR                   │
-├──────────────────────────────────────────────────────┤
-│                                                       │
-│  Input: Legal Text + Extraction Dictionary           │
-│                                                       │
-│          ┌────────────────────────────────┐          │
-│          │  SpanAlignedVSA                │          │
-│          │                                │          │
-│          │  4 Detection Methods:          │          │
-│          │                                │          │
-│          │  1. Numerical Conflicts        │          │
-│          │     • Pattern: \$?[\d,]+\.?\d* │          │
-│          │     • Compare to expected      │          │
-│          │                                │          │
-│          │  2. Date Inconsistencies       │          │
-│          │     • Multiple date formats    │          │
-│          │     • Chronological checks     │          │
-│          │                                │          │
-│          │  3. Party Name Mismatches      │          │
-│          │     • Name pattern matching    │          │
-│          │     • Alias detection          │          │
-│          │                                │          │
-│          │  4. Reference Errors           │          │
-│          │     • Section references       │          │
-│          │     • Validity checks          │          │
-│          └────────────┬───────────────────┘          │
-│                       │                               │
-│                       ▼                               │
-│          ┌────────────────────────────────┐          │
-│          │  SpanIssue Objects             │          │
-│          │                                │          │
-│          │  • issue_type                  │          │
-│          │  • span_start / span_end       │          │
-│          │  • flagged_text                │          │
-│          │  • expected_value              │          │
-│          │  • confidence (0.0-1.0)        │          │
-│          │  • source_reference            │          │
-│          └────────────────────────────────┘          │
-│                                                       │
-│  Location Alignment Metric: IoU (Intersection/Union) │
-└──────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph DETECTOR["Span-Aligned VSA Detector"]
+        INPUT["Input: Legal Text + Extraction Dictionary"]
+
+        subgraph VSA["SpanAlignedVSA - 4 Detection Methods"]
+            NUM["1. Numerical Conflicts<br/>• Pattern: $?[\\d,]+\\.?\\d*<br/>• Compare to expected"]
+            DATE["2. Date Inconsistencies<br/>• Multiple date formats<br/>• Chronological checks"]
+            PARTY["3. Party Name Mismatches<br/>• Name pattern matching<br/>• Alias detection"]
+            REF["4. Reference Errors<br/>• Section references<br/>• Validity checks"]
+        end
+
+        OUTPUT["SpanIssue Objects<br/>• issue_type<br/>• span_start / span_end<br/>• flagged_text<br/>• expected_value<br/>• confidence (0.0-1.0)<br/>• source_reference"]
+
+        METRIC["Location Alignment Metric: IoU"]
+    end
+
+    INPUT --> NUM
+    INPUT --> DATE
+    INPUT --> PARTY
+    INPUT --> REF
+    NUM --> OUTPUT
+    DATE --> OUTPUT
+    PARTY --> OUTPUT
+    REF --> OUTPUT
+    OUTPUT --> METRIC
 ```
 
 ## Files

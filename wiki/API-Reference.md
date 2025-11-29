@@ -64,10 +64,11 @@ Extract GSW structure from legal text.
     text: string;             // Legal text to extract
     situation?: string;       // Brief description
     documentId?: string;      // Source document ID
+    format?: 'json' | 'toon'; // Response format (default: 'json')
 }
 ```
 
-**Response:**
+**Response (JSON format):**
 ```typescript
 {
     success: boolean;
@@ -81,6 +82,21 @@ Extract GSW structure from legal text.
     error?: string;
 }
 ```
+
+**Response (TOON format):**
+```
+Actors[2]{id,name,type,roles}
+a1,John Smith,person,Applicant|Father
+a2,Jane Smith,person,Respondent|Mother
+
+VerbPhrases[1]{id,verb,agent_id,patient_ids}
+v1,filed,a1,a2
+
+Questions[1]{id,text,type,answerable}
+q1,When did parties separate?,when,false
+```
+
+TOON format reduces response size by ~40%. See [TOON-Format](TOON-Format) for details.
 
 ---
 

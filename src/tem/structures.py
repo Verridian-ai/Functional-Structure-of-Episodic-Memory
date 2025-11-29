@@ -61,6 +61,20 @@ class CaseStructure:
             "reasoning": self.reasoning
         }
 
+    def to_toon(self) -> str:
+        """
+        Convert case structure to TOON format (~40% token reduction).
+
+        Output format:
+        CaseStructure[1]{archetype,confidence,features,reasoning}
+        PARENTING_EQUAL_TIME,0.85,duration:0.7|conflict:0.3,Based on equal parenting indicators
+        """
+        features_str = "|".join(f"{k}:{v}" for k, v in self.features.items())
+        # Escape commas in reasoning
+        reasoning_escaped = self.reasoning.replace(",", ";")
+        data = f"{self.archetype.name},{self.confidence},{features_str},{reasoning_escaped}"
+        return f"CaseStructure[1]{{archetype,confidence,features,reasoning}}\n{data}"
+
 # Descriptions for RAG/Context
 ARCHETYPE_DESCRIPTIONS = {
     CaseArchetype.PARENTING_EQUAL_TIME: "Standard parenting case considering equal shared parental responsibility and time.",

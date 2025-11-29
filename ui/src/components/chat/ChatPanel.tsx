@@ -177,25 +177,27 @@ export function ChatPanel() {
   }, [setGenerating]);
 
   return (
-    <div className="flex flex-col h-full">
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto">
-            {messages.length === 0 ? (
-              <WelcomeScreen onSuggestionClick={handleSend} />
-            ) : (
-              <div className="divide-y divide-white/5">
-                {messages.map((message, index) => (
-              <div
-                key={message.id}
-                className="animate-fade-in"
-                style={{ animationDelay: `${index * 30}ms` }}
-              >
-                <ChatMessage message={message} />
-              </div>
-            ))}
-          </div>
-        )}
-        <div ref={messagesEndRef} />
+    <div className="flex flex-col h-full relative">
+      {/* Messages - Centered container matching input width, mobile-optimized padding */}
+      <div className="flex-1 overflow-y-auto pb-28 sm:pb-32 flex justify-center">
+        <div className="w-full max-w-3xl px-2 sm:px-4 md:px-6">
+          {messages.length === 0 ? (
+            <WelcomeScreen onSuggestionClick={handleSend} />
+          ) : (
+            <div className="space-y-3 sm:space-y-4 py-3 sm:py-4">
+              {messages.map((message, index) => (
+                <div
+                  key={message.id}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 30}ms` }}
+                >
+                  <ChatMessage message={message} />
+                </div>
+              ))}
+            </div>
+          )}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
 
       {/* Input */}

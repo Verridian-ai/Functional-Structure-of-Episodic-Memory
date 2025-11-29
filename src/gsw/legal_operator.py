@@ -63,7 +63,8 @@ class LegalOperator:
         api_key: Optional[str] = None,
         use_openrouter: bool = True,
         enable_validation: bool = False,
-        corpus_path: Optional[str] = None
+        corpus_path: Optional[str] = None,
+        use_toon: bool = True  # Enable TOON format for ~40% token reduction
     ):
         """
         Initialize the Legal Operator.
@@ -74,9 +75,11 @@ class LegalOperator:
             use_openrouter: Whether to use OpenRouter API
             enable_validation: Whether to enable statutory validation
             corpus_path: Path to statutory corpus for validation
+            use_toon: Whether to use TOON format for context (default: True)
         """
         self.model = model
         self.use_openrouter = use_openrouter
+        self.use_toon = use_toon
         self.parser = ExtractionParser()
 
         # Get API key
@@ -140,10 +143,15 @@ class LegalOperator:
         if chunk_id is None:
             chunk_id = f"chunk_{uuid4().hex[:8]}"
 
-        # Build the prompt
+        # Build the prompt with optional TOON format (~40% token reduction)
         ontology_str = ""
         if ontology_context:
-            ontology_str = f"\n<known_vocabulary>\n{ontology_context.to_prompt_context()}\n</known_vocabulary>\n"
+            if self.use_toon:
+                # Use compact TOON format
+                ontology_str = f"\n<known_vocabulary format=\"toon\">\n{ontology_context.to_toon()}\n</known_vocabulary>\n"
+            else:
+                # Use verbose format
+                ontology_str = f"\n<known_vocabulary>\n{ontology_context.to_prompt_context()}\n</known_vocabulary>\n"
 
         user_prompt = LEGAL_OPERATOR_USER_PROMPT.format(
             situation=situation or "Legal proceedings",

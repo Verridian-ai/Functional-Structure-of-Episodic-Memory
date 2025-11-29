@@ -118,6 +118,15 @@ Document processing and classification.
 | `prompts.py` | LLM prompts | ~100 |
 | `reconciler.py` | Entity reconciliation | ~200 |
 
+### Utils Module (`src/utils/`)
+
+TOON encoding and utility functions.
+
+| File | Purpose | Lines |
+|------|---------|-------|
+| `toon.py` | TOON encoder/decoder (~40% token reduction) | ~380 |
+| `math_utils.py` | Mathematical utilities | ~50 |
+
 ### Other Backend (`src/`)
 
 | Directory | Purpose |
@@ -128,7 +137,6 @@ Document processing and classification.
 | `integration/` | System integration |
 | `observability/` | LangFuse tracing |
 | `retrieval/` | Document retrieval |
-| `utils/` | Utility functions |
 | `aiml/` | ML utilities |
 
 ---
@@ -177,6 +185,7 @@ Document processing and classification.
 | `tem/` | TEM TypeScript types |
 | `vsa/` | VSA TypeScript implementation |
 | `active_inference/` | Agency TypeScript |
+| `toon/` | TOON encoder/decoder for TypeScript |
 
 ### Other Frontend
 
@@ -240,6 +249,7 @@ wiki/
 ├── Contributing.md
 ├── API-Reference.md
 ├── Data-Schemas.md
+├── TOON-Format.md
 ├── Glossary.md
 └── File-Index.md
 ```

@@ -3,6 +3,28 @@ import { MemoryClient } from 'mem0ai';
 
 const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions';
 
+// Type definitions
+interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+}
+
+interface MemorySearchResult {
+  memory?: string;
+  user_id?: string;
+  metadata?: Record<string, unknown>;
+}
+
+interface OpenRouterRequest {
+  model: string;
+  messages: ChatMessage[];
+  temperature: number;
+  max_tokens: number;
+  stream: boolean;
+  tools?: unknown[];
+  tool_choice?: string;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { messages, model, temperature, maxTokens, apiKey, systemPrompt, tools, userId } = await request.json();
@@ -39,7 +61,7 @@ export async function POST(request: NextRequest) {
            });
 
            if (searchResults && searchResults.length > 0) {
-             memoryContext = `\n\nRELEVANT MEMORY FROM PREVIOUS INTERACTIONS:\n${searchResults.map((m: any) => `- ${m.memory}`).join('\n')}`;
+             memoryContext = `\n\nRELEVANT MEMORY FROM PREVIOUS INTERACTIONS:\n${searchResults.filter((m) => m.memory).map((m) => `- ${m.memory}`).join('\n')}`;
            }
            
            // Add current user message to memory (fire and forget or await)
@@ -55,11 +77,11 @@ export async function POST(request: NextRequest) {
     // ------------------------
 
     // Build the request
-    const requestBody: any = {
+    const requestBody: OpenRouterRequest = {
       model: model || 'google/gemini-2.5-flash-preview-05-20',
       messages: [
-        ...(systemPrompt ? [{ role: 'system', content: systemPrompt + memoryContext }] : []),
-        ...messages.map((m: any) => ({
+        ...(systemPrompt ? [{ role: 'system' as const, content: systemPrompt + memoryContext }] : []),
+        ...messages.map((m: ChatMessage) => ({
           role: m.role,
           content: m.content,
         })),
