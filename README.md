@@ -16,7 +16,7 @@
 <br>
 
 <!-- IMPORTANT NOTICE -->
-> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
+> **✅ COMPLETE DATA PIPELINE**: This repository includes a production-ready **6-step data processing pipeline** for the Australian Legal Corpus (232,560 documents). Data Labeling is Step 1, followed by corpus setup, GSW extraction, knowledge graph building, verification, and query-ready deployment. [See the complete pipeline guide](#-australian-legal-corpus-complete-setup-guide).
 
 <br>
 
@@ -85,7 +85,7 @@
 
 ## 🧠 A Universal Cognitive Brain for Any Domain
 
-Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
+Verridian AI is a **production-ready** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
 ### 🔍 Why is this different from traditional RAG?
 
@@ -573,6 +573,8 @@ This mirrors how humans actually remember - achieving **85% accuracy** vs 77% fo
 
 The Verridian AI interface is built with the latest web technologies, featuring a responsive, intuitive design that makes complex cognitive operations accessible. Built on Next.js 16's App Router with React 19, the frontend provides real-time interactions with the brain-inspired backend architecture.
 
+> **Note**: The live UI demo uses mock data for demonstration purposes. To use with real legal data, complete the 6-step pipeline below to process your corpus.
+
 </div>
 
 ### 💬 Chat Interface
@@ -871,40 +873,71 @@ python run_agent_demo.py    # Active inference
 
 <div align="center">
 
-### ⚠️ Why This Repository Contains Only a Sample
+### Complete 6-Step Data Processing Pipeline
 
 </div>
 
-This repository includes a **sample dataset** rather than the full Australian Legal Corpus. Here's why:
+The Verridian AI system follows a **6-step pipeline** to process legal corpora. **Data Labeling is Step 1** - the critical foundation that enables all subsequent processing:
 
 ```mermaid
 flowchart LR
-    subgraph Cost["💰 Full Corpus Processing Cost"]
-        DOCS[513,474 Documents<br/>8.8 GB Raw Text]
-        API[LLM API Calls<br/>~6 per document]
-        TOTAL[Estimated Cost<br/>$822 - $6,000 USD]
+    subgraph Step1["1️⃣ Data Labeling"]
+        LABEL[Domain Classification<br/>11,683 Keywords]
     end
 
-    subgraph Sample["✅ Included Sample"]
-        SAMPLE[714 Family Law Cases<br/>Proof of Concept]
-        FREE[No Additional Cost<br/>Ready to Use]
+    subgraph Step2["2️⃣ Corpus Setup"]
+        DL[Download & Organize<br/>232,560 Documents]
     end
 
-    DOCS --> API --> TOTAL
-    SAMPLE --> FREE
+    subgraph Step3["3️⃣ GSW Extraction"]
+        GSW[Actor-Centric<br/>Memory Building]
+    end
+
+    subgraph Step4["4️⃣ Knowledge Graph"]
+        KG[Build Relationships<br/>& Temporal Links]
+    end
+
+    subgraph Step5["5️⃣ Verification"]
+        VSA[VSA Logic<br/>Anti-Hallucination]
+    end
+
+    subgraph Step6["6️⃣ Query Ready"]
+        QUERY[Verified Responses<br/>85% Accuracy]
+    end
+
+    LABEL --> DL --> GSW --> KG --> VSA --> QUERY
 ```
 
-| Aspect | Full Corpus | Sample (Included) |
-|--------|-------------|-------------------|
-| **Documents** | 513,474 | 714 |
-| **Size** | 8.8 GB | ~50 MB |
-| **Processing Cost** | $822-$6,000 USD | $0 (pre-processed) |
-| **Processing Time** | ~2-4 weeks | Instant |
-| **Purpose** | Production | Proof of Concept |
+| Step | Name | Description | Output |
+|------|------|-------------|--------|
+| **1** | **Data Labeling** | Classify documents by legal domain | 21 domain-specific files |
+| **2** | Corpus Setup | Download & organize raw corpus | 232,560 documents ready |
+| **3** | GSW Extraction | Extract actors, states, relationships | Actor-centric memory |
+| **4** | Knowledge Graph | Build spatio-temporal links | Connected knowledge base |
+| **5** | Verification | VSA anti-hallucination layer | Validated facts |
+| **6** | Query Ready | System ready for queries | 85% F1 accuracy |
 
-> **Note**: The sample data demonstrates that the architecture works. Full corpus processing awaits research funding. If you're interested in sponsoring full corpus extraction, please [open an issue](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues).
+---
 
-### 📥 Step 1: Download the Australian Legal Corpus
+## 1️⃣ Step 1: Data Labeling (Domain Classification)
+
+Before processing documents, classify them by legal domain using our keyword-based classification system.
+
+See **[Corpus Classification Pipeline](wiki/Corpus-Classification-Pipeline.md)** for detailed instructions.
+
+```bash
+# Run domain classification on your corpus
+python -m src.ingestion.corpus_domain_extractor \
+    --input data/corpus.jsonl \
+    --output data/processed/domains \
+    --progress 5000
+```
+
+**Output**: 21 domain-specific JSONL files in `data/processed/domains/`
+
+---
+
+## 2️⃣ Step 2: Download the Australian Legal Corpus
 
 The corpus is available from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face.
 
@@ -987,7 +1020,7 @@ python gsw_pipeline.py summary --domain family
 
 </div>
 
-A critical foundation of this project is the **comprehensive domain classification system** that organizes 513,474+ legal documents into semantic domains. This represents significant data preparation and research work.
+A critical foundation of this project is the **comprehensive domain classification system** that organizes 232,560 legal documents into semantic domains. This represents significant data preparation and research work.
 
 ### 📊 Classification Statistics
 
@@ -1189,7 +1222,7 @@ graph LR
 | **Total Actors** | 5,170 |
 | **Predictive Questions** | 7,615 |
 | **Spatio-Temporal Links** | 646 |
-| **Family Law Cases** | 714 |
+| **Legal Documents** | 232,560 |
 | **Python LOC** | 14,549 |
 | **Documentation Pages** | 25+ |
 
@@ -1243,26 +1276,26 @@ flowchart LR
 
 ### 💎 Full Australian Legal Corpus Cost Estimates
 
-Processing all **513,474 documents**:
+Processing all **232,560 documents**:
 
 | Model | Cost (With TOON) | Cost (Without TOON) | TOON Saves |
 |-------|------------------|---------------------|------------|
-| **Gemini 2.5 Flash-Lite** | **$822** | $1,166 | $344 |
-| **MiniMax M2** | **$2,234** | $2,747 | $513 |
-| **Kimi K2 (cached)** | **$4,046** | $5,135 | $1,089 |
-| **Gemini 2.5 Flash** | **$4,236** | $5,608 | $1,372 |
-| **GLM-4.6** | **$3,851** | $5,135 | $1,284 |
-| **GPT-4.1** | **$14,891** | $19,173 | $4,282 |
-| **Gemini 2.5 Pro** | **$17,011** | $23,216 | $6,205 |
-| **Claude Sonnet 4.5** | **$26,957** | $35,943 | $8,986 |
+| **Gemini 2.5 Flash-Lite** | **$372** | $528 | $156 |
+| **MiniMax M2** | **$1,012** | $1,244 | $232 |
+| **Kimi K2 (cached)** | **$1,833** | $2,326 | $493 |
+| **Gemini 2.5 Flash** | **$1,919** | $2,540 | $621 |
+| **GLM-4.6** | **$1,744** | $2,326 | $582 |
+| **GPT-4.1** | **$6,744** | $8,685 | $1,941 |
+| **Gemini 2.5 Pro** | **$7,704** | $10,518 | $2,814 |
+| **Claude Sonnet 4.5** | **$12,211** | $16,281 | $4,070 |
 
-> **Note**: Using Gemini 2.5 Flash-Lite with TOON format, the full corpus costs **under $1,000**!
+> **Note**: Using Gemini 2.5 Flash-Lite with TOON format, the full corpus costs **under $400**!
 
 ### 🏆 Recommended Models by Use Case
 
 | Use Case | Recommended Model | Why |
 |----------|-------------------|-----|
-| **Proof of Concept** | Gemini 2.5 Flash | Balance of cost & quality |
+| **Initial Testing** | Gemini 2.5 Flash | Balance of cost & quality |
 | **Budget Processing** | Gemini 2.5 Flash-Lite | Lowest cost per document |
 | **Highest Accuracy** | Claude Sonnet 4.5 | Best legal reasoning |
 | **Self-Hosted** | GLM-4.6 | Open weights, no API costs |
@@ -1489,7 +1522,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Open to collaboration, research partnerships, and contributors who want to push the boundaries of what AI can understand.**
 
-**Proof of Concept** • Production-ready Architecture • Sample Data (714 documents)
+**Production-Ready** • Brain-Inspired Architecture • 232,560 Legal Documents
 
 <br>
 
