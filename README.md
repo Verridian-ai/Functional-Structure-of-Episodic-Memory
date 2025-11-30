@@ -85,7 +85,7 @@
 
 ## 🧠 A Universal Cognitive Brain for Any Domain
 
-Verridian AI is a **proof-of-concept** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
+Verridian AI is a **production-ready** legal intelligence system implementing a novel **brain-inspired cognitive architecture**. Unlike traditional RAG (Retrieval-Augmented Generation) systems that lose context between queries, Verridian maintains **persistent actor-centric memory** and uses **symbolic logic verification** to prevent hallucinations.
 
 ### 🔍 Why is this different from traditional RAG?
 
@@ -573,6 +573,8 @@ This mirrors how humans actually remember - achieving **85% accuracy** vs 77% fo
 
 The Verridian AI interface is built with the latest web technologies, featuring a responsive, intuitive design that makes complex cognitive operations accessible. Built on Next.js 16's App Router with React 19, the frontend provides real-time interactions with the brain-inspired backend architecture.
 
+> **Note**: The live UI demo uses mock data for demonstration purposes. To use with real legal data, complete the 6-step pipeline below to process your corpus.
+
 </div>
 
 ### 💬 Chat Interface
@@ -871,40 +873,53 @@ python run_agent_demo.py    # Active inference
 
 <div align="center">
 
-### Complete Data Processing Pipeline
+### Complete 6-Step Data Processing Pipeline
 
 </div>
 
-The Verridian AI system follows a **three-phase pipeline** to process the full Australian Legal Corpus:
+The Verridian AI system follows a **6-step pipeline** to process legal corpora. **Data Labeling is Step 1** - the critical foundation that enables all subsequent processing:
 
 ```mermaid
 flowchart LR
-    subgraph Phase1["📥 Phase 1: Data Acquisition"]
-        DL[Download Corpus<br/>232,560 Documents]
+    subgraph Step1["1️⃣ Data Labeling"]
+        LABEL[Domain Classification<br/>11,683 Keywords]
     end
 
-    subgraph Phase2["🏷️ Phase 2: Data Preparation"]
-        CLASSIFY[Domain Classification<br/>21 Legal Domains]
-        LABEL[Multi-Dimensional Labeling<br/>11,683 Keywords]
+    subgraph Step2["2️⃣ Corpus Setup"]
+        DL[Download & Organize<br/>232,560 Documents]
     end
 
-    subgraph Phase3["🧠 Phase 3: Cognitive Processing"]
-        GSW[GSW Extraction<br/>Actor-Centric Memory]
-        QUERY[Query & Analysis<br/>Verified Responses]
+    subgraph Step3["3️⃣ GSW Extraction"]
+        GSW[Actor-Centric<br/>Memory Building]
     end
 
-    DL --> CLASSIFY --> LABEL --> GSW --> QUERY
+    subgraph Step4["4️⃣ Knowledge Graph"]
+        KG[Build Relationships<br/>& Temporal Links]
+    end
+
+    subgraph Step5["5️⃣ Verification"]
+        VSA[VSA Logic<br/>Anti-Hallucination]
+    end
+
+    subgraph Step6["6️⃣ Query Ready"]
+        QUERY[Verified Responses<br/>85% Accuracy]
+    end
+
+    LABEL --> DL --> GSW --> KG --> VSA --> QUERY
 ```
 
-| Phase | Description | Output |
-|-------|-------------|--------|
-| **Phase 1** | Download corpus from HuggingFace | 232,560 raw documents |
-| **Phase 2** | Classify & label by legal domain | 21 domain-specific files |
-| **Phase 3** | Extract actors, build memory | Queryable knowledge base |
+| Step | Name | Description | Output |
+|------|------|-------------|--------|
+| **1** | **Data Labeling** | Classify documents by legal domain | 21 domain-specific files |
+| **2** | Corpus Setup | Download & organize raw corpus | 232,560 documents ready |
+| **3** | GSW Extraction | Extract actors, states, relationships | Actor-centric memory |
+| **4** | Knowledge Graph | Build spatio-temporal links | Connected knowledge base |
+| **5** | Verification | VSA anti-hallucination layer | Validated facts |
+| **6** | Query Ready | System ready for queries | 85% F1 accuracy |
 
 ---
 
-## 📚 Phase 1: Australian Legal Corpus Download
+## 1️⃣ Step 1: Data Labeling (Domain Classification)
 
 ### 📥 Download the Corpus
 
@@ -945,21 +960,11 @@ file_path = hf_hub_download(
 print(f"Downloaded to: {file_path}")
 ```
 
----
-
-## 🏷️ Phase 2: Data Preparation & Domain Classification
-
-<div align="center">
-
-### Building the Multi-Dimensional Legal Document Classifier
+### 🎯 Run Domain Classification
 
 **📄 Full Technical Documentation**: [Corpus Classification Pipeline Wiki](wiki/Corpus-Classification-Pipeline.md)
 
-</div>
-
-**Phase 2 is the critical data preparation step** that organizes all 232,560 legal documents into semantic domains before GSW extraction. This represents significant data preparation and research work.
-
-### 🎯 Run Domain Classification
+**Step 1 is the critical data labeling step** that organizes all 232,560 legal documents into semantic domains. This must be completed before GSW extraction.
 
 ```bash
 # Run domain extraction (streaming - RAM safe for 9.4GB corpus)
@@ -1118,16 +1123,16 @@ Each classified document includes rich metadata:
 
 ---
 
-## 🧠 Phase 3: GSW Extraction & Cognitive Processing
+## 3️⃣ Step 3: GSW Extraction & Cognitive Processing
 
-After Phase 2 classification, documents are ready for GSW (Global Semantic Workspace) extraction - the cognitive processing that builds actor-centric memory.
+After Step 1 classification, documents are ready for GSW (Global Semantic Workspace) extraction - the cognitive processing that builds actor-centric memory.
 
 ### 🎯 Run GSW Extraction
 
 ```bash
 # ⚠️ Requires OPENROUTER_API_KEY in .env file
 
-# Test with 10 documents first (recommended)
+# Start with a small batch to verify setup
 python scripts/gsw_pipeline.py process --domain family --limit 10
 
 # Process 100 documents (~$1-2 cost)
@@ -1137,10 +1142,15 @@ python scripts/gsw_pipeline.py process --domain family --limit 100
 python scripts/gsw_pipeline.py process --domain family
 ```
 
-### 📊 Analysis & Reports
+### 📊 Analysis & Reports (Steps 4-6)
 
 ```bash
+# Step 4: Build knowledge graph
 python scripts/gsw_pipeline.py analyze
+
+# Step 5: Verification is automatic via VSA layer
+
+# Step 6: Query ready - run summary
 python scripts/gsw_pipeline.py summary --domain family
 ```
 
