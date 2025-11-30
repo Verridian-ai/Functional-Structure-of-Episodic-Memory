@@ -15,8 +15,8 @@
 
 <br>
 
-<!-- IMPORTANT NOTICE -->
-> **⚠️ SAMPLE DATASET ONLY**: This repository contains a **714-document sample** of Australian Family Law cases for demonstration purposes. The full Australian Legal Corpus (513,474 documents) requires approximately **$822-$6,000 USD** in API costs to process, depending on the LLM chosen. [Learn more about processing the full corpus](#-australian-legal-corpus-complete-setup-guide).
+<!-- PIPELINE OVERVIEW -->
+> **🔄 COMPLETE DATA PIPELINE**: This system processes the **full Australian Legal Corpus (232,560 documents)**. The pipeline follows: **Step 1: Data Preparation & Classification** → **Step 2: GSW Extraction** → **Step 3: Query & Analysis**. [See the complete pipeline](#-system-pipeline-overview).
 
 <br>
 
@@ -867,44 +867,46 @@ python run_agent_demo.py    # Active inference
 
 ---
 
-## 📚 Australian Legal Corpus: Complete Setup Guide
+## 🔄 System Pipeline Overview
 
 <div align="center">
 
-### ⚠️ Why This Repository Contains Only a Sample
+### Complete Data Processing Pipeline
 
 </div>
 
-This repository includes a **sample dataset** rather than the full Australian Legal Corpus. Here's why:
+The Verridian AI system follows a **three-phase pipeline** to process the full Australian Legal Corpus:
 
 ```mermaid
 flowchart LR
-    subgraph Cost["💰 Full Corpus Processing Cost"]
-        DOCS[513,474 Documents<br/>8.8 GB Raw Text]
-        API[LLM API Calls<br/>~6 per document]
-        TOTAL[Estimated Cost<br/>$822 - $6,000 USD]
+    subgraph Phase1["📥 Phase 1: Data Acquisition"]
+        DL[Download Corpus<br/>232,560 Documents]
     end
 
-    subgraph Sample["✅ Included Sample"]
-        SAMPLE[714 Family Law Cases<br/>Proof of Concept]
-        FREE[No Additional Cost<br/>Ready to Use]
+    subgraph Phase2["🏷️ Phase 2: Data Preparation"]
+        CLASSIFY[Domain Classification<br/>21 Legal Domains]
+        LABEL[Multi-Dimensional Labeling<br/>11,683 Keywords]
     end
 
-    DOCS --> API --> TOTAL
-    SAMPLE --> FREE
+    subgraph Phase3["🧠 Phase 3: Cognitive Processing"]
+        GSW[GSW Extraction<br/>Actor-Centric Memory]
+        QUERY[Query & Analysis<br/>Verified Responses]
+    end
+
+    DL --> CLASSIFY --> LABEL --> GSW --> QUERY
 ```
 
-| Aspect | Full Corpus | Sample (Included) |
-|--------|-------------|-------------------|
-| **Documents** | 513,474 | 714 |
-| **Size** | 8.8 GB | ~50 MB |
-| **Processing Cost** | $822-$6,000 USD | $0 (pre-processed) |
-| **Processing Time** | ~2-4 weeks | Instant |
-| **Purpose** | Production | Proof of Concept |
+| Phase | Description | Output |
+|-------|-------------|--------|
+| **Phase 1** | Download corpus from HuggingFace | 232,560 raw documents |
+| **Phase 2** | Classify & label by legal domain | 21 domain-specific files |
+| **Phase 3** | Extract actors, build memory | Queryable knowledge base |
 
-> **Note**: The sample data demonstrates that the architecture works. Full corpus processing awaits research funding. If you're interested in sponsoring full corpus extraction, please [open an issue](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/issues).
+---
 
-### 📥 Step 1: Download the Australian Legal Corpus
+## 📚 Phase 1: Australian Legal Corpus Download
+
+### 📥 Download the Corpus
 
 The corpus is available from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face.
 
@@ -943,41 +945,9 @@ file_path = hf_hub_download(
 print(f"Downloaded to: {file_path}")
 ```
 
-### ⚙️ Step 2: Domain Classification
-
-```bash
-# Run domain extraction (streaming - RAM safe)
-python gsw_pipeline.py extract --input ../corpus.jsonl
-
-# With progress reporting every 1000 docs
-python gsw_pipeline.py extract --input ../corpus.jsonl --progress 1000
-```
-
-### 🧠 Step 3: GSW Extraction
-
-```bash
-# ⚠️ Requires OPENROUTER_API_KEY in .env file
-
-# Test with 10 documents first (recommended)
-python gsw_pipeline.py process --domain family --limit 10
-
-# Process 100 documents (~$1-2 cost)
-python gsw_pipeline.py process --domain family --limit 100
-
-# Process 1000 documents (~$10-20 cost)
-python gsw_pipeline.py process --domain family --limit 1000
-```
-
-### 📊 Step 4: Analysis & Reports
-
-```bash
-python gsw_pipeline.py analyze
-python gsw_pipeline.py summary --domain family
-```
-
 ---
 
-## 🔬 Data Preparation & Corpus Classification
+## 🏷️ Phase 2: Data Preparation & Domain Classification
 
 <div align="center">
 
@@ -987,7 +957,24 @@ python gsw_pipeline.py summary --domain family
 
 </div>
 
-A critical foundation of this project is the **comprehensive domain classification system** that organizes 513,474+ legal documents into semantic domains. This represents significant data preparation and research work.
+**Phase 2 is the critical data preparation step** that organizes all 232,560 legal documents into semantic domains before GSW extraction. This represents significant data preparation and research work.
+
+### 🎯 Run Domain Classification
+
+```bash
+# Run domain extraction (streaming - RAM safe for 9.4GB corpus)
+python -m src.ingestion.corpus_domain_extractor \
+    --input data/corpus.jsonl \
+    --output data/processed/domains \
+    --progress 5000
+
+# Output: Creates 21 domain-specific JSONL files
+# data/processed/domains/
+# ├── family.jsonl         (Family Law documents)
+# ├── criminal.jsonl       (Criminal Law documents)
+# ├── property.jsonl       (Property Law documents)
+# └── ... (21 domain files total)
+```
 
 ### 📊 Classification Statistics
 
@@ -1106,24 +1093,7 @@ Each document receives a multi-factor score combining all classification dimensi
 | `src/ingestion/corpus_domain_extractor.py` | Multi-dimensional classifier |
 | `scripts/integrate_keywords.py` | Keyword aggregation tool |
 
-### 🎯 Running Corpus Classification
-
-```bash
-# Full corpus classification (streaming - handles 9.4GB efficiently)
-python -m src.ingestion.corpus_domain_extractor \
-    --input data/corpus.jsonl \
-    --output data/processed/domains \
-    --progress 5000
-
-# Output: Creates domain-specific JSONL files
-# data/processed/domains/
-# ├── family.jsonl         (Family Law documents)
-# ├── criminal.jsonl       (Criminal Law documents)
-# ├── property.jsonl       (Property Law documents)
-# └── ... (21 domain files)
-```
-
-### 📈 Sample Output
+### 📈 Classification Output
 
 Each classified document includes rich metadata:
 
@@ -1144,7 +1114,37 @@ Each classified document includes rich metadata:
 }
 ```
 
-> **Data Quality**: This classification system demonstrates professional-grade data preparation, achieving domain assignment for 232,560+ documents in ~15 hours with streaming memory efficiency.
+> **Data Quality**: This classification system demonstrates professional-grade data preparation, achieving domain assignment for 232,560 documents in ~15 hours with streaming memory efficiency.
+
+---
+
+## 🧠 Phase 3: GSW Extraction & Cognitive Processing
+
+After Phase 2 classification, documents are ready for GSW (Global Semantic Workspace) extraction - the cognitive processing that builds actor-centric memory.
+
+### 🎯 Run GSW Extraction
+
+```bash
+# ⚠️ Requires OPENROUTER_API_KEY in .env file
+
+# Test with 10 documents first (recommended)
+python scripts/gsw_pipeline.py process --domain family --limit 10
+
+# Process 100 documents (~$1-2 cost)
+python scripts/gsw_pipeline.py process --domain family --limit 100
+
+# Process full domain (costs vary by LLM choice)
+python scripts/gsw_pipeline.py process --domain family
+```
+
+### 📊 Analysis & Reports
+
+```bash
+python scripts/gsw_pipeline.py analyze
+python scripts/gsw_pipeline.py summary --domain family
+```
+
+> **Note**: GSW extraction requires LLM API calls. See the [LLM Model Comparison](#-llm-model-comparison-pricing-quality--toon-savings) section for cost estimates.
 
 ---
 
@@ -1182,14 +1182,13 @@ graph LR
 | **Response Time** | 11.83ms | ~500ms | 42x faster |
 | **Query Success** | 100% | ~95% | +5% |
 
-### 📈 Knowledge Base Statistics
+### 📈 Corpus & Knowledge Base Statistics
 
 | Metric | Count |
 |--------|-------|
-| **Total Actors** | 5,170 |
-| **Predictive Questions** | 7,615 |
-| **Spatio-Temporal Links** | 646 |
-| **Family Law Cases** | 714 |
+| **Total Legal Documents** | 232,560 |
+| **Legal Domains** | 21 |
+| **Classification Keywords** | 11,683 |
 | **Python LOC** | 14,549 |
 | **Documentation Pages** | 25+ |
 
@@ -1241,22 +1240,22 @@ flowchart LR
 
 *Kimi K2 input price is $0.15 with cache hit, $0.60 without cache.
 
-### 💎 Full Australian Legal Corpus Cost Estimates
+### 💎 Full Corpus GSW Extraction Cost Estimates
 
-Processing all **513,474 documents**:
+Processing all **232,560 documents** (Phase 3 GSW extraction):
 
 | Model | Cost (With TOON) | Cost (Without TOON) | TOON Saves |
 |-------|------------------|---------------------|------------|
-| **Gemini 2.5 Flash-Lite** | **$822** | $1,166 | $344 |
-| **MiniMax M2** | **$2,234** | $2,747 | $513 |
-| **Kimi K2 (cached)** | **$4,046** | $5,135 | $1,089 |
-| **Gemini 2.5 Flash** | **$4,236** | $5,608 | $1,372 |
-| **GLM-4.6** | **$3,851** | $5,135 | $1,284 |
-| **GPT-4.1** | **$14,891** | $19,173 | $4,282 |
-| **Gemini 2.5 Pro** | **$17,011** | $23,216 | $6,205 |
-| **Claude Sonnet 4.5** | **$26,957** | $35,943 | $8,986 |
+| **Gemini 2.5 Flash-Lite** | **$372** | $528 | $156 |
+| **MiniMax M2** | **$1,012** | $1,244 | $232 |
+| **Kimi K2 (cached)** | **$1,833** | $2,326 | $493 |
+| **Gemini 2.5 Flash** | **$1,919** | $2,540 | $621 |
+| **GLM-4.6** | **$1,744** | $2,326 | $582 |
+| **GPT-4.1** | **$6,743** | $8,683 | $1,940 |
+| **Gemini 2.5 Pro** | **$7,704** | $10,517 | $2,813 |
+| **Claude Sonnet 4.5** | **$12,208** | $16,277 | $4,069 |
 
-> **Note**: Using Gemini 2.5 Flash-Lite with TOON format, the full corpus costs **under $1,000**!
+> **Note**: Using Gemini 2.5 Flash-Lite with TOON format, the full corpus GSW extraction costs **under $400**! Phase 2 classification is free (no API calls).
 
 ### 🏆 Recommended Models by Use Case
 
@@ -1489,7 +1488,7 @@ MIT License - see [LICENSE](LICENSE) for details.
 
 **Open to collaboration, research partnerships, and contributors who want to push the boundaries of what AI can understand.**
 
-**Proof of Concept** • Production-ready Architecture • Sample Data (714 documents)
+**Full Corpus Pipeline** • Production-ready Architecture • 232,560 Legal Documents
 
 <br>
 

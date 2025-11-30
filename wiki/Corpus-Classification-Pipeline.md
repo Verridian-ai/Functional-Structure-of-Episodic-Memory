@@ -1,6 +1,14 @@
 # Corpus Classification Pipeline
 
-> Multi-Dimensional Legal Document Classification for the Australian Legal Corpus
+> **Phase 2 of the Verridian AI Pipeline**: Multi-Dimensional Legal Document Classification
+
+This documentation covers **Phase 2: Data Preparation & Classification** - the critical step that must be completed before GSW extraction (Phase 3). The complete pipeline is:
+
+1. **Phase 1**: Download Australian Legal Corpus from HuggingFace
+2. **Phase 2**: Data Preparation & Domain Classification ← *This Document*
+3. **Phase 3**: GSW Extraction & Cognitive Processing
+
+---
 
 ## Overview
 
