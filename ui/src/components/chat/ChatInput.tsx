@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Mic, MicOff, Paperclip, Code, FileText, StopCircle, Sparkles, AudioLines, PlusCircle, ArrowUp, Scale, ScrollText, Gavel, BookOpen, X } from 'lucide-react';
+import { Mic, FileText, AudioLines, PlusCircle, ArrowUp, ScrollText, Gavel, BookOpen, X } from 'lucide-react';
 import { useStore } from '@/lib/store';
 import { useSound } from '@/hooks/useSound';
 
@@ -22,11 +22,13 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   const [attachedFiles, setAttachedFiles] = useState<AttachedFile[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { isGenerating, voice, setVoice, settings, updateSettings, messages } = useStore();
+  const { isGenerating, voice, setVoice, settings, messages } = useStore();
   const { play } = useSound();
   const prevListening = useRef(voice.isListening);
   // Track the input state *before* the current voice session started
   const inputBeforeListening = useRef('');
+  // Ref to hold handleSend for use in effects
+  const handleSendRef = useRef<() => void>(() => {});
 
   // Auto-resize textarea
   useEffect(() => {
@@ -64,7 +66,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       // We just need to check auto-send.
       
       if (settings.voiceAutoSend && input.trim()) {
-        handleSend();
+        handleSendRef.current();
       }
       
       // Reset base input for next time? 
@@ -87,8 +89,10 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       
       if (e.code === 'Space' && !e.repeat) {
         // Check if focused element is an input/textarea
-        const activeTag = document.activeElement?.tagName.toLowerCase();
-        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || (document.activeElement as HTMLElement)?.isContentEditable;
+        const activeElement = document.activeElement;
+        const activeTag = activeElement?.tagName.toLowerCase();
+        const isContentEditable = activeElement instanceof HTMLElement && activeElement.isContentEditable;
+        const isInputActive = activeTag === 'input' || activeTag === 'textarea' || isContentEditable;
 
         if (!isInputActive && !voice.isListening && !isGenerating && !disabled) {
           e.preventDefault(); // Prevent scrolling
@@ -119,7 +123,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   }, [voice.isListening, isGenerating, disabled, setVoice]);
 
 
-  const handleSend = () => {
+  const handleSend = React.useCallback(() => {
     if ((input.trim() || attachedFiles.length > 0) && !disabled && !isGenerating) {
       play('send');
       const files = attachedFiles.map(af => af.file);
@@ -127,7 +131,12 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
       setInput('');
       setAttachedFiles([]);
     }
-  };
+  }, [input, attachedFiles, disabled, isGenerating, play, onSend]);
+
+  // Keep ref updated for use in effects
+  useEffect(() => {
+    handleSendRef.current = handleSend;
+  }, [handleSend]);
 
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -207,61 +216,62 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   ];
 
   return (
-    <div className="w-full">
-      {/* Starter Prompts - Scrollable on mobile, wrapped on larger screens */}
-      {messages.length === 0 && !input && (
-          <div id="quick-actions-container" className="flex items-center gap-2 mb-3 sm:mb-4 animate-fade-in-up overflow-x-auto scrollbar-hide pb-1 sm:pb-0 sm:flex-wrap sm:justify-center -mx-2 px-2 sm:mx-0 sm:px-0">
-              {quickActions.map((action, i) => (
-                  <button
-                      key={i}
-                      onClick={() => {
-                          play('click');
-                          action.action();
-                          textareaRef.current?.focus();
-                      }}
-                      className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-xs sm:text-sm text-zinc-300 hover:bg-white/10 active:bg-white/10 hover:text-white hover:border-emerald-500/30 transition-all active:scale-95 shadow-lg whitespace-nowrap flex-shrink-0 touch-target"
-                  >
-                      <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 flex-shrink-0" />
-                      <span className="hidden sm:inline">{action.label}</span>
-                      <span className="sm:hidden">{action.label.split(' ')[0]}</span>
-                  </button>
-              ))}
-          </div>
-      )}
-
-      {/* Attached Files Preview - Mobile optimized */}
-      {attachedFiles.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3 px-1 sm:px-2 animate-fade-in">
-          {attachedFiles.map((af, index) => (
-            <div
-              key={index}
-              className="relative group flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl"
-            >
-              {af.preview ? (
-                <img
-                  src={af.preview}
-                  alt={af.file.name}
-                  className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded"
-                />
-              ) : (
-                <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
-              )}
-              <span className="text-xs sm:text-sm text-zinc-300 max-w-[80px] sm:max-w-[120px] truncate">
-                {af.file.name}
-              </span>
-              <button
-                onClick={() => removeFile(index)}
-                className="ml-0.5 sm:ml-1 p-1 text-zinc-500 hover:text-red-400 active:text-red-400 hover:bg-red-500/10 rounded-full transition-colors touch-target"
-                title="Remove file"
-              >
-                <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-              </button>
+    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-2 sm:p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl z-20 safe-area-pb">
+      <div className="w-full px-2 sm:px-4 md:px-0">
+        {/* Starter Prompts - Scrollable on mobile, wrapped on larger screens */}
+        {messages.length === 0 && !input && (
+            <div id="quick-actions-container" className="flex items-center gap-2 mb-3 sm:mb-4 animate-fade-in-up overflow-x-auto scrollbar-hide pb-1 sm:pb-0 sm:flex-wrap sm:justify-center -mx-2 px-2 sm:mx-0 sm:px-0">
+                {quickActions.map((action, i) => (
+                    <button
+                        key={i}
+                        onClick={() => {
+                            play('click');
+                            action.action();
+                            textareaRef.current?.focus();
+                        }}
+                        className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-xs sm:text-sm text-zinc-300 hover:bg-white/10 active:bg-white/10 hover:text-white hover:border-emerald-500/30 transition-all active:scale-95 shadow-lg whitespace-nowrap flex-shrink-0 touch-target"
+                    >
+                        <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 flex-shrink-0" />
+                        <span className="hidden sm:inline">{action.label}</span>
+                        <span className="sm:hidden">{action.label.split(' ')[0]}</span>
+                    </button>
+                ))}
             </div>
-          ))}
-        </div>
-      )}
+        )}
 
-      {/* Input Container - Mobile optimized */}
+        {/* Attached Files Preview - Mobile optimized */}
+        {attachedFiles.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3 px-1 sm:px-2 animate-fade-in">
+            {attachedFiles.map((af, index) => (
+              <div
+                key={index}
+                className="relative group flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/50 backdrop-blur-md border border-white/10 rounded-lg sm:rounded-xl"
+              >
+                {af.preview ? (
+                  <img
+                    src={af.preview}
+                    alt={af.file.name}
+                    className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded"
+                  />
+                ) : (
+                  <FileText className="w-4 h-4 sm:w-5 sm:h-5 text-emerald-400 flex-shrink-0" />
+                )}
+                <span className="text-xs sm:text-sm text-zinc-300 max-w-[80px] sm:max-w-[120px] truncate">
+                  {af.file.name}
+                </span>
+                <button
+                  onClick={() => removeFile(index)}
+                  className="ml-0.5 sm:ml-1 p-1 text-zinc-500 hover:text-red-400 active:text-red-400 hover:bg-red-500/10 rounded-full transition-colors touch-target"
+                  title="Remove file"
+                >
+                  <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Input Container - Mobile optimized */}
       <div
         id="chat-input-container"
         className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 ${
