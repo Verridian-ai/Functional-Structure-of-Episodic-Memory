@@ -1,0 +1,443 @@
+================================================================================
+EMPLOYMENT/INDUSTRIAL LAW - NEW KEYWORDS FOR DOMAIN SUBCATEGORIES
+================================================================================
+Source: industrial.jsonl (577 documents analyzed)
+Date: 2025-11-29
+
+================================================================================
+1. UNFAIR DISMISSAL
+================================================================================
+
+CORE TERMS:
+- unfair dismissal, unlawful termination, wrongful termination
+- harsh dismissal, unjust dismissal, constructive dismissal
+- summary dismissal, termination of employment
+
+MISCONDUCT & PERFORMANCE:
+- serious misconduct, wilful misconduct, gross misconduct
+- performance management, performance issue
+- disciplinary action, warning letter, show cause
+- capacity, incapacity, inability to perform
+
+PROCEDURAL:
+- procedural fairness, substantive fairness
+- valid reason, opportunity to respond
+- harsh, unjust or unreasonable
+
+REMEDIES:
+- reinstatement, compensation, compensation cap
+- payment in lieu, notice period
+
+STATUTORY:
+- s.385, s.387, s.394
+- high income threshold
+- small business fair dismissal code
+- minimum employment period
+- 21 days (time limit)
+
+EMPLOYMENT STATUS:
+- probationary period, probation, trial period
+- casual employees, abandonment of employment
+
+================================================================================
+2. GENERAL PROTECTIONS
+================================================================================
+
+CORE CONCEPTS:
+- adverse action, general protections claim
+- workplace rights, prohibited reason, protected attribute
+
+STATUTORY:
+- s.340, s.351
+- reverse onus, reverse onus of proof
+
+RIGHTS:
+- exercising a workplace right, filing a complaint
+- benefit under workplace law
+
+LEAVE & ABSENCE:
+- temporary absence, parental leave
+- carer leave, compassionate leave
+
+INDUSTRIAL:
+- freedom of association, trade union membership
+- industrial activity, industrial association
+
+LEGAL TESTS:
+- subjective intention, substantial and operative reason
+- causation, but for test, coercion
+
+OTHER:
+- victimisation, whistleblower, jury service
+
+================================================================================
+3. ENTERPRISE AGREEMENTS
+================================================================================
+
+TYPES:
+- enterprise agreement, single enterprise agreement
+- multi-enterprise agreement, greenfields agreement
+- project agreement
+
+APPROVAL:
+- better off overall test (BOOT), approval of agreement
+- no disadvantage
+
+BARGAINING:
+- collective bargaining, enterprise bargaining
+- good faith bargaining, bargaining representative
+- bargaining period, surface bargaining, pattern bargaining
+
+CONTENT:
+- model term, flexibility term
+- individual flexibility arrangement (IFA)
+- dispute resolution, consultation clause, redundancy clause
+
+LIFECYCLE:
+- nominal expiry date, variation, termination of agreement
+- replacement agreement, zombie agreement
+
+STATUTORY:
+- undertaking, majority support determination
+- scope order, protected action ballot
+- notice of employee representational rights (NERR)
+
+================================================================================
+4. FAIR WORK COMMISSION & SYSTEM
+================================================================================
+
+INSTITUTIONS:
+- Fair Work Commission (FWC)
+- Fair Work Ombudsman (FWO)
+- Fair Work Act 2009
+
+NES:
+- National Employment Standards (NES)
+- annual leave, personal/carer leave, compassionate leave
+- parental leave, notice of termination, redundancy pay
+- maximum weekly hours, public holidays
+
+WAGES:
+- minimum wage, national minimum wage, annual wage review
+
+COMPLIANCE:
+- inspector, compliance notice, infringement notice
+- underpayment, unpaid wages, wage theft
+- record keeping, pay slip, time and wages records
+
+PENALTIES:
+- civil penalty, pecuniary penalty
+- accessorial liability, serious contraventions
+- enforceable undertaking
+
+SYSTEM:
+- national system employer, constitutional corporation
+- modern award system, registered organisations
+- transfer of business, transmission of business
+
+CONTRACTING:
+- sham contracting, phoenixing, casual conversion
+
+ENTRY:
+- right of entry, permit holder, notice of entry
+
+================================================================================
+5. DISCRIMINATION & HARASSMENT
+================================================================================
+
+GENERAL:
+- unlawful discrimination, workplace discrimination
+- protected attributes, direct discrimination, indirect discrimination
+- equal remuneration, pay equity
+
+PROTECTED ATTRIBUTES:
+- age discrimination, race discrimination, sex discrimination
+- disability discrimination, pregnancy discrimination
+- marital status, family responsibilities, sexual orientation
+- gender identity, religious belief, political opinion
+
+HARASSMENT:
+- sexual harassment, workplace bullying
+- hostile work environment, victimisation
+
+LEGISLATION:
+- Sex Discrimination Act 1984
+- Age Discrimination Act 2004
+- Disability Discrimination Act 1992
+- Racial Discrimination Act 1975
+- Australian Human Rights Commission (AHRC)
+
+TESTS:
+- inherent requirement, genuine occupational requirement
+- reasonable adjustment, accommodation
+- unjustifiable hardship, comparator
+- less favourable treatment
+
+OTHER:
+- positive duty, gender pay gap, systemic discrimination
+- disparate impact, vicarious liability
+
+================================================================================
+6. WORKPLACE SAFETY (WHS/OHS)
+================================================================================
+
+LEGISLATION:
+- Work Health and Safety (WHS), WHS Act
+- Occupational Health and Safety (OHS), OHS Act
+- SafeWork Australia, WorkSafe
+
+DUTIES:
+- duty of care, primary duty of care
+- PCBU (Person Conducting Business or Undertaking)
+- officer duties, officer due diligence
+- so far as reasonably practicable, reasonable steps
+
+RISK MANAGEMENT:
+- risk assessment, hazard identification
+- safety management system (SMS)
+- safe work method statement (SWMS)
+- JSEA (Job Safety and Environmental Analysis)
+
+HSR:
+- health and safety representatives
+- HSR functions, HSR powers, designated work group
+
+INCIDENTS:
+- notifiable incidents, serious injury or illness
+- dangerous incident, death, incident investigation
+
+EQUIPMENT & PROCEDURES:
+- personal protective equipment (PPE)
+- emergency procedures, evacuation
+- training and instruction, induction
+- workplace inspection, safety audit
+
+ENFORCEMENT:
+- improvement notice, prohibition notice
+- provisional improvement notice (PIN)
+- inspector powers, compliance notices
+
+PROSECUTION:
+- category 1 offence, category 2 offence, category 3 offence
+- reckless conduct, failure to comply
+
+WORK CESSATION:
+- cease unsafe work, cease work direction
+- right to refuse unsafe work
+
+OTHER:
+- psychosocial hazards, mental health, stress
+- fatigue management, workers compensation
+- issue resolution procedures
+
+================================================================================
+7. AWARDS & AWARD INTERPRETATION
+================================================================================
+
+MODERNISATION:
+- modern awards, award modernisation
+- modern award objective, award simplification
+- plain language, 4-yearly review
+
+COVERAGE:
+- award coverage, award interpretation
+- coverage clause, classification, classification structure
+
+PAY:
+- penalty rates, overtime, allowances
+- minimum rates of pay, casual loading
+- award wage, pay increment, progression
+
+HOURS:
+- ordinary hours, span of hours, spread of hours
+- rostering, roster, shift pattern, shift work
+- weekend work, public holiday
+
+EMPLOYMENT:
+- casual employment, part-time, full-time
+- fixed term contract, apprentice, trainee, junior rates
+
+BREAKS:
+- meal break, rest break, tea break
+- minimum engagement, minimum payment
+
+ALLOWANCES:
+- on-call, standby, availability
+- higher duties, tool allowance, travel allowance
+- uniform, meal allowance, call back
+
+OTHER:
+- annualised salary, salary packaging
+- consultation provisions, dispute resolution provisions
+- award variation application
+
+================================================================================
+8. INDUSTRIAL DISPUTES & ACTIONS
+================================================================================
+
+ACTION TYPES:
+- industrial action, protected industrial action
+- unprotected action, strikes, work stoppages
+- work bans, lockouts, picketing
+
+CATEGORIES:
+- employee claim action, employer response action
+- organising or engaging, threatening to organise
+
+BALLOTS:
+- ballot for protected action, protected action ballot
+- protected action ballot order (PABO)
+- ballot requirements, ballot agent
+
+NOTIFICATIONS:
+- notification of industrial action
+- notice of action, notice of intention
+- written notice, three days notice
+
+RESOLUTION:
+- conciliation, arbitration, mediation, facilitation
+- compulsory conference, conciliation conference
+- dispute notification, dispute resolution clause
+
+ORDERS:
+- suspension of industrial action, suspension order
+- termination of action order, bargaining order
+- serious breach declaration, pattern bargaining orders
+- scope orders, good faith bargaining orders
+
+HARM:
+- significant harm, endangering life
+- personal safety, health or welfare
+
+PROCEDURAL:
+- cooling off period, interim injunction
+- appeal, judicial review, stay application
+
+================================================================================
+9. REDUNDANCY
+================================================================================
+
+CORE:
+- redundancy, genuine redundancy
+- s.119, job no longer required, position made redundant
+
+BUSINESS CHANGES:
+- operational requirements, business restructure
+- downsizing, workforce reduction
+- transfer of business, sale of business
+
+REDEPLOYMENT:
+- redeployment, suitable alternative employment
+- alternative position, reasonable redeployment
+- trial period, retraining
+
+CONSULTATION:
+- consultation obligations, redundancy consultation
+- consultation period, discuss changes
+- reasons for redundancy, measures to avoid
+
+SELECTION:
+- redundancy selection, selection criteria
+- selection process, volunteers for redundancy
+- voluntary redundancy
+
+PAYMENTS:
+- redundancy pay, severance pay
+- notice of termination, years of service
+- service calculation, continuous service
+
+EXEMPTIONS:
+- small business exemption, redundancy exclusions
+- casual employees, fixed term, seasonal work
+
+================================================================================
+10. CONTRACTORS vs EMPLOYEES
+================================================================================
+
+STATUS:
+- independent contractors, employment status
+- employee or independent contractor
+- deemed employees, statutory deeming
+
+TESTS:
+- common law tests, multi-factorial test
+- holistic assessment, control test
+- integration test, control and direction
+
+FACTORS:
+- contract for services, contract of service
+- supervision, degree of control
+- right to delegate, delegation, personal service
+- provision of equipment, tools of trade
+- commercial risk, financial risk, profit and loss
+- business on own account, commercial independence
+
+ARRANGEMENTS:
+- contractor, subcontractor, consultant
+- labour hire, labour hire worker, host employer
+- gig economy workers, on-demand worker, platform worker
+
+COMPLIANCE:
+- sham contracting, sham contracting prohibition
+- misrepresentation, reckless misrepresentation
+
+OBLIGATIONS:
+- ABN, Australian Business Number
+- taxation treatment, tax treatment
+- superannuation guarantee, super obligation
+- workers compensation, public liability
+
+CONVERSION:
+- casual conversion, casual conversion rights
+- pathway to permanency
+
+================================================================================
+MAJOR LEGISLATION
+================================================================================
+
+1. Fair Work Act 2009 (138 refs)
+2. Workplace Relations Act 1996 (129 refs)
+3. Industrial Relations Act (168 refs)
+4. Work Health and Safety Act (103 refs)
+5. Fair Work (Registered Organisations) Act (46 refs)
+6. Sex Discrimination Act 1984 (7 refs)
+7. Disability Discrimination Act 1992 (6 refs)
+8. Racial Discrimination Act 1975
+9. Age Discrimination Act 2004
+10. Occupational Health and Safety Act (22 refs)
+11. Building and Construction Industry Act (47 refs)
+12. Registered Organisations Act (6 refs)
+
+================================================================================
+KEY ORGANIZATIONS
+================================================================================
+
+TRIBUNALS:
+- Fair Work Commission (FWC) - 54 refs
+- Industrial Relations Commission - 199 refs
+- Australian Industrial Relations Commission (AIRC) - 68 refs
+- Australian Human Rights Commission (AHRC)
+
+GOVERNMENT:
+- Fair Work Ombudsman (FWO) - 43 refs
+- Australian Building and Construction Commission (ABCC) - 58 refs
+- SafeWork Australia - 14 refs
+
+UNIONS (Top 6):
+- Australian Council of Trade Unions (ACTU) - 297 refs
+- Construction, Forestry, Mining and Energy Union (CFMEU) - 168 refs
+- Australian Services Union (ASU) - 180 refs
+- Shop, Distributive and Allied Employees (SDA) - 93 refs
+- Australian Workers Union (AWU) - 52 refs
+- Australian Manufacturing Workers Union (AMWU) - 46 refs
+
+EMPLOYERS:
+- Australian Chamber of Commerce and Industry (ACCI) - 52 refs
+- Australian Industry Group (Ai Group) - 10 refs
+- Master Builders Australia
+
+================================================================================
+TOTAL UNIQUE KEYWORDS: 500+
+DOCUMENTS ANALYZED: 577
+CATEGORIES: 10
+================================================================================
