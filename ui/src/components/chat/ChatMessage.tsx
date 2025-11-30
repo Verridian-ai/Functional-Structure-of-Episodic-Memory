@@ -237,7 +237,7 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
       </div>
     </div>
   );
-}
+});
 
 function ToolCallDisplay({ toolCall }: { toolCall: ToolCall }) {
   const [expanded, setExpanded] = React.useState(false);
