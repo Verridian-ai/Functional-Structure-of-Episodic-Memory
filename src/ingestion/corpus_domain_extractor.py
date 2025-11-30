@@ -1,18 +1,35 @@
 """
-Corpus Domain Extractor
+Corpus Domain Extractor - Multi-Dimensional Legal Document Classifier
 
-Streams the Australian Legal Corpus and classifies documents into 14 legal domains.
-This is the preprocessing step before GSW extraction.
+Streams the Australian Legal Corpus and classifies documents into 37+ legal domains
+using multi-dimensional scoring across:
+  1. Keyword patterns (10,500+ terms from 111 categories)
+  2. Legislation references (500+ Acts mapped to domains)
+  3. Landmark case citations (150+ key cases)
+  4. Court hierarchy (50+ court codes with authority scores)
 
 Usage:
     python -m src.ingestion.corpus_domain_extractor --input corpus.jsonl --output data/processed/domains
 
 Features:
 - Streaming extraction (RAM-safe for 8.8GB+)
-- Enhanced classification with citation/jurisdiction boosts
+- Multi-dimensional classification (keywords + legislation + cases + courts)
+- Enhanced metadata: court level, authority score, legislation refs, case refs
+- 5-factor boost scoring for domain alignment
+- Specialist court domain hints (Family, Federal, AAT, etc.)
 - Multi-domain tracking in metadata
 - Checkpoint/resume support
-- Statistics collection during extraction
+- Comprehensive statistics collection (courts, legislation refs, case refs)
+
+Classification Output per Document:
+- primary_domain: Main domain classification
+- primary_category: Specific subcategory
+- all_matches: Top 5 matching categories with scores
+- court: Extracted court code (e.g., "HCA", "NSWCA")
+- court_level: apex/intermediate/trial/tribunal
+- authority_score: Precedent weight (0-100)
+- legislation_refs: Referenced Acts (up to 10)
+- case_refs: Referenced landmark cases (up to 10)
 """
 
 import json
@@ -29,6 +46,18 @@ from datetime import datetime
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.ingestion.classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
+from src.ingestion.legislation_patterns import (
+    LEGISLATION_TO_DOMAIN, LEGISLATION_PATTERNS,
+    extract_legislation_refs, get_domain_for_legislation
+)
+from src.ingestion.case_patterns import (
+    LANDMARK_CASES, CASE_NAME_PATTERNS,
+    extract_case_citations, match_landmark_case
+)
+from src.ingestion.court_hierarchy import (
+    COURT_CODES, get_court_info, get_authority_score,
+    get_domain_hint, extract_court_from_citation
+)
 
 
 # ============================================================================
@@ -56,10 +85,15 @@ class DomainStats:
     by_jurisdiction: Dict[str, int] = field(default_factory=Counter)
     by_source: Dict[str, int] = field(default_factory=Counter)
     by_category: Dict[str, int] = field(default_factory=Counter)
+    by_court: Dict[str, int] = field(default_factory=Counter)
+    by_court_level: Dict[str, int] = field(default_factory=Counter)
     date_min: Optional[str] = None
     date_max: Optional[str] = None
     text_lengths: List[int] = field(default_factory=list)
+    authority_scores: List[int] = field(default_factory=list)
     sample_citations: List[str] = field(default_factory=list)
+    top_legislation_refs: Dict[str, int] = field(default_factory=Counter)
+    top_case_refs: Dict[str, int] = field(default_factory=Counter)
 
     def update_date_range(self, date_str: Optional[str]) -> None:
         """Update min/max date range."""
@@ -83,9 +117,26 @@ class DomainStats:
             "by_jurisdiction": dict(self.by_jurisdiction),
             "by_source": dict(self.by_source),
             "by_category": dict(self.by_category),
+            "by_court": dict(self.by_court),
+            "by_court_level": dict(self.by_court_level),
             "date_range": {"min": self.date_min, "max": self.date_max},
             "text_length_stats": self._calc_text_stats(),
-            "sample_citations": self.sample_citations
+            "authority_stats": self._calc_authority_stats(),
+            "sample_citations": self.sample_citations,
+            "top_legislation_refs": dict(Counter(self.top_legislation_refs).most_common(20)),
+            "top_case_refs": dict(Counter(self.top_case_refs).most_common(20)),
+        }
+
+    def _calc_authority_stats(self) -> Dict[str, float]:
+        """Calculate authority score statistics."""
+        if not self.authority_scores:
+            return {"min": 0, "max": 0, "mean": 0, "count": 0}
+        scores = self.authority_scores
+        return {
+            "min": min(scores),
+            "max": max(scores),
+            "mean": sum(scores) / len(scores),
+            "count": len(scores)
         }
 
     def _calc_text_stats(self) -> Dict[str, float]:
@@ -142,7 +193,7 @@ class OverlapStats:
 # ============================================================================
 
 class DomainClassifier:
-    """Enhanced document classifier with weighted scoring."""
+    """Enhanced document classifier with multi-dimensional scoring."""
 
     def __init__(self):
         # Pre-compile regex patterns for performance
@@ -157,24 +208,92 @@ class DomainClassifier:
             for granular in granular_list:
                 self.category_to_domain[granular] = broad
 
-    def classify(self, doc: Dict[str, Any]) -> Tuple[str, str, List[Tuple[str, int]]]:
+        # Pre-compile legislation patterns
+        self.legislation_patterns: Dict[str, re.Pattern] = {}
+        for act_name in LEGISLATION_TO_DOMAIN.keys():
+            self.legislation_patterns[act_name] = re.compile(
+                re.escape(act_name), re.IGNORECASE
+            )
+
+        # Pre-compile case patterns
+        self.case_patterns: Dict[str, re.Pattern] = {}
+        for case_name in LANDMARK_CASES.keys():
+            self.case_patterns[case_name] = re.compile(
+                re.escape(case_name), re.IGNORECASE
+            )
+
+    def classify(self, doc: Dict[str, Any]) -> Tuple[str, str, List[Tuple[str, int]], Dict]:
         """
-        Classify a document into domains.
+        Classify a document into domains with enhanced metadata.
 
         Returns:
-            (primary_domain, primary_category, all_matches)
+            (primary_domain, primary_category, all_matches, enhanced_metadata)
             where all_matches is [(category, score), ...]
+            and enhanced_metadata contains legislation_refs, case_refs, court, etc.
         """
         doc_type = doc.get('type', '')
         citation = doc.get('citation', '') or ''
         text = doc.get('text', '') or ''
         jurisdiction = (doc.get('jurisdiction', '') or '').lower()
 
+        # Initialize enhanced metadata
+        enhanced_meta = {
+            'legislation_refs': [],
+            'case_refs': [],
+            'court': None,
+            'court_level': None,
+            'authority_score': 0,
+        }
+
+        # Extract court from citation
+        court_code = extract_court_from_citation(citation)
+        if court_code:
+            enhanced_meta['court'] = court_code
+            court_info = get_court_info(court_code)
+            if court_info:
+                enhanced_meta['court_level'] = court_info.get('level')
+                enhanced_meta['authority_score'] = court_info.get('authority_score', 0)
+                # Get domain hint from specialist court
+                domain_hint = get_domain_hint(court_code)
+                if domain_hint:
+                    enhanced_meta['domain_hint'] = domain_hint
+
         # Different strategies for legislation vs decisions
         if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
-            return self._classify_legislation(citation, jurisdiction)
+            primary_domain, primary_category, all_matches = self._classify_legislation(citation, jurisdiction)
         else:
-            return self._classify_decision(citation, text, jurisdiction)
+            primary_domain, primary_category, all_matches = self._classify_decision(
+                citation, text, jurisdiction, enhanced_meta
+            )
+
+        # Extract legislation references
+        search_text = f"{citation} {text[:10000]}"
+        leg_refs = self._extract_legislation(search_text)
+        if leg_refs:
+            enhanced_meta['legislation_refs'] = leg_refs[:10]  # Limit to top 10
+
+        # Extract case references
+        case_refs = self._extract_cases(search_text)
+        if case_refs:
+            enhanced_meta['case_refs'] = case_refs[:10]  # Limit to top 10
+
+        return primary_domain, primary_category, all_matches, enhanced_meta
+
+    def _extract_legislation(self, text: str) -> List[str]:
+        """Extract legislation references from text."""
+        refs = []
+        for act_name, pattern in self.legislation_patterns.items():
+            if pattern.search(text):
+                refs.append(act_name)
+        return refs
+
+    def _extract_cases(self, text: str) -> List[str]:
+        """Extract landmark case references from text."""
+        refs = []
+        for case_name, pattern in self.case_patterns.items():
+            if pattern.search(text):
+                refs.append(case_name)
+        return refs
 
     def _classify_legislation(
         self,
@@ -202,9 +321,10 @@ class DomainClassifier:
         self,
         citation: str,
         text: str,
-        jurisdiction: str
+        jurisdiction: str,
+        enhanced_meta: Dict = None
     ) -> Tuple[str, str, List[Tuple[str, int]]]:
-        """Classify court decisions with enhanced scoring."""
+        """Classify court decisions with enhanced multi-dimensional scoring."""
         scores = Counter()
 
         # Build searchable text (citation + first 15000 chars)
@@ -235,7 +355,36 @@ class DomainClassifier:
                 if "criminal" in jurisdiction or "crime" in jurisdiction:
                     base_score += 15
 
+            # BOOST 3: Court domain hint alignment
+            if enhanced_meta and enhanced_meta.get('domain_hint'):
+                domain_hint = enhanced_meta['domain_hint']
+                category_domain = self.category_to_domain.get(category, '')
+                if domain_hint == category_domain:
+                    base_score += 25  # Strong boost for specialist court match
+
             scores[category] = base_score
+
+        # BOOST 4: Legislation-based domain boost
+        if enhanced_meta:
+            for leg_ref in enhanced_meta.get('legislation_refs', []):
+                if leg_ref in LEGISLATION_TO_DOMAIN:
+                    leg_info = LEGISLATION_TO_DOMAIN[leg_ref]
+                    for subcat in leg_info.get('subcategories', []):
+                        if subcat in scores:
+                            scores[subcat] += 15
+                        else:
+                            scores[subcat] = 15
+
+        # BOOST 5: Case law-based domain boost
+        if enhanced_meta:
+            for case_ref in enhanced_meta.get('case_refs', []):
+                if case_ref in LANDMARK_CASES:
+                    case_info = LANDMARK_CASES[case_ref]
+                    for subcat in case_info.get('subcategories', []):
+                        if subcat in scores:
+                            scores[subcat] += 10
+                        else:
+                            scores[subcat] = 10
 
         if not scores:
             return "Unclassified", "Unclassified", []
@@ -372,9 +521,9 @@ class CorpusDomainExtractor:
         file_manager: DomainFileManager,
         line_num: int
     ) -> None:
-        """Process a single document."""
-        # Classify
-        primary_domain, primary_category, all_matches = self.classifier.classify(doc)
+        """Process a single document with enhanced multi-dimensional classification."""
+        # Classify with enhanced metadata
+        primary_domain, primary_category, all_matches, enhanced_meta = self.classifier.classify(doc)
 
         # Track overlap statistics
         all_domains = list(set([
@@ -383,14 +532,24 @@ class CorpusDomainExtractor:
         ]))
         self.overlap_stats.record(all_domains)
 
-        # Inject classification metadata
+        # Inject classification metadata with enhanced fields
         doc['_classification'] = {
             'primary_domain': primary_domain,
             'primary_category': primary_category,
             'all_matches': [(cat, score) for cat, score in all_matches[:5]],  # Top 5
             'match_count': len(all_matches),
-            'line_number': line_num
+            'line_number': line_num,
+            # Enhanced multi-dimensional metadata
+            'court': enhanced_meta.get('court'),
+            'court_level': enhanced_meta.get('court_level'),
+            'authority_score': enhanced_meta.get('authority_score', 0),
+            'legislation_refs': enhanced_meta.get('legislation_refs', []),
+            'case_refs': enhanced_meta.get('case_refs', []),
         }
+
+        # Add domain hint if specialist court detected
+        if enhanced_meta.get('domain_hint'):
+            doc['_classification']['domain_hint'] = enhanced_meta['domain_hint']
 
         # Write to primary domain file
         file_manager.write(primary_domain, doc)
@@ -404,10 +563,27 @@ class CorpusDomainExtractor:
         stats.by_category[primary_category] += 1
         stats.update_date_range(doc.get('date'))
 
-        # Sample text lengths (every 100th doc to save memory)
+        # Track court and authority statistics
+        court = enhanced_meta.get('court')
+        if court:
+            stats.by_court[court] += 1
+        court_level = enhanced_meta.get('court_level')
+        if court_level:
+            stats.by_court_level[court_level] += 1
+
+        # Track legislation and case references (top occurrences)
+        for leg_ref in enhanced_meta.get('legislation_refs', []):
+            stats.top_legislation_refs[leg_ref] += 1
+        for case_ref in enhanced_meta.get('case_refs', []):
+            stats.top_case_refs[case_ref] += 1
+
+        # Sample text lengths and authority scores (every 100th doc to save memory)
         if stats.document_count % 100 == 0:
             text = doc.get('text', '')
             stats.text_lengths.append(len(text) if text else 0)
+            authority_score = enhanced_meta.get('authority_score', 0)
+            if authority_score > 0:
+                stats.authority_scores.append(authority_score)
 
         # Sample citations
         stats.add_sample_citation(doc.get('citation', ''))
