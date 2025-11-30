@@ -74,11 +74,11 @@ const createSanitizer = () => {
   };
 
   return {
-    sanitize: (dirty: string, extraConfig?: DOMPurify.Config): string => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    sanitize: (dirty: string, extraConfig?: any): string => {
       // Use extraConfig if provided, otherwise use base config
-      // Type assertion needed due to DOMPurify's strict config typing
       const finalConfig = extraConfig || config;
-      return DOMPurify.sanitize(dirty, finalConfig) as string;
+      return DOMPurify.sanitize(dirty, finalConfig) as unknown as string;
     },
   };
 };
