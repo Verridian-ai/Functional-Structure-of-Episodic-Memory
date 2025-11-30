@@ -130,7 +130,7 @@ docker/langfuse/postgres_data/
 
 # Large processed data files (keep extraction state)
 data/processed/*.json
-!data/processed/extraction_state.json
+data/processed/extraction_state.json
 !data/processed/extraction_statistics.json
 data/legislation/*.jsonl
 
