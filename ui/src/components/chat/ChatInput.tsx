@@ -271,15 +271,15 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           </div>
         )}
 
-          {/* Input Container - Mobile optimized */}
-        <div
-          id="chat-input-container"
-          className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 ${
-            isFocused
-              ? 'bg-black/60 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)] sm:shadow-[0_0_30px_rgba(16,185,129,0.2)] backdrop-blur-xl'
-              : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-[0_0_15px_rgba(0,0,0,0.4)] sm:shadow-[0_0_20px_rgba(0,0,0,0.5)]'
-          }`}
-        >
+        {/* Input Container - Mobile optimized */}
+      <div
+        id="chat-input-container"
+        className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 ${
+          isFocused
+            ? 'bg-black/60 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)] sm:shadow-[0_0_30px_rgba(16,185,129,0.2)] backdrop-blur-xl'
+            : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-[0_0_15px_rgba(0,0,0,0.4)] sm:shadow-[0_0_20px_rgba(0,0,0,0.5)]'
+        }`}
+      >
           {/* Hidden File Input */}
           <input
             ref={fileInputRef}
@@ -373,9 +373,6 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
             )}
           </div>
         </div>
-        
-        {/* Centered Helper Text */}
-        {/* Helper Text removed as per user request */}
       </div>
     </div>
   );
