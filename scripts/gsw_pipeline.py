@@ -30,7 +30,9 @@ from datetime import datetime
 from typing import Optional, List
 
 # Add project root to path
-PROJECT_ROOT = Path(__file__).resolve().parent
+# Path(__file__).parent is "scripts/"
+# Path(__file__).parent.parent is project root
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
 # Load .env file if exists
@@ -57,7 +59,7 @@ from src.gsw.cost_tracker import reset_cost_tracker, get_cost_tracker
 # ============================================================================
 
 DEFAULT_INPUT = PROJECT_ROOT.parent / "corpus.jsonl"
-DOMAINS_DIR = PROJECT_ROOT / "data" / "domains"
+DOMAINS_DIR = PROJECT_ROOT / "data" / "processed" / "domains"
 WORKSPACES_DIR = PROJECT_ROOT / "data" / "workspaces"
 REPORTS_DIR = PROJECT_ROOT / "reports" / "domain_analysis"
 
@@ -99,7 +101,8 @@ def run_gsw_processing(
     limit: Optional[int] = None,
     batch_size: int = 10,
     calibration: bool = False,
-    resume: bool = False
+    resume: bool = False,
+    use_free_models: bool = False
 ) -> GlobalWorkspace:
     """
     Run GSW processing on a domain.
@@ -110,13 +113,29 @@ def run_gsw_processing(
         batch_size: Documents per batch
         calibration: If True, don't save results (test mode)
         resume: Resume from checkpoint
+        use_free_models: Use free model rotation
     """
     print("=" * 60)
     print(f"PHASE 2: GSW Processing - {domain.title()}")
     print("=" * 60)
 
-    # Initialize cost tracker
-    cost_tracker = reset_cost_tracker("google/gemini-2.5-flash")
+    # Define model strategy
+    if use_free_models:
+        models = [
+            "google/gemini-2.0-flash-exp:free",
+            "deepseek/deepseek-r1-distill-llama-70b:free",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "mistralai/mistral-7b-instruct:free",
+            "huggingfaceh4/zephyr-7b-beta:free",
+            "microsoft/phi-3-medium-128k-instruct:free"
+        ]
+        print(f"[Config] Using FREE model rotation ({len(models)} models)")
+        # Initial tracker with first model
+        cost_tracker = reset_cost_tracker(models[0])
+    else:
+        models = "google/gemini-2.5-flash"
+        print(f"[Config] Using standard model: {models}")
+        cost_tracker = reset_cost_tracker(models)
 
     # Paths
     domain_file = DOMAINS_DIR / f"{domain.lower()}.jsonl"
@@ -132,7 +151,7 @@ def run_gsw_processing(
     print("[Init] Loading components...")
 
     try:
-        operator = LegalOperator()
+        operator = LegalOperator(model=models)
         print("  - LegalOperator: OK")
     except Exception as e:
         print(f"  - LegalOperator: FAILED ({e})")
@@ -397,6 +416,8 @@ Examples:
                                 help="Calibration mode (don't save)")
     process_parser.add_argument("--resume", "-r", action="store_true",
                                 help="Resume from checkpoint")
+    process_parser.add_argument("--free", action="store_true",
+                                help="Use free models (rotation)")
 
     # Analyze command
     analyze_parser = subparsers.add_parser("analyze", help="Generate analysis reports")
@@ -416,6 +437,8 @@ Examples:
                              help="Domain to process")
     full_parser.add_argument("--limit", "-l", type=int, default=10,
                              help="Documents to process")
+    full_parser.add_argument("--free", action="store_true",
+                             help="Use free models")
 
     args = parser.parse_args()
 
@@ -427,7 +450,7 @@ Examples:
     elif args.command == "process":
         run_gsw_processing(
             args.domain, args.limit, args.batch,
-            args.calibration, args.resume
+            args.calibration, args.resume, args.free
         )
 
     elif args.command == "analyze":
@@ -445,7 +468,7 @@ Examples:
             run_domain_extraction(args.input)
 
         # Step 2: Process
-        run_gsw_processing(args.domain, args.limit)
+        run_gsw_processing(args.domain, args.limit, use_free_models=args.free)
 
         # Step 3: Analyze
         run_analysis()

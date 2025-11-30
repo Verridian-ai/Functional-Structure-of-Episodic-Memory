@@ -3,6 +3,8 @@ google-generativeai
 jsonlines
 polars
 pydantic
-# Install torch with CUDA support manually if needed, or rely on the default wheel if it detects CUDA.
-# For explicit CUDA 11.8/12.1 support, users often need to specify the index-url in pip install commands.
 torch
+# New integrations
+cognee>=0.1.0
+mem0ai>=0.0.20
+neo4j>=5.0.0

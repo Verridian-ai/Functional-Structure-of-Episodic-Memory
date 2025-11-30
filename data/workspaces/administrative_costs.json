@@ -1,0 +1,27 @@
+{
+  "model": "google/gemini-2.0-flash-exp:free",
+  "total_input_tokens": 0,
+  "total_output_tokens": 0,
+  "total_requests": 0,
+  "input_cost": 0.0,
+  "output_cost": 0.0,
+  "total_cost": 0.0,
+  "components": {
+    "operator": {
+      "input": 0,
+      "output": 0
+    },
+    "reconciler": {
+      "input": 0,
+      "output": 0
+    },
+    "spacetime": {
+      "input": 0,
+      "output": 0
+    },
+    "summary": {
+      "input": 0,
+      "output": 0
+    }
+  }
+}
