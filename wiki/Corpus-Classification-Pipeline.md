@@ -1,22 +1,80 @@
+<div align="center">
+
+<img src="../assets/images/verridian_logo.png" alt="Verridian AI" width="150">
+
 # Corpus Classification Pipeline
 
-> Multi-Dimensional Legal Document Classification for the Australian Legal Corpus
+### Step 1 of the Verridian AI Data Pipeline
 
-## Overview
+<img src="../assets/images/LAW_OS_Features_Infographic.png" alt="LAW OS" width="400">
 
-LAW-OS processes a **9.4GB Australian Legal Corpus** containing **232,560+ legal documents**. The classification system uses a novel **multi-dimensional approach** combining:
-
-1. **Keyword Pattern Matching** (11,683 keywords across 86 categories)
-2. **Legislation Reference Detection** (500+ Acts mapped to domains)
-3. **Landmark Case Citation Matching** (150+ precedent cases)
-4. **Court Hierarchy Analysis** (50+ courts with authority scores)
-5. **Temporal State Tracking** (legislative lifecycle states)
-
-This document details the **data preparation and cleansing process** - the foundational work that enables accurate legal document classification at scale.
+*Multi-Dimensional Legal Document Classification for the Australian Legal Corpus*
 
 ---
 
-## Corpus Statistics
+**21 Domains** • **86 Categories** • **11,683 Keywords** • **232,560 Documents**
+
+</div>
+
+---
+
+## 📋 Overview
+
+This documentation covers **Step 1: Data Labeling** - the critical foundation that must be completed before GSW extraction. The classification system processes the **full Australian Legal Corpus** using a novel **multi-dimensional approach**:
+
+| Dimension | Description | Scale |
+|-----------|-------------|-------|
+| **Keyword Patterns** | Domain-specific legal terminology | 11,683 keywords |
+| **Legislation Detection** | Australian Acts mapped to domains | 133 Acts |
+| **Case Citation Matching** | Landmark precedent identification | 66 cases |
+| **Court Hierarchy** | Authority scoring by court level | 71 courts |
+| **Temporal Tracking** | Legislative lifecycle states | 6 states |
+
+---
+
+## 🔄 Data Curation Phase
+
+Before classification begins, the raw corpus undergoes curation to ensure data quality and consistency.
+
+### Source Corpus
+
+The Australian Legal Corpus is sourced from the **UMARV-FoE/Open-Australian-Legal-Corpus** on Hugging Face:
+
+```bash
+# Download the corpus (9.4 GB)
+huggingface-cli download UMARV-FoE/Open-Australian-Legal-Corpus \
+    --local-dir ./data \
+    --repo-type dataset
+```
+
+### Corpus Composition
+
+```mermaid
+pie title Document Types in Corpus
+    "Primary Legislation" : 25
+    "Secondary Legislation" : 35
+    "Case Law Decisions" : 40
+```
+
+| Document Type | Description | Typical Size |
+|---------------|-------------|--------------|
+| **Primary Legislation** | Acts of Parliament | 10-500 KB |
+| **Secondary Legislation** | Regulations, Rules, Orders | 5-100 KB |
+| **Case Law Decisions** | Court judgments and rulings | 20-2000 KB |
+
+### Data Quality Checks
+
+Before processing, the system performs:
+
+1. **Format Validation** - Ensure valid JSONL structure
+2. **Required Fields** - Check for citation, text, type, jurisdiction
+3. **Text Completeness** - Verify text content is present
+4. **Encoding Consistency** - UTF-8 encoding verification
+5. **Duplicate Detection** - Identify potential duplicate citations
+
+---
+
+## 📊 Corpus Statistics
 
 | Metric | Value |
 |--------|-------|
@@ -28,11 +86,46 @@ This document details the **data preparation and cleansing process** - the found
 
 ---
 
-## Research & Domain Knowledge Development
+## 🏗️ Classification System Development
+
+The corpus labeling system required extensive research and development work to achieve production-quality classification. This section documents the effort invested in building the classification infrastructure.
+
+### Development Timeline
+
+```mermaid
+gantt
+    title Classification System Development
+    dateFormat  YYYY-MM-DD
+    section Research
+    Domain Knowledge Research    :done, r1, 2024-01-01, 30d
+    Law Dictionary Development   :done, r2, after r1, 20d
+    Legislation Mapping          :done, r3, after r2, 15d
+    section Implementation
+    Keyword Pattern Engine       :done, i1, after r3, 10d
+    Court Hierarchy System       :done, i2, after i1, 7d
+    Multi-Dimension Scoring      :done, i3, after i2, 14d
+    section Testing
+    Validation & Tuning          :done, t1, after i3, 14d
+```
+
+### Research Investment Summary
+
+| Component | Files Created | Keywords/Items | Hours Est. |
+|-----------|--------------|----------------|------------|
+| **Domain Knowledge Docs** | 12 markdown files | 8,926 keywords | 80+ |
+| **Law Dictionaries** | 5 Python modules | 7,045+ keywords | 40+ |
+| **Legislation Mapping** | 1 comprehensive file | 133 Acts | 20+ |
+| **Case Law Database** | 1 comprehensive file | 66 landmark cases | 15+ |
+| **Court Hierarchy** | 1 comprehensive file | 71 courts | 10+ |
+| **Total** | **20+ files** | **16,000+ items** | **165+ hours** |
+
+---
+
+## 📚 Domain Knowledge Research
 
 ### Phase 1: Comprehensive Legal Domain Research
 
-Before implementing the classification system, extensive research was conducted across **12 major legal domains** to build comprehensive domain knowledge dictionaries:
+Extensive research was conducted across **12 major legal domains** to build comprehensive domain knowledge dictionaries:
 
 #### Domain Knowledge Files Created
 
