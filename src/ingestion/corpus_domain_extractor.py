@@ -65,7 +65,7 @@ from src.ingestion.court_hierarchy import (
 # ============================================================================
 
 BASE_DIR = Path(__file__).resolve().parents[2]
-DEFAULT_INPUT = BASE_DIR.parent / "corpus.jsonl"
+DEFAULT_INPUT = BASE_DIR / "data" / "corpus.jsonl"
 DEFAULT_OUTPUT = BASE_DIR / "data" / "processed" / "domains"
 STATE_FILE = BASE_DIR / "data" / "processed" / "extraction_state.json"
 

@@ -49,6 +49,24 @@ Think of it like this:
 
 ---
 
+## Step 1: Data Preparation - The Australian Legal Corpus
+
+The foundation of this system is the **Australian Legal Corpus**, a massive dataset of over 232,000 legal documents that serves as the ground truth for the cognitive engine. This is the **first step of data preparation** before any cognitive processing occurs.
+
+**[Read the full Corpus Classification Pipeline documentation](Corpus-Classification-Pipeline)**
+
+1.  **Ingestion**: Raw JSONL data from the Open Australian Legal Corpus (9.4GB).
+2.  **Classification**: A multi-dimensional pipeline labels every document with:
+    *   **Domain & Category**: Mapped to 21 domains (e.g., Criminal, Family, Tax) and 86 sub-categories.
+    *   **Legislation**: 500+ Acts detected and linked.
+    *   **Case Law**: 150+ landmark precedents identified.
+    *   **Court Authority**: Hierarchical scoring (0-100) based on court level.
+3.  **Structuring**: Converting unstructured text into the specialized **TOON (Token-Oriented Object Notation)** format for efficient processing.
+
+This ensures that when the cognitive engine (GSW) begins extraction, it is working with structured, domain-aware, and verified legal data.
+
+---
+
 ## UI Features Gallery
 
 **Explore the complete interface** - The Verridian UI showcases 30+ advanced features in a modern, intuitive interface:

@@ -1,9 +1,23 @@
 {
-  "last_line": 2,
-  "total_processed": 3,
-  "started_at": "2025-11-28T06:49:46.862755",
+  "last_line": 5000,
+  "total_processed": 5001,
+  "started_at": "2025-12-01T01:19:22.779978",
   "domain_counts": {
-    "Family": 1,
-    "Administrative": 2
+    "Family": 256,
+    "Legislation_Other": 2528,
+    "Health": 1784,
+    "Unclassified": 135,
+    "Torts": 100,
+    "Equity": 42,
+    "Criminal": 41,
+    "Specialized": 5,
+    "Administrative": 63,
+    "Commercial": 14,
+    "Animal": 9,
+    "Procedural": 10,
+    "Property": 8,
+    "Constitutional": 3,
+    "Privacy": 1,
+    "Tax": 2
   }
 }

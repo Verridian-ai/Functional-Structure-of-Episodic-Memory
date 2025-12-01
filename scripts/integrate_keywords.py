@@ -177,6 +177,37 @@ CATEGORY_MAPPING = {
     "INFRASTRUCTURE_MAJOR_PROJECTS_LAW": "Resources_Infrastructure",
     "AGRICULTURE_PRIMARY_PRODUCTION_LAW": "Resources_Agriculture",
 
+    # Additional Mappings for Unmapped Categories
+    "2_INSOLVENCY_LAW_VOIDABLE_TRANSACTIONS": "Corp_Insolvency",
+    "2_INSOLVENCY_LAW_PERSONAL_BANKRUPTCY": "Corp_Insolvency",
+    "Pharmacy_and_Drugs": "Health_Therapeutic_Goods",
+    "Disability_NDIS": "Health_Aged_Care",
+    "Coronial_Law": "Spec_Coronial",
+    "Guardianship_and_Administration": "Health_Mental",
+    "Privacy_and_Health_Records": "Privacy_Data",
+    "Food_Safety": "Health_Food_Safety",
+    "Veterinary_and_Animal_Law": "Animal_Welfare",
+    "Professional_Discipline_NonHealth": "Admin_Disciplinary",
+    "Professional_Discipline_Health": "Health_Practitioner",
+
+    # Gaming and Liquor
+    "GAMING_GAMBLING_CASINO_LICENSING": "Gaming_Gambling",
+    "GAMING_GAMBLING_WAGERING_BETTING": "Gaming_Gambling",
+    "GAMING_GAMBLING_LOTTERIES_KENO": "Gaming_Gambling",
+    "GAMING_GAMBLING_GAMING_MACHINES": "Gaming_Gambling",
+    "LIQUOR_LICENSING_LICENCE_TYPES": "Spec_Liquor",
+    "LIQUOR_LICENSING_RSA_COMPLIANCE": "Spec_Liquor",
+    "LIQUOR_LICENSING_VENUE_OPERATIONS_COMPLIANCE": "Spec_Liquor",
+    "RACING_THOROUGHBRED_RACING": "Gaming_Gambling",
+    "RACING_HARNESS_RACING": "Gaming_Gambling",
+    "RACING_GREYHOUND_RACING": "Gaming_Gambling",
+    "SPORTS_LAW_SPORTING_TRIBUNALS_DISCIPLINE": "Sports_Governance",
+
+    # Catch-all for broad domains
+    "CHARITIES_NOT_FOR_PROFIT": "Charities_NFP",
+    "MILITARY_DEFENCE": "Spec_Military",
+    "INTERNATIONAL_LAW": "Spec_International",
+
     # Map from domain knowledge file names
     "FAMILY_LAW_ACT_1975": "Family_General",
     "EMPLOYMENT_LAW": "Emp_Unfair_Dismissal",
@@ -253,6 +284,10 @@ NEW_CATEGORIES = {
     'Media_Communications': [],
     'Animal_Welfare': [],
     'Elder_Law': [],
+    'Gaming_Gambling': [],
+    'Spec_Liquor': [],
+    'Spec_Military': [],
+    'Spec_International': [],
 }
 
 NEW_DOMAIN_MAPPING = {
@@ -277,6 +312,7 @@ NEW_DOMAIN_MAPPING = {
     'Media': ['Media_Communications'],
     'Animal': ['Animal_Welfare'],
     'Elder': ['Elder_Law'],
+    'Specialized': ['Gaming_Gambling', 'Spec_Liquor', 'Spec_Military', 'Spec_International'],
 }
 
 
@@ -358,7 +394,14 @@ def load_all_dictionaries() -> Dict[str, List[str]]:
     print("=" * 60)
 
     md_dir = BASE_DIR / "law docs research"
-    md_files = list(md_dir.glob("*_DOMAIN_KNOWLEDGE.md"))
+    md_files = []
+    # Add multiple patterns to capture all relevant files
+    patterns = ["*_DOMAIN_KNOWLEDGE.md", "*_COMPLETE.md", "*_KEYWORDS.md", "*_REFERENCE.md", "*_ANALYSIS.md"]
+    for pattern in patterns:
+        md_files.extend(list(md_dir.glob(pattern)))
+    
+    # Deduplicate files
+    md_files = list(set(md_files))
 
     for filepath in md_files:
         print(f"Loading: {filepath.name}")

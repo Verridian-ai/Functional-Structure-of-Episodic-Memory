@@ -105,6 +105,7 @@ Thumbs.db
 # Data directories (large jsonl files)
 data/domains/*.jsonl
 data/processed/*.jsonl
+data/processed/domains/*.jsonl
 data/by_type/*.jsonl
 data/by_source/*.jsonl
 data/by_court/*.jsonl
@@ -129,7 +130,7 @@ docker/langfuse/postgres_data/
 
 # Large processed data files (keep extraction state)
 data/processed/*.json
-!data/processed/extraction_state.json
+data/processed/extraction_state.json
 !data/processed/extraction_statistics.json
 data/legislation/*.jsonl
 

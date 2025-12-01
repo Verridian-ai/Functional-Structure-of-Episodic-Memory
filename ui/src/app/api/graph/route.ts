@@ -259,11 +259,29 @@ function generateMockGraph(count: number): GraphData {
   };
 }
 
+// Load graph data from JSONL files or Neo4j
+async function loadGraph(limit: number = 5000, useNeo4j: bool = false): Promise<GraphData> {
+  if (useNeo4j && process.env.NEO4J_URI) {
+      try {
+          // TODO: Implement real Neo4j fetching
+          // const driver = neo4j.driver(process.env.NEO4J_URI, neo4j.auth.basic(process.env.NEO4J_USER, process.env.NEO4J_PASSWORD));
+          // const session = driver.session();
+          // ...
+          console.log("Neo4j integration pending");
+      } catch (e) {
+          console.error("Neo4j Error:", e);
+      }
+  }
+  
+  return loadGraphFromFiles(limit);
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const limit = parseInt(searchParams.get('limit') || '5000', 10);
   const refresh = searchParams.get('refresh') === 'true';
   const mock = searchParams.get('mock') === 'true';
+  const source = searchParams.get('source'); // 'neo4j' or 'file'
 
   // Use mock data if requested
   if (mock) {
@@ -271,17 +289,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(data);
   }
 
-  // Check cache
+  // Check cache if not Neo4j (Neo4j should probably not cache the same way or have its own)
   const now = Date.now();
-  if (!refresh && cachedGraph && (now - cacheTimestamp) < CACHE_TTL) {
+  if (source !== 'neo4j' && !refresh && cachedGraph && (now - cacheTimestamp) < CACHE_TTL) {
     return NextResponse.json(cachedGraph);
   }
 
-  // Load real data
+  // Load data
   try {
-    const data = await loadGraphFromFiles(limit);
-    cachedGraph = data;
-    cacheTimestamp = now;
+    const data = await loadGraph(limit, source === 'neo4j');
+    if (source !== 'neo4j') {
+        cachedGraph = data;
+        cacheTimestamp = now;
+    }
     return NextResponse.json(data);
   } catch (error) {
     console.error('Failed to load graph:', error);

@@ -1,0 +1,236 @@
+================================================================================
+EQUITY/TRUSTS LAW KEYWORDS - QUICK REFERENCE
+Extracted from corpus.jsonl (10,000+ Australian Legal Documents)
+================================================================================
+
+TOP 50 KEYWORDS BY FREQUENCY
+================================================================================
+Rank  Keyword                          Occurrences  Category
+--------------------------------------------------------------------------------
+ 1.   trustee                          1,674        Trusts
+ 2.   election                         1,263        Equitable Doctrines
+ 3.   mortgage                         1,027        Mortgages
+ 4.   injunction                       643          Remedies
+ 5.   executor                         523          Wills/Estates
+ 6.   mortgagee                        444          Mortgages
+ 7.   beneficiary                      389          Trusts
+ 8.   confidential information         314          Breach of Confidence
+ 9.   without notice                   287          Priorities
+10.   conflict of interest             282          Fiduciary Duties
+11.   devise                           272          Wills/Estates
+12.   probate                          232          Wills/Estates
+13.   rectification                    215          Remedies
+14.   bequest                          192          Wills/Estates
+15.   estoppel                         186          Estoppel
+16.   equitable interest               153          Equitable Interests
+17.   specific performance             150          Remedies
+18.   testator                         150          Wills/Estates
+19.   breach of trust                  149          Trusts
+20.   rescission                       146          Remedies
+21.   interlocutory injunction         129          Remedies
+22.   letters of administration        122          Wills/Estates
+23.   mortgagor                        115          Mortgages
+24.   unconscionable conduct           100          Unconscionability
+25.   legacy                           96           Wills/Estates
+26.   unit trust                       93           Trusts
+27.   duress                           89           Unconscionability
+28.   intestacy                        89           Wills/Estates
+29.   family trust                     88           Trusts
+30.   discretionary trust              85           Trusts
+31.   undue influence                  82           Unconscionability
+32.   fiduciary duty                   80           Fiduciary Duties
+33.   tracing                          65           Remedies
+34.   acquiescence                     65           Equitable Doctrines
+35.   constructive trust               60           Trusts
+36.   account of profits               49           Remedies
+37.   breach of confidence             49           Breach of Confidence
+38.   floating charge                  48           Mortgages
+39.   charitable trust                 45           Trusts
+40.   breach of fiduciary duty         45           Fiduciary Duties
+41.   settlor                          44           Trusts
+42.   equitable compensation           40           Remedies
+43.   express trust                    39           Trusts
+44.   foreclosure                      38           Mortgages
+45.   subrogation                      36           Remedies
+46.   equity of redemption             36           Mortgages
+47.   fiduciary obligation             35           Fiduciary Duties
+48.   fixed charge                     32           Mortgages
+49.   resulting trust                  31           Trusts
+50.   actual notice                    27           Priorities
+
+================================================================================
+CATEGORY BREAKDOWN
+================================================================================
+
+TRUSTS (28 unique terms, 15,079 total occurrences)
+--------------------------------------------------------------------------------
+Express Types:      express trust, bare trust, fixed trust
+Implied Types:      constructive trust, resulting trust
+Specialized:        discretionary trust, unit trust, family trust,
+                    charitable trust, purpose trust, pension trust,
+                    superannuation trust, testamentary trust,
+                    secret trust, Quistclose trust
+
+Key Parties:        settlor, trustee, beneficiary, appointor, protector,
+                    life tenant, remainderman
+
+Elements:           three certainties, trust deed, declaration of trust,
+                    settled property, vesting
+
+Doctrines:          purchase money resulting trust, presumption of advancement,
+                    common intention constructive trust, mutual wills
+
+FIDUCIARY DUTIES (15 unique terms, 3,449 total occurrences)
+--------------------------------------------------------------------------------
+Core Duties:        fiduciary duty, fiduciary obligation, duty of loyalty,
+                    duty of care, duty to account, duty of disclosure,
+                    no conflict rule, no profit rule
+
+Breaches:           breach of fiduciary duty, self-dealing,
+                    conflict of interest, secret profit, bribe,
+                    corporate opportunity
+
+Trust Duties:       duty to invest, duty of impartiality, duty to distribute,
+                    prudent person rule, even hand rule
+
+SPECIFIC PERFORMANCE (8 unique terms, 324 total occurrences)
+--------------------------------------------------------------------------------
+Core:               specific performance, decree of specific performance
+Requirements:       uniqueness, inadequacy of damages, mutuality,
+                    readiness and willingness, time is of the essence
+Context:            land contract, vendor and purchaser
+
+INJUNCTIONS (11 unique terms, 1,653 total occurrences)
+--------------------------------------------------------------------------------
+Types:              interlocutory injunction, mandatory injunction,
+                    prohibitory injunction, quia timet, final injunction
+
+Specialized:        Mareva injunction, freezing order, Anton Piller,
+                    search order, springboard injunction,
+                    Norwich Pharmacal order
+
+ESTOPPEL (7 unique terms, 2,386 total occurrences)
+--------------------------------------------------------------------------------
+Types:              proprietary estoppel, promissory estoppel,
+                    equitable estoppel, estoppel by representation,
+                    estoppel by acquiescence
+
+Elements:           common assumption, reliance, detriment
+
+UNCONSCIONABLE CONDUCT (8 unique terms, 1,191 total occurrences)
+--------------------------------------------------------------------------------
+Core:               unconscionable conduct, unconscionable dealing,
+                    unconscionable bargain, special disadvantage
+
+Related:            undue influence (actual/presumed), duress,
+                    economic duress, procuring execution, pressure
+
+BREACH OF CONFIDENCE (8 unique terms, 997 total occurrences)
+--------------------------------------------------------------------------------
+Elements:           confidential information, obligation of confidence,
+                    quality of confidence, unauthorized use/disclosure
+
+Doctrines:          springboard doctrine, trade secret, know-how
+
+EQUITABLE REMEDIES (16 unique terms, 54,098 total occurrences)
+--------------------------------------------------------------------------------
+Primary:            rescission, rectification, account of profits,
+                    specific performance, injunction
+
+Monetary:           equitable compensation, equitable damages
+
+Restitutionary:     tracing, following, subrogation
+
+Security:           equitable lien, charging order, contribution, indemnity
+
+Declaratory:        declaration, declaratory relief, set-off
+
+WILLS AND ESTATES (36 unique terms, 50,478 total occurrences)
+--------------------------------------------------------------------------------
+Documents:          will, testament, codicil
+
+Parties:            testator/testatrix, executor/executrix,
+                    administrator/administratrix
+
+Process:            probate, letters of administration, intestacy,
+                    intestate succession
+
+Gifts:              legacy, bequest, devise, residuary estate/gift,
+                    specific gift, pecuniary legacy, demonstrative legacy
+
+Issues:             testamentary capacity, knowledge and approval,
+                    undue influence, suspicious circumstances,
+                    family provision, ademption, lapse, abatement,
+                    mutual wills, attestation, execution, revocation
+
+EQUITABLE DOCTRINES (11 unique terms, 19,263 total occurrences)
+--------------------------------------------------------------------------------
+Maxims:             clean hands, equity follows the law,
+                    equity acts in personam, delay defeats equity
+
+Defenses:           laches, acquiescence, waiver
+
+Other:              election, marshalling, satisfaction, performance,
+                    conversion, exoneration
+
+================================================================================
+SPECIALIZED SUBCATEGORIES
+================================================================================
+
+TRUST POWERS (8 unique terms, 325 occurrences)
+  - power of appointment (special/general), power of advancement,
+    power of maintenance, variation of trusts, cy-pres
+
+TRUST ADMINISTRATION (8 unique terms, 508 occurrences)
+  - trustee liability/exemption/indemnity, dishonest assistance,
+    knowing receipt, removal/appointment/retirement of trustee
+
+EQUITABLE INTERESTS (9 unique terms, 445 occurrences)
+  - equitable interest/title/ownership, legal title, equity of redemption,
+    chose in action, equitable charge
+
+PRIORITIES & NOTICE (10 unique terms, 64,484 occurrences)
+  - bona fide purchaser for value without notice, actual notice,
+    constructive notice, caveats, lis pendens, nemo dat
+
+ASSIGNMENT (5 unique terms, 1,620 occurrences)
+  - equitable assignment, legal assignment, novation, non-assignable
+
+MORTGAGES (14 unique terms, 14,542 occurrences)
+  - mortgage, mortgagor, mortgagee, equity of redemption, foreclosure,
+    power of sale, fixed/floating charge, crystallization, clog on equity
+
+================================================================================
+RECOMMENDED KEYWORD SETS FOR DOMAIN EXTRACTION
+================================================================================
+
+ESSENTIAL SET (Most distinctive Equity terms):
+  constructive trust, resulting trust, fiduciary duty, specific performance,
+  estoppel, unconscionable conduct, breach of confidence, equitable interest,
+  equity of redemption, testamentary capacity
+
+HIGH-VALUE SET (Frequent + Specific):
+  trustee, beneficiary, settlor, breach of trust, breach of fiduciary duty,
+  injunction, probate, intestacy, executor, letters of administration,
+  rescission, rectification, account of profits, tracing, subrogation
+
+COMPREHENSIVE SET (All major categories):
+  All terms from Essential + High-Value sets, plus:
+  express trust, discretionary trust, unit trust, family trust,
+  charitable trust, duty of loyalty, conflict of interest, self-dealing,
+  interlocutory injunction, Mareva injunction, proprietary estoppel,
+  promissory estoppel, undue influence, duress, confidential information,
+  equitable compensation, bequest, devise, legacy, mortgage, mortgagee,
+  foreclosure, bona fide purchaser, without notice, laches, acquiescence
+
+CONTEXTUAL PHRASES (For pattern matching):
+  "breach of trust", "breach of fiduciary duty", "constructive trust",
+  "resulting trust", "specific performance", "equitable remedy",
+  "unconscionable conduct", "undue influence", "breach of confidence",
+  "proprietary estoppel", "equity of redemption",
+  "bona fide purchaser for value without notice", "testamentary capacity",
+  "letters of administration", "three certainties"
+
+================================================================================
+END OF QUICK REFERENCE
+================================================================================

@@ -1,0 +1,1890 @@
+{
+  "total_documents": 33744,
+  "category_breakdown": {
+    "Admin_Information": 32449,
+    "Admin_Disciplinary": 134,
+    "Admin_Veterans": 89,
+    "Admin_Migration": 1032,
+    "Admin_Social_Security": 40
+  },
+  "all_matches": {
+    "Admin_Information": 33673,
+    "Succession_Probate": 477,
+    "Family_ADR": 5900,
+    "Criminal_Property": 3003,
+    "Comp_Motor_Accidents": 210,
+    "Family_Violence": 10381,
+    "Admin_Social_Security": 2359,
+    "Admin_Disciplinary": 2511,
+    "Family_Child_Protection": 2747,
+    "Criminal_Drugs": 730,
+    "Family_Enforcement": 9041,
+    "Admin_Veterans": 7354,
+    "Ind_Employment": 777,
+    "Proc_Evidence": 1766,
+    "Family_General": 3822,
+    "Criminal_General": 4886,
+    "Family_Adoption": 651,
+    "Family_Child_Support": 3821,
+    "Equity_General": 1110,
+    "Env_Development": 3370,
+    "Family_Property": 1794,
+    "Corp_Insolvency": 3508,
+    "Criminal_Violence": 2064,
+    "Criminal_Sexual": 934,
+    "Criminal_Procedure": 1702,
+    "Admin_Migration": 6452,
+    "Proc_Civil": 5751,
+    "Tax_Federal": 2142,
+    "Tort_Negligence": 2672,
+    "Prop_Torrens": 988,
+    "Family_Financial": 2508,
+    "IP_Patent_Trademark": 594,
+    "Comm_Consumer": 850,
+    "Equity_Trusts": 673,
+    "Ind_Industrial": 1685,
+    "Family_Maintenance": 334,
+    "Tort_Nuisance": 79,
+    "Family_Relocation": 517,
+    "Spec_Coronial": 69,
+    "Tort_Defamation": 973,
+    "Tort_Intentional": 187,
+    "Comm_Contract": 968,
+    "Constitutional_Federal": 1133,
+    "Family_Parenting": 2224,
+    "Prop_Neighbours": 784,
+    "Tax_State": 464,
+    "Succession_Family_Provision": 415,
+    "Prop_Strata": 310,
+    "Family_De_Facto": 343,
+    "IP_Copyright": 263,
+    "Prop_Leasing": 217,
+    "Comm_Banking": 1403,
+    "Native_Title": 305,
+    "Env_Compulsory_Acq": 249,
+    "Constitutional_State": 203,
+    "Comm_Insurance": 283,
+    "Ind_Safety": 91,
+    "Env_Protection": 154,
+    "Tort_Institutional": 73,
+    "Comp_Victims": 22,
+    "Comp_Workers": 449,
+    "Spec_Aviation": 68,
+    "Tort_Medical": 75,
+    "Corp_Governance": 81,
+    "Criminal_Traffic": 111,
+    "Spec_Maritime": 91,
+    "Spec_Mental_Health": 15,
+    "Proc_Enforcement": 25
+  },
+  "keyword_frequencies": {
+    "sat": 28986,
+    "tribunal": 25104,
+    "permit": 14726,
+    "compliance": 8429,
+    "approval": 8136,
+    "regulation": 7868,
+    "visa": 6963,
+    "migration": 6943,
+    "immigration": 6692,
+    "planning": 5393,
+    "judicial review": 4718,
+    "procedural fairness": 3889,
+    "registration": 3819,
+    "refugee": 3513,
+    "administrative decision": 3451,
+    "jurisdictional error": 3216,
+    "acat": 3024,
+    "pension": 2831,
+    "administrative decisions": 2699,
+    "citizenship": 2660,
+    "administrative appeals tribunal": 2393,
+    "natural justice": 2344,
+    "welfare": 2096,
+    "local government": 1991,
+    "privacy": 1963,
+    "administrative law": 1798,
+    "regulatory": 1675,
+    "discretionary power": 1584,
+    "disciplinary": 1537,
+    "ncat": 1495,
+    "aat": 1472,
+    "merits review": 1265,
+    "licensing": 1093,
+    "legal services": 1045,
+    "land use": 1022,
+    "reviewable decision": 1019,
+    "certification": 938,
+    "asylum": 804,
+    "statutory interpretation": 801,
+    "social security": 711,
+    "professional conduct": 659,
+    "centrelink": 580,
+    "ombudsman": 555,
+    "tribunal proceeding": 554,
+    "freedom of information": 476,
+    "foi": 469,
+    "public authority": 448,
+    "professional standards": 436,
+    "ultra vires": 430,
+    "accreditation": 409,
+    "deportation": 387,
+    "development approval": 379,
+    "proclamation": 369,
+    "access to information": 324,
+    "medical board": 266,
+    "government information": 253,
+    "disability support": 244,
+    "information commissioner": 185,
+    "rezoning": 165,
+    "vcat": 160,
+    "permanent residency": 136,
+    "newstart": 132,
+    "age pension": 112,
+    "statutory decision": 92,
+    "temporary entry": 74,
+    "ministerial decision": 63,
+    "professional registration": 62,
+    "executive decision": 58,
+    "government decision": 47,
+    "building permit": 38,
+    "qcat": 33,
+    "public records": 28,
+    "austudy": 27,
+    "planning permit": 26,
+    "skilled migration": 24,
+    "parenting payment": 24,
+    "jobseeker": 23,
+    "carer payment": 16,
+    "family tax benefit": 15,
+    "abstudy": 4
+  },
+  "source_distribution": {
+    "tasmanian_legislation": 91,
+    "high_court_of_australia": 1982,
+    "south_australian_legislation": 30,
+    "nsw_caselaw": 18530,
+    "federal_court_of_australia": 12963,
+    "nsw_legislation": 37,
+    "queensland_legislation": 82,
+    "western_australian_legislation": 29
+  },
+  "court_distribution": {
+    "Unknown": 33744
+  },
+  "potential_misclassifications_count": 32322,
+  "sample_misclassifications": [
+    {
+      "version_id": "tasmanian_legislation:2014-07-03/sr-2014-084",
+      "citation": "Proclamation under the Land Use Planning and Approvals Amendment Act 2013 (Tas)",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Property"
+      ],
+      "keywords_found": [
+        "approval",
+        "planning",
+        "land use",
+        "local government",
+        "proclamation"
+      ],
+      "text_preview": "Proclamation under the Land Use Planning and Approvals Amendment Act 2013\n\nI, the Lieutenant-Governor in and over the State of Tasmania and its Dependencies in the Commonwealth of Australia, acting wi"
+    },
+    {
+      "version_id": "high_court_of_australia:/showbyHandle/1/10325",
+      "citation": "Muir v Open Brethren [1956] HCA 14",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [],
+      "text_preview": "High Court of Australia\nDixon C.J. Webb, Fullagar and Kitto JJ.\nMuir v Open Brethren\n[1956] HCA 14\n\nORDER\nAppeal dismissed with costs.\n\nCur. adv. vult.\n\nThe following written judgments were delivered:"
+    },
+    {
+      "version_id": "south_australian_legislation:2020-07-01/2018.192.un",
+      "citation": "Freedom of Information (Fees and Charges) Regulations 2018 (SA)",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Property"
+      ],
+      "keywords_found": [
+        "freedom of information",
+        "sat",
+        "regulation"
+      ],
+      "text_preview": "South Australia\nFreedom of Information (Fees and Charges) Regulations 2018\nunder the Freedom of Information Act 1991\n\n\n\nContents\n1\tShort title\n3\tInterpretation\n5\tWaiver and remission (section 53(2)(a)"
+    },
+    {
+      "version_id": "nsw_caselaw:54a63c143004de94513db49f",
+      "citation": "Insurance Australia Limited t/as NRMA Insurance v Banos (No 2) [2013] NSWSC 1668",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "visa",
+        "judicial review",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  Insurance Australia Limited t/as NRMA Insurance v Banos (No 2) [2013] NSWSC 1668\nHearing dates:            In chambers on the papers\nDecision d"
+    },
+    {
+      "version_id": "nsw_caselaw:5c1ca992e4b0b9ab40212a90",
+      "citation": "Fisher v Commissioner for Fair Trading [2018] NSWCATAD 301",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "centrelink",
+        "administrative decisions",
+        "reviewable decision",
+        "aat",
+        "sat"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Fisher v Commissioner for Fair Trading [2018] NSWCATAD 301\nHearing dates:            21 December 2018\nDate of orders:       "
+    },
+    {
+      "version_id": "nsw_caselaw:549f71263004262463a71376",
+      "citation": "Da Silva and Sunlake Real Estate Pty Ltd t/as L J Hooker Morisset [2004] NSWIRComm 381",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "tribunal",
+        "compliance"
+      ],
+      "text_preview": "Industrial Relations Commission\nof New South Wales\n\n\n  CITATION :              Da Silva and Sunlake Real Estate Pty Ltd t/as L J Hooker Morisset [2004] NSWIRComm 381\n                          APPLICAN"
+    },
+    {
+      "version_id": "nsw_caselaw:58aa86cae4b058596cba4316",
+      "citation": "R v Xie (No 13) [2015] NSWSC 2125",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "permit",
+        "discretionary power"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  R v Xie (No 13) [2015] NSWSC 2125\nDecision date:            16 June 2015\nJurisdiction:             Common Law - Criminal\nBefore:               "
+    },
+    {
+      "version_id": "nsw_caselaw:179ee385d8062b0ca24420e2",
+      "citation": "OBQ [2020] NSWCATGD 59",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "pension",
+        "welfare",
+        "ncat",
+        "sat",
+        "acat"
+      ],
+      "text_preview": "NSW Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  OBQ [2020] NSWCATGD 59\nHearing dates:            11 September 2020 and 25 September 2020\nDate of orders:           25 Se"
+    },
+    {
+      "version_id": "nsw_caselaw:549f81eb3004262463ab5dc5",
+      "citation": "Hardie v North Sydney City Council [2006] NSWLEC 45",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "tribunal",
+        "compliance",
+        "planning"
+      ],
+      "text_preview": "Land and Environment Court\nof New South Wales\n\n\n  CITATION :              Hardie v North Sydney City Council [2006] NSWLEC 45\n\n                          APPLICANT\n                          Katrina Har"
+    },
+    {
+      "version_id": "nsw_caselaw:182a4dd01909ad9300d59d81",
+      "citation": "In the matter of MyDeal.com.au Limited [2022] NSWSC 1094",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "regulatory",
+        "permit",
+        "approval"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  In the matter of MyDeal.com.au Limited [2022] NSWSC 1094\nHearing dates:            2 August 2022\nDate of orders:           2 August 2022\nDecisi"
+    },
+    {
+      "version_id": "nsw_caselaw:55835e58e4b0f1d031de9a9c",
+      "citation": "Hilton John Cawthray v R [2013] NSWCCA 105",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Tax"
+      ],
+      "keywords_found": [
+        "procedural fairness",
+        "sat",
+        "tribunal",
+        "permit",
+        "approval"
+      ],
+      "text_preview": "Court of Criminal Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Hilton John Cawthray v R [2013] NSWCCA 105\nHearing dates:            15 February 2013\nDecision date:            09 May "
+    },
+    {
+      "version_id": "nsw_caselaw:5760c56de4b058596cb9c487",
+      "citation": "OKC [2016] NSWCATGD 2",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "welfare",
+        "sat",
+        "acat",
+        "tribunal",
+        "planning"
+      ],
+      "text_preview": "NSW Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  OKC [2016] NSWCATGD 2\nHearing dates:            1 February 2016\nDate of orders:           01 February 2016\nDecision date"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2020/2020fca1492",
+      "citation": "Cromwell Corporation Limited v ARA Real Estate Investors XXI Pte Ltd [2020] FCA 1492",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "aat",
+        "sat",
+        "compliance"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nCromwell Corporation Limited v ARA Real Estate Investors XXI Pte Ltd [2020] FCA 1492\nFile number(s):                                             VID 513 of 2020\n\nJudgment o"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2020/2020fca0168",
+      "citation": "Bickle v State of Victoria (Victoria Police) [2020] FCA 168",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "approval",
+        "local government"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nBickle v State of Victoria (Victoria Police) [2020] FCA 168\nFile number:                   VID 937 of 2019\n\nJudge:                         SNADEN J\n\nDate of judgment:      "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2003/2003fca0601",
+      "citation": "Australian Competition & Consumer Commission v George Weston Foods Limited & Anor [2003] FCA 601",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "welfare",
+        "sat",
+        "compliance",
+        "permit",
+        "approval"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAustralian Competition & Consumer Commission v George Weston Foods\nLimited & Anor [2003] FCA 601\n\n\nLEGAL PROFESSIONAL PRIVILEGE - inquiry into Part IV contraventions by pre"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2002/2002fca0369",
+      "citation": "BWK Elders (Australia) Pty Ltd v Westgate Wool Company Pty Ltd (No.4) [2002] FCA 369",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "sat",
+        "permit"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nBWK Elders (Australia) Pty Ltd v Westgate Wool Company Pty Ltd (No.4)\n[2002] FCA 369\nBWK ELDERS (AUSTRALIA) PTY LTD (ACN 000 320 794) v WESTGATE WOOL COMPANY PTY LTD (ACN 0"
+    },
+    {
+      "version_id": "nsw_caselaw:5a690d11e4b058596cbadb93",
+      "citation": "Auld v Independent Liquor and Gaming Authority [2018] NSWCATAD 25",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "administrative decisions",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Auld v Independent Liquor and Gaming Authority [2018] NSWCATAD 25\nHearing dates:            1 and 2 August 2017\nDate of orde"
+    },
+    {
+      "version_id": "nsw_caselaw:57565e15e4b058596cb9c05f",
+      "citation": "CJT v Office of the Children\u2019s Guardian [2016] NSWSC 738",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Family",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "citizenship",
+        "welfare",
+        "judicial review"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  CJT v Office of the Children's Guardian [2016] NSWSC 738\nHearing dates:            8 April 2016\nDecision date:            08 June 2016\nBefore: "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2018/2018fca0831",
+      "citation": "APG16 v Minister for Immigration and Border Protection [2018] FCA 831",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "immigration",
+        "judicial review",
+        "jurisdictional error"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAPG16 v Minister for Immigration and Border Protection [2018] FCA 831\nAppeal from:                         Application for leave to appeal: APG16 v Minister for Immigration"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/full/2004/2004fcafc0198",
+      "citation": "SPLB v Minister for Immigration & Multicultural & Indigenous Affairs [2004] FCAFC 198",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "judicial review"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nSPLB v Minister for Immigration & Multicultural & Indigenous Affairs\n[2004] FCAFC 198\nMIGRATION \u2013 appeal from summary dismissal for failure to comply with orders, and on ba"
+    },
+    {
+      "version_id": "nsw_caselaw:549fb1683004262463b7fd13",
+      "citation": "OLIVE v STATE OF NEW SOUTH WALES [2003] NSWSC 356",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment",
+        "Torts"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "permit",
+        "planning",
+        "disciplinary"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n  CITATION :         OLIVE v STATE OF NEW SOUTH WALES [2003] NSWSC 356\n  HEARING DATE(S) :  13 - 15 May 2002\n  JUDGMENT DATE :\n                     6 February 2003\n\n  J"
+    },
+    {
+      "version_id": "high_court_of_australia:/showbyHandle/1/10804",
+      "citation": "Latec Investments Ltd v Hotel Terrigal Pty Ltd [1965] HCA 17",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "sat",
+        "acat",
+        "registration"
+      ],
+      "text_preview": "High Court of Australia\nKitto, Taylor and Menzies JJ.\nLatec Investments Ltd v Hotel Terrigal Pty Ltd\n[1965] HCA 17\n\nORDER\nAppeal allowed and the decree of the Supreme Court of New South Wales in its e"
+    },
+    {
+      "version_id": "nsw_caselaw:549fbce83004262463ba1998",
+      "citation": "Davis v Greater Western Area Health Service [2005] NSWSC 1206",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "welfare",
+        "sat",
+        "tribunal",
+        "approval"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n  CITATION :         Davis v Greater Western Area Health Service [2005] NSWSC 1206\n\n  HEARING DATE(S) :  11 November 2005\n\n  JUDGMENT DATE :    1 December 2005\n\n  JURIS"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2024/2024fca0248",
+      "citation": "Societe Civile et Agricole du Vieux Chateau Certan v Kreglinger (Australia) Pty Ltd [2024] FCA 248",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "sat",
+        "regulatory",
+        "permit",
+        "approval",
+        "registration"
+      ],
+      "text_preview": "Federal Court of Australia\n\nSociete Civile et Agricole du Vieux Chateau Certan v Kreglinger (Australia) Pty Ltd [2024] FCA 248\nFile number:                    VID 252 of 2021\n\nJudgment of:            "
+    },
+    {
+      "version_id": "nsw_caselaw:57b10694e4b058596cb9e622",
+      "citation": "Norris v Routley [2016] NSWCA 212",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "acat",
+        "tribunal",
+        "permit"
+      ],
+      "text_preview": "Court of Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Norris v Routley [2016] NSWCA 212\nHearing dates:            11 August 2016\nDate of orders:           11 August 2016\nDecision dat"
+    },
+    {
+      "version_id": "nsw_caselaw:5949b705e4b058596cba7c9f",
+      "citation": "Bella Ikea Belmore Pty Limited v City of Canterbury Bankstown Council [2017] NSWLEC 1315",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "planning"
+      ],
+      "text_preview": "Land and Environment Court\nNew South Wales\n\nMedium Neutral Citation:  Bella Ikea Belmore Pty Limited v City of Canterbury Bankstown Council [2017] NSWLEC 1315\nHearing dates:            Conciliation co"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2023/2023fca1448",
+      "citation": "AES20 v Minister for Immigration, Citizenship & Multicultural Affairs [2023] FCA 1448",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "immigration",
+        "citizenship",
+        "judicial review"
+      ],
+      "text_preview": "Federal Court of Australia\n\nAES20 v Minister for Immigration, Citizenship & Multicultural Affairs [2023] FCA 1448\nAppeal from:                          AES20 v Minister for Immigration & Anor [2020] F"
+    },
+    {
+      "version_id": "nsw_caselaw:549fba5f3004262463b9c812",
+      "citation": "YESHIVA PROPERTIES NO.1 PTY LIMITED & 6 ORS v JOAN MARSHALL [2005] NSWCA 23",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "approval",
+        "planning",
+        "rezoning"
+      ],
+      "text_preview": "New South Wales\nCourt of Appeal\n\n\n  CITATION:         YESHIVA PROPERTIES NO.1 PTY LIMITED & 6 ORS v JOAN MARSHALL [2005] NSWCA 23\n\n  HEARING DATE(S):  26/11/2004\n\n\n  JUDGMENT DATE:    17 February 2005"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/1999/1999fca0634",
+      "citation": "Adlam v Bauer [1999] FCA 634",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Employment"
+      ],
+      "keywords_found": [
+        "natural justice",
+        "tribunal"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAdlam v Bauer [1999] FCA 634\nIndustrial Law \u2013 notice of motion to discharge rule to show cause \u2013 motion dismissed \u2013 no point of principle.\nWorkplace Relations Act 1996 (Cth"
+    },
+    {
+      "version_id": "nsw_caselaw:549f7cf33004262463aa05ae",
+      "citation": "Heawood v Muswellbrook Shire Council [2001] NSWLEC 8",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "sat",
+        "tribunal",
+        "regulation"
+      ],
+      "text_preview": "Reported Decision :  (2001) 112 LGERA 315\n\n\n\nLand and Environment Court\nof New South Wales\n\n\n  CITATION :              Heawood v Muswellbrook Shire Council [2001] NSWLEC 8\n                          AP"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2003/2003fca0804",
+      "citation": "Australian Securities & Investments Commission v Southcorp Limited [2003] FCA 804",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "legal services"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAustralian Securities & Investments Commission v Southcorp Limited\n[2003] FCA 804\n\n\nPRACTICE AND PROCEDURE \u2013 legal professional privilege \u2013 expert witness retained to provi"
+    },
+    {
+      "version_id": "nsw_caselaw:54a638f23004de94513da3d5",
+      "citation": "BT v R [2012] NSWCCA 276",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family"
+      ],
+      "keywords_found": [
+        "visa",
+        "refugee",
+        "procedural fairness",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Court of Criminal Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  BT v R [2012] NSWCCA 276\nHearing dates:            1 November 2012\nDecision date:            14 December 2012\nBefore:  "
+    },
+    {
+      "version_id": "nsw_caselaw:549faf5b3004262463b768b9",
+      "citation": "Murray v Wingecarribee Shire Council [2004] NSWSC 19",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Torts"
+      ],
+      "keywords_found": [
+        "ultra vires",
+        "sat",
+        "tribunal",
+        "permit",
+        "planning"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n  CITATION :         Murray v Wingecarribee Shire Council [2004] NSWSC 19\n  HEARING DATE(S) :  20, 27 and 29 January 2004\n  JUDGMENT DATE :\n                     29 Janu"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2001/2001fca0377",
+      "citation": "Pegasus Gold Australia Pty Ltd v Bateman Project Engineering Pty Ltd [2001] FCA 377",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Torts"
+      ],
+      "keywords_found": [],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\nPegasus Gold Australia Pty Ltd v Bateman Project Engineering Pty Ltd\n[2001] FCA 377\nCOSTS \u2013 security for costs sought in relation to cross-claim \u2013 the cross-claim is essenti"
+    },
+    {
+      "version_id": "nsw_caselaw:5657e434e4b0eaaf45af0033",
+      "citation": "Alexander v Perpetual Trustee Company Limited [2015] NSWSC 1815",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  Alexander v Perpetual Trustee Company Limited [2015] NSWSC 1815\nHearing dates:            27 November 2015\nDate of orders:           04 Decembe"
+    },
+    {
+      "version_id": "nsw_caselaw:549f60943004262463a18898",
+      "citation": "Tallong Park Association Inc v Sutherland; Sutherland v Tallong Park Association Inc (EOD) [2007] NS",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "social security",
+        "administrative decisions",
+        "reviewable decision",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Appeal Panel - Internal\n\n\n\n  CITATION:                       Tallong Park Association Inc v Sutherland; Sutherland v Tallong Park Association Inc (EOD) [2007] NSWADTAP 19\n\n                            "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2011/2011fca1067",
+      "citation": "Statewide Secured Investments Pty Ltd v Tarrant [2011] FCA 1067",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "sat",
+        "permit"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nStatewide Secured Investments Pty Ltd v Tarrant [2011] FCA 1067\nCitation:                     Statewide Secured Investments Pty Ltd v Tarrant [2011] FCA 1067\n\nParties:     "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2011/2011fca0049",
+      "citation": "Australian Competition and Consumer Commission v Jones (No 5) [2011] FCA 49",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "judicial review",
+        "administrative decisions",
+        "procedural fairness",
+        "sat",
+        "administrative decision"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAustralian Competition and Consumer Commission v Jones (No 5)\n[2011] FCA 49\nCitation:                     Australian Competition and Consumer Commission v Jones (No 5) [201"
+    },
+    {
+      "version_id": "nsw_caselaw:18b59b70d3f2dc30edc67ee2",
+      "citation": "R v Tertsis [2023] NSWDC 442",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "immigration",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "District Court\nNew South Wales\n\nMedium Neutral Citation:  R v Tertsis [2023] NSWDC 442\nHearing dates:            22/9/23\nDate of orders:           22/9/23\nDecision date:            22 September 2023\nJ"
+    },
+    {
+      "version_id": "nsw_caselaw:549f945b3004262463afbb74",
+      "citation": "Vassallo v Council of the City of Sydney [2010] NSWLEC 1030",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "tribunal",
+        "compliance",
+        "permit"
+      ],
+      "text_preview": "Land and Environment Court\nof New South Wales\n\n\n  CITATION :                  Vassallo v Council of the City of Sydney [2010] NSWLEC 1030\n\n                              APPLICANT\n                     "
+    },
+    {
+      "version_id": "nsw_caselaw:549fb3c83004262463b8a375",
+      "citation": "State of New South Wales v Ridley [2004] NSWCA 68",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment",
+        "Torts"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "New South Wales\nCourt of Appeal\n\n\n  CITATION :         State of New South Wales v Ridley [2004] NSWCA 68\n  HEARING DATE(S) :  10/02/04, 11/02/04\n  JUDGMENT DATE :\n                     18 March 2004\n\n "
+    },
+    {
+      "version_id": "nsw_caselaw:549fbf1e3004262463ba6291",
+      "citation": "R v Potier [2005] NSWCCA 336",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Family",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat",
+        "tribunal",
+        "permit"
+      ],
+      "text_preview": "New South Wales\nCourt of Criminal Appeal\n\n\n\n  CITATION:         R v Potier [2005] NSWCCA 336\n\n  HEARING DATE(S):  16 September 2005\n\n  JUDGMENT DATE:    16 September 2005\n\n  JUDGMENT OF:      Basten J"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2022/2022fca0888",
+      "citation": "BNO19 v Minister for Immigration, Citizenship, Migrant Services and Multicultural Affairs [2022] FCA",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "Federal Court of Australia\n\nBNO19 v Minister for Immigration, Citizenship, Migrant Services and Multicultural Affairs [2022] FCA 888\nAppeal from:                         BNP19 as Litigation Guardian f"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2011/2011fca0134",
+      "citation": "Forest Marsh Pty Ltd v Pleash [2011] FCA 134",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "permit",
+        "regulation"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nForest Marsh Pty Ltd v Pleash [2011] FCA 134\nCitation:                       Forest Marsh Pty Ltd v Pleash [2011] FCA 134\n\nParties:                        FOREST MARSH PTY "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2015/2015fca0834",
+      "citation": "Perrett v Attorney-General of the Commonwealth of Australia [2015] FCA 834",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "judicial review",
+        "administrative decisions",
+        "sat",
+        "tribunal",
+        "administrative decision"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nPerrett v Attorney-General of the Commonwealth of Australia [2015] FCA 834\nCitation:                      Perrett v Attorney-General of the Commonwealth of Australia [2015]"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/1998/1998fca1438",
+      "citation": "FAI General Insurance Co Ltd & Anor v Workcover Corp of South Australia [1998] FCA 1438",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "permit"
+      ],
+      "text_preview": "IN THE FEDERAL COURT OF AUSTRALIA\n\nSOUTH AUSTRALIA DISTRICT REGISTRY  SG 42 of 1998\n\n\n\nBETWEEN:  fai general insurance company ltd\n\n          (acn 000 327 855)\n\n          first Applicant\n\n          fa"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2023/2023fca0402",
+      "citation": "Tredders Investments Pty Ltd as trustee for Warren Tredrea Trust v Channel 9 South Australia [2023] ",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "permit"
+      ],
+      "text_preview": "Federal Court of Australia\n\nTredders Investments Pty Ltd as trustee for Warren Tredrea Trust v Channel 9 South Australia [2023] FCA 402\nFile number:                   SAD 147 of 2022\n\nJudgment of:    "
+    },
+    {
+      "version_id": "nsw_caselaw:174954d29dfc4751e8e584dc",
+      "citation": "Carpenter v Morris [2020] NSWSC 1264",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat",
+        "tribunal",
+        "compliance",
+        "permit"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  Carpenter v Morris [2020] NSWSC 1264\nHearing dates:            14 September 2020\nDate of orders:           16 September 2020\nDecision date:    "
+    },
+    {
+      "version_id": "nsw_caselaw:5dba088de4b0c3247d712a7e",
+      "citation": "Moore v R [2019] NSWCCA 264",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Family"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "planning"
+      ],
+      "text_preview": "Court of Criminal Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Moore v R [2019] NSWCCA 264\nHearing dates:            16 October 2019\nDecision date:            04 November 2019\nBefore"
+    },
+    {
+      "version_id": "nsw_caselaw:1752ab93cf81b80e40874df1",
+      "citation": "Murphie v Chen [2020] NSWCATAP 212",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Murphie v Chen [2020] NSWCATAP 212\nHearing dates:            9 October 2020\nDate of orders:           9 October 2020\nDecisio"
+    },
+    {
+      "version_id": "nsw_caselaw:5930ab51e4b058596cba72b1",
+      "citation": "Australian Youth & Health Foundation v Perpetual Trustee Company Ltd [2017] NSWCA 127",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Court of Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Australian Youth & Health Foundation v Perpetual Trustee Company Ltd [2017] NSWCA 127\nHearing dates:            20 April 2017\nDa"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2008/2008fca0204",
+      "citation": "SZKON v Minister for Immigration and Citizenship (No 2) [2008] FCA 204",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Property",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nSZKON v Minister for Immigration and Citizenship (No 2) [2008] FCA 204\n\n\nSZKON v MINISTER FOR IMMIGRATION AND CITIZENSHIP AND REFUGEE REVIEW TRIBUNAL\nNSD 2198 OF 2007\n\nGRAH"
+    },
+    {
+      "version_id": "nsw_caselaw:572180afe4b05f2c4f04d74e",
+      "citation": "Bulmash v Webster [2016] NSWCATCD 23",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "permit",
+        "approval",
+        "regulation"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Bulmash v Webster [2016] NSWCATCD 23\nHearing dates:            16 December 2015\nDecision date:            03 March 2016\nJuri"
+    },
+    {
+      "version_id": "nsw_caselaw:54a63b153004de94513daff4",
+      "citation": "Suzanne Marie Ryan and Mary Agnes Briggs as executrices of the estate of the late Patrick Joseph Don",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat",
+        "tribunal"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  Suzanne Marie Ryan and Mary Agnes Briggs as executrices of the estate of the late Patrick Joseph Donoghue & Anor v Prenitha Srimath Wikramanaya"
+    },
+    {
+      "version_id": "nsw_caselaw:1894c5e7d3860408f13949fb",
+      "citation": "Jury v The Council of City of Sydney [2023] NSWLEC 1369",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "tribunal",
+        "permit",
+        "planning"
+      ],
+      "text_preview": "Land and Environment Court\nNew South Wales\n\nMedium Neutral Citation:  Jury v The Council of City of Sydney [2023] NSWLEC 1369\nHearing dates:            Conciliation Conference 21 June 2023\nDate of ord"
+    },
+    {
+      "version_id": "nsw_caselaw:54a63c1a3004de94513db740",
+      "citation": "Busuttil v Commissioner of Police [2013] NSWADT 305",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "social security",
+        "administrative decisions",
+        "sat",
+        "tribunal",
+        "administrative decision"
+      ],
+      "text_preview": "Administrative Decisions Tribunal\nNew South Wales\nMedium Neutral Citation:  Busuttil v Commissioner of Police [2013] NSWADT 305\nHearing dates:            16 September 2013; 15 October 2013\nDecision da"
+    },
+    {
+      "version_id": "high_court_of_australia:/showbyHandle/1/9419",
+      "citation": "Psaltis v Schultz [1948] HCA 31",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Family"
+      ],
+      "keywords_found": [
+        "sat",
+        "permit"
+      ],
+      "text_preview": "High Court of Australia\nLatham C.J. Dixon and Williams JJ.\nPsaltis v Schultz\n[1948] HCA 31\n\nORDER\nAppeal dismissed with costs.\n\nCur. adv. vult.\n\nThe following written judgments were delivered:\u2014\n\n    O"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2019/2019fca1872",
+      "citation": "Wellcom Group Limited, in the matter of Wellcom Group Limited (No 2) [2019] FCA 1872",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Employment"
+      ],
+      "keywords_found": [
+        "sat",
+        "compliance",
+        "approval"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nWellcom Group Limited, in the matter of Wellcom Group Limited (No 2) [2019] FCA 1872\nFile number:                           VID 878 of 2019\n\nJudge:                         "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2013/2013fca0937",
+      "citation": "Shea v TruEnergy Services Pty Ltd (No 5) [2013] FCA 937",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "permit",
+        "legal services"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nShea v TruEnergy Services Pty Ltd (No 5) [2013] FCA 937\nCitation:                      Shea v TruEnergy Services Pty Ltd (No 5) [2013] FCA 937\n\nParties:                    "
+    },
+    {
+      "version_id": "nsw_caselaw:18ba6978ab6e895ed76c66c7",
+      "citation": "West v Arico [2023] NSWLEC 1668",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "privacy",
+        "sat",
+        "tribunal",
+        "regulation"
+      ],
+      "text_preview": "Land and Environment Court\nNew South Wales\n\nMedium Neutral Citation:  West v Arico [2023] NSWLEC 1668\nHearing dates:            23 October 2023\nDate of orders:           23 October 2023\nDecision date:"
+    },
+    {
+      "version_id": "nsw_caselaw:549f9d8e3004262463b215d8",
+      "citation": "REGINA v BOOTH [2000] NSWCCA 239",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial"
+      ],
+      "keywords_found": [
+        "tribunal"
+      ],
+      "text_preview": "New South Wales\nCourt of Criminal Appeal\n\n\n\n  CITATION :         REGINA v BOOTH [2000] NSWCCA 239\n  FILE NUMBER(S) :   CCA 60753/98\n  HEARING DATE(S) :  29 May 2000\n  JUDGMENT DATE :\n                 "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2016/2016fca0728",
+      "citation": "Australian Competition and Consumer Commission v SensaSlim Australia Pty Ltd (in liq) (No 8) [2016] ",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "sat"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nAustralian Competition and Consumer Commission v SensaSlim Australia Pty Ltd (in liq) (No 8) [2016] FCA 728\nFile number:                       NSD 1163 of 2011\n\nJudge:     "
+    },
+    {
+      "version_id": "nsw_caselaw:59cc7791e4b074a7c6e19093",
+      "citation": "Novakov v Carew [2017] NSWCATAP 194",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat",
+        "tribunal",
+        "permit"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Novakov v Carew [2017] NSWCATAP 194\nHearing dates:            01 June 2017\nDate of orders:           29 September 2017\nDecis"
+    },
+    {
+      "version_id": "nsw_caselaw:54a63c173004de94513db5e7",
+      "citation": "In the matter of Eden Resort Hotel Limited [2013] NSWSC 1820",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "compliance",
+        "permit",
+        "approval"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  In the matter of Eden Resort Hotel Limited [2013] NSWSC 1820\nHearing dates:            11 December 2013\nDecision date:            11 December 2"
+    },
+    {
+      "version_id": "nsw_caselaw:549f79333004262463a903db",
+      "citation": "Transport Workers' Union of New South Wales (on behalf on S & L Bozinovski Pty Ltd and MJW Transport",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "licensing",
+        "permit",
+        "approval"
+      ],
+      "text_preview": "Industrial Relations Commission\nof New South Wales\n\n\n  CITATION:               Transport Workers' Union of New South Wales (on behalf on S & L Bozinovski Pty Ltd and MJW Transport Pty Ltd) and Glen Ca"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2021/2021fca0485",
+      "citation": "Heath v LawTap Pty Ltd [2021] FCA 485",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Torts"
+      ],
+      "keywords_found": [
+        "sat",
+        "permit"
+      ],
+      "text_preview": "Federal Court of Australia\n\nHeath v LawTap Pty Ltd [2021] FCA 485\nFile number:                              VID 124 of 2021\n\nJudgment of:                              MORTIMER J\n\nDate of judgment:    "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2015/2015fca1339",
+      "citation": "Thomas v Commissioner of Taxation [2015] FCA 1339",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "aat",
+        "administrative appeals tribunal",
+        "sat",
+        "tribunal",
+        "tribunal proceeding"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nThomas v Commissioner of Taxation [2015] FCA 1339\nCitation:                      Thomas v Commissioner of Taxation [2015] FCA 1339\n\nParties:                       MARTIN AN"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/full/2009/2009fcafc0098",
+      "citation": "Minister for Immigration and Citizenship v Kamal [2009] FCAFC 98",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "immigration",
+        "citizenship",
+        "jurisdictional error"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nMinister for Immigration and Citizenship v Kamal [2009] FCAFC 98\n\n\nMIGRATION \u2013 application for Student (Temporary) (Class TU) visa under the Migration Act 1958 (Cth) \u2013 crit"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2020/2020fca1176",
+      "citation": "BDS20 v Minister for Immigration, Citizenship, Migrant Services and Multicultural Affairs [2020] FCA",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "Federal Court of Australia\n\nBDS20 v Minister for Immigration, Citizenship, Migrant Services and Multicultural Affairs [2020] FCA 1176\nFile number:                   NSD 300 of 2020\n\nJudgment of:      "
+    },
+    {
+      "version_id": "nsw_caselaw:549f918d3004262463af0fb4",
+      "citation": "Miltonbrook Pty Limited v. Kiama Municipal Council [1998] NSWLEC 127",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal",
+        "permit",
+        "approval",
+        "registration"
+      ],
+      "text_preview": "Land and Environment Court\nof New South Wales\n\n\n  CITATION :              Miltonbrook Pty Limited v. Kiama Municipal Council [1998] NSWLEC 127\n                          APPLICANT\n                     "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2023/2023fca1343",
+      "citation": "Save the Children Australia v Minister for Home Affairs [2023] FCA 1343",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "citizenship",
+        "judicial review",
+        "sat"
+      ],
+      "text_preview": "Federal Court of Australia\n\nSave the Children Australia v Minister for Home Affairs [2023] FCA 1343\nFile number:                                     VID 403 of 2023\n\nJudgment of:                      "
+    },
+    {
+      "version_id": "nsw_caselaw:549fab863004262463b65161",
+      "citation": "R v Galati [2002] NSWCCA 366",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family"
+      ],
+      "keywords_found": [
+        "welfare",
+        "sat",
+        "tribunal",
+        "permit"
+      ],
+      "text_preview": "New South Wales\nCourt of Criminal Appeal\n\n\n\n  CITATION :         R v Galati [2002] NSWCCA 366\n  FILE NUMBER(S) :   CCA 60413/02\n  HEARING DATE(S) :  29 August 2002\n  JUDGMENT DATE :\n                  "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/full/2022/2022fcafc0078",
+      "citation": "Shepherd v Watt [2022] FCAFC 78",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "citizenship",
+        "procedural fairness",
+        "sat"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nShepherd v Watt [2022] FCAFC 78\nAppeal from:                    Watt v Shepherd [2021] FCA 561\n\nFile number(s):                 NSD 530 of 2021\n\nJudgment of:               "
+    },
+    {
+      "version_id": "tasmanian_legislation:2024-07-01/act-2017-023",
+      "citation": "Payroll Tax Rebate (Apprentices, Trainees and Youth Employees) Act 2017 (Tas)",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "regulation"
+      ],
+      "text_preview": "Payroll Tax Rebate (Apprentices, Trainees and Youth Employees) Act 2017\n\nAn Act to enable the administration of a scheme for the payment of payroll tax rebates in relation to apprentices, trainees and"
+    },
+    {
+      "version_id": "nsw_caselaw:549f85993004262463ac3abb",
+      "citation": "Haughton v Lane Cove C [2005] NSWLEC 424",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "visa",
+        "privacy",
+        "sat",
+        "tribunal",
+        "permit"
+      ],
+      "text_preview": "Land and Environment Court\nof New South Wales\n\n\n  CITATION :              Haughton v Lane Cove C [2005] NSWLEC 424\n\n                          APPLICANT\n                          William Haughton\n\n  PA"
+    },
+    {
+      "version_id": "nsw_caselaw:549fa56f3004262463b4987c",
+      "citation": "Barnaby v Berry [2001] NSWCA 454",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [
+        "pension",
+        "sat",
+        "acat",
+        "tribunal"
+      ],
+      "text_preview": "New South Wales\nCourt of Appeal\n\n\n\n  CITATION :         Barnaby v Berry [2001] NSWCA 454\n  FILE NUMBER(S) :   CA 40292/01\n  HEARING DATE(S) :  21/11/01\n  JUDGMENT DATE :\n                     21 Novemb"
+    },
+    {
+      "version_id": "nsw_caselaw:549f98c23004262463b0bbe5",
+      "citation": "The Village McEvoy Pty Ltd v Council of the City of Sydney [2009] NSWLEC 1214",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat",
+        "tribunal",
+        "approval",
+        "planning"
+      ],
+      "text_preview": "Land and Environment Court\nof New South Wales\n\n\n  CITATION :              The Village McEvoy Pty Ltd v Council of the City of Sydney [2009] NSWLEC 1214\n\n                          APPLICANT\n           "
+    },
+    {
+      "version_id": "nsw_caselaw:549fb6d93004262463b9519d",
+      "citation": "Giltej Applications Pty Ltd v Rosaria Grace Moschella [2005] NSWSC 599",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n                     Giltej Applications Pty Ltd v Rosaria Grace Moschella [2005] NSWSC 599\n  CITATION :         This decision has been amended. Please see the end of t"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2018/2018fca1099",
+      "citation": "ADF15 v Minister for Immigration and Border Protection [2018] FCA 1099",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "judicial review"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nADF15 v Minister for Immigration and Border Protection [2018] FCA 1099\nAppeal from:                         ADF15 v Minister for Immigration and Border Protection [2016] FC"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2005/2005fca1760",
+      "citation": "Baker v Rigg [2005] FCA 1760",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "sat",
+        "acat"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nBaker v Rigg [2005] FCA 1760\n\n\nBANKRUPTCY \u2013 Application for annulment of sequestration order \u2013 Principles relevant to determination of whether the sequestration order shoul"
+    },
+    {
+      "version_id": "nsw_caselaw:549f630a3004262463a27bb2",
+      "citation": "Coleman & anor v Chief Commissioner of State Revenue (RD) [2006] NSWADTAP 59",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "administrative decisions",
+        "natural justice",
+        "sat",
+        "tribunal",
+        "administrative decision"
+      ],
+      "text_preview": "Set aside by Appeal :  Set Aside by Appeal on 21 June 2007: Chief Commissioner of State Revenue v Geoffrey Harry Coleman & Another [2007] NSWSC 625\n\n\n\n\nAppeal Panel - Internal\n\n\n\n  CITATION:          "
+    },
+    {
+      "version_id": "nsw_caselaw:1879cf40e7bd4837bef6bdcb",
+      "citation": "Chaaban v Commissioner of Police, NSW Police Force [2023] NSWCATAD 93",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "immigration",
+        "citizenship",
+        "social security"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Chaaban v Commissioner of Police, NSW Police Force [2023] NSWCATAD 93\nHearing dates:            14 April 2023\nDate of orders"
+    },
+    {
+      "version_id": "south_australian_legislation:e92bab2be38f54f8/advance%20care%20directives%20(review)%20amendment%20bill%202023/b_as%20introduced%20in%20ha/advance%20review%20amendment%20bill%202022.un",
+      "citation": "Advance Care Directives (Review) Amendment Bill 2023 (SA)",
+      "primary_category": "Admin_Veterans",
+      "suggested_domains": [
+        "Criminal"
+      ],
+      "keywords_found": [
+        "sat",
+        "proclamation",
+        "regulation"
+      ],
+      "text_preview": "South Australia\nAdvance Care Directives (Review) Amendment Bill 2022\nA Bill For\nAn Act to amend the Advance Care Directives Act 2013.\n\n\n\n\n\nContents\nPart 1\u2014Preliminary\n1\tShort title\n2\tCommencement\nPart"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2019/2019fca1230",
+      "citation": "CYM16 v Minister for Immigration and Border Protection [2019] FCA 1230",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nCYM16 v Minister for Immigration and Border Protection [2019] FCA 1230\nAppeal from:                    CYM16 v Minister for Immigration & Anor [2019] FCCA 369\n\nFile number("
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2010/2010fca0679",
+      "citation": "SZMVK v Minister for Immigration and Citizenship [2010] FCA 679",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nSZMVK v Minister for Immigration and Citizenship [2010] FCA 679\nCitation:                            SZMVK v Minister for Immigration and Citizenship [2010] FCA 679\n\nAppeal"
+    },
+    {
+      "version_id": "nsw_caselaw:549fc0673004262463ba8c8e",
+      "citation": "DUHBIHUR v. TRANSPORT APPEAL BOARD & ANOR [2005] NSWSC 811",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "pension",
+        "procedural fairness",
+        "jurisdictional error"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n  CITATION :         DUHBIHUR v. TRANSPORT APPEAL BOARD & ANOR [2005] NSWSC 811\n\n  HEARING DATE(S) :  Thursday 12 May 2005\n\n  JUDGMENT DATE :    12 August 2005\n\n  JURIS"
+    },
+    {
+      "version_id": "high_court_of_australia:/showbyHandle/1/10240",
+      "citation": "Dawson v Perpetual Trustee Co (Ltd) [1953] HCA 83",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property"
+      ],
+      "keywords_found": [],
+      "text_preview": "High Court of Australia\nDixon C.J. Kitto and Taylor JJ.\nDawson v Perpetual Trustee Co (Ltd)\n[1953] HCA 83\n\nORDER\nAppeal dismissed with costs.\n\nCur. adv. vult.\n\nThe Court delivered the following writte"
+    },
+    {
+      "version_id": "nsw_caselaw:18f2c8f601120b07a6c3c425",
+      "citation": "Smith v R [2024] NSWCCA 59",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Family",
+        "Employment"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "Court of Criminal Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Smith v R [2024] NSWCCA 59\nHearing dates:            8 April 2024\nDate of orders:           1 May 2024\nDecision date:  "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/1995/1995fca0561",
+      "citation": "Robert J. Zupanovich Pty Ltd v B & N Beale Nominees Pty Ltd & Ors [1995] FCA 561",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment"
+      ],
+      "keywords_found": [
+        "visa",
+        "sat",
+        "permit"
+      ],
+      "text_preview": "CATCHWORDS\nCOPYRIGHT - builder's plans - whether respondents' plans and buildings infringed applicant's copyright in its plans and the buildings constructed from those plans - remedies - applicant ele"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2014/2014fca1231",
+      "citation": "SZTHQ v Minister for Immigration and Border Protection [2014] FCA 1231",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "immigration",
+        "citizenship"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nSZTHQ v Minister for Immigration and Border Protection [2014] FCA 1231\nCitation:                          SZTHQ v Minister for Immigration and Border Protection [2014] FCA "
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2010/2010fca1014",
+      "citation": "Deputy Commissioner of Taxation v Hua Wang Bank Berhad [2010] FCA 1014",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "sat",
+        "approval",
+        "registration",
+        "regulation",
+        "discretionary power"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nDeputy Commissioner of Taxation v Hua Wang Bank Berhad [2010] FCA 1014\n\nCitation:                       Deputy Commissioner of Taxation v Hua Wang Bank Berhad [2010] FCA 10"
+    },
+    {
+      "version_id": "nsw_caselaw:549fa7533004262463b5250e",
+      "citation": "Azar & Anor v Gordon & Anor [2002] NSWSC 904",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "New South Wales\nSupreme Court\n\n\n\n  CITATION :         Azar & Anor v Gordon & Anor [2002] NSWSC 904\n  FILE NUMBER(S) :   SC 11845/01\n  HEARING DATE(S) :  05/02/2002\n  JUDGMENT DATE :    2 October 2002\n"
+    },
+    {
+      "version_id": "nsw_caselaw:582be2bce4b058596cba1740",
+      "citation": "Council of the Law Society of New South Wales v Nguyen [2016] NSWCATOD 141",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "refugee",
+        "pension",
+        "sat",
+        "tribunal",
+        "compliance"
+      ],
+      "text_preview": "Civil and Administrative Tribunal\nNew South Wales\nMedium Neutral Citation:  Council of the Law Society of New South Wales v Nguyen [2016] NSWCATOD 141\nHearing dates:            5 September 2016\nDate o"
+    },
+    {
+      "version_id": "federal_court_of_australia:irc/1995/1995irca0578",
+      "citation": "Julie-Anne de Jong v J & M Waste Pty Limited, J & M Metals Pty Limited [1995] IRCA 578",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment"
+      ],
+      "keywords_found": [
+        "procedural fairness",
+        "sat"
+      ],
+      "text_preview": "CATCHWORDS\nINDUSTRIAL LAW - UNLAWFUL TERMINATION - PROCEDURAL FAIRNESS - UNJUST - COMPENSATION.\nIndustrial Relations Act 1988ss 170DC, 170DE, 170EA, 170EE\nNicolson v Heaven and Earth Gallery Pty Limit"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2000/2000fca0178",
+      "citation": "Lu v Minister for Immigration & Multicultural Affairs [2000] FCA 178",
+      "primary_category": "Admin_Migration",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Tax"
+      ],
+      "keywords_found": [
+        "visa",
+        "migration",
+        "refugee",
+        "deportation",
+        "immigration"
+      ],
+      "text_preview": "FEDERAL COURT OF AUSTRALIA\n\nLu v Minister for Immigration & Multicultural Affairs [2000] FCA 178\n\nIMMIGRATION -- Competency of Minister's cancellation of permanent visa where earlier order for deporta"
+    },
+    {
+      "version_id": "federal_court_of_australia:fca/single/2022/2022fca1153",
+      "citation": "Cooper v Judicial Registrar Lackenby [2022] FCA 1153",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Tax"
+      ],
+      "keywords_found": [
+        "migration",
+        "immigration",
+        "judicial review",
+        "administrative decisions",
+        "sat"
+      ],
+      "text_preview": "Federal Court of Australia\n\nCooper v Judicial Registrar Lackenby [2022] FCA 1153\nFile number(s):               SAD 45 of 2022\n\nJudgment of:                  O'SULLIVAN J\n\nDate of judgment:            "
+    },
+    {
+      "version_id": "nsw_caselaw:5b1f0e2ee4b09e996306ff6c",
+      "citation": "Sze Tu v Jam Studios Pty Ltd; Jam Studios Pty Ltd v Sze Tu [2018] NSWSC 868",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Property",
+        "Employment",
+        "Tax",
+        "Torts"
+      ],
+      "keywords_found": [
+        "visa",
+        "sat",
+        "acat",
+        "tribunal",
+        "tribunal proceeding"
+      ],
+      "text_preview": "Supreme Court\nNew South Wales\n\nMedium Neutral Citation:  Sze Tu v Jam Studios Pty Ltd; Jam Studios Pty Ltd v Sze Tu [2018] NSWSC 868\nHearing dates:            16-18 and 24 October 2017\nDate of orders:"
+    },
+    {
+      "version_id": "nsw_caselaw:54a640003004de94513dcabe",
+      "citation": "Boensch v Donovan Electrical Services Pty Ltd [2014] NSWCA 453",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "judicial review",
+        "sat",
+        "tribunal"
+      ],
+      "text_preview": "Court of Appeal\nSupreme Court\nNew South Wales\nMedium Neutral Citation:  Boensch v Donovan Electrical Services Pty Ltd [2014] NSWCA 453\nHearing dates:            18 December 2014\nDecision date:        "
+    },
+    {
+      "version_id": "nsw_caselaw:549f5d003004262463a03e9a",
+      "citation": "Omeri v Quality Assurance Services Pty Ltd (No 2) [2004] NSWADT 105",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Criminal",
+        "Commercial",
+        "Employment",
+        "Tax"
+      ],
+      "keywords_found": [
+        "procedural fairness",
+        "sat",
+        "tribunal",
+        "compliance",
+        "certification"
+      ],
+      "text_preview": "  CITATION:             Omeri v Quality Assurance Services Pty Ltd (No 2) [2004] NSWADT 105 revised - 11/10/2004\n  DIVISION:             Equal Opportunity Division\n                        APPLICANT\n  "
+    },
+    {
+      "version_id": "nsw_caselaw:5df6bf12e4b0c3247d714378",
+      "citation": "Byron Shire Council v Ardill Payne & Partners [2019] NSWLEC 195",
+      "primary_category": "Admin_Information",
+      "suggested_domains": [
+        "Commercial"
+      ],
+      "keywords_found": [
+        "visa",
+        "privacy",
+        "sat",
+        "tribunal",
+        "compliance"
+      ],
+      "text_preview": "Land and Environment Court\nNew South Wales\n\nMedium Neutral Citation:  Byron Shire Council v Ardill Payne & Partners [2019] NSWLEC 195\nHearing dates:            3 December 2019\nDate of orders:         "
+    }
+  ]
+}

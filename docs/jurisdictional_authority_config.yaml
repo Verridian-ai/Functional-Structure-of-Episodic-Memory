@@ -1,0 +1,818 @@
+# Jurisdictional Authority Configuration
+# For Jurisdictional Sentinel Agent - Verridian AI System
+# Version: 1.0
+# Date: 2025-11-29
+
+---
+
+# Constitutional Authority Tags
+constitutional_authority:
+  CONSTITUTIONAL_APEX:
+    description: "High Court of Australia - constitutional interpretation authority"
+    applies_to:
+      - "Constitutional interpretation"
+      - "High Court decisions"
+      - "Special leave appeals from all courts"
+    binding_on: "All Australian courts (federal, state, territory)"
+
+  SECTION_51_CONCURRENT:
+    description: "Commonwealth concurrent power under Section 51"
+    applies_to:
+      - "39 heads of power listed in s51"
+      - "Both Commonwealth and States can legislate"
+      - "Commonwealth prevails if inconsistent (s109)"
+    key_powers:
+      - "s51(i): Trade and commerce"
+      - "s51(ii): Taxation"
+      - "s51(xvii): Bankruptcy"
+      - "s51(xx): Corporations"
+      - "s51(xxi): Marriage"
+      - "s51(xxii): Divorce and matrimonial causes"
+      - "s51(xxix): External affairs"
+      - "s51(xxxv): Industrial relations"
+
+  SECTION_51_EXCLUSIVE_PRACTICAL:
+    description: "Practically exclusive Commonwealth powers (though technically concurrent)"
+    applies_to:
+      - "s51(vi): Defence"
+      - "s51(xxix): Foreign affairs"
+      - "s51(xxvii): Immigration"
+      - "s51(xii): Currency"
+      - "s51(xix): Naturalization"
+    notes: "Technically concurrent but exclusively exercised by Commonwealth"
+
+  SECTION_52_EXCLUSIVE:
+    description: "Explicitly exclusive Commonwealth powers under Section 52"
+    applies_to:
+      - "s52(i): Seat of government and Commonwealth places"
+      - "s52(ii): Federal public service departments"
+      - "s52(iii): Other exclusive matters"
+    states_prohibited: true
+
+  SECTION_90_EXCLUSIVE:
+    description: "Exclusive Commonwealth power over customs, excise, and bounties"
+    applies_to:
+      - "Customs duties"
+      - "Excise duties"
+      - "Bounties on production or export"
+    states_prohibited: true
+    constitutional_basis: "Section 90"
+
+  SECTION_109_INCONSISTENCY:
+    description: "Commonwealth law prevails over inconsistent State law"
+    tests:
+      direct_inconsistency:
+        - "Impossible to obey both laws simultaneously"
+        - "One law confers right that other removes"
+      indirect_inconsistency:
+        - "Commonwealth intends to 'cover the field'"
+        - "State law enters field covered by Commonwealth"
+    result: "State law invalid to extent of inconsistency"
+    constitutional_basis: "Section 109"
+
+  SECTION_122_TERRITORIES:
+    description: "Plenary Commonwealth power over territories"
+    applies_to:
+      - "All territories (ACT, NT, external territories)"
+      - "Not limited by other constitutional provisions"
+      - "Can override territory legislation"
+    notes:
+      - "Territory legislatures created by Commonwealth statute"
+      - "Not protected by Chapter III"
+      - "Subject to Commonwealth override at any time"
+    constitutional_basis: "Section 122"
+
+  RESIDUAL_STATE:
+    description: "Powers not in Constitution - retained by States"
+    applies_to:
+      - "Criminal law (state crimes)"
+      - "Land law and planning"
+      - "Contract and tort law"
+      - "Education"
+      - "Health"
+      - "Police"
+      - "Roads and transport"
+      - "Local government"
+      - "State natural resources"
+    notes: "Preserved under Section 107"
+    commonwealth_influence: "Section 96 tied grants, corporations power"
+
+---
+
+# Court Hierarchy Authority Tags
+court_hierarchy_authority:
+
+  # Federal Courts
+  CONSTITUTIONAL_APEX:
+    court_name: "High Court of Australia"
+    level: "Apex court"
+    jurisdiction:
+      original:
+        - "Constitutional interpretation"
+        - "Disputes between States"
+        - "Matters involving Commonwealth officers"
+      appellate:
+        - "Special leave appeals from all Australian courts"
+    binding_authority: "All Australian courts"
+    composition: "7 judges (Chief Justice + 6 Justices)"
+    location: "Canberra (with circuit sittings in capitals)"
+
+  FEDERAL_APPELLATE:
+    court_name: "Federal Court of Australia (Appellate Division)"
+    level: "Superior federal court - appellate"
+    jurisdiction:
+      - "Appeals from FCFCOA Division 2"
+      - "Appeals from State Supreme Courts (federal matters)"
+      - "Appeals from tribunals (AAT, FWC)"
+    binding_authority: "Lower federal courts, persuasive for state courts"
+    court_type: "Superior court of record"
+
+  FEDERAL_ORIGINAL:
+    court_name: "Federal Court of Australia (Original Jurisdiction), FCFCOA Division 2"
+    level: "Federal trial court"
+    jurisdiction:
+      - "Corporations law"
+      - "Intellectual property"
+      - "Taxation"
+      - "Migration"
+      - "Administrative law"
+      - "Bankruptcy"
+      - "Competition and consumer law"
+      - "Employment (federal instruments)"
+    notes: "FCFCOA Div 2 technically inferior court"
+
+  FEDERAL_FAMILY_APPELLATE:
+    court_name: "Federal Circuit and Family Court Division 1 (Appellate)"
+    level: "Family law appeals"
+    jurisdiction:
+      - "Appeals from Division 2 family law matters"
+      - "Complex family law cases"
+    composition: "35 judges"
+    established: "2021-09-01 (merger of Family Court)"
+    court_type: "Superior court of record"
+
+  FEDERAL_FAMILY_ORIGINAL:
+    court_name: "Federal Circuit and Family Court Division 1 (Original)"
+    level: "Complex family law trial court"
+    jurisdiction:
+      - "Complex parenting matters"
+      - "Complex property matters"
+      - "Family law matters transferred from Division 2"
+    applies_to: "Married couples under Family Law Act 1975 (Cth)"
+
+  # State Courts
+  STATE_APPELLATE:
+    court_name: "State Supreme Courts (Court of Appeal)"
+    level: "State appellate court"
+    jurisdiction:
+      - "Appeals from state District/County Courts"
+      - "Appeals from state Magistrates/Local Courts"
+      - "Some first instance matters"
+    binding_authority: "Lower state courts in same state"
+    examples:
+      - "NSW Court of Appeal"
+      - "Victorian Court of Appeal"
+      - "Queensland Court of Appeal"
+    appeals_to: "High Court (by special leave only)"
+
+  STATE_ORIGINAL_SUPERIOR:
+    court_name: "State Supreme Courts (Trial Division)"
+    level: "State superior trial court"
+    jurisdiction:
+      original:
+        - "Murder, manslaughter, treason"
+        - "Complex civil matters over jurisdictional limit"
+        - "Equity matters"
+        - "Judicial review of state administrative decisions"
+    court_type: "Superior court of record"
+    examples:
+      - "Supreme Court of NSW"
+      - "Supreme Court of Victoria"
+      - "Supreme Court of Queensland"
+      - "Supreme Court of Western Australia"
+      - "Supreme Court of South Australia"
+      - "Supreme Court of Tasmania"
+
+  STATE_INTERMEDIATE:
+    court_name: "District Court / County Court"
+    level: "State intermediate court"
+    jurisdiction:
+      criminal:
+        - "Serious indictable offences (excluding murder/manslaughter/treason)"
+        - "Trial by judge and jury or judge alone"
+      civil:
+        - "Claims typically up to $750,000"
+        - "Unlimited jurisdiction for personal injury (some states)"
+      appellate:
+        - "Appeals from Magistrates/Local Courts"
+    court_type: "Technically inferior court"
+    presided_by: "Judges"
+    states_with_intermediate:
+      - name: "New South Wales"
+        court: "District Court of NSW"
+      - name: "Victoria"
+        court: "County Court of Victoria"
+      - name: "Queensland"
+        court: "District Court of Queensland"
+      - name: "South Australia"
+        court: "District Court of SA"
+      - name: "Western Australia"
+        court: "District Court of WA"
+    states_without_intermediate:
+      - "Tasmania"
+      - "Northern Territory"
+      - "Australian Capital Territory"
+
+  STATE_ORIGINAL_INFERIOR:
+    court_name: "Magistrates Court / Local Court"
+    level: "State lower court"
+    jurisdiction:
+      criminal:
+        - "Summary offences (≤ 2 years imprisonment)"
+        - "Minor indictable offences"
+        - "Committal hearings for serious offences"
+      civil:
+        - "Small claims (typically up to $100,000)"
+    presided_by: "Magistrates"
+    jury_trials: false
+    maximum_sentence: "Typically 2 years per offence, up to 5 years for multiple offences"
+    handles_percentage: "95% of criminal matters"
+    nomenclature:
+      NSW: "Local Court"
+      other_states: "Magistrates Court"
+
+  # Territory Courts
+  TERRITORY_SUPERIOR:
+    court_name: "ACT Supreme Court / NT Supreme Court"
+    level: "Territory superior court"
+    jurisdiction:
+      - "Same as state Supreme Courts within territory"
+      - "Serious criminal matters"
+      - "Complex civil matters"
+      - "Appeals from territory Magistrates Courts"
+    important_distinctions:
+      - "NOT Chapter III courts"
+      - "Created under Section 122 (territories power)"
+      - "Judges lack Section 72 constitutional protections"
+      - "No intermediate court in ACT or NT"
+    appeals_to: "High Court only"
+
+  TERRITORY_INFERIOR:
+    court_name: "ACT Magistrates Court / NT Magistrates Court"
+    level: "Territory lower court"
+    jurisdiction:
+      - "Summary offences"
+      - "Minor indictable offences"
+      - "Civil claims under jurisdictional limit"
+    summary_offence_definition:
+      ACT: "ACT offences ≤ 2 years, Commonwealth offences ≤ 1 year"
+      NT: "Offences ≤ 2 years imprisonment"
+
+  # Special Cases
+  STATE_FEDERAL_CONCURRENT:
+    court_name: "Family Court of Western Australia"
+    level: "State court with dual jurisdiction"
+    jurisdiction:
+      federal:
+        applies_to: "Married couples"
+        legislation: "Family Law Act 1975 (Cth)"
+        appeals_to: "Federal Circuit and Family Court of Australia"
+      state:
+        applies_to: "De facto couples"
+        legislation: "Family Court Act 1997 (WA)"
+        appeals_to: "Supreme Court of Western Australia (Court of Appeal)"
+    special_arrangement: true
+    established: "1975 under Section 41 Family Law Act"
+    unique_feature: "Only state family court exercising federal jurisdiction"
+    other_states: "Use Federal Circuit and Family Court for all family law"
+
+---
+
+# Geographic Jurisdiction Tags
+geographic_jurisdiction:
+
+  states:
+    STATE_NSW:
+      name: "New South Wales"
+      type: "State"
+      intermediate_court: true
+      court_nomenclature: "Local Court (not Magistrates Court)"
+
+    STATE_VIC:
+      name: "Victoria"
+      type: "State"
+      intermediate_court: true
+      intermediate_name: "County Court (not District Court)"
+
+    STATE_QLD:
+      name: "Queensland"
+      type: "State"
+      intermediate_court: true
+
+    STATE_WA:
+      name: "Western Australia"
+      type: "State"
+      intermediate_court: true
+      special_family_court: true
+
+    STATE_SA:
+      name: "South Australia"
+      type: "State"
+      intermediate_court: true
+
+    STATE_TAS:
+      name: "Tasmania"
+      type: "State"
+      intermediate_court: false
+
+  self_governing_territories:
+    TERRITORY_ACT:
+      name: "Australian Capital Territory"
+      type: "Self-governing territory"
+      self_government_act: "Australian Capital Territory (Self-Government) Act 1988"
+      self_government_date: "1989-05-11"
+      intermediate_court: false
+      legislative_assembly: true
+      section_122_override: true
+      constitutional_status: "Not a state, created under s122"
+
+    TERRITORY_NT:
+      name: "Northern Territory"
+      type: "Self-governing territory"
+      self_government_act: "Northern Territory (Self-Government) Act 1978"
+      self_government_date: "1978-07-01"
+      intermediate_court: false
+      legislative_assembly: true
+      section_122_override: true
+      aboriginal_affairs: "Partly Commonwealth controlled"
+      example_override: "Euthanasia law overturned 1997"
+
+  external_territories:
+    TERRITORY_NORFOLK:
+      name: "Norfolk Island"
+      type: "External territory"
+      self_government: "Limited (reduced 2015/2016)"
+      law_applied: "NSW law (via Commonwealth)"
+      parliament: false
+
+    TERRITORY_CHRISTMAS:
+      name: "Christmas Island"
+      type: "External territory"
+      governing_act: "Christmas Island Act 1958 (Cth)"
+      law_applied: "WA law (via Commonwealth)"
+      population: "~1,800"
+
+    TERRITORY_COCOS:
+      name: "Cocos (Keeling) Islands"
+      type: "External territory"
+      governing_act: "Cocos (Keeling) Islands Act 1955 (Cth)"
+      law_applied: "WA law (via Commonwealth)"
+      population: "~600"
+
+    TERRITORY_ASHMORE_CARTIER:
+      name: "Ashmore and Cartier Islands"
+      type: "External territory"
+      inhabited: false
+      status: "Nature reserve"
+
+    TERRITORY_CORAL_SEA:
+      name: "Coral Sea Islands"
+      type: "External territory"
+      inhabited: "Weather station only"
+
+    TERRITORY_HEARD_MCDONALD:
+      name: "Heard Island and McDonald Islands"
+      type: "External territory"
+      inhabited: false
+      status: "UNESCO World Heritage Site"
+      location: "Southern Ocean"
+
+    TERRITORY_ANTARCTIC:
+      name: "Australian Antarctic Territory"
+      type: "External territory"
+      claim_percentage: "~42% of Antarctica"
+      governing_act: "Australian Antarctic Territory Act 1954 (Cth)"
+      treaty_status: "Claims held in abeyance under Antarctic Treaty"
+
+  national:
+    JURISDICTION_NATIONAL:
+      name: "National (all of Australia)"
+      applies_to: "Commonwealth laws, High Court decisions"
+
+---
+
+# Subject Matter Jurisdiction Tags
+subject_matter_jurisdiction:
+
+  exclusive_federal:
+    SUBJECT_DEFENCE:
+      name: "Defence"
+      constitutional_basis: "s51(vi)"
+      exclusive_type: "Practical exclusivity"
+      commonwealth_act: "Defence Act 1903"
+      examples:
+        - "Australian Defence Force"
+        - "Military operations"
+        - "Defence facilities"
+
+    SUBJECT_FOREIGN_AFFAIRS:
+      name: "Foreign Affairs"
+      constitutional_basis: "s51(xxix)"
+      exclusive_type: "Practical exclusivity"
+      examples:
+        - "Treaties"
+        - "Diplomatic relations"
+        - "International agreements"
+      key_case: "Tasmanian Dams Case (1983)"
+
+    SUBJECT_IMMIGRATION:
+      name: "Immigration and Emigration"
+      constitutional_basis: "s51(xxvii)"
+      exclusive_type: "Practical exclusivity"
+      commonwealth_act: "Migration Act 1958"
+      examples:
+        - "Visas"
+        - "Border control"
+        - "Citizenship (with s51(xix))"
+
+    SUBJECT_CUSTOMS_EXCISE:
+      name: "Customs and Excise"
+      constitutional_basis: "s90"
+      exclusive_type: "Explicit exclusivity"
+      states_prohibited: true
+      commonwealth_act: "Customs Act 1901"
+      examples:
+        - "Import duties"
+        - "Excise taxes"
+        - "Bounties"
+
+    SUBJECT_CURRENCY:
+      name: "Currency and Coinage"
+      constitutional_basis: "s51(xii)"
+      exclusive_type: "Practical exclusivity"
+      commonwealth_act: "Currency Act 1965"
+      examples:
+        - "Legal tender"
+        - "Coinage"
+        - "Reserve Bank"
+
+    SUBJECT_NATURALIZATION:
+      name: "Naturalization and Citizenship"
+      constitutional_basis: "s51(xix)"
+      exclusive_type: "Practical exclusivity"
+      commonwealth_act: "Australian Citizenship Act 2007"
+
+  concurrent_commonwealth_dominated:
+    SUBJECT_MARRIAGE:
+      name: "Marriage"
+      constitutional_basis: "s51(xxi)"
+      concurrent: true
+      commonwealth_occupied_field: true
+      commonwealth_act: "Marriage Act 1961"
+      key_case: "Commonwealth v ACT (2013) - marriage power includes same-sex marriage"
+      exception:
+        jurisdiction: "Western Australia"
+        subject: "De facto relationships"
+        status: "State power"
+        act: "Family Court Act 1997 (WA)"
+
+    SUBJECT_DIVORCE:
+      name: "Divorce and Matrimonial Causes"
+      constitutional_basis: "s51(xxii)"
+      concurrent: true
+      commonwealth_occupied_field: true
+      commonwealth_act: "Family Law Act 1975"
+      includes:
+        - "Divorce"
+        - "Parental rights"
+        - "Custody and guardianship of infants"
+        - "Property division"
+
+    SUBJECT_BANKRUPTCY:
+      name: "Bankruptcy and Insolvency"
+      constitutional_basis: "s51(xvii)"
+      concurrent: true
+      commonwealth_occupied_field: true
+      commonwealth_act: "Bankruptcy Act 1966"
+
+    SUBJECT_CORPORATIONS:
+      name: "Corporations"
+      constitutional_basis: "s51(xx)"
+      concurrent: true
+      commonwealth_extensive: true
+      commonwealth_act: "Corporations Act 2001"
+      scope:
+        - "Foreign corporations"
+        - "Trading corporations"
+        - "Financial corporations"
+      key_case: "Workchoices Case (2006) - broad interpretation"
+      notes: "Can regulate corporate conduct in otherwise state areas"
+
+    SUBJECT_INDUSTRIAL_RELATIONS:
+      name: "Industrial Relations"
+      constitutional_basis: "s51(xxxv)"
+      concurrent: true
+      commonwealth_extensive: true
+      commonwealth_act: "Fair Work Act 2009"
+      scope: "Disputes extending beyond one state"
+      often_combined_with: "s51(xx) corporations power"
+
+  concurrent_both_active:
+    SUBJECT_TRADE_COMMERCE:
+      name: "Trade and Commerce"
+      constitutional_basis: "s51(i)"
+      concurrent: true
+      commonwealth_act: "Competition and Consumer Act 2010"
+      state_acts: "Fair Trading Acts (various)"
+      scope:
+        commonwealth: "Interstate and international trade"
+        states: "Intrastate commerce"
+
+    SUBJECT_TAXATION:
+      name: "Taxation"
+      constitutional_basis: "s51(ii)"
+      concurrent: true
+      both_active: true
+      commonwealth_taxes:
+        - "Income tax"
+        - "GST"
+        - "Customs duties"
+      state_taxes:
+        - "Payroll tax"
+        - "Land tax"
+        - "Stamp duty"
+      limitation: "Cannot discriminate between states"
+
+    SUBJECT_HEALTH:
+      name: "Health"
+      residual_state: true
+      commonwealth_involvement: "Funding via s96, Medicare"
+      primary_responsibility: "States"
+      state_examples:
+        - "Public hospitals"
+        - "Public health services"
+      commonwealth_examples:
+        - "Medicare"
+        - "PBS (Pharmaceutical Benefits Scheme)"
+        - "Private health insurance regulation"
+
+    SUBJECT_EDUCATION:
+      name: "Education"
+      residual_state: true
+      commonwealth_involvement: "Funding via s96, universities"
+      primary_responsibility: "States"
+      state_examples:
+        - "Schools"
+        - "Curriculum"
+        - "Teacher registration"
+      commonwealth_examples:
+        - "University funding"
+        - "Student loans (HELP)"
+
+    SUBJECT_ENVIRONMENT:
+      name: "Environment"
+      residual_state: true
+      concurrent: true
+      commonwealth_basis:
+        - "s51(xxix) external affairs (international environmental treaties)"
+        - "s51(xx) corporations power (corporate environmental regulation)"
+      state_basis: "Residual power"
+      commonwealth_act: "Environment Protection and Biodiversity Conservation Act 1999"
+
+  residual_state:
+    SUBJECT_CRIMINAL_LAW:
+      name: "Criminal Law"
+      residual_state: true
+      primary_responsibility: "States"
+      state_acts:
+        NSW: "Crimes Act 1900"
+        VIC: "Crimes Act 1958"
+        QLD: "Criminal Code 1899"
+        WA: "Criminal Code 1913"
+        SA: "Criminal Law Consolidation Act 1935"
+        TAS: "Criminal Code 1924"
+      examples:
+        - "Murder, manslaughter"
+        - "Assault"
+        - "Theft, fraud"
+        - "Sexual offences"
+        - "Drug offences (state)"
+      federal_exceptions:
+        - "Customs offences"
+        - "Immigration offences"
+        - "Taxation offences"
+        - "Terrorism"
+        - "Money laundering"
+
+    SUBJECT_LAND_LAW:
+      name: "Land Law and Planning"
+      residual_state: true
+      exclusive_state: true
+      examples:
+        - "Real property law"
+        - "Land titles"
+        - "Planning and zoning"
+        - "Development consent"
+        - "Tenancy"
+
+    SUBJECT_CONTRACT_TORT:
+      name: "Contract and Tort Law"
+      residual_state: true
+      exclusive_state: true
+      law_type: "Common law and state legislation"
+      examples:
+        - "Contract law"
+        - "Negligence"
+        - "Defamation"
+        - "Nuisance"
+
+    SUBJECT_POLICE:
+      name: "Police"
+      residual_state: true
+      state_police: "State police forces"
+      federal_police: "Australian Federal Police (limited jurisdiction)"
+
+    SUBJECT_LOCAL_GOVERNMENT:
+      name: "Local Government"
+      residual_state: true
+      exclusive_state: true
+      notes: "Creation and regulation of councils"
+
+  family_law_special:
+    SUBJECT_FAMILY_LAW_FEDERAL:
+      name: "Family Law (Federal)"
+      applies_to: "Married couples"
+      legislation: "Family Law Act 1975 (Cth)"
+      constitutional_basis: "s51(xxi), s51(xxii)"
+      court: "Federal Circuit and Family Court (except WA)"
+
+    SUBJECT_FAMILY_LAW_STATE_WA:
+      name: "Family Law (WA State)"
+      applies_to: "De facto couples in Western Australia"
+      legislation: "Family Court Act 1997 (WA)"
+      constitutional_basis: "Residual state power (de facto not in Constitution)"
+      court: "Family Court of Western Australia (state jurisdiction)"
+
+    SUBJECT_FAMILY_LAW_STATE_REFERRED:
+      name: "Family Law (Referred State Power)"
+      applies_to: "De facto couples (all states except WA)"
+      constitutional_basis: "s51(xxxvii) - states referred power to Commonwealth"
+      legislation: "Family Law Act 1975 (Cth) as amended"
+      court: "Federal Circuit and Family Court"
+      states_referred:
+        - "New South Wales"
+        - "Victoria"
+        - "Queensland"
+        - "South Australia"
+        - "Tasmania"
+
+---
+
+# Validation Rules
+validation_rules:
+
+  section_109_inconsistency:
+    direct_inconsistency:
+      test: "Can both laws be obeyed simultaneously?"
+      result_no: "Direct inconsistency - Commonwealth prevails"
+      result_yes: "Proceed to cover the field test"
+
+    cover_the_field:
+      test: "Does Commonwealth law intend to cover the field?"
+      indicators:
+        - "Comprehensive regulation"
+        - "Express statement of intention"
+        - "Detailed scheme leaving no room for state law"
+      result_yes: "Indirect inconsistency - Commonwealth prevails"
+      result_no: "No inconsistency - both laws operate"
+
+  wa_family_law_special:
+    married_couples:
+      jurisdiction: "Federal"
+      court: "Family Court of Western Australia"
+      legislation: "Family Law Act 1975 (Cth)"
+      appeals_to: "Federal Circuit and Family Court"
+
+    de_facto_couples:
+      jurisdiction: "State"
+      court: "Family Court of Western Australia"
+      legislation: "Family Court Act 1997 (WA)"
+      appeals_to: "Supreme Court of Western Australia"
+
+  territory_courts:
+    constitutional_status: "NOT Chapter III courts"
+    created_under: "Section 122"
+    protections:
+      section_72: false
+      section_80: false
+    subject_to: "Commonwealth override under s122"
+
+  intermediate_courts:
+    states_with:
+      - "New South Wales: District Court"
+      - "Victoria: County Court"
+      - "Queensland: District Court"
+      - "South Australia: District Court"
+      - "Western Australia: District Court"
+    states_without:
+      - "Tasmania: Magistrates → Supreme Court directly"
+      - "Northern Territory: Magistrates → Supreme Court directly"
+      - "Australian Capital Territory: Magistrates → Supreme Court directly"
+
+---
+
+# Common Tagging Scenarios
+tagging_examples:
+
+  example_1:
+    case: "High Court constitutional interpretation of marriage power"
+    tags:
+      constitutional_authority:
+        - CONSTITUTIONAL_APEX
+        - SECTION_51_CONCURRENT
+      court_authority:
+        - CONSTITUTIONAL_APEX
+      geographic_scope:
+        - JURISDICTION_NATIONAL
+      subject_matter:
+        - SUBJECT_MARRIAGE
+
+  example_2:
+    case: "WA Family Court de facto property settlement"
+    tags:
+      constitutional_authority:
+        - RESIDUAL_STATE
+      court_authority:
+        - STATE_FEDERAL_CONCURRENT
+      geographic_scope:
+        - STATE_WA
+      subject_matter:
+        - SUBJECT_FAMILY_LAW_STATE_WA
+
+  example_3:
+    case: "Federal Court corporations law case"
+    tags:
+      constitutional_authority:
+        - SECTION_51_CONCURRENT
+      court_authority:
+        - FEDERAL_ORIGINAL
+      geographic_scope:
+        - JURISDICTION_NATIONAL
+      subject_matter:
+        - SUBJECT_CORPORATIONS
+
+  example_4:
+    case: "NSW District Court criminal trial (robbery)"
+    tags:
+      constitutional_authority:
+        - RESIDUAL_STATE
+      court_authority:
+        - STATE_INTERMEDIATE
+      geographic_scope:
+        - STATE_NSW
+      subject_matter:
+        - SUBJECT_CRIMINAL_LAW
+
+  example_5:
+    case: "Fair Work Commission unfair dismissal"
+    tags:
+      constitutional_authority:
+        - SECTION_51_CONCURRENT
+      court_authority:
+        - FEDERAL_ORIGINAL
+      geographic_scope:
+        - JURISDICTION_NATIONAL
+      subject_matter:
+        - SUBJECT_INDUSTRIAL_RELATIONS
+        - SUBJECT_CORPORATIONS
+
+  example_6:
+    case: "ACT Supreme Court appeal"
+    tags:
+      constitutional_authority:
+        - SECTION_122_TERRITORIES
+      court_authority:
+        - TERRITORY_SUPERIOR
+      geographic_scope:
+        - TERRITORY_ACT
+      subject_matter:
+        - "[depends on case subject]"
+      notes: "Not a Chapter III court, appeals to HCA only"
+
+---
+
+# Metadata
+metadata:
+  version: "1.0"
+  date: "2025-11-29"
+  purpose: "Jurisdictional authority tagging configuration for Jurisdictional Sentinel Agent"
+  system: "Verridian AI"
+  documentation:
+    full_reference: "AUSTRALIAN_JURISDICTIONAL_HIERARCHY.md"
+    quick_reference: "JURISDICTIONAL_QUICK_REFERENCE.md"
+  sources:
+    - "Commonwealth of Australia Constitution Act 1900"
+    - "High Court of Australia decisions"
+    - "Parliamentary Education Office resources"
+    - "Australian Law Reform Commission publications"
+    - "State and Territory legislation"

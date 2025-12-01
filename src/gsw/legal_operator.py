@@ -25,9 +25,10 @@ import json
 import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional, Any, Union
 from uuid import uuid4
 import os
+import time
 
 # Add parent paths for imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
@@ -59,7 +60,7 @@ class LegalOperator:
 
     def __init__(
         self,
-        model: str = "google/gemini-2.5-flash",
+        model: Union[str, List[str]] = "google/gemini-2.5-flash",
         api_key: Optional[str] = None,
         use_openrouter: bool = True,
         enable_validation: bool = False,
@@ -70,14 +71,20 @@ class LegalOperator:
         Initialize the Legal Operator.
 
         Args:
-            model: Model to use for extraction
+            model: Model to use for extraction (or list of models for rotation)
             api_key: API key (or uses env var)
             use_openrouter: Whether to use OpenRouter API
             enable_validation: Whether to enable statutory validation
             corpus_path: Path to statutory corpus for validation
             use_toon: Whether to use TOON format for context (default: True)
         """
-        self.model = model
+        if isinstance(model, list):
+            self.models = model
+            self.model = model[0]
+        else:
+            self.models = [model]
+            self.model = model
+
         self.use_openrouter = use_openrouter
         self.use_toon = use_toon
         self.parser = ExtractionParser()
@@ -187,39 +194,65 @@ class LegalOperator:
             )
 
     def _call_llm(self, user_prompt: str) -> str:
-        """Call the LLM and get response."""
-        if self.use_openrouter:
-            response = self.client.post(
-                "/chat/completions",
-                json={
-                    "model": self.model,
-                    "messages": [
-                        {"role": "system", "content": LEGAL_OPERATOR_SYSTEM_PROMPT},
-                        {"role": "user", "content": user_prompt}
-                    ],
-                    "temperature": 0.1,
-                    "max_tokens": 8000
-                }
-            )
-            response.raise_for_status()
-            result = response.json()
+        """Call the LLM and get response, rotating models on error."""
+        errors = []
+        
+        # Try each model in the list
+        for model_name in self.models:
+            try:
+                if self.use_openrouter:
+                    response = self.client.post(
+                        "/chat/completions",
+                        json={
+                            "model": model_name,
+                            "messages": [
+                                {"role": "system", "content": LEGAL_OPERATOR_SYSTEM_PROMPT},
+                                {"role": "user", "content": user_prompt}
+                            ],
+                            "temperature": 0.1,
+                            "max_tokens": 8000,
+                            # Add headers to prevent caching if needed, though usually not an issue
+                            "provider": {"order": ["Google", "DeepSeek", "Meta", "Mistral"]} 
+                        }
+                    )
+                    
+                    # specific handling for 429 or 503 to trigger rotation
+                    if response.status_code in [429, 502, 503, 504]:
+                        print(f"[Operator] Model {model_name} busy/rate-limited (Status {response.status_code}). Switching...")
+                        errors.append(f"{model_name}: {response.status_code}")
+                        continue
+                        
+                    response.raise_for_status()
+                    result = response.json()
 
-            # Track token usage
-            usage = result.get("usage", {})
-            if usage:
-                tracker = get_cost_tracker(self.model)
-                tracker.add_usage(
-                    "operator",
-                    usage.get("prompt_tokens", 0),
-                    usage.get("completion_tokens", 0)
-                )
+                    # Track token usage
+                    usage = result.get("usage", {})
+                    if usage:
+                        tracker = get_cost_tracker(model_name)
+                        tracker.add_usage(
+                            "operator",
+                            usage.get("prompt_tokens", 0),
+                            usage.get("completion_tokens", 0)
+                        )
+                    
+                    # Update current effective model for logging
+                    self.model = model_name
+                    return result["choices"][0]["message"]["content"]
+                else:
+                    # Non-OpenRouter fallback (Google GenAI usually single model)
+                    response = self.client.generate_content(
+                        f"{LEGAL_OPERATOR_SYSTEM_PROMPT}\n\n{user_prompt}"
+                    )
+                    return response.text
+                    
+            except Exception as e:
+                print(f"[Operator] Model {model_name} failed: {str(e)[:100]}...")
+                errors.append(f"{model_name}: {e}")
+                time.sleep(1) # Brief pause before next model
+                continue
 
-            return result["choices"][0]["message"]["content"]
-        else:
-            response = self.client.generate_content(
-                f"{LEGAL_OPERATOR_SYSTEM_PROMPT}\n\n{user_prompt}"
-            )
-            return response.text
+        # If all models fail
+        raise Exception(f"All models failed. Errors: {'; '.join(errors)}")
 
     def _repair_json(self, text: str) -> str:
         """Attempt to repair common JSON issues from LLM output."""
