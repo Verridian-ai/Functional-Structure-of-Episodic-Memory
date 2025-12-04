@@ -73,7 +73,7 @@ This ensures that when the cognitive engine (GSW) begins extraction, it is worki
 
 <div align="center">
 
-[![Main Interface](../assets/images/features/01-main-chat-interface.png)](Frontend-Features#main-chat-interface)
+[![Main Interface](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/01-main-chat-interface.png)](Frontend-Features#main-chat-interface)
 
 **[View Complete UI Features Documentation](Frontend-Features)**
 

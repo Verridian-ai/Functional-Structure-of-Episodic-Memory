@@ -1,12 +1,12 @@
 <div align="center">
 
-<img src="../assets/images/verridian_logo.png" alt="Verridian AI" width="150">
+<img src="https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/verridian_logo.png" alt="Verridian AI" width="150">
 
 # Corpus Classification Pipeline
 
 ### Step 1 of the Verridian AI Data Pipeline
 
-<img src="../assets/images/LAW_OS_Features_Infographic.png" alt="LAW OS" width="400">
+<img src="https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/LAW_OS_Features_Infographic.png" alt="LAW OS" width="400">
 
 *Multi-Dimensional Legal Document Classification for the Australian Legal Corpus*
 
@@ -707,11 +707,11 @@ Default definitions integrated from all 9 jurisdictions:
 
 ## Related Documentation
 
-- [[Backend-Ingestion-Module]] - Ingestion pipeline details
-- [[Data-Schemas]] - Document schema definitions
-- [[GSW-Global-Semantic-Workspace]] - How classified docs feed GSW
-- [[TOON-Format]] - Compression for LLM context
-- [[Data-Flow]] - Overall system data flow
+- [Backend-Ingestion-Module](Backend-Ingestion-Module) - Ingestion pipeline details
+- [Data-Schemas](Data-Schemas) - Document schema definitions
+- [GSW-Global-Semantic-Workspace](GSW-Global-Semantic-Workspace) - How classified docs feed GSW
+- [TOON-Format](TOON-Format) - Compression for LLM context
+- [Data-Flow](Data-Flow) - Overall system data flow
 
 ---
 
