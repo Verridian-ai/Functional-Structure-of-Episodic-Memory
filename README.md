@@ -923,7 +923,7 @@ flowchart LR
 
 Before processing documents, classify them by legal domain using our keyword-based classification system.
 
-See **[Corpus Classification Pipeline](wiki/Corpus-Classification-Pipeline.md)** for detailed instructions.
+See **[Corpus Classification Pipeline](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Corpus-Classification-Pipeline)** for detailed instructions.
 
 ```bash
 # Run domain classification on your corpus
@@ -1016,7 +1016,7 @@ python gsw_pipeline.py summary --domain family
 
 ### Building the Multi-Dimensional Legal Document Classifier
 
-**📄 Full Technical Documentation**: [Corpus Classification Pipeline Wiki](wiki/Corpus-Classification-Pipeline.md)
+**📄 Full Technical Documentation**: [Corpus Classification Pipeline Wiki](https://github.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/wiki/Corpus-Classification-Pipeline)
 
 </div>
 

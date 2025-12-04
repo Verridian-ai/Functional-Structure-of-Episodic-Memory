@@ -77,7 +77,7 @@ graph TB
 
 ## 1. Main Chat Interface
 
-![Main Chat Interface](../assets/images/features/01-main-chat-interface.png)
+![Main Chat Interface](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/01-main-chat-interface.png)
 
 ### Overview
 
@@ -141,7 +141,7 @@ interface ChatPanelProps {
 
 ## 2. Chat with Messages
 
-![Chat with Messages](../assets/images/features/02-chat-with-messages.png)
+![Chat with Messages](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/02-chat-with-messages.png)
 
 ### Features
 
@@ -184,7 +184,7 @@ interface Message {
 
 ## 3. Admin Settings - System Prompt
 
-![Settings Panel - Prompt](../assets/images/features/03-settings-panel-prompt.png)
+![Settings Panel - Prompt](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/03-settings-panel-prompt.png)
 
 ### Features
 
@@ -220,7 +220,7 @@ interface Settings {
 
 ## 4. Admin Settings - Model Configuration
 
-![Settings Panel - Model Config](../assets/images/features/04-settings-model-config.png)
+![Settings Panel - Model Config](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/04-settings-model-config.png)
 
 ### Features
 
@@ -265,7 +265,7 @@ const MODELS = [
 
 ## 5. Admin Settings - Tools Configuration
 
-![Settings Panel - Tools Config](../assets/images/features/05-settings-tools-config.png)
+![Settings Panel - Tools Config](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/05-settings-tools-config.png)
 
 ### Features
 
@@ -315,7 +315,7 @@ interface Tool {
 
 ## 6. Admin Settings - MCP Server Configuration
 
-![Settings Panel - MCP Config](../assets/images/features/06-settings-mcp-config.png)
+![Settings Panel - MCP Config](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/06-settings-mcp-config.png)
 
 ### Features
 
@@ -348,7 +348,7 @@ interface MCPServer {
 
 ## 7. Canvas Panel
 
-![Canvas Panel](../assets/images/features/07-canvas-panel.png)
+![Canvas Panel](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/07-canvas-panel.png)
 
 ### Features
 
@@ -399,7 +399,7 @@ interface CanvasState {
 
 ## 8. Voice Input Active
 
-![Voice Input Active](../assets/images/features/08-voice-input-active.png)
+![Voice Input Active](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/08-voice-input-active.png)
 
 ### Features
 
@@ -441,7 +441,7 @@ recognition.lang = 'en-US';
 
 ## 9. 3D Visualization
 
-![3D Visualization](../assets/images/features/09-3d-visualization.png)
+![3D Visualization](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/09-3d-visualization.png)
 
 ### Features
 
@@ -492,7 +492,7 @@ interface GraphEdge {
 
 ## 10. Document Generation Workflow
 
-![Document Generation](../assets/images/features/10-document-generation-workflow.png)
+![Document Generation](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/10-document-generation-workflow.png)
 
 ### Features
 
@@ -542,7 +542,7 @@ interface DocumentRequest {
 
 ## 11. Quick Action Buttons
 
-![Quick Action Buttons](../assets/images/features/11-quick-action-buttons.png)
+![Quick Action Buttons](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/11-quick-action-buttons.png)
 
 ### Features
 
@@ -598,7 +598,7 @@ const DEFAULT_ACTIONS: QuickAction[] = [
 
 ## 12. Full Page Layout
 
-![Full Page Layout](../assets/images/features/12-full-page-layout.png)
+![Full Page Layout](https://raw.githubusercontent.com/Verridian-ai/Functional-Structure-of-Episodic-Memory/master/assets/images/features/12-full-page-layout.png)
 
 ### Features
 
