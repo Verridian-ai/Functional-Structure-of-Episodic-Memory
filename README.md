@@ -976,7 +976,9 @@ file_path = hf_hub_download(
 print(f"Downloaded to: {file_path}")
 ```
 
-### ⚙️ Step 2: Domain Classification
+## 3️⃣ Step 3: Domain Classification (Alternative Method)
+
+For streamlined classification using the GSW pipeline script:
 
 ```bash
 # Run domain extraction (streaming - RAM safe)
@@ -986,7 +988,11 @@ python gsw_pipeline.py extract --input ../corpus.jsonl
 python gsw_pipeline.py extract --input ../corpus.jsonl --progress 1000
 ```
 
-### 🧠 Step 3: GSW Extraction
+---
+
+## 4️⃣ Step 4: GSW Extraction
+
+Extract actor-centric memory from classified documents:
 
 ```bash
 # ⚠️ Requires OPENROUTER_API_KEY in .env file
@@ -1001,7 +1007,11 @@ python gsw_pipeline.py process --domain family --limit 100
 python gsw_pipeline.py process --domain family --limit 1000
 ```
 
-### 📊 Step 4: Analysis & Reports
+---
+
+## 5️⃣ Step 5: Analysis & Reports
+
+Generate extraction statistics and summaries:
 
 ```bash
 python gsw_pipeline.py analyze
