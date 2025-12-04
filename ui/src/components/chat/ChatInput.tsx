@@ -211,15 +211,15 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
     {
         icon: BookOpen,
         label: 'Explain Statute',
-        action: () => setInput('Explain Section 60CC of the Family Law Act in relation to '),
+        action: () => setInput('Explain the legal implications of '),
     }
   ];
 
   return (
-    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-2 sm:p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-3xl z-20 safe-area-pb">
+    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-3 sm:p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 w-full md:max-w-4xl z-20 safe-area-pb">
       <div className="w-full px-2 sm:px-4 md:px-0">
-        {/* Starter Prompts - Scrollable on mobile, wrapped on larger screens */}
-        {messages.length === 0 && !input && (
+        {/* Starter Prompts - Hidden when welcome screen is shown, only show when there are messages */}
+        {messages.length > 0 && !input && (
             <div id="quick-actions-container" className="flex items-center gap-2 mb-3 sm:mb-4 animate-fade-in-up overflow-x-auto scrollbar-hide pb-1 sm:pb-0 sm:flex-wrap sm:justify-center -mx-2 px-2 sm:mx-0 sm:px-0">
                 {quickActions.map((action, i) => (
                     <button
@@ -271,13 +271,13 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           </div>
         )}
 
-        {/* Input Container - Mobile optimized */}
+        {/* Input Container - Mobile optimized with light/dark theme support */}
       <div
         id="chat-input-container"
-        className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 ${
+        className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 chat-input-container ${
           isFocused
-            ? 'bg-black/60 border-emerald-500/50 shadow-[0_0_20px_rgba(16,185,129,0.15)] sm:shadow-[0_0_30px_rgba(16,185,129,0.2)] backdrop-blur-xl'
-            : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-[0_0_15px_rgba(0,0,0,0.4)] sm:shadow-[0_0_20px_rgba(0,0,0,0.5)]'
+            ? 'bg-black/60 border-amber-500/50 shadow-[0_0_20px_rgba(251,191,36,0.15)] sm:shadow-[0_0_30px_rgba(251,191,36,0.2)] backdrop-blur-xl'
+            : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-lg'
         }`}
       >
           {/* Hidden File Input */}
@@ -314,7 +314,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
             onKeyDown={handleKeyDown}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
-            placeholder="Message Verridian..."
+            placeholder="Message the assistant..."
             disabled={disabled}
             rows={1}
             className="flex-1 py-2.5 sm:py-3 bg-transparent resize-none outline-none text-white placeholder:text-zinc-500 min-h-[40px] sm:min-h-[44px] max-h-[150px] sm:max-h-[200px] text-[16px] leading-relaxed"
@@ -330,7 +330,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                   play('click');
                   toggleVoice();
                 }}
-                className={`hidden xs:flex w-10 h-10 sm:w-11 sm:h-11 items-center justify-center rounded-full transition-all duration-300 touch-target ${
+                className={`hidden min-[375px]:flex w-10 h-10 sm:w-11 sm:h-11 items-center justify-center rounded-full transition-all duration-300 touch-target ${
                   voice.isListening
                     ? 'bg-red-500 text-white shadow-lg shadow-red-500/40 animate-pulse'
                     : 'text-zinc-400 hover:text-emerald-400 active:text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/10'
@@ -373,6 +373,11 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
             )}
           </div>
         </div>
+        
+        {/* Disclaimer Text */}
+        <p className="text-[10px] sm:text-xs text-zinc-500 text-center mt-2 sm:mt-3 px-2">
+          The assistant can make mistakes. Review important information.
+        </p>
       </div>
     </div>
   );

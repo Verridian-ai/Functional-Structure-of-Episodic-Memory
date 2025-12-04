@@ -4,10 +4,9 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
   MessageSquare, FileText, Settings, Menu, Plus,
-  ChevronLeft, Trash2, Brain
+  ChevronLeft, Trash2, Brain, Sun, Moon, Home
 } from 'lucide-react';
 import { useStore } from '@/lib/store';
-import { VerridianBrainUltimate } from '@/components/ui/VerridianBrainUltimate';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -17,6 +16,23 @@ interface MainLayoutProps {
 export function MainLayout({ children, onNewChat }: MainLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+
+  // Theme toggle effect
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.setAttribute('data-theme', newTheme);
+  };
   const {
     conversations,
     currentConversationId,
@@ -56,7 +72,9 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
   // Mobile responsiveness: close sidebar by default on mobile
   useEffect(() => {
     const handleResize = () => {
-        if (window.innerWidth < 768) {
+        const width = window.innerWidth;
+        // Close sidebar on mobile (< 768px), open on tablet+ (>= 768px)
+        if (width < 768) {
             setSidebarOpen(false);
         } else {
             setSidebarOpen(true);
@@ -77,14 +95,12 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
 
   return (
     <div 
-      className="flex h-screen bg-zinc-950 text-white overflow-hidden relative"
+      className="flex min-h-[100dvh] md:h-screen bg-zinc-950 text-white overflow-hidden relative"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* 3D Brain Background */}
-      <VerridianBrainUltimate />
-
-      {/* Subtle gradient overlay */}
+      {/* Subtle gradient background for LAW OS */}
+      <div className="fixed inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 pointer-events-none z-[0]" />
       <div className="fixed inset-0 gradient-mesh pointer-events-none z-[1]" />
       
       {/* Mobile Overlay */}
@@ -99,54 +115,55 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       <aside
         className={`
             fixed md:relative z-30 h-full
-            ${sidebarOpen ? 'translate-x-0 w-[280px] sm:w-[300px] md:w-80' : '-translate-x-full md:translate-x-0 md:w-0'}
-            flex flex-col bg-zinc-950/80 backdrop-blur-3xl border-r border-white/5 transition-all duration-300 overflow-hidden shadow-2xl
+            ${sidebarOpen ? 'translate-x-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-80' : '-translate-x-full md:translate-x-0 md:w-0'}
+            flex flex-col bg-zinc-950/95 backdrop-blur-3xl border-r border-white/5 transition-all duration-300 ease-in-out overflow-hidden shadow-2xl
         `}
       >
-        {/* Sidebar Header Section */}
-        <div className="flex-shrink-0 pt-4 sm:pt-6 md:pt-8 pb-4 sm:pb-6 border-b border-white/5" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-          <div className="flex justify-center mb-4 sm:mb-6 md:mb-8">
-            <div className="relative w-24 h-24 sm:w-32 sm:h-32 md:w-40 md:h-40 flex items-center justify-center hover:scale-105 transition-transform duration-300">
+        {/* Sidebar Header Section - Logo */}
+        <div className="flex-shrink-0 pt-4 sm:pt-5 md:pt-6 pb-4" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+          {/* Logo - Switch based on theme */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            <div className="relative w-32 h-12 sm:w-36 sm:h-14 md:w-40 md:h-16 flex items-center justify-center flex-shrink-0">
               <Image
-                src="/verridian_logo_new.png"
-                alt="Verridian"
-                fill
-                className="object-contain drop-shadow-2xl"
+                src={theme === 'dark' ? '/Law_OS_Dark_Mode_Logo.png' : '/Law_OS_Light_Mode_Logo.png'}
+                alt="LAW OS logo"
+                width={160}
+                height={64}
+                className="object-contain drop-shadow-lg"
                 priority
               />
             </div>
           </div>
+        </div>
 
-          {/* New Chat Button - Compact size */}
+        {/* New Chat Button */}
+        <div className="flex-shrink-0 mb-6" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           <button
             id="new-project-button"
             onClick={() => {
                 onNewChat();
                 if (window.innerWidth < 768) setSidebarOpen(false);
             }}
-            className="group flex items-center gap-2.5 px-3 h-10 bg-white/5 hover:bg-white/10 border border-white/10 text-white rounded-lg font-medium shadow-lg transition-all active:scale-[0.98]"
+            className="group w-full flex items-center justify-center gap-2.5 px-4 h-11 sm:h-12 bg-white/[0.08] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 text-white rounded-xl sm:rounded-2xl font-semibold transition-all duration-200 active:scale-[0.98] touch-target shadow-sm"
           >
-            <div className="w-6 h-6 flex items-center justify-center bg-white/5 rounded-md group-hover:bg-white/10 transition-colors flex-shrink-0">
-                <Plus className="w-3.5 h-3.5 text-white stroke-[2.5]" />
-            </div>
-            <span className="tracking-wide text-sm">New Project</span>
+            <Plus className="w-5 h-5 text-white stroke-[2]" />
+            <span className="tracking-wide text-sm sm:text-base">New Chat</span>
           </button>
         </div>
 
-        {/* Search Section - Compact */}
-        <div className="flex-shrink-0 py-3 border-b border-white/5 bg-white/[0.02]" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        {/* Search Section */}
+        <div className="flex-shrink-0 mb-6" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search projects..."
-            className="h-9 px-3 bg-black/40 border border-zinc-800 rounded-lg text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-zinc-700 transition-all"
-            style={{ width: '180px' }}
+            className="h-10 w-full px-3 bg-black/40 border border-zinc-800 rounded-xl text-sm text-zinc-200 placeholder:text-zinc-600 focus:outline-none focus:bg-black/60 focus:border-zinc-700 focus:ring-1 focus:ring-emerald-500/40 transition-all"
           />
         </div>
 
-        {/* Recent Activity Label - Compact */}
-        <div className="pt-3 pb-2 flex items-center justify-between border-b border-white/5 bg-white/[0.02]" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        {/* Recent Activity Label */}
+        <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-3" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
             <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
             <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{filteredConversations.length}</span>
         </div>
@@ -154,39 +171,44 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
           {filteredConversations.length === 0 ? (
-            <div className="text-center py-8 px-3">
-              <div className="w-10 h-10 mx-auto mb-2 rounded-lg bg-zinc-900/50 border border-dashed border-zinc-800 flex items-center justify-center">
-                <MessageSquare className="w-4 h-4 text-zinc-700" />
+            <div className="empty-state-container flex flex-col items-center justify-center py-12 sm:py-16 px-4 text-center rounded-2xl mt-4">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-5 rounded-xl sm:rounded-2xl bg-zinc-800/50 border border-dashed border-zinc-600/50 flex items-center justify-center">
+                <MessageSquare className="w-8 h-8 sm:w-10 sm:h-10 text-zinc-500" />
               </div>
-              <p className="text-xs text-zinc-600 font-medium">
-                {searchQuery ? 'No matches found' : 'No history yet'}
+              <p className="text-sm sm:text-base text-zinc-400 font-medium mb-1">
+                {searchQuery ? 'No matches found' : 'No conversations yet'}
               </p>
+              {!searchQuery && (
+                <p className="text-xs sm:text-sm text-zinc-500">
+                  Start a new chat to begin
+                </p>
+              )}
             </div>
           ) : (
             <div className="space-y-1 sm:space-y-1.5">
               {filteredConversations.map((conv, index) => (
                 <div
                   key={conv.id}
-                  className={`group relative flex items-center gap-2.5 sm:gap-3.5 p-2.5 sm:p-3.5 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-200 border touch-target ${
+                  className={`group relative flex items-center gap-2.5 sm:gap-3.5 p-3 sm:p-3.5 rounded-xl sm:rounded-2xl cursor-pointer transition-all duration-200 border touch-target ${
                     conv.id === currentConversationId
-                      ? 'bg-white/10 border-white/10 shadow-md'
-                      : 'hover:bg-white/5 border-transparent hover:border-white/5 active:bg-white/5'
+                      ? 'bg-white/10 border-white/10 shadow-md shadow-emerald-500/10'
+                      : 'bg-white/[0.02] border-white/5 hover:bg-white/8 hover:border-white/10 active:bg-white/10'
                   }`}
                   onClick={() => {
                       setCurrentConversation(conv.id);
                       if (window.innerWidth < 768) setSidebarOpen(false);
                   }}
                 >
-                  <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
+                  <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
                     conv.id === currentConversationId
-                      ? 'bg-white/10 text-white'
-                      : 'bg-zinc-900 text-zinc-600 group-hover:text-zinc-400 group-hover:bg-zinc-800'
+                      ? 'bg-emerald-500/20 text-white border border-emerald-500/30'
+                      : 'bg-zinc-900/70 text-zinc-500 group-hover:text-zinc-300 group-hover:bg-zinc-800/80 border border-transparent group-hover:border-zinc-700/60'
                   }`}>
-                    <MessageSquare className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5" />
                   </div>
 
                   <div className="flex-1 min-w-0 py-0.5">
-                    <div className={`text-xs sm:text-sm font-medium truncate mb-0.5 ${
+                    <div className={`text-xs sm:text-sm font-semibold truncate mb-0.5 ${
                       conv.id === currentConversationId ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'
                     }`}>
                       {conv.title}
@@ -218,31 +240,29 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
           )}
         </div>
 
-        {/* Sidebar Footer - Compact */}
-        <div className="flex-shrink-0 py-3 border-t border-white/10 bg-black/20 safe-area-pb" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-            <div className="flex items-center gap-2">
-                <button
-                    id="canvas-toggle-button"
-                    onClick={() => {
-                        toggleCanvas();
-                        if (window.innerWidth < 768) setSidebarOpen(false);
-                    }}
-                    className={`group flex items-center gap-2 px-3 h-9 rounded-lg text-sm font-medium transition-all ${
-                    showCanvas
-                        ? 'bg-white/10 text-white border border-white/10'
-                        : 'hover:bg-white/5 text-zinc-400 hover:text-zinc-200 border border-transparent'
-                    }`}
-                >
-                    <FileText className="w-4 h-4 stroke-[1.5] flex-shrink-0" />
-                    <span>Canvas</span>
-                </button>
+        {/* Sidebar Footer */}
+        <div className="flex-shrink-0 py-3 border-t border-white/10 safe-area-pb" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+            {/* Dashboard Button */}
+            <button
+                className="w-full flex items-center gap-3 px-3 py-2.5 mb-3 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/[0.05] transition-all"
+            >
+                <Home className="w-4 h-4" />
+                <span>Dashboard</span>
+            </button>
 
+            {/* Theme Toggle */}
+            <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-400">Theme</span>
                 <button
-                    onClick={toggleAdmin}
-                    className="flex items-center gap-2 px-3 h-9 rounded-lg text-sm font-medium text-zinc-400 hover:text-zinc-200 hover:bg-white/5 border border-transparent transition-all"
+                    onClick={toggleTheme}
+                    className="w-9 h-9 flex items-center justify-center rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 transition-all"
+                    aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
                 >
-                    <Settings className="w-4 h-4 stroke-[1.5] flex-shrink-0" />
-                    <span>Settings</span>
+                    {theme === 'dark' ? (
+                        <Moon className="w-4 h-4 text-amber-400" />
+                    ) : (
+                        <Sun className="w-4 h-4 text-amber-500" />
+                    )}
                 </button>
             </div>
         </div>
@@ -251,26 +271,27 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 relative z-[2]">
         {/* Top Bar - Responsive */}
-        <header className="flex-shrink-0 flex items-center justify-between px-2 sm:px-4 py-2 sm:py-3 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5">
+        <header className="flex-shrink-0 flex items-center justify-between px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5 safe-area-pt">
           <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 sm:p-2 hover:bg-white/5 active:bg-white/5 rounded-lg sm:rounded-xl transition-colors touch-target"
+              className="p-2 sm:p-2.5 hover:bg-white/5 active:bg-white/10 rounded-lg sm:rounded-xl transition-colors touch-target"
+              aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
             >
               {sidebarOpen ? (
-                <ChevronLeft className="w-5 h-5 text-zinc-400" />
+                <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400" />
               ) : (
-                <Menu className="w-5 h-5 text-zinc-400" />
+                <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400" />
               )}
             </button>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Model Badge - Condensed on mobile */}
-            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 bg-white/5 rounded-full border border-white/10">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white/5 rounded-full border border-white/10">
               <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full status-online bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-              <span className="text-[10px] sm:text-xs text-zinc-300 hidden xs:inline">Gemini 3 Pro</span>
-              <span className="text-[10px] sm:text-xs text-zinc-300 xs:hidden">AI</span>
+              <span className="text-[10px] sm:text-xs text-zinc-300 hidden min-[375px]:inline">Gemini 3 Pro</span>
+              <span className="text-[10px] sm:text-xs text-zinc-300 min-[375px]:hidden">AI</span>
             </div>
 
             {/* Knowledge Base Badge - Hidden on mobile */}
