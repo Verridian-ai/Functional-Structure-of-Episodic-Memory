@@ -260,7 +260,7 @@ function generateMockGraph(count: number): GraphData {
 }
 
 // Load graph data from JSONL files or Neo4j
-async function loadGraph(limit: number = 5000, useNeo4j: bool = false): Promise<GraphData> {
+async function loadGraph(limit: number = 5000, useNeo4j: boolean = false): Promise<GraphData> {
   if (useNeo4j && process.env.NEO4J_URI) {
       try {
           // TODO: Implement real Neo4j fetching
