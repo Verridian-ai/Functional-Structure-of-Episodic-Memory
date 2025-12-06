@@ -47,7 +47,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.ingestion.classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
 from src.ingestion.legislation_patterns import (
-    LEGISLATION_TO_DOMAIN, LEGISLATION_PATTERNS,
+    LEGISLATION_TO_DOMAIN, LEGISLATION_PATTERNS, LEGISLATION_TITLE_PATTERNS,
     extract_legislation_refs, get_domain_for_legislation
 )
 from src.ingestion.case_patterns import (
@@ -58,6 +58,9 @@ from src.ingestion.court_hierarchy import (
     COURT_CODES, get_court_info, get_authority_score,
     get_domain_hint, extract_court_from_citation
 )
+from src.ingestion.toon_integration import batch_to_toon, convert_doc_to_row, DOC_HEADERS
+from src.utils.toon import ToonEncoder
+from src.ingestion.auto_gsw_trigger import GSWExtractionQueue, SmartSampler
 
 
 # ============================================================================
@@ -208,19 +211,19 @@ class DomainClassifier:
             for granular in granular_list:
                 self.category_to_domain[granular] = broad
 
-        # Pre-compile legislation patterns
-        self.legislation_patterns: Dict[str, re.Pattern] = {}
+        # Pre-lowercase legislation names for fast string matching
+        self.legislation_names: Dict[str, str] = {}  # lowercase -> original
         for act_name in LEGISLATION_TO_DOMAIN.keys():
-            self.legislation_patterns[act_name] = re.compile(
-                re.escape(act_name), re.IGNORECASE
-            )
+            self.legislation_names[act_name.lower()] = act_name
+        # Keep for compatibility
+        self.legislation_patterns = self.legislation_names
 
-        # Pre-compile case patterns
-        self.case_patterns: Dict[str, re.Pattern] = {}
+        # Pre-lowercase case names for fast string matching
+        self.case_names: Dict[str, str] = {}  # lowercase -> original
         for case_name in LANDMARK_CASES.keys():
-            self.case_patterns[case_name] = re.compile(
-                re.escape(case_name), re.IGNORECASE
-            )
+            self.case_names[case_name.lower()] = case_name
+        # Keep for compatibility
+        self.case_patterns = self.case_names
 
     def classify(self, doc: Dict[str, Any]) -> Tuple[str, str, List[Tuple[str, int]], Dict]:
         """
@@ -266,33 +269,47 @@ class DomainClassifier:
                 citation, text, jurisdiction, enhanced_meta
             )
 
-        # Extract legislation references
-        search_text = f"{citation} {text[:10000]}"
-        leg_refs = self._extract_legislation(search_text)
-        if leg_refs:
-            enhanced_meta['legislation_refs'] = leg_refs[:10]  # Limit to top 10
+        # Extract legislation and case references (limit text for speed)
+        search_text = f"{citation} {text[:5000]}"
+        search_text_lower = search_text.lower()
 
-        # Extract case references
-        case_refs = self._extract_cases(search_text)
+        leg_refs = self._extract_legislation_fast(search_text_lower)
+        if leg_refs:
+            enhanced_meta['legislation_refs'] = leg_refs[:10]
+
+        case_refs = self._extract_cases_fast(search_text_lower)
         if case_refs:
-            enhanced_meta['case_refs'] = case_refs[:10]  # Limit to top 10
+            enhanced_meta['case_refs'] = case_refs[:10]
 
         return primary_domain, primary_category, all_matches, enhanced_meta
 
-    def _extract_legislation(self, text: str) -> List[str]:
-        """Extract legislation references from text."""
+    def _extract_legislation_fast(self, text_lower: str) -> List[str]:
+        """Extract legislation references using pre-lowercased text."""
         refs = []
-        for act_name, pattern in self.legislation_patterns.items():
-            if pattern.search(text):
-                refs.append(act_name)
+
+        # 1. Specific Legislation
+        for name_lower, name_original in self.legislation_names.items():
+            if name_lower in text_lower:
+                refs.append(name_original)
+
+        # 2. Fallback Patterns (if few specific refs found)
+        if len(refs) < 3:
+            for domain, keywords in LEGISLATION_TITLE_PATTERNS.items():
+                for keyword in keywords:
+                    kw_lower = keyword.lower()
+                    # Simple check: keyword followed by "act" or "regulation"
+                    if f"{kw_lower} act" in text_lower or f"{kw_lower} regulation" in text_lower:
+                        refs.append(f"{keyword} Legislation")
+                        break # One per domain is enough to avoid noise
+
         return refs
 
-    def _extract_cases(self, text: str) -> List[str]:
-        """Extract landmark case references from text."""
+    def _extract_cases_fast(self, text_lower: str) -> List[str]:
+        """Extract landmark case references using pre-lowercased text."""
         refs = []
-        for case_name, pattern in self.case_patterns.items():
-            if pattern.search(text):
-                refs.append(case_name)
+        for name_lower, name_original in self.case_names.items():
+            if name_lower in text_lower:
+                refs.append(name_original)
         return refs
 
     def _classify_legislation(
@@ -304,18 +321,27 @@ class DomainClassifier:
         scores = Counter()
         citation_lower = citation.lower()
 
+        # 1. Title Pattern Matching (Broad Domains) - HIGHEST PRIORITY for Legislation
+        # This is curated specifically for Act titles (e.g. "Local Government", "Public Health")
+        for domain, keywords in LEGISLATION_TITLE_PATTERNS.items():
+            for keyword in keywords:
+                if keyword.lower() in citation_lower:
+                    # Found a broad domain match
+                    return domain, f"{domain}_Legislation", [(f"{domain}_Legislation", 10)]
+
+        # 2. Exact Match (Category Keywords) - Fallback
+        # This uses the massive keyword list designed for full text, which can be noisy for titles
         for category, pattern in self.patterns.items():
             if pattern.search(citation_lower):
-                scores[category] = 10  # High weight for title match
+                scores[category] = 5  # Lower weight than title patterns
 
-        if not scores:
-            return "Legislation_Other", "Legislation_Other", []
+        if scores:
+            all_matches = scores.most_common()
+            best_category = all_matches[0][0]
+            best_domain = self.category_to_domain.get(best_category, "Legislation_Other")
+            return best_domain, best_category, all_matches
 
-        all_matches = scores.most_common()
-        best_category = all_matches[0][0]
-        best_domain = self.category_to_domain.get(best_category, "Legislation_Other")
-
-        return best_domain, best_category, all_matches
+        return "Legislation_Other", "Legislation_Other", []
 
     def _classify_decision(
         self,
@@ -386,6 +412,27 @@ class DomainClassifier:
                         else:
                             scores[subcat] = 10
 
+        # BOOST 6: Case Title Patterns (Party Names)
+        # Strong indicators of domain based on parties (e.g. Crown, Regulators)
+        if "r v " in citation_lower or "regina v " in citation_lower or "dpp v " in citation_lower or "police v " in citation_lower:
+            scores["Criminal_General"] += 20
+
+        if "minister " in citation_lower:
+            scores["Admin_Review"] += 15
+            if "immigration" in citation_lower:
+                scores["Admin_Migration"] += 20
+
+        if "accc " in citation_lower:
+            scores["Competition_Cartels"] += 15
+            scores["Comm_Consumer"] += 15
+
+        if "asic " in citation_lower:
+            scores["Corp_Governance"] += 15
+            scores["Securities_Licensing"] += 15
+
+        if "commissioner of taxation" in citation_lower or "fct v" in citation_lower:
+            scores["Tax_Federal"] += 20
+
         if not scores:
             return "Unclassified", "Unclassified", []
 
@@ -400,20 +447,25 @@ class DomainClassifier:
 # FILE MANAGER
 # ============================================================================
 
-class DomainFileManager:
-    """Manages output file handles for all domain files."""
+# ============================================================================
+# FILE MANAGER
+# ============================================================================
+
+class ToonFileManager:
+    """Manages output file handles for TOON domain files."""
 
     def __init__(self, output_dir: Path, append: bool = False):
         self.output_dir = output_dir
         self.handles: Dict[str, TextIO] = {}
         self.append = append
+        self.legislation_path = output_dir / "legislation" / "acts.toon"
 
-    def __enter__(self) -> "DomainFileManager":
+    def __enter__(self) -> "ToonFileManager":
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        for domain in ALL_DOMAINS:
-            path = self.output_dir / f"{domain.lower()}.jsonl"
-            mode = 'a' if self.append else 'w'
-            self.handles[domain] = open(path, mode, encoding='utf-8')
+        (self.output_dir / "cases").mkdir(exist_ok=True)
+        (self.output_dir / "legislation").mkdir(exist_ok=True)
+
+        # We don't pre-open all files for TOON to allow for lazy creation/headers
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -421,12 +473,114 @@ class DomainFileManager:
             handle.close()
 
     def write(self, domain: str, doc: Dict[str, Any]) -> None:
-        """Write document to appropriate domain file."""
-        if domain in self.handles:
-            self.handles[domain].write(json.dumps(doc, ensure_ascii=False) + '\n')
+        """Write document to appropriate TOON file."""
+        doc_type = doc.get("type", "")
+
+        # Determine target file and table name
+        if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
+            target_path = self.legislation_path
+            table_name = "Legislation"
+            key = "legislation"
         else:
-            # Fallback to Unclassified
-            self.handles["Unclassified"].write(json.dumps(doc, ensure_ascii=False) + '\n')
+            # Case Law -> Organized by Domain
+            domain_dir = self.output_dir / "cases" / domain
+            domain_dir.mkdir(exist_ok=True)
+            target_path = domain_dir / f"{domain}.toon"
+            table_name = f"Cases_{domain}"
+            key = domain
+
+        # Get or create handle
+        if key not in self.handles:
+            mode = 'a' if self.append and target_path.exists() else 'w'
+            f = open(target_path, mode, encoding='utf-8')
+            self.handles[key] = f
+
+            # Write header if new file or overwriting
+            if mode == 'w':
+                # We can't write the full TOON header "Name[Count]{cols}" yet because we stream.
+                # Standard TOON expects a count.
+                # For streaming, we might need a variant or just buffer.
+                # However, for "perfect accuracy" and standard TOON, we usually batch.
+                # Given strict streaming requirement, we will append rows and
+                # relied on a post-processing step OR use a "Streaming TOON" concept (not standard).
+                #
+                # ALTERNATIVE: Write as separate TOON blocks per batch?
+                # Or just write CSV-like lines but that violates "Name[Count]".
+                #
+                # Let's check `src/utils/toon.py`. It writes a block.
+                # To support streaming to one file, we should probably write one block per document
+                # OR (better) write a header with specific count if we knew it found
+                # OR just write blocks of N documents.
+                #
+                # DECISION: We will buffer in memory until X docs for that domain, then flushing a block.
+                pass
+
+        # We actually need to Buffer per domain to write valid TOON blocks
+        # So we won't write immediately to file handle in this method if we strictly follow TOON.
+        # But `ToonFileManager` interface assumes `write` writes.
+        # Let's change this class to buffer.
+        pass # Replaced by buffered implementation below
+
+class BufferedToonFileManager:
+    """Manages output file handles and buffers for TOON domain files."""
+
+    def __init__(self, output_dir: Path, batch_size: int = 100, append: bool = False):
+        self.output_dir = output_dir
+        self.batch_size = batch_size
+        self.append = append
+        self.legislation_path = output_dir / "legislation" / "acts.toon"
+        self.buffers: Dict[str, List[Dict]] = defaultdict(list)
+
+    def __enter__(self) -> "BufferedToonFileManager":
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        (self.output_dir / "cases").mkdir(exist_ok=True)
+        (self.output_dir / "legislation").mkdir(exist_ok=True)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # Flush all remaining buffers
+        for key in list(self.buffers.keys()):
+            self._flush(key)
+
+    def write(self, domain: str, doc: Dict[str, Any]) -> None:
+        """Buffer document and flush if full."""
+        doc_type = doc.get("type", "")
+
+        if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
+            key = "legislation"
+        else:
+            key = domain
+
+        self.buffers[key].append(doc)
+
+        if len(self.buffers[key]) >= self.batch_size:
+            self._flush(key)
+
+    def _flush(self, key: str):
+        docs = self.buffers[key]
+        if not docs:
+            return
+
+        if key == "legislation":
+            target_path = self.legislation_path
+            table_name = "Legislation"
+        else:
+            domain = key
+            domain_dir = self.output_dir / "cases" / domain
+            domain_dir.mkdir(exist_ok=True)
+            target_path = domain_dir / f"{domain}.toon"
+            table_name = f"Cases_{domain}"
+
+        # Generate TOON block
+        toon_block = batch_to_toon(docs, table_name)
+
+        # Write to file
+        mode = 'a' if target_path.exists() else 'w'
+        with open(target_path, mode, encoding='utf-8') as f:
+            f.write(toon_block + "\n")
+
+        # Clear buffer
+        self.buffers[key] = []
 
 
 # ============================================================================
@@ -445,7 +599,10 @@ class CorpusDomainExtractor:
         self,
         input_path: Path,
         output_dir: Path,
-        state_path: Optional[Path] = None
+        state_path: Optional[Path] = None,
+        enable_auto_gsw: bool = False,
+        gsw_queue: Optional[GSWExtractionQueue] = None,
+        gsw_min_authority: int = 60
     ):
         self.input_path = Path(input_path)
         self.output_dir = Path(output_dir)
@@ -455,10 +612,16 @@ class CorpusDomainExtractor:
         self.stats: Dict[str, DomainStats] = defaultdict(DomainStats)
         self.overlap_stats = OverlapStats()
 
+        # Auto-GSW extraction
+        self.enable_auto_gsw = enable_auto_gsw
+        self.gsw_queue = gsw_queue or (GSWExtractionQueue(min_authority=gsw_min_authority) if enable_auto_gsw else None)
+        self.sampler = SmartSampler() if enable_auto_gsw else None
+
     def extract_all(
         self,
         progress_interval: int = 5000,
-        resume: bool = False
+        resume: bool = False,
+        limit: Optional[int] = None
     ) -> Dict[str, DomainStats]:
         """
         Process entire corpus with streaming.
@@ -466,6 +629,7 @@ class CorpusDomainExtractor:
         Args:
             progress_interval: Print progress every N documents
             resume: Whether to resume from checkpoint
+            limit: Maximum number of documents to process (for testing)
 
         Returns:
             Dictionary of domain -> DomainStats
@@ -484,12 +648,17 @@ class CorpusDomainExtractor:
 
         start_time = datetime.now()
 
-        with DomainFileManager(self.output_dir, append=resume) as file_manager:
+        with BufferedToonFileManager(self.output_dir, append=resume) as file_manager:
             with open(self.input_path, 'r', encoding='utf-8') as infile:
                 for line_num, line in enumerate(infile):
                     # Skip lines if resuming
                     if line_num < start_line:
                         continue
+
+                    # Stop if limit reached
+                    if limit and line_num >= start_line + limit:
+                        print(f"\n[Limit] Reached limit of {limit} documents")
+                        break
 
                     try:
                         doc = json.loads(line)
@@ -518,7 +687,7 @@ class CorpusDomainExtractor:
     def _process_document(
         self,
         doc: Dict[str, Any],
-        file_manager: DomainFileManager,
+        file_manager: BufferedToonFileManager,
         line_num: int
     ) -> None:
         """Process a single document with enhanced multi-dimensional classification."""
@@ -587,6 +756,13 @@ class CorpusDomainExtractor:
 
         # Sample citations
         stats.add_sample_citation(doc.get('citation', ''))
+
+        # Auto-trigger GSW extraction if enabled
+        if self.enable_auto_gsw and self.gsw_queue:
+            # Use smart sampler to determine priority
+            priority = self.sampler.get_sampling_priority(doc)
+            if priority >= self.gsw_queue.min_authority:
+                self.gsw_queue.add(doc, priority=priority)
 
     def _print_progress(self, line_num: int, start_time: datetime) -> None:
         """Print progress update."""
@@ -681,6 +857,12 @@ def main():
         action="store_true",
         help="Resume from checkpoint"
     )
+    parser.add_argument(
+        "--limit", "-l",
+        type=int,
+        default=None,
+        help="Limit number of documents to process"
+    )
 
     args = parser.parse_args()
 
@@ -695,7 +877,8 @@ def main():
 
     extractor.extract_all(
         progress_interval=args.progress,
-        resume=args.resume
+        resume=args.resume,
+        limit=args.limit
     )
 
 

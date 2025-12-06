@@ -30,12 +30,17 @@ export default function Home() {
   } = useStore();
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const checkViewport = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 768);
+      setIsTablet(width >= 768 && width < 1024);
+    };
+    checkViewport();
+    window.addEventListener('resize', checkViewport);
+    return () => window.removeEventListener('resize', checkViewport);
   }, []);
 
   const handleNewChat = useCallback(() => {
@@ -79,17 +84,21 @@ export default function Home() {
               {showCanvas && (
                 <div
                   className={`
-                      ${isMobile ? 'fixed inset-0 z-50 bg-black/95 backdrop-blur-xl' : 'w-[500px] flex-shrink-0 relative'}
+                      ${isMobile
+                        ? 'fixed inset-0 z-50 bg-black/95 backdrop-blur-xl safe-area-inset'
+                        : isTablet
+                          ? 'w-full max-w-full md:w-[340px] flex-shrink-0 relative'
+                          : 'w-full max-w-full md:w-[360px] lg:w-[440px] xl:w-[520px] flex-shrink-0 relative'}
                       transition-all duration-300 ease-in-out border-l border-cyan-500/20 shadow-2xl shadow-cyan-500/5
                   `}
                 >
                   {isMobile && (
                       <button
                           onClick={toggleCanvas}
-                          className="absolute top-4 right-4 p-2 bg-zinc-800 rounded-full z-50"
+                          className="absolute top-4 right-4 p-2.5 sm:p-3 bg-zinc-800/80 hover:bg-zinc-700/80 rounded-full z-50 touch-target transition-colors"
                           aria-label="Close canvas"
                       >
-                          <X className="w-5 h-5 text-zinc-400" />
+                          <X className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-300" />
                       </button>
                   )}
                   <ErrorBoundary>

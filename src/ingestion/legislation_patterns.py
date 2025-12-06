@@ -4,7 +4,8 @@ Legislation Patterns for Corpus Labeling
 Maps Australian legislation to legal domains for enhanced document classification.
 
 This module contains:
-- LEGISLATION_TO_DOMAIN: Maps Act names to primary legal domains
+- LEGISLATION_TO_DOMAIN: Maps specific Act names to primary legal domains
+- LEGISLATION_TITLE_PATTERNS: Maps title keywords to domains (Fallback)
 - SECTION_PATTERNS: Regex patterns for extracting section references
 - Utility functions for legislation matching
 """
@@ -42,7 +43,95 @@ SCHEDULE_PATTERN = re.compile(
 
 
 # ============================================================================
-# LEGISLATION TO DOMAIN MAPPING
+# LEGISLATION TITLE KEYWORD MAPPING (FALLBACK)
+# ============================================================================
+# If exact match fails, check if title contains these keywords
+
+LEGISLATION_TITLE_PATTERNS = {
+    'Resources': [
+        'Mining', 'Minerals', 'Mine', 'Coal', 'Petroleum', 'Gas', 'Electricity',
+        'Energy', 'Resources', 'Offshore', 'Pipeline', 'Transport', 'Road',
+        'Rail', 'Marine', 'Aviation', 'Navigation', 'Port', 'Harbour', 'Water',
+        'Fisheries', 'Forestry', 'Alumina', 'Iron Ore', 'Liquid Fuel'
+    ],
+    'Education': [
+        'Education', 'University', 'College', 'School', 'Teaching', 'Teacher',
+        'Training', 'Higher Education', 'Curriculum', 'Student', 'Academic'
+    ],
+    'Administrative': [
+        'Administrative', 'Ombudsman', 'Freedom of Information', 'Privacy',
+        'Judicial Review', 'Tribunal', 'Government Information', 'Public Interest',
+        'Local Government', 'Municipality', 'City of', 'Council', 'Valuer-General',
+        'State Service', 'Public Service', 'Public Sector', 'Government Sector',
+        'Electoral', 'Election', 'Commission of Inquiry', 'Integrity', 'Corruption',
+        'Government Advertising', 'Hemp', 'Audit', 'Auditor-General'
+    ],
+    'Commercial': [
+        'Corporations', 'Company', 'Securities', 'Investment', 'Consumer',
+        'Trade', 'Fair Trading', 'Competition', 'Sale of Goods', 'Partnership',
+        'Bank', 'Insurance', 'Bankruptcy', 'Insolvency', 'Financial', 'Credit',
+        'Small Business', 'Retail', 'Franchise', 'Liquor', 'Gaming', 'Gambling',
+        'Conveyancers Licensing', 'Agents', 'Architects', 'Building'
+    ],
+    'Criminal': [
+        'Crime', 'Criminal', 'Penalties', 'Sentencing', 'Bail', 'Police',
+        'Summary Offences', 'Misuse of Drugs', 'Drugs', 'Weapons', 'Firearms',
+        'Domestic Violence', 'Terrorism', 'Proceeds of Crime', 'Jury', 'Parole',
+        'Correction', 'Prison', 'Young Offenders', 'Youth Justice', 'Victims',
+        'Witness', 'Forensic', 'Coroners', 'Death', 'Surveillance Devices',
+        'Confiscation', 'Prostitution'
+    ],
+    'Property': [
+        'Property', 'Land', 'Conveyancing', 'Strata', 'Tenanc', 'Lease',
+        'Housing', 'Real Property', 'Titles', 'Valuation', 'Surveying',
+        'Fences', 'Encroachment', 'Community Titles', 'Retirement Village',
+        'Crown Land', 'Native Title', 'Urban Renewal', 'Cemetery', 'Cemeteries'
+    ],
+    'Family': [
+        'Family', 'Child', 'Marriage', 'Divorce', 'De Facto', 'Adoption',
+        'Surrogacy', 'Domestic Relationships', 'Status of Children', 'Births',
+        'Relationships'
+    ],
+    'Torts': [
+        'Civil Liability', 'Defamation', 'Wrongs', 'Limitation', 'Motor Accident',
+        'Personal Injury', 'Dust Diseases', 'Compensation to Relatives', 'Negligence'
+    ],
+    'Health': [
+        'Health', 'Medical', 'Hospital', 'Nurse', 'Pharmacy', 'Poisons',
+        'Therapeutic', 'Mental', 'Public Health', 'Food', 'Tobacco', 'Smoking',
+        'Disability', 'Aged Care', 'Human Tissue', 'Anatomy', 'Veterinary',
+        'Radiation', 'Gene Technology'
+    ],
+    'Employment': [
+        'Fair Work', 'Industrial', 'Employment', 'Work Health', 'Safety',
+        'Workers Compensation', 'Long Service', 'Holidays', 'Labour', 'Wages',
+        'Superannuation', 'Public Holidays'
+    ],
+    'Environment': [
+        'Environment', 'Planning', 'Development', 'Heritage', 'National Park',
+        'Conservation', 'Biodiversity', 'Wildlife', 'Pollution',
+        'Waste', 'Contaminated', 'Climate', 'Air', 'Botanic', 'Plantation',
+        'Reafforestation', 'Aquaculture', 'Protection of the Environment'
+    ],
+    'Tax': [
+        'Tax', 'Duty', 'Duties', 'Revenue', 'Payroll', 'Land Tax', 'Stamp',
+        'Rates', 'Excise', 'Customs', 'Debits'
+    ],
+    'Equity': [
+        'Trust', 'Trustee', 'Succession', 'Wills', 'Probate', 'Administration',
+        'Guardianship', 'Power of Attorney', 'Charitable', 'Associations'
+    ],
+    'Procedural': [
+        'Evidence', 'Civil Procedure', 'Supreme Court', 'District Court',
+        'Magistrates Court', 'Local Court', 'Oaths', 'Affidavits', 'Interpretation',
+        'Statute Law', 'Legislation', 'Repeal', 'Amendment', 'Civil Process',
+        'Justices'
+    ]
+}
+
+
+# ============================================================================
+# LEGISLATION TO DOMAIN MAPPING (EXACT MATCH)
 # ============================================================================
 
 LEGISLATION_TO_DOMAIN = {
@@ -658,11 +747,10 @@ def extract_legislation_refs(text: str) -> List[Tuple[str, str, str]]:
     results = []
     text_lower = text.lower()
 
+    # 1. Check specific Acts
     for act_name, info in LEGISLATION_TO_DOMAIN.items():
         if act_name.lower() in text_lower:
             domain = info['domain']
-
-            # Find section references near the act name
             sections = SECTION_PATTERN.findall(text)
             if sections:
                 for section in sections[:10]:  # Limit to first 10
@@ -670,14 +758,34 @@ def extract_legislation_refs(text: str) -> List[Tuple[str, str, str]]:
             else:
                 results.append((act_name, '', domain))
 
+    # 2. Check title patterns if no specific match
+    if not results:
+        for domain, keywords in LEGISLATION_TITLE_PATTERNS.items():
+            for keyword in keywords:
+                # Regex to find keyword followed by "Act" or "Regulations"
+                # e.g. "Public Health Act", "Local Government Regulations"
+                pattern = re.compile(r'\b' + re.escape(keyword) + r'.*?\b(Act|Regulations|Rules|Order)\b', re.IGNORECASE)
+                matches = pattern.findall(text)
+                for match in matches:
+                    results.append((f"{keyword} {match}", "", domain))
+                    break # One per domain is enough to avoid noise
+
     return results
 
 
 def get_domain_for_legislation(act_name: str) -> Optional[str]:
     """Get the primary domain for a legislation name."""
+    # 1. Exact/Partial Match
     for name, info in LEGISLATION_TO_DOMAIN.items():
         if name.lower() in act_name.lower() or act_name.lower() in name.lower():
             return info['domain']
+
+    # 2. Pattern Match
+    for domain, keywords in LEGISLATION_TITLE_PATTERNS.items():
+        for keyword in keywords:
+            if keyword.lower() in act_name.lower():
+                return domain
+
     return None
 
 
