@@ -18,8 +18,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Verridian LAW OS",
-  description: "AI-powered legal assistant with episodic memory",
+  title: "LAW OS",
+  description: "AI-powered legal assistant",
   manifest: "/manifest.json",
   icons: {
     icon: "/favicon.ico",
@@ -28,10 +28,10 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Verridian",
+    title: "LAW OS",
   },
-  applicationName: "Verridian LAW OS",
-  keywords: ["legal", "AI", "assistant", "law", "productivity"],
+  applicationName: "LAW OS",
+  keywords: ["AI", "assistant", "legal", "law"],
 };
 
 export default function RootLayout({

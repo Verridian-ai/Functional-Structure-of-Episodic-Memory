@@ -80,20 +80,21 @@
   --text-tertiary: #71717a;
 }
 
-/* Light Mode Theme - Warm off-white with subtle shading */
+/* Light Mode Theme - Warm cream with subtle depth */
 [data-theme="light"] {
-  --background: #f5f5f5;
+  /* Warm cream palette instead of pure gray */
+  --background: #faf8f5;
   --foreground: #1a1a1a;
-  --bg-primary: #f5f5f5;
-  --bg-secondary: #ebebeb;
-  --bg-tertiary: #e0e0e0;
-  --bg-card: rgba(255, 255, 255, 0.85);
-  --bg-card-hover: rgba(255, 255, 255, 0.95);
-  --border-color: rgba(0, 0, 0, 0.1);
-  --border-color-hover: rgba(0, 0, 0, 0.18);
-  --text-primary: #1a1a1a;
-  --text-secondary: #3d3d3d;
-  --text-tertiary: #5a5a5a;
+  --bg-primary: #faf8f5;
+  --bg-secondary: #f5f2ed;
+  --bg-tertiary: #ebe7e0;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: rgba(255, 255, 255, 0.98);
+  --border-color: rgba(120, 100, 80, 0.12);
+  --border-color-hover: rgba(120, 100, 80, 0.2);
+  --text-primary: #2c2a26;
+  --text-secondary: #4a4640;
+  --text-tertiary: #6b665e;
   /* Charcoal grey for sidebar/badges */
   --charcoal: #2d2d2d;
   --charcoal-light: #3d3d3d;
@@ -189,10 +190,13 @@
   border-color: var(--border-color) !important;
 }
 
-/* Light mode sidebar - Cream/beige background */
+/* Light mode sidebar - Warm cream with subtle shadow */
 [data-theme="light"] aside {
-  background-color: #faf7f2 !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: linear-gradient(180deg, #fdfbf7 0%, #f8f5f0 100%) !important;
+  border-color: rgba(120, 100, 80, 0.1) !important;
+  box-shadow:
+    2px 0 20px rgba(0, 0, 0, 0.04),
+    1px 0 4px rgba(0, 0, 0, 0.02) !important;
 }
 
 [data-theme="light"] aside .text-white {
@@ -273,10 +277,13 @@
   color: #666 !important;
 }
 
-/* Light mode header */
+/* Light mode header - Subtle depth with warm tones */
 [data-theme="light"] header {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(0, 0, 0, 0.08) !important;
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 100%) !important;
+  border-color: rgba(120, 100, 80, 0.08) !important;
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.03),
+    0 1px 3px rgba(0, 0, 0, 0.02) !important;
 }
 
 /* Light mode header badges - Dark charcoal with yellow icons */
@@ -302,9 +309,9 @@
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
 }
 
-/* Light mode main content area - Subtle gradient background */
+/* Light mode main content area - Warm cream gradient */
 [data-theme="light"] main {
-  background: linear-gradient(180deg, #f8f8f8 0%, #f0f0f0 50%, #e8e8e8 100%) !important;
+  background: linear-gradient(180deg, #faf8f5 0%, #f5f2ed 50%, #f0ece5 100%) !important;
 }
 
 [data-theme="light"] main > div {
@@ -316,49 +323,50 @@
   background: transparent !important;
 }
 
-/* Light mode gradient background override */
+/* Light mode gradient background override - Warm cream tones */
 [data-theme="light"] .bg-gradient-to-br {
-  background: linear-gradient(135deg, #f5f5f5 0%, #ebebeb 50%, #e5e5e5 100%) !important;
+  background: linear-gradient(135deg, #faf8f5 0%, #f5f2ed 50%, #f0ece5 100%) !important;
 }
 
 [data-theme="light"] .gradient-mesh {
   background:
-    radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.02) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(0, 0, 0, 0.01) 0%, transparent 70%) !important;
+    radial-gradient(circle at 20% 30%, rgba(251, 191, 36, 0.03) 0%, transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(120, 100, 80, 0.02) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(255, 250, 240, 0.3) 0%, transparent 60%) !important;
   opacity: 1 !important;
 }
 
 /* Light mode fixed background layers */
 [data-theme="light"] .fixed.inset-0 {
-  background: linear-gradient(180deg, #f8f8f8 0%, #f0f0f0 100%) !important;
+  background: linear-gradient(180deg, #faf8f5 0%, #f5f2ed 100%) !important;
 }
 
 [data-theme="light"] .from-zinc-950,
 [data-theme="light"] .via-zinc-900,
 [data-theme="light"] .to-zinc-950 {
-  --tw-gradient-from: #f5f5f5 !important;
-  --tw-gradient-via: #ebebeb !important;
-  --tw-gradient-to: #e5e5e5 !important;
+  --tw-gradient-from: #faf8f5 !important;
+  --tw-gradient-via: #f5f2ed !important;
+  --tw-gradient-to: #f0ece5 !important;
 }
 
-/* Light mode chat input */
+/* Light mode chat input - Clean white with subtle depth */
 [data-theme="light"] .chat-input-container {
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(0, 0, 0, 0.12) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fdfcfa 100%) !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
   box-shadow:
-    0 4px 20px rgba(0, 0, 0, 0.1),
-    0 1px 3px rgba(0, 0, 0, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    0 6px 24px rgba(0, 0, 0, 0.08),
+    0 2px 6px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.02) !important;
 }
 
 [data-theme="light"] .chat-input-container:focus-within {
-  background: rgba(255, 255, 255, 1) !important;
-  border-color: rgba(251, 191, 36, 0.6) !important;
+  background: #ffffff !important;
+  border-color: rgba(251, 191, 36, 0.5) !important;
   box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.12),
-    0 0 0 3px rgba(251, 191, 36, 0.15),
-    inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
+    0 8px 30px rgba(0, 0, 0, 0.1),
+    0 0 0 3px rgba(251, 191, 36, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
 }
 
 [data-theme="light"] .chat-input-container textarea {
@@ -377,11 +385,14 @@
   color: var(--text-primary) !important;
 }
 
-/* Light mode logo badge - Charcoal grey */
+/* Light mode logo badge - Refined charcoal with subtle glow */
 [data-theme="light"] .logo-badge {
-  background: var(--charcoal) !important;
-  border-color: rgba(0, 0, 0, 0.2) !important;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15) !important;
+  background: linear-gradient(145deg, #3a3a3a 0%, #2d2d2d 50%, #252525 100%) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.18),
+    0 4px 12px rgba(0, 0, 0, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
 }
 
 /* Dark mode suggestion card icons - Yellow */
@@ -394,39 +405,41 @@
   color: #fbbf24 !important;
 }
 
-/* Light mode suggestion cards - Dark charcoal grey */
+/* Light mode suggestion cards - Refined dark charcoal with subtle depth */
 [data-theme="light"] .suggestion-card {
-  background: #3d3d3d !important;
-  border-color: #4a4a4a !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  background: linear-gradient(145deg, #424242 0%, #383838 100%) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    0 2px 6px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04) !important;
+  transition: all 0.2s ease-out !important;
 }
 
 [data-theme="light"] .suggestion-card:hover {
-  background: #4a4a4a !important;
-  border-color: #5a5a5a !important;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2) !important;
+  background: linear-gradient(145deg, #4a4a4a 0%, #404040 100%) !important;
+  border-color: rgba(251, 191, 36, 0.2) !important;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(251, 191, 36, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  transform: translateY(-1px);
 }
 
 [data-theme="light"] .suggestion-card span {
-  color: #f5f5f5 !important;
+  color: #f0f0f0 !important;
 }
 
-/* Light mode icon containers - Almost black with yellow icons */
+/* Light mode icon containers - Deep charcoal with yellow icons */
 [data-theme="light"] .icon-container {
-  background: #1a1a1a !important;
-  border-color: #2d2d2d !important;
+  background: linear-gradient(145deg, #1f1f1f 0%, #181818 100%) !important;
+  border-color: rgba(251, 191, 36, 0.15) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03) !important;
 }
 
 [data-theme="light"] .icon-container svg {
   color: #fbbf24 !important;
-}
-
-/* Light mode gradient mesh background */
-[data-theme="light"] .gradient-mesh {
-  background:
-    radial-gradient(circle at 15% 50%, rgba(251, 191, 36, 0.03), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.03), transparent 25%),
-    radial-gradient(circle at 50% 80%, rgba(217, 119, 6, 0.02), transparent 40%) !important;
+  filter: drop-shadow(0 0 2px rgba(251, 191, 36, 0.3));
 }
 
 /* Hide 3D brain in light mode for cleaner look */

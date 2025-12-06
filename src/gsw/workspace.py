@@ -49,18 +49,48 @@ class WorkspaceManager:
 
     @classmethod
     def load(cls, path: Path) -> "WorkspaceManager":
-        """Load workspace from JSON file."""
+        """Load workspace, auto-detecting format (JSON or TOON)."""
         if not path.exists():
             print(f"[Workspace] No existing workspace at {path}, creating new")
             return cls(storage_path=path)
 
+        # Auto-detect format
+        if path.suffix == '.toon':
+            return cls.load_toon(path)
+        else:
+            return cls.load_json(path)
+
+    @classmethod
+    def load_json(cls, path: Path) -> "WorkspaceManager":
+        """Load workspace from JSON file."""
         with open(path, 'r', encoding='utf-8') as f:
             data = json.load(f)
 
         workspace = cls._deserialize_workspace(data)
         manager = cls(workspace=workspace, storage_path=path)
 
-        print(f"[Workspace] Loaded: {len(workspace.actors)} actors, "
+        print(f"[Workspace] Loaded JSON: {len(workspace.actors)} actors, "
+              f"{len(workspace.questions)} questions")
+
+        return manager
+
+    @classmethod
+    def load_toon(cls, path: Path) -> "WorkspaceManager":
+        """Load workspace from TOON file."""
+        from src.utils.toon import ToonDecoder
+
+        with open(path, 'r', encoding='utf-8') as f:
+            toon_content = f.read()
+
+        # Decode TOON to workspace dict
+        workspace_dict = ToonDecoder.decode_workspace(toon_content)
+
+        # Convert to GlobalWorkspace object
+        workspace = cls._deserialize_workspace(workspace_dict)
+
+        manager = cls(workspace=workspace, storage_path=path)
+
+        print(f"[Workspace] Loaded TOON: {len(workspace.actors)} actors, "
               f"{len(workspace.questions)} questions")
 
         return manager
@@ -79,6 +109,32 @@ class WorkspaceManager:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         print(f"[Workspace] Saved to {save_path}")
+
+    def save_toon(self, path: Optional[Path] = None) -> None:
+        """
+        Save workspace to TOON file (~62% smaller than JSON).
+
+        TOON (Token-Oriented Object Notation) provides massive size reduction
+        for LLM context optimization while maintaining full data fidelity.
+        """
+        from src.utils.toon import ToonEncoder
+
+        save_path = path or self.storage_path
+        if not save_path:
+            raise ValueError("No storage path specified")
+
+        # Force .toon extension
+        save_path = save_path.with_suffix('.toon')
+
+        # Convert workspace to TOON format
+        toon_data = self.workspace.to_toon()
+
+        # Save
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(save_path, 'w', encoding='utf-8') as f:
+            f.write(toon_data)
+
+        print(f"[Workspace] Saved TOON to {save_path}")
 
     def get_ontology_context(self) -> OntologyContext:
         """

@@ -7,14 +7,18 @@ Optimized Strategy:
 1.  Full Corpus Metadata Index (Citation/Title) for specific navigation.
 2.  Domain-Specific Full-Text Index (Family Law) for semantic search.
 3.  Legislation Index (Family Law Act) for statutory grounding.
+4.  VSA Anti-Hallucination Validation for response quality assurance.
 """
 
 import json
 import re
 import math
 from pathlib import Path
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 from collections import Counter
+
+from src.logic.gsw_schema import GlobalWorkspace
+from src.retrieval.vsa_validator import VSAValidator
 
 class SimpleBM25:
     """
@@ -81,11 +85,15 @@ class SimpleBM25:
         return [(self.documents[idx], score) for idx, score in results]
 
 class LegalRetriever:
-    def __init__(self, data_dir: str = 'data'):
+    def __init__(self, data_dir: str = 'data', enable_vsa_validation: bool = True):
         self.data_dir = Path(data_dir)
         self.bm25 = SimpleBM25()
         self.citation_index = {}
-        
+        self.enable_vsa_validation = enable_vsa_validation
+
+        # Initialize VSA validator if enabled
+        self.vsa_validator = VSAValidator() if enable_vsa_validation else None
+
         self._load_indices()
         
     def _load_indices(self):
@@ -142,13 +150,13 @@ class LegalRetriever:
         Hybrid search: Citation Lookup + Full Text Search.
         """
         results = []
-        
+
         # 1. Direct Citation Lookup
         # (Basic normalization)
         q_norm = query.lower().strip()
         if q_norm in self.citation_index:
             results.append(self.citation_index[q_norm])
-            
+
         # 2. Full Text Search
         bm25_results = self.bm25.search(query, top_k=top_k)
         for doc, score in bm25_results:
@@ -157,6 +165,141 @@ class LegalRetriever:
                 doc_res = doc.copy()
                 doc_res['score'] = score
                 results.append(doc_res)
-                
+
         return results[:top_k]
+
+    def retrieve_with_validation(
+        self,
+        query: str,
+        workspace: Optional[GlobalWorkspace] = None,
+        top_k: int = 5,
+        generate_response: bool = True
+    ) -> Dict:
+        """
+        Retrieve results and optionally validate with VSA.
+
+        Args:
+            query: The search query
+            workspace: Global workspace for validation (optional)
+            top_k: Number of results to retrieve
+            generate_response: Whether to generate and validate a response
+
+        Returns:
+            Dictionary containing:
+                - results: List of retrieval results
+                - response: Generated response (if generate_response=True)
+                - validation: VSA validation results (if workspace provided)
+                - confidence: Overall confidence score
+                - hallucination_risk: Boolean indicating risk level
+        """
+        # Get retrieval results
+        results = self.search(query, top_k)
+
+        result_dict = {
+            'results': results,
+            'query': query,
+            'num_results': len(results)
+        }
+
+        # Generate response if requested
+        if generate_response:
+            response = self._generate_response(query, results)
+            result_dict['response'] = response
+
+            # Validate with VSA if workspace provided and validation enabled
+            if workspace and self.vsa_validator:
+                validation = self.vsa_validator.validate_response(
+                    query,
+                    response,
+                    workspace
+                )
+
+                result_dict['validation'] = validation
+                result_dict['confidence'] = validation['overall_confidence']
+                result_dict['hallucination_risk'] = validation['hallucination_detected']
+
+                # Add severity warnings
+                if validation['severity']['high_risk'] > 0:
+                    result_dict['warning'] = f"High risk: {validation['severity']['high_risk']} claims flagged"
+                elif validation['severity']['medium_risk'] > 0:
+                    result_dict['warning'] = f"Medium risk: {validation['severity']['medium_risk']} claims need review"
+
+        return result_dict
+
+    def _generate_response(self, query: str, results: List[Dict]) -> str:
+        """
+        Generate a response from retrieval results.
+
+        Args:
+            query: The original query
+            results: List of retrieval results
+
+        Returns:
+            Generated response string
+        """
+        if not results:
+            return "No relevant information found."
+
+        # Simple response generation: concatenate top results
+        response_parts = []
+        for i, result in enumerate(results[:3], 1):
+            preview = result.get('text_preview', '')
+            title = result.get('title', result.get('id', 'Document'))
+
+            if preview:
+                response_parts.append(f"{i}. From {title}: {preview}")
+
+        if response_parts:
+            return "\n\n".join(response_parts)
+        else:
+            return f"Found {len(results)} relevant documents for: {query}"
+
+    def validate_claim(
+        self,
+        claim: str,
+        workspace: GlobalWorkspace
+    ) -> Dict:
+        """
+        Validate a single claim against workspace.
+
+        Args:
+            claim: The claim to validate
+            workspace: The global workspace
+
+        Returns:
+            Validation result dictionary
+        """
+        if not self.vsa_validator:
+            return {
+                'error': 'VSA validation is not enabled',
+                'valid': None
+            }
+
+        return self.vsa_validator.validate_claim(claim, workspace)
+
+    def batch_validate_claims(
+        self,
+        claims: List[str],
+        workspace: GlobalWorkspace
+    ) -> List[Dict]:
+        """
+        Validate multiple claims against workspace.
+
+        Args:
+            claims: List of claims to validate
+            workspace: The global workspace
+
+        Returns:
+            List of validation results
+        """
+        if not self.vsa_validator:
+            return [{
+                'error': 'VSA validation is not enabled',
+                'valid': None
+            } for _ in claims]
+
+        return [
+            self.vsa_validator.validate_claim(claim, workspace)
+            for claim in claims
+        ]
 

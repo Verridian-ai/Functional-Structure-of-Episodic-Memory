@@ -151,3 +151,13 @@ data/legislation/*.jsonl
 
 # Pytest cache
 .pytest_cache/
+
+# TOON format files (generated from JSON workspaces)
+*.toon
+
+# Temporary directories
+tmp/
+
+# Workspace state files (runtime artifacts)
+data/workspaces/*_costs.json
+data/workspaces/*_state.json

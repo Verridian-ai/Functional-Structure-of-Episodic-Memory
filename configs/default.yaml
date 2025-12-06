@@ -1,0 +1,118 @@
+# Default Pipeline Configuration
+# ==============================
+# This is the default configuration for the full corpus processing pipeline.
+# Copy and modify this file for custom configurations.
+
+# ============================================================================
+# INPUT/OUTPUT PATHS
+# ============================================================================
+
+corpus_path: data/corpus.jsonl
+output_dir: data/processed
+workspace_dir: data/workspaces
+graph_dir: data/processed/graph
+checkpoint_dir: data/checkpoints
+
+# ============================================================================
+# CLASSIFICATION SETTINGS
+# ============================================================================
+
+classification_batch_size: 100
+classification_progress_interval: 5000
+classification_resume: true
+
+# ============================================================================
+# GSW EXTRACTION SETTINGS
+# ============================================================================
+
+# Enable automatic GSW extraction for high-authority documents
+enable_auto_gsw: true
+
+# Minimum authority score to trigger extraction (0-100)
+# 60 = Intermediate courts and above
+# 70 = Appellate courts and above
+# 90 = Apex courts only
+gsw_authority_threshold: 60
+
+# Batch size for GSW extraction
+gsw_batch_size: 10
+
+# Primary model for GSW extraction
+gsw_model: google/gemini-2.5-flash
+
+# Fallback models for rotation (used when primary fails)
+gsw_fallback_models:
+  - google/gemini-2.5-flash
+  - deepseek/deepseek-chat
+  - meta-llama/llama-3.3-70b-instruct
+
+# API rate limiting delay (seconds)
+gsw_delay: 0.5
+
+# Maximum retries per document
+gsw_max_retries: 3
+
+# Use TOON format for context (reduces tokens by ~40%)
+gsw_use_toon: true
+
+# ============================================================================
+# GRAPH BUILDING
+# ============================================================================
+
+enable_graph_building: true
+graph_include_legislation: true
+graph_min_citation_confidence: 0.7
+
+# ============================================================================
+# FORMAT SETTINGS
+# ============================================================================
+
+# Use TOON format for output files
+use_toon: true
+
+# Store workspaces in TOON format
+toon_workspace_storage: true
+
+# Batch size for TOON file writing
+toon_batch_size: 100
+
+# ============================================================================
+# PROCESSING LIMITS
+# ============================================================================
+
+# Maximum number of documents to process (null = all)
+document_limit: null
+
+# Maximum text length for GSW extraction (characters)
+max_text_length: 30000
+
+# Skip already processed documents
+skip_existing: true
+
+# ============================================================================
+# CHECKPOINTING
+# ============================================================================
+
+# Enable checkpointing for resume capability
+enable_checkpoints: true
+
+# Save checkpoint every N documents
+checkpoint_interval: 10000
+
+# Compress checkpoints (saves disk space)
+checkpoint_compress: true
+
+# ============================================================================
+# LOGGING
+# ============================================================================
+
+log_level: INFO
+log_file: null
+verbose: false
+
+# ============================================================================
+# PARALLEL PROCESSING (FUTURE)
+# ============================================================================
+
+parallel_workers: 1
+use_multiprocessing: false

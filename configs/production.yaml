@@ -1,0 +1,57 @@
+# Production Pipeline Configuration
+# ==================================
+# Optimized for production deployment with full corpus processing
+
+corpus_path: data/corpus.jsonl
+output_dir: data/processed
+workspace_dir: data/workspaces
+graph_dir: data/processed/graph
+checkpoint_dir: data/checkpoints
+
+# Classification - Production settings
+classification_batch_size: 200
+classification_progress_interval: 10000
+classification_resume: true
+
+# GSW Extraction - Production quality
+enable_auto_gsw: true
+gsw_authority_threshold: 70  # Higher threshold for production quality
+gsw_batch_size: 20
+gsw_model: google/gemini-2.5-flash
+gsw_fallback_models:
+  - google/gemini-2.5-flash
+  - deepseek/deepseek-chat
+  - meta-llama/llama-3.3-70b-instruct
+  - anthropic/claude-3.5-sonnet
+gsw_delay: 0.5
+gsw_max_retries: 3
+gsw_use_toon: true
+
+# Graph Building - Full graph
+enable_graph_building: true
+graph_include_legislation: true
+graph_min_citation_confidence: 0.8  # Higher confidence for production
+
+# Format
+use_toon: true
+toon_workspace_storage: true
+toon_batch_size: 200
+
+# Processing Limits - Process everything
+document_limit: null  # Process all documents
+max_text_length: 30000
+skip_existing: true
+
+# Checkpointing - Less frequent saves
+enable_checkpoints: true
+checkpoint_interval: 50000
+checkpoint_compress: true
+
+# Logging
+log_level: INFO
+log_file: logs/production_pipeline.log
+verbose: false
+
+# Parallel - Future expansion
+parallel_workers: 1
+use_multiprocessing: false

@@ -23,6 +23,8 @@ from collections import defaultdict
 
 from src.tem.action_space import LegalAction, ACTION_TO_ID
 
+from src.utils.toon import ToonDecoder
+
 class LegalGraphBuilder:
     def __init__(self, graph_dir: Path):
         self.graph_dir = graph_dir
@@ -33,37 +35,51 @@ class LegalGraphBuilder:
         self._load_graph()
 
     def _load_graph(self):
-        """Loads nodes and edges from JSONL files."""
-        nodes_path = self.graph_dir / "spcnet_nodes.jsonl"
-        edges_path = self.graph_dir / "spcnet_edges.jsonl"
+        """Loads nodes and edges from TOON files."""
+        nodes_path = self.graph_dir / "spcnet_nodes.toon"
+        edges_path = self.graph_dir / "spcnet_edges.toon"
 
         print(f"Loading graph from {self.graph_dir}...")
 
         # Load Nodes
         if nodes_path.exists():
             with open(nodes_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    data = json.loads(line)
-                    node_id = data['id']
-                    self.nodes[node_id] = data
+                content = f.read()
+                tables = ToonDecoder.decode(content)
+                rows = tables.get("Nodes", [])
+                for row in rows:
+                    node_id = row['id']
+                    self.nodes[node_id] = row
                     self.node_ids.append(node_id)
         
         # Load Edges
         if edges_path.exists():
             with open(edges_path, 'r', encoding='utf-8') as f:
-                for line in f:
-                    data = json.loads(line)
-                    source = data['source']
-                    target = data['target']
-                    rel_type = data.get('type', 'CITE')
-                    
+                content = f.read()
+                tables = ToonDecoder.decode(content)
+                rows = tables.get("Edges", [])
+                for row in rows:
+                    source = row['source']
+                    target = row['target']
+                    rel_type = row.get('action', row.get('type', 'CITE'))  # Support both 'action' and 'type' field
+
                     # Map string relation to LegalAction enum
-                    # Default to CITE if unknown
-                    try:
-                        action = LegalAction[rel_type.upper()]
-                    except KeyError:
-                        action = LegalAction.CITE
-                        
+                    # Handle variations in action names
+                    action_mapping = {
+                        'CITED': LegalAction.CITE,
+                        'CITE': LegalAction.CITE,
+                        'CITES': LegalAction.CITE,
+                        'FOLLOWED': LegalAction.FOLLOW,
+                        'FOLLOW': LegalAction.FOLLOW,
+                        'DISTINGUISHED': LegalAction.DISTINGUISH,
+                        'DISTINGUISH': LegalAction.DISTINGUISH,
+                        'OVERRULED': LegalAction.OVERRULE,
+                        'OVERRULE': LegalAction.OVERRULE,
+                        'CONSIDERED': LegalAction.CONSIDER,
+                        'CONSIDER': LegalAction.CONSIDER,
+                    }
+
+                    action = action_mapping.get(rel_type.upper(), LegalAction.CITE)
                     self.adj_list[source].append((target, action))
         
         print(f"Graph loaded: {len(self.nodes)} nodes, {sum(len(v) for v in self.adj_list.values())} edges.")
