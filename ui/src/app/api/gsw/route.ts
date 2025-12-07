@@ -119,9 +119,9 @@ interface GSWWorkspace {
     answer_text: string | null;
     source_chunk_id: string;
   }>;
-  verb_phrases: Record<string, any>;
-  spatio_temporal_links: Record<string, any>;
-  entity_summaries: Record<string, any>;
+  verb_phrases: Record<string, unknown>;
+  spatio_temporal_links: Record<string, unknown>;
+  entity_summaries: Record<string, unknown>;
   metadata: {
     created_at: string;
     last_updated: string;

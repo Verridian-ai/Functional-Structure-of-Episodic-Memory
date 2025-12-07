@@ -196,7 +196,7 @@ export function InfographicSuggestions({
                     <div className="p-3 bg-black/30 rounded-lg">
                       <p className="text-xs text-zinc-500 mb-1">Preview of content:</p>
                       <p className="text-xs text-zinc-300 italic">
-                        "{suggestion.sectionText}"
+                        &ldquo;{suggestion.sectionText}&rdquo;
                       </p>
                     </div>
 
