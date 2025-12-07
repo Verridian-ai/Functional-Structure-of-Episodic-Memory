@@ -397,6 +397,8 @@ class OntologyContext(BaseModel):
 
     This implements Phase 4.5 from the research: the cybernetic
     feedback loop that standardizes vocabulary over time.
+
+    Now seeded with 633+ terms from ontology_seed.py across 6 categories.
     """
     # Frequency counts of extracted values
     actor_types: Dict[str, int] = Field(default_factory=dict)
@@ -408,6 +410,28 @@ class OntologyContext(BaseModel):
     standard_roles: List[str] = Field(default_factory=list)
     standard_states: List[str] = Field(default_factory=list)
     standard_verbs: List[str] = Field(default_factory=list)
+    standard_assets: List[str] = Field(default_factory=list)
+    standard_outcomes: List[str] = Field(default_factory=list)
+    standard_relationships: List[str] = Field(default_factory=list)
+
+    @classmethod
+    def from_seed(cls) -> "OntologyContext":
+        """
+        Create an OntologyContext seeded with the 633-term vocabulary.
+        This provides prior knowledge for GSW extraction.
+        """
+        from src.logic.ontology_seed import (
+            STANDARD_ASSETS, STANDARD_OUTCOMES, STANDARD_EVENTS,
+            STANDARD_ROLES, STANDARD_STATES, STANDARD_RELATIONSHIPS
+        )
+        return cls(
+            standard_roles=list(STANDARD_ROLES),
+            standard_states=list(STANDARD_STATES),
+            standard_verbs=list(STANDARD_EVENTS),  # Events map to verbs
+            standard_assets=list(STANDARD_ASSETS),
+            standard_outcomes=list(STANDARD_OUTCOMES),
+            standard_relationships=list(STANDARD_RELATIONSHIPS),
+        )
 
     def get_top_n(self, category: str, n: int = 20) -> List[str]:
         """Get top N items from a category by frequency."""
@@ -417,17 +441,39 @@ class OntologyContext(BaseModel):
 
     def to_prompt_context(self) -> str:
         """Convert to a string for injection into operator prompt."""
+        # Get learned vocabulary from frequency counts
+        learned_roles = self.get_top_n("role_types", 15)
+        learned_states = self.get_top_n("state_names", 15)
+        learned_verbs = self.get_top_n("verb_types", 15)
+
+        # Combine with seed vocabulary
+        all_roles = list(set(self.standard_roles[:20] + learned_roles))
+        all_states = list(set(self.standard_states[:20] + learned_states))
+        all_verbs = list(set(self.standard_verbs[:20] + learned_verbs))
+        all_assets = self.standard_assets[:20] if self.standard_assets else []
+        all_outcomes = self.standard_outcomes[:15] if self.standard_outcomes else []
+        all_relationships = self.standard_relationships[:15] if self.standard_relationships else []
+
         lines = [
-            "## Known Vocabulary (from previous extractions)",
+            "## Standard Legal Vocabulary (use these terms for consistency)",
             "",
-            "### Common Roles:",
-            ", ".join(self.get_top_n("role_types", 15)),
+            "### Standard Roles:",
+            ", ".join(all_roles) if all_roles else "(none)",
             "",
-            "### Common States:",
-            ", ".join(self.get_top_n("state_names", 15)),
+            "### Standard States:",
+            ", ".join(all_states) if all_states else "(none)",
             "",
-            "### Common Actions:",
-            ", ".join(self.get_top_n("verb_types", 15)),
+            "### Standard Events/Actions:",
+            ", ".join(all_verbs) if all_verbs else "(none)",
+            "",
+            "### Standard Assets:",
+            ", ".join(all_assets) if all_assets else "(none)",
+            "",
+            "### Standard Outcomes:",
+            ", ".join(all_outcomes) if all_outcomes else "(none)",
+            "",
+            "### Standard Relationships:",
+            ", ".join(all_relationships) if all_relationships else "(none)",
         ]
         return "\n".join(lines)
 
@@ -436,13 +482,30 @@ class OntologyContext(BaseModel):
         Convert ontology context to TOON format (~40% token reduction).
 
         Output format:
-        Vocabulary{roles,states,actions}
-        role1|role2|role3,state1|state2,action1|action2
+        Vocabulary{roles,states,verbs,assets,outcomes,relationships}
+        role1|role2|role3,state1|state2,verb1|verb2,asset1|asset2,outcome1|outcome2,rel1|rel2
         """
-        roles = self.get_top_n("role_types", 15)
-        states = self.get_top_n("state_names", 15)
-        verbs = self.get_top_n("verb_types", 15)
+        # Get learned vocabulary from frequency counts
+        learned_roles = self.get_top_n("role_types", 15)
+        learned_states = self.get_top_n("state_names", 15)
+        learned_verbs = self.get_top_n("verb_types", 15)
 
-        header = "Vocabulary[1]{roles,states,actions}"
-        data = f"{"|".join(roles)},{"|".join(states)},{"|".join(verbs)}"
+        # Combine with seed vocabulary (compact subset for TOON)
+        all_roles = list(set(self.standard_roles[:15] + learned_roles))[:15]
+        all_states = list(set(self.standard_states[:15] + learned_states))[:15]
+        all_verbs = list(set(self.standard_verbs[:15] + learned_verbs))[:15]
+        all_assets = self.standard_assets[:10] if self.standard_assets else []
+        all_outcomes = self.standard_outcomes[:10] if self.standard_outcomes else []
+        all_rels = self.standard_relationships[:10] if self.standard_relationships else []
+
+        header = "Vocabulary[1]{roles,states,verbs,assets,outcomes,relationships}"
+        pipe = "|"
+        data = (
+            f"{pipe.join(all_roles)},"
+            f"{pipe.join(all_states)},"
+            f"{pipe.join(all_verbs)},"
+            f"{pipe.join(all_assets)},"
+            f"{pipe.join(all_outcomes)},"
+            f"{pipe.join(all_rels)}"
+        )
         return f"{header}\n{data}"

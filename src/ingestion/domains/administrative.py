@@ -1,0 +1,1200 @@
+"""
+Administrative Law Domain Keywords for Australian Legal Corpus
+==============================================================
+
+This module contains comprehensive keyword sets for Australian Administrative Law,
+covering judicial review, merits review, migration/refugee law, freedom of information,
+and related administrative processes.
+
+Categories covered:
+- Judicial Review (ADJR, Constitutional writs, jurisdictional error)
+- Merits Review (AAT, SSAT, ART, state tribunals)
+- Migration & Refugee Law (visa classes, cancellation, protection)
+- Freedom of Information (FOI exemptions, public interest)
+- Privacy and Ombudsman matters
+- Administrative subcategories and procedures
+
+Total keywords: 400+
+"""
+
+from typing import Dict, List
+
+# ============================================================================
+# ADMINISTRATIVE LAW KEYWORDS
+# ============================================================================
+
+ADMINISTRATIVE_KEYWORDS = {
+
+    # ------------------------------------------------------------------------
+    # JUDICIAL REVIEW KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Judicial_Review': [
+        # Jurisdictional Error
+        'jurisdictional error',
+        'jurisdictional errors',
+        'ultra vires',
+        'acting ultra vires',
+        'excess of jurisdiction',
+        'lack of jurisdiction',
+        'constructive failure to exercise jurisdiction',
+        'failure to exercise jurisdiction',
+        'jurisdictional fact',
+        'jurisdictional facts',
+        'jurisdictional question',
+
+        # Procedural Fairness / Natural Justice
+        'procedural fairness',
+        'breach of procedural fairness',
+        'denial of procedural fairness',
+        'natural justice',
+        'breach of natural justice',
+        'denial of natural justice',
+        'hearing rule',
+        'right to be heard',
+        'audi alteram partem',
+        'opportunity to be heard',
+        'fair hearing',
+        'legitimate expectation',
+        'legitimate expectations',
+
+        # Bias
+        'apprehended bias',
+        'reasonable apprehension of bias',
+        'actual bias',
+        'ostensible bias',
+        'nemo judex in causa sua',
+        'impartial decision-maker',
+        'lack of impartiality',
+        'prejudgment',
+        'pre-judgment',
+        'disqualifying interest',
+
+        # Unreasonableness
+        'wednesbury unreasonableness',
+        'legal unreasonableness',
+        'irrationality',
+        'irrational decision',
+        'illogical decision',
+        'illogicality',
+        'unreasoning decision',
+        'arbitrary decision',
+        'capricious decision',
+
+        # Error of Law
+        'error of law',
+        'errors of law',
+        'error of law on the face of the record',
+        'misconstruction of statute',
+        'misapplication of law',
+        'wrong legal test',
+        'legal error',
+
+        # Relevant/Irrelevant Considerations
+        'irrelevant consideration',
+        'irrelevant considerations',
+        'relevant consideration',
+        'relevant considerations',
+        'failure to take into account',
+        'failed to consider',
+        'took into account irrelevant matter',
+        'mandatory relevant consideration',
+
+        # Improper Purpose / Bad Faith
+        'improper purpose',
+        'ulterior purpose',
+        'bad faith',
+        'mala fides',
+        'bona fides',
+        'purpose of the power',
+        'unauthorized purpose',
+
+        # No Evidence / Illogicality
+        'no evidence',
+        'no probative evidence',
+        'no rational basis',
+        'logical connection',
+        'logical basis',
+        'evidentiary foundation',
+
+        # Fettering Discretion
+        'fettering of discretion',
+        'fettered discretion',
+        'unlawful delegation',
+        'wrongful delegation',
+        'policy fettering',
+        'inflexible policy',
+        'applied policy rigidly',
+
+        # Constitutional Writs & Remedies
+        'certiorari',
+        'prohibition',
+        'mandamus',
+        'prerogative writ',
+        'prerogative writs',
+        'constitutional writ',
+        'constitutional writs',
+        'supervisory jurisdiction',
+        'section 75(v)',
+        's 75(v)',
+        'section 39B',
+        's 39B',
+        'section 476',
+        's 476',
+
+        # Privative Clauses
+        'privative clause',
+        'privative clauses',
+        'ouster clause',
+        'ouster clauses',
+        'no certiorari clause',
+        'finality clause',
+        'conclusive evidence clause',
+        'privative clause decision',
+
+        # ADJR Act Grounds
+        'adjr act',
+        'administrative decisions (judicial review) act',
+        'section 5',
+        'section 6',
+        'section 7',
+        'section 13',
+        'decision of an administrative character',
+        'decision under an enactment',
+        'statement of reasons',
+
+        # Other Judicial Review Concepts
+        'jurisdictional requirement',
+        'constitutional minimum',
+        'denial of procedural fairness',
+        'failure to afford procedural fairness',
+        'administrative decision',
+        'reviewable decision',
+        'reviewable error',
+        'non-jurisdictional error',
+        'jurisdictional limit',
+        'statutory construction',
+        'statutory interpretation',
+    ],
+
+    # ------------------------------------------------------------------------
+    # MERITS REVIEW KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Merits_Review': [
+        # Administrative Appeals Tribunal (AAT / ART)
+        'aat',
+        'administrative appeals tribunal',
+        'art',
+        'administrative review tribunal',
+        'tribunal',
+        'federal tribunal',
+        'commonwealth tribunal',
+        'aat act',
+        'administrative appeals tribunal act',
+        'administrative appeals tribunal act 1975',
+        'administrative review tribunal act 2024',
+
+        # State Tribunals
+        'vcat',
+        'victorian civil and administrative tribunal',
+        'ncat',
+        'nsw civil and administrative tribunal',
+        'qcat',
+        'queensland civil and administrative tribunal',
+        'sacat',
+        'south australian civil and administrative tribunal',
+        'wasat',
+        'state administrative tribunal',
+        'tascat',
+        'tasmanian civil and administrative tribunal',
+        'acat',
+        'act civil and administrative tribunal',
+        'ntcat',
+        'northern territory civil and administrative tribunal',
+
+        # Social Security Tribunals
+        'ssat',
+        'social security appeals tribunal',
+        'social services and child support division',
+
+        # Merits Review Principles
+        'de novo review',
+        'de novo',
+        'review on the merits',
+        'merits review',
+        'stand in the shoes',
+        'standing in the shoes',
+        'exercise the power afresh',
+        'correct or preferable decision',
+        'preferable decision',
+        'correct decision',
+        'all the material before the tribunal',
+
+        # Tribunal Procedures
+        'tribunal hearing',
+        'tribunal proceeding',
+        'tribunal decision',
+        'tribunal member',
+        'senior member',
+        'presidential member',
+        'tribunal directions',
+        'case conference',
+        'compulsory conference',
+        'alternative dispute resolution',
+        'tribunal rules',
+        'practice directions',
+
+        # Tribunal Powers
+        'tribunal jurisdiction',
+        'tribunal powers',
+        'affirm decision',
+        'vary decision',
+        'set aside decision',
+        'remit decision',
+        'substitute decision',
+        'dismiss application',
+
+        # Appeals from Tribunal
+        'appeal from tribunal',
+        'appeal on question of law',
+        'question of law',
+        'error of law',
+        'leave to appeal',
+        'federal court appeal',
+        'supreme court appeal',
+
+        # Tribunal Review Types
+        'internal review',
+        'external review',
+        'first tier review',
+        'second tier review',
+        'independent merits review',
+        'administrative review',
+        'reconsideration',
+    ],
+
+    # ------------------------------------------------------------------------
+    # MIGRATION REVIEW KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Migration': [
+        # Visa General Terms
+        'visa',
+        'visas',
+        'visa application',
+        'visa grant',
+        'visa refusal',
+        'visa cancellation',
+        'visa cancellations',
+        'automatic visa cancellation',
+        'mandatory visa cancellation',
+        'discretionary visa cancellation',
+        'bridging visa',
+        'bridging visas',
+
+        # Visa Classes - Skilled Migration
+        'subclass 189',
+        'subclass 190',
+        'subclass 491',
+        'skilled independent',
+        'skilled nominated',
+        'skilled work regional',
+        'skilled migration',
+        'points test',
+        'skillselect',
+        'occupation list',
+        'skilled occupation list',
+
+        # Visa Classes - Temporary Work
+        'subclass 482',
+        'temporary skill shortage',
+        'tss visa',
+        'subclass 457',
+        '457 visa',
+        'temporary work visa',
+        'sponsored visa',
+        'employer sponsored',
+        'labour agreement',
+        'labour market testing',
+
+        # Visa Classes - Student
+        'subclass 500',
+        'student visa',
+        'coe',
+        'confirmation of enrolment',
+        'esos act',
+        'genuine temporary entrant',
+        'gte',
+        'student visa conditions',
+
+        # Visa Classes - Family
+        'subclass 820',
+        'subclass 801',
+        'subclass 309',
+        'subclass 100',
+        'partner visa',
+        'spouse visa',
+        'de facto partner',
+        'prospective marriage',
+        'subclass 300',
+        'parent visa',
+        'contributory parent',
+        'child visa',
+
+        # Visa Classes - Visitor/Tourist
+        'subclass 600',
+        'visitor visa',
+        'tourist visa',
+        'subclass 601',
+        'eta',
+        'electronic travel authority',
+        'evisitor',
+
+        # Visa Classes - Permanent Residence
+        'permanent residence',
+        'permanent resident',
+        'permanent visa',
+        'residence status',
+        'citizenship',
+        'australian citizenship',
+        'citizenship by conferral',
+        'citizenship test',
+
+        # Migration Act Sections
+        'migration act',
+        'migration act 1958',
+        'section 501',
+        's 501',
+        'section 501ca',
+        's 501ca',
+        'section 116',
+        's 116',
+        'section 119',
+        'section 137j',
+        'section 48',
+        's 48',
+        'section 48a',
+        's 48a',
+
+        # Character Test
+        'character test',
+        'character requirement',
+        'substantial criminal record',
+        'sentence of imprisonment',
+        'association with criminal groups',
+        'risk to the australian community',
+        'character concerns',
+        'character grounds',
+        'pass the character test',
+        'fail the character test',
+        'character cancellation',
+
+        # Ministerial Intervention
+        'ministerial intervention',
+        'section 417',
+        's 417',
+        'section 351',
+        's 351',
+        'section 48b',
+        's 48b',
+        'minister\'s discretion',
+        'ministerial power',
+        'public interest',
+        'unique or exceptional circumstances',
+
+        # Migration Procedures
+        'migration agent',
+        'registered migration agent',
+        'migration advice',
+        'mara',
+        'office of the migration agents registration authority',
+        'department of home affairs',
+        'home affairs',
+        'immigration detention',
+        'detention centre',
+        'community detention',
+        'immigration bridge',
+
+        # Deportation & Removal
+        'deportation',
+        'removal',
+        'removal order',
+        'unlawful non-citizen',
+        'overstay',
+        'overstayer',
+        'unlawful presence',
+        'section 198',
+        's 198',
+        'liable for removal',
+
+        # Direction and Guidelines
+        'direction 90',
+        'direction 99',
+        'ministerial direction',
+        'pal guidelines',
+        'procedural advice letter',
+        'migration regulations',
+        'schedule 2',
+        'schedule 3',
+
+        # Other Migration Terms
+        'genuine relationship',
+        'relationship breakdown',
+        'health requirement',
+        'medical examination',
+        'security requirement',
+        'public interest criterion',
+        'pic',
+        'time limit',
+        'substantial compliance',
+        'sponsor',
+        'sponsorship',
+        'nomination',
+    ],
+
+    # ------------------------------------------------------------------------
+    # REFUGEE & PROTECTION VISA KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Refugee': [
+        # Protection Visa
+        'protection visa',
+        'protection visas',
+        'subclass 866',
+        'refugee visa',
+        'asylum seeker',
+        'asylum seekers',
+        'asylum application',
+        'protection claim',
+        'protection claims',
+
+        # Refugee Convention
+        'refugee',
+        'refugees',
+        'refugee convention',
+        'refugees convention',
+        'convention relating to the status of refugees',
+        '1951 convention',
+        '1967 protocol',
+        'well-founded fear of persecution',
+        'persecution',
+        'fear of persecution',
+
+        # Protection Grounds
+        'race',
+        'religion',
+        'nationality',
+        'membership of a particular social group',
+        'particular social group',
+        'political opinion',
+        'convention reason',
+        'convention grounds',
+        'nexus to convention',
+
+        # Complementary Protection
+        'complementary protection',
+        'significant harm',
+        'arbitrary deprivation of life',
+        'death penalty',
+        'torture',
+        'cruel or inhuman treatment',
+        'degrading treatment or punishment',
+        'real risk',
+        'real chance',
+
+        # Refugee Determination
+        'refugee status determination',
+        'refugee status',
+        'sur place claim',
+        'internal relocation',
+        'internal flight alternative',
+        'state protection',
+        'effective protection',
+        'country information',
+        'dfat report',
+        'country of reference',
+
+        # Exclusion Clauses
+        'article 1f',
+        'exclusion clause',
+        'serious non-political crime',
+        'war crime',
+        'crimes against humanity',
+        'acts contrary to the purposes and principles of un',
+
+        # Offshore Processing
+        'offshore processing',
+        'offshore entry person',
+        'offshore detention',
+        'regional processing',
+        'nauru',
+        'manus island',
+        'papua new guinea',
+        'transitory person',
+
+        # Tribunals & Review
+        'rrt',
+        'refugee review tribunal',
+        'mrt',
+        'migration review tribunal',
+        'migration and refugee division',
+        'immigration assessment authority',
+        'iaa',
+        'fast track review',
+
+        # Safe Third Country
+        'safe third country',
+        'safe haven enterprise visa',
+        'shev',
+        'subclass 790',
+        'temporary protection visa',
+        'tpv',
+        'subclass 785',
+
+        # Other Refugee Terms
+        'non-refoulement',
+        'refoulement',
+        'stateless person',
+        'statelessness',
+        'country of former habitual residence',
+        'durable solution',
+        'resettlement',
+        'surrogate protection',
+    ],
+
+    # ------------------------------------------------------------------------
+    # FREEDOM OF INFORMATION KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_FOI': [
+        # FOI General
+        'freedom of information',
+        'foi',
+        'foi request',
+        'foi application',
+        'access to documents',
+        'right to information',
+        'information access',
+        'foi act',
+        'freedom of information act 1982',
+
+        # State FOI Acts
+        'gipa act',
+        'government information (public access) act',
+        'government information public access',
+        'gipa',
+        'rti act',
+        'right to information act',
+        'foi act 1982',
+        'foi victoria',
+
+        # FOI Procedures
+        'foi decision',
+        'initial decision',
+        'internal review',
+        'ic review',
+        'information commissioner review',
+        'oaic',
+        'office of the australian information commissioner',
+        'victorian information commissioner',
+        'nsw information commissioner',
+        'queensland information commissioner',
+
+        # Documents & Records
+        'document',
+        'documents',
+        'official document',
+        'government document',
+        'government records',
+        'administrative document',
+        'exempt document',
+        'exempt documents',
+        'conditionally exempt',
+        'conditionally exempt document',
+
+        # Exemptions - Cabinet & Deliberative
+        'cabinet documents',
+        'cabinet exemption',
+        'section 34',
+        's 34',
+        'deliberative process',
+        'deliberative matter',
+        'section 47c',
+        's 47c',
+        'opinion advice recommendation',
+        'consultation or deliberation',
+
+        # Exemptions - Business & Commercial
+        'business affairs',
+        'commercial information',
+        'trade secrets',
+        'commercially valuable information',
+        'section 47',
+        's 47',
+        'substantial adverse effect',
+        'competitive disadvantage',
+
+        # Exemptions - Personal Privacy
+        'personal information',
+        'personal privacy',
+        'unreasonable disclosure',
+        'section 47f',
+        's 47f',
+        'privacy act',
+        'australian privacy principles',
+        'app',
+        'third party',
+        'third party consultation',
+
+        # Exemptions - Law Enforcement & Security
+        'law enforcement',
+        'law enforcement exemption',
+        'section 37',
+        's 37',
+        'prejudice investigation',
+        'enforcement of law',
+        'national security',
+        'defence',
+        'international relations',
+        'section 33',
+        's 33',
+
+        # Exemptions - Other
+        'legal professional privilege',
+        'section 42',
+        's 42',
+        'commonwealth-state relations',
+        'section 47b',
+        's 47b',
+        'economy of the commonwealth',
+        'financial or property interest',
+        'operations of agencies',
+        'section 47e',
+        's 47e',
+
+        # Public Interest Test
+        'public interest',
+        'public interest test',
+        'public interest factors',
+        'balance of public interest',
+        'public interest considerations',
+        'promote transparency',
+        'promote accountability',
+        'inform debate',
+        'enhance scrutiny',
+
+        # FOI Charges & Timeframes
+        'foi charges',
+        'processing charges',
+        'application fee',
+        'deposit',
+        'access charge',
+        'statutory timeframe',
+        '30 day timeframe',
+        'extension of time',
+        'practical refusal',
+        'voluminous request',
+    ],
+
+    # ------------------------------------------------------------------------
+    # PRIVACY KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Privacy': [
+        # Privacy Act & Principles
+        'privacy act',
+        'privacy act 1988',
+        'australian privacy principles',
+        'app',
+        'app 1',
+        'app 3',
+        'app 6',
+        'app 11',
+        'information privacy principles',
+        'ipp',
+        'privacy principles',
+
+        # Privacy Commissioner
+        'privacy commissioner',
+        'australian information commissioner',
+        'oaic',
+        'privacy complaint',
+        'privacy determination',
+        'privacy investigation',
+
+        # Privacy Concepts
+        'personal information',
+        'sensitive information',
+        'collection of personal information',
+        'use and disclosure',
+        'data quality',
+        'data security',
+        'access and correction',
+        'anonymity and pseudonymity',
+        'direct marketing',
+        'cross-border disclosure',
+        'overseas recipient',
+
+        # Privacy Breach
+        'privacy breach',
+        'data breach',
+        'notifiable data breach',
+        'eligible data breach',
+        'serious data breach',
+        'unauthorized access',
+        'unauthorized disclosure',
+        'loss of personal information',
+
+        # Other Privacy Terms
+        'consent',
+        'express consent',
+        'implied consent',
+        'opt-in',
+        'opt-out',
+        'privacy policy',
+        'collection notice',
+        'privacy impact assessment',
+        'pia',
+    ],
+
+    # ------------------------------------------------------------------------
+    # OMBUDSMAN KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Ombudsman': [
+        # Commonwealth Ombudsman
+        'ombudsman',
+        'commonwealth ombudsman',
+        'ombudsman act',
+        'ombudsman act 1976',
+        'ombudsman investigation',
+        'ombudsman complaint',
+        'ombudsman report',
+
+        # State Ombudsmen
+        'nsw ombudsman',
+        'victorian ombudsman',
+        'queensland ombudsman',
+        'sa ombudsman',
+        'wa ombudsman',
+        'tasmanian ombudsman',
+        'act ombudsman',
+        'nt ombudsman',
+
+        # Ombudsman Functions
+        'maladministration',
+        'administrative action',
+        'defective administration',
+        'unreasonable administrative action',
+        'unjust administrative action',
+        'oppressive administrative action',
+        'improperly discriminatory',
+        'administrative deficiency',
+
+        # Ombudsman Remedies
+        'recommendation',
+        'ombudsman recommendation',
+        'remedy',
+        'apology',
+        'explanation',
+        'financial remedy',
+        'change of decision',
+        'change of practice',
+    ],
+
+    # ------------------------------------------------------------------------
+    # GENERAL ADMINISTRATIVE LAW KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Review': [
+        # General Administrative Concepts
+        'administrative law',
+        'administrative decision',
+        'administrative action',
+        'administrative function',
+        'statutory power',
+        'statutory discretion',
+        'discretionary power',
+        'executive power',
+        'delegated legislation',
+        'subordinate legislation',
+        'regulations',
+        'legislative instrument',
+
+        # Decision-Making
+        'decision-maker',
+        'delegate',
+        'statutory decision-maker',
+        'authorized officer',
+        'proper officer',
+        'responsible minister',
+        'minister',
+        'secretary',
+        'departmental decision',
+
+        # Reasons for Decision
+        'statement of reasons',
+        'reasons for decision',
+        'findings of fact',
+        'findings on material questions of fact',
+        'evidence or material',
+        'section 13',
+        'duty to give reasons',
+
+        # Standing & Parties
+        'standing',
+        'locus standi',
+        'person aggrieved',
+        'affected person',
+        'interested person',
+        'applicant',
+        'respondent',
+        'contradictor',
+        'intervener',
+
+        # Time Limits
+        'time limit',
+        'time limits',
+        'limitation period',
+        'extension of time',
+        'out of time',
+        'within time',
+        'statutory timeframe',
+        'prescribed period',
+
+        # Costs & Procedures
+        'costs',
+        'costs order',
+        'public interest costs order',
+        'indemnity costs',
+        'party-party costs',
+        'security for costs',
+        'vexatious litigant',
+        'abuse of process',
+    ],
+
+    # ------------------------------------------------------------------------
+    # VETERANS & SOCIAL SECURITY KEYWORDS
+    # ------------------------------------------------------------------------
+    'Admin_Veterans': [
+        'veterans',
+        'veteran',
+        'veterans\' entitlements',
+        'veterans\' entitlements act',
+        'vea',
+        'military rehabilitation and compensation',
+        'mrca',
+        'dvA',
+        'department of veterans\' affairs',
+        'repatriation commission',
+        'service pension',
+        'disability pension',
+        'war pension',
+        'war service',
+        'operational service',
+        'eligible war service',
+        'defence service',
+        'statement of principles',
+        'sop',
+        'reasonable hypothesis',
+        'kind of injury',
+        'incapacity',
+        'permanent impairment',
+    ],
+
+    'Admin_Social_Security': [
+        'social security',
+        'social security act',
+        'social security act 1991',
+        'centrelink',
+        'services australia',
+        'jobseeker',
+        'jobseeker payment',
+        'newstart',
+        'youth allowance',
+        'austudy',
+        'parenting payment',
+        'disability support pension',
+        'dsp',
+        'age pension',
+        'carer payment',
+        'carer allowance',
+        'family tax benefit',
+        'ftb',
+        'ndis',
+        'national disability insurance scheme',
+        'ndis act',
+        'robodebt',
+        'debt recovery',
+        'overpayment',
+        'compensation recovery',
+        'income support',
+        'means test',
+        'assets test',
+        'activity test',
+        'mutual obligation',
+        'participation requirements',
+    ],
+}
+
+
+# ============================================================================
+# ADMINISTRATIVE LEGISLATION MAPPING
+# ============================================================================
+
+ADMINISTRATIVE_LEGISLATION = {
+    # Judicial Review
+    'Administrative Decisions (Judicial Review) Act 1977': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'key_sections': {
+            's 5': 'Admin_Judicial_Review',
+            's 6': 'Admin_Judicial_Review',
+            's 13': 'Admin_Review',
+        }
+    },
+    'ADJR Act': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+    },
+
+    # Judiciary & Courts
+    'Judiciary Act 1903': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'key_sections': {
+            's 39B': 'Admin_Judicial_Review',
+        }
+    },
+    'Federal Court of Australia Act 1976': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+    },
+
+    # Merits Review
+    'Administrative Appeals Tribunal Act 1975': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Merits_Review'],
+    },
+    'Administrative Review Tribunal Act 2024': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Merits_Review'],
+    },
+    'AAT Act': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Merits_Review'],
+    },
+    'Social Security (Administration) Act 1999': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Social_Security', 'Admin_Merits_Review'],
+    },
+
+    # Migration
+    'Migration Act 1958': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration'],
+        'key_sections': {
+            's 48': 'Admin_Migration',
+            's 48A': 'Admin_Migration',
+            's 116': 'Admin_Migration',
+            's 137J': 'Admin_Migration',
+            's 351': 'Admin_Migration',
+            's 417': 'Admin_Migration',
+            's 476': 'Admin_Judicial_Review',
+            's 501': 'Admin_Migration',
+            's 501CA': 'Admin_Migration',
+        }
+    },
+    'Migration Regulations 1994': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration'],
+    },
+    'Australian Citizenship Act 2007': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration'],
+    },
+
+    # Freedom of Information
+    'Freedom of Information Act 1982': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+        'key_sections': {
+            's 33': 'Admin_FOI',
+            's 34': 'Admin_FOI',
+            's 37': 'Admin_FOI',
+            's 42': 'Admin_FOI',
+            's 47': 'Admin_FOI',
+            's 47B': 'Admin_FOI',
+            's 47C': 'Admin_FOI',
+            's 47E': 'Admin_FOI',
+            's 47F': 'Admin_FOI',
+        }
+    },
+    'FOI Act': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+    },
+    'Government Information (Public Access) Act 2009': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+    },
+    'GIPA Act': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+    },
+    'Right to Information Act 2009': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+    },
+
+    # Privacy
+    'Privacy Act 1988': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Privacy'],
+    },
+    'Australian Information Commissioner Act 2010': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Privacy', 'Admin_FOI'],
+    },
+
+    # Ombudsman
+    'Ombudsman Act 1976': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Ombudsman'],
+    },
+
+    # Veterans
+    'Veterans\' Entitlements Act 1986': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Veterans'],
+    },
+    'Military Rehabilitation and Compensation Act 2004': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Veterans'],
+    },
+
+    # Social Security
+    'Social Security Act 1991': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Social_Security'],
+    },
+    'National Disability Insurance Scheme Act 2013': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Social_Security'],
+    },
+    'NDIS Act': {
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Social_Security'],
+    },
+}
+
+
+# ============================================================================
+# ADMINISTRATIVE LANDMARK CASES
+# ============================================================================
+
+ADMINISTRATIVE_CASES = {
+    # Judicial Review - Jurisdictional Error
+    'Craig v South Australia': {
+        'citation': '(1995) 184 CLR 163',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['jurisdictional error', 'judicial review', 'extent of judicial review'],
+    },
+    'Kirk v Industrial Court (NSW)': {
+        'citation': '(2010) 239 CLR 531',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['constitutional minimum', 'supervisory jurisdiction', 'privative clause'],
+    },
+    'Plaintiff S157/2002 v Commonwealth': {
+        'citation': '(2003) 211 CLR 476',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review', 'Admin_Migration'],
+        'keywords': ['privative clause', 's 474', 'jurisdictional error'],
+    },
+
+    # Procedural Fairness
+    'Kioa v West': {
+        'citation': '(1985) 159 CLR 550',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['natural justice', 'procedural fairness', 'audi alteram partem'],
+    },
+    'Re Minister for Immigration and Multicultural Affairs; Ex parte Lam': {
+        'citation': '(2003) 214 CLR 1',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['procedural fairness', 'legitimate expectation'],
+    },
+    'SZBEL v Minister for Immigration': {
+        'citation': '(2006) 228 CLR 152',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration'],
+        'keywords': ['procedural fairness', 'migration', 'opportunity to be heard'],
+    },
+
+    # Bias
+    'Ebner v Official Trustee': {
+        'citation': '(2000) 205 CLR 337',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['apprehended bias', 'reasonable apprehension'],
+    },
+
+    # Unreasonableness
+    'Minister for Immigration v Li': {
+        'citation': '(2013) 249 CLR 332',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review', 'Admin_Migration'],
+        'keywords': ['legal unreasonableness', 'irrationality', 'illogicality'],
+    },
+
+    # Relevant Considerations
+    'Minister for Aboriginal Affairs v Peko-Wallsend': {
+        'citation': '(1986) 162 CLR 24',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Judicial_Review'],
+        'keywords': ['relevant considerations', 'mandatory considerations'],
+    },
+
+    # Migration & Refugee Cases
+    'Plaintiff M70/2011 v Minister for Immigration': {
+        'citation': '(2011) 244 CLR 144',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration', 'Admin_Refugee'],
+        'keywords': ['offshore processing', 'refugees', 'protection obligations'],
+    },
+    'NAAV v Minister for Immigration': {
+        'citation': '(2002) 123 FCR 298',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Refugee'],
+        'keywords': ['particular social group', 'refugee convention'],
+    },
+    'SZATV v Minister for Immigration': {
+        'citation': '(2007) 233 CLR 18',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Refugee'],
+        'keywords': ['internal relocation', 'persecution', 'reasonableness'],
+    },
+
+    # Character Test
+    'Pearson v Minister for Immigration': {
+        'citation': '[2018] FCAFC 139',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_Migration'],
+        'keywords': ['s 501', 'character test', 'visa cancellation'],
+    },
+
+    # FOI Cases
+    'Commonwealth v Fairfax': {
+        'citation': '(1980) 147 CLR 39',
+        'domain': 'Administrative',
+        'subcategories': ['Admin_FOI'],
+        'keywords': ['cabinet documents', 'public interest', 'confidentiality'],
+    },
+}
+
+
+# ============================================================================
+# EXPORTS
+# ============================================================================
+
+__all__ = [
+    'ADMINISTRATIVE_KEYWORDS',
+    'ADMINISTRATIVE_LEGISLATION',
+    'ADMINISTRATIVE_CASES',
+]

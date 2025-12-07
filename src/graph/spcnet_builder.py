@@ -30,11 +30,10 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 
 # Regex for Australian Case Citations (Enhanced)
-# Matches: [2023] HCA 1, (2023) 123 CLR 456, etc.
+# Matches: [2023] HCA 1, [2020] FamCA 100, (2023) 123 CLR 456, etc.
 CITATION_PATTERNS = [
-    re.compile(r'\[(\d{4})\]\s+([A-Z][A-Z]+[A-Za-z]*)\s+(\d+)'),  # [2023] HCA 1
-    re.compile(r'\((\d{4})\)\s+(\d+)\s+([A-Z][A-Z]+[A-Za-z]*)\s+(\d+)'),  # (2023) 97 ALJR 123
-    re.compile(r'\[(\d{4})\]\s+([A-Z]+SC[A-Z]*)\s+(\d+)'),  # [2023] NSWSC 456
+    re.compile(r'\[(\d{4})\]\s+([A-Za-z]{2,10})\s+(\d+)'),  # [2023] HCA 1, [2020] FamCA 100
+    re.compile(r'\((\d{4})\)\s+(\d+)\s+([A-Za-z]{2,10})\s+(\d+)'),  # (2023) 97 ALJR 123
 ]
 
 # Action type patterns for citation context analysis
