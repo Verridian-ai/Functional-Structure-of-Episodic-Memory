@@ -288,9 +288,9 @@ export function CanvasPanel() {
   };
 
   return (
-    <div className="fixed inset-0 md:relative md:inset-auto h-full flex flex-col bg-zinc-950 md:bg-zinc-950/40 backdrop-blur-xl md:border-l border-white/5 z-40 md:z-auto">
+    <div className="canvas-panel fixed inset-0 md:relative md:inset-auto h-full flex flex-col backdrop-blur-xl md:border-l border-white/5 z-40 md:z-auto">
       {/* Header - Mobile optimized */}
-      <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5 safe-area-pt">
+      <div className="canvas-header flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 border-b border-white/5 safe-area-pt">
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             onClick={toggleCanvas}
@@ -337,7 +337,7 @@ export function CanvasPanel() {
               </button>
 
               {showLayoutMenu && (
-                <div className="fixed inset-x-4 top-20 md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 w-auto md:w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50 max-h-[70vh] md:max-h-[60vh]">
+                <div className="layout-menu fixed inset-x-4 top-20 md:absolute md:inset-auto md:right-0 md:top-full md:mt-2 w-auto md:w-80 bg-zinc-900 border border-zinc-700 rounded-xl shadow-2xl overflow-hidden z-50 max-h-[70vh] md:max-h-[60vh]">
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-zinc-800 bg-black/20">
                         <h3 className="text-sm font-semibold text-white flex items-center gap-2">
@@ -450,7 +450,7 @@ export function CanvasPanel() {
               >
                 <Download className="w-4 h-4" />
               </button>
-              <div className="absolute right-0 top-full mt-1 w-32 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+              <div className="export-menu absolute right-0 top-full mt-1 w-32 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
                 <button onClick={handleDownloadDOCX} className="w-full px-3 py-2.5 sm:py-2 text-left text-sm text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-800 transition touch-target">
                   Word (.docx)
                 </button>
@@ -476,7 +476,7 @@ export function CanvasPanel() {
 
       {/* Tabs - Scrollable on mobile */}
       {artifacts.length > 0 && (
-        <div className="flex items-center gap-1 px-2 py-1.5 sm:py-2 border-b border-white/5 overflow-x-auto scrollbar-hide">
+        <div className="canvas-tabs flex items-center gap-1 px-2 py-1.5 sm:py-2 border-b border-white/5 overflow-x-auto scrollbar-hide">
           {artifacts.map((artifact) => (
             <button
               key={artifact.id}
@@ -495,14 +495,14 @@ export function CanvasPanel() {
       )}
 
       {/* Content */}
-      <div className="flex-1 overflow-auto relative" onMouseUp={handleTextHighlight}>
+      <div className="canvas-content flex-1 overflow-auto relative" onMouseUp={handleTextHighlight}>
         {activeArtifact ? (
           <div className="h-full">
               
             {/* NanoBanana Pro Modal - Mobile optimized */}
             {showImageModal && (
-                <div className="absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6">
-                    <div className="w-full sm:max-w-md bg-zinc-900 border-t sm:border border-yellow-500/30 rounded-t-2xl sm:rounded-xl p-4 sm:p-5 shadow-2xl shadow-yellow-500/10 max-h-[90vh] overflow-y-auto">
+                <div className="image-modal-backdrop absolute inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-6">
+                    <div className="image-modal w-full sm:max-w-md bg-zinc-900 border-t sm:border border-yellow-500/30 rounded-t-2xl sm:rounded-xl p-4 sm:p-5 shadow-2xl shadow-yellow-500/10 max-h-[90vh] overflow-y-auto">
                         <h3 className="text-base sm:text-lg font-bold text-yellow-400 mb-1 flex items-center gap-2">
                             <ImageIcon className="w-4 h-4 sm:w-5 sm:h-5" />
                             <span className="hidden sm:inline">NanoBanana Pro - Infographic Generator</span>
@@ -611,7 +611,7 @@ export function CanvasPanel() {
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full text-zinc-500">
+          <div className="canvas-empty-state flex flex-col items-center justify-center h-full text-zinc-500">
             <FileText className="w-16 h-16 mb-6 opacity-20 stroke-[1.5]" />
             <p className="text-lg font-medium text-zinc-400">No artifacts selected</p>
             <p className="text-sm mt-2 max-w-xs text-center opacity-60">
@@ -623,7 +623,7 @@ export function CanvasPanel() {
       
       {/* Footer ... */}
       {activeArtifact && (
-        <div className="px-4 py-2 border-t border-white/5 text-xs text-zinc-500 flex items-center justify-between bg-black/20">
+        <div className="canvas-footer px-4 py-2 border-t border-white/5 text-xs text-zinc-500 flex items-center justify-between bg-black/20">
           <span>
             {activeArtifact.type} • Created {activeArtifact.createdAt ? new Date(activeArtifact.createdAt).toLocaleString() : 'Unknown'}
           </span>
