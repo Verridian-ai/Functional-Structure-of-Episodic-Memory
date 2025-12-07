@@ -353,7 +353,7 @@ async function loadGraphFromFiles(limit: number = 5000, filters: FilterOptions =
         }
         // Fallback: distribute by hash for visual diversity
         else {
-          const hash = nodeId.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+          const hash = nodeId.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
           const fallbackKeys = ['nsw_supreme', 'vic_supreme', 'qld_supreme', 'federal_court', 'family', 'criminal'];
           courtKey = fallbackKeys[hash % fallbackKeys.length];
         }
