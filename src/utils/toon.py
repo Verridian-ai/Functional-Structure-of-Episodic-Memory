@@ -28,12 +28,23 @@ class ToonEncoder:
 
     @staticmethod
     def _escape_value(val: Any) -> str:
-        """Escape a value for TOON format."""
+        """Escape a value for TOON format.
+
+        TOON uses single-line rows, so newlines are replaced with spaces.
+        This ensures the decoder can parse by line count correctly.
+        """
         if val is None:
             return ""
         s = str(val)
-        # Quote if contains comma, newline, or leading/trailing whitespace
-        if "," in s or "\n" in s or s != s.strip():
+
+        # Replace newlines with spaces to maintain single-line row format
+        # This is critical for TOON decoder which counts lines
+        has_newline = '\n' in s or '\r' in s
+        if has_newline:
+            s = s.replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+
+        # Quote if contains comma or leading/trailing whitespace
+        if "," in s or s != s.strip():
             s = s.replace('"', '""')  # Escape internal quotes
             return f'"{s}"'
         return s
