@@ -1,0 +1,39 @@
+{
+  "node_count": 9716,
+  "edge_count": 284,
+  "density": 3.008763341057945e-06,
+  "avg_out_degree": 0.029230135858377932,
+  "avg_in_degree": 0.029230135858377932,
+  "max_out_degree": 3,
+  "max_in_degree": 8,
+  "action_distribution": {
+    "CITED": 252,
+    "CONSIDERED": 10,
+    "FOLLOWED": 21,
+    "OVERRULED": 1
+  },
+  "domain_distribution": {
+    "Administrative": 1145,
+    "Animal": 53,
+    "Commercial": 532,
+    "Criminal": 2019,
+    "Education": 151,
+    "Equity": 186,
+    "Family": 761,
+    "Health": 625,
+    "Legislation_Other": 39,
+    "Privacy": 264,
+    "Procedural": 433,
+    "Property": 1507,
+    "Resources": 1002,
+    "Specialized": 21,
+    "Tax": 133,
+    "Torts": 398,
+    "Employment": 94,
+    "Environment": 203,
+    "Unclassified": 103,
+    " by this my proclamation made under section 2 of the Commonwealth Powers (De Facto Relationships) Act 2006 fix 8 October 2008 as the day on which that Act commences.": 1,
+    "": 46
+  },
+  "isolated_nodes": 9280
+}

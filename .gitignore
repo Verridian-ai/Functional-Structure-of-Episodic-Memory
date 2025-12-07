@@ -161,3 +161,35 @@ tmp/
 # Workspace state files (runtime artifacts)
 data/workspaces/*_costs.json
 data/workspaces/*_state.json
+
+# Agent deliverable documentation (implementation artifacts)
+AGENT*.md
+BENCHMARKING_FRAMEWORK_SUMMARY.md
+SCREENSHOT_REMOVAL_*.md
+SCREENSHOT_REMOVAL_*.txt
+
+# UI test and development artifacts
+ui/AGENT*.md
+ui/CHROME_DEVTOOLS_TESTING.md
+ui/MOBILE*.md
+ui/screenshots/
+ui/scripts/
+ui/public/mobile-test.html
+ui/public/*-test*.png
+ui/public/*-visualization.png
+
+# Test/sample data directories
+data/sample_*/
+data/test_*/
+data/test_corpus*.jsonl
+
+# Sample configs (development only)
+configs/sample_*.yaml
+configs/*_flight.yaml
+
+# Large domain subdirectories
+data/processed/domains/cases/
+data/processed/domains/legislation/
+
+# Assets generated during development
+assets/images/ui-*/
