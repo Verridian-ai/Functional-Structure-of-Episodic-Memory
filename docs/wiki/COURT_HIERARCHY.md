@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Australian court system is organized in a hierarchical structure with 106+ distinct court codes, each assigned an authority score (0-100) based on binding precedent power. This hierarchy determines the weight and precedential value of judicial decisions in the classification system.
+The Australian court system is organized in a hierarchical structure with 80 distinct court codes, each assigned an authority score (0-100) based on binding precedent power. This hierarchy determines the weight and precedential value of judicial decisions in the classification system.
 
 ---
 
@@ -458,7 +458,7 @@ pattern = r'\[(\d{4})\]\s*([A-Za-z]{2,10})\s*(\d+)'
 
 ## Full Court Code Reference
 
-### Complete List (106+ Codes)
+### Complete List (80 Codes)
 
 **Federal**: HCA, FCAFC, FCA, FamCAFC, FamCA, FedCFamC, FCCA, AATA, AAT, FWC, FWCFB, IRC, AIRC, MRT, RRT, SSAT, VET, IPC, OAIC, NNTT
 
@@ -466,7 +466,7 @@ pattern = r'\[(\d{4})\]\s*([A-Za-z]{2,10})\s*(\d+)'
 
 **VIC**: VSCA, VSC, VCC, VMC, VChC, VICCOR, VCAT
 
-**QLD**: QCA, QSC, QDC, QMC, QCAT, ICQ
+**QLD**: QCA, QSC, QDC, QMC, QCAT, ICQ, QIRC
 
 **WA**: WASCA, WASC, WADC, WAMC, SAT, WAIRC
 
