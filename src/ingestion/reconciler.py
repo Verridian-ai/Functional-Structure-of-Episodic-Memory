@@ -5,7 +5,10 @@ from collections import Counter
 from pathlib import Path
 from src.logic.schema import LegalCase, Person, Object, State, Event, Entity
 from src.embeddings.vector_store import LocalVectorStore
-from src.logic.ontology_seed import STANDARD_ASSETS, STANDARD_OUTCOMES, STANDARD_EVENTS
+from src.logic.ontology_seed import (
+    STANDARD_ASSETS, STANDARD_OUTCOMES, STANDARD_EVENTS,
+    STANDARD_ROLES, STANDARD_STATES, STANDARD_RELATIONSHIPS
+)
 from src.utils.toon import ToonEncoder
 
 class Reconciler:
