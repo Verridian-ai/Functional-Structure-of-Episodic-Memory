@@ -252,6 +252,14 @@ COURT_CODES = {
         'authority_score': 65,
         'domain_hint': 'Employment',
     },
+    'QIRC': {
+        'name': 'Queensland Industrial Relations Commission',
+        'level': 'tribunal',
+        'jurisdiction': 'QLD',
+        'binding': False,
+        'authority_score': 50,
+        'domain_hint': 'Employment',
+    },
 
     # --- WESTERN AUSTRALIA ---
     'WASCA': {
@@ -859,5 +867,13 @@ def is_binding_authority(citing_court: str, cited_court: str) -> bool:
 
 
 def get_report_series_info(series_abbr: str) -> Optional[Dict]:
-    """Get information about a report series."""
-    return REPORT_SERIES.get(series_abbr.upper())
+    """Get information about a report series (case-insensitive lookup)."""
+    # Try exact match first
+    if series_abbr in REPORT_SERIES:
+        return REPORT_SERIES[series_abbr]
+    # Try case-insensitive match
+    series_upper = series_abbr.upper()
+    for key, value in REPORT_SERIES.items():
+        if key.upper() == series_upper:
+            return value
+    return None
