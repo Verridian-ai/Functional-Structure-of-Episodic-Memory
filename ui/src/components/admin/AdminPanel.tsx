@@ -37,15 +37,16 @@ export function AdminPanel() {
           </div>
           <button
             onClick={toggleAdmin}
-            className="p-2 hover:bg-zinc-800 rounded-lg transition"
+            className="p-2.5 min-w-[44px] min-h-[44px] flex items-center justify-center hover:bg-zinc-800 active:bg-zinc-700 rounded-lg transition touch-manipulation"
+            aria-label="Close settings"
           >
             <X className="w-5 h-5 text-zinc-400" />
           </button>
         </div>
 
         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
-          {/* Sidebar */}
-          <div className="w-full md:w-48 border-b md:border-b-0 md:border-r border-zinc-800 p-2 flex md:flex-col gap-2 overflow-x-auto flex-shrink-0 bg-zinc-900/50">
+          {/* Sidebar - Horizontal scroll on mobile with proper touch targets */}
+          <div className="w-full md:w-48 border-b md:border-b-0 md:border-r border-zinc-800 p-2 flex md:flex-col gap-1.5 md:gap-2 overflow-x-auto flex-shrink-0 bg-zinc-900/50 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
             {[
               { id: 'prompt', label: 'Prompt', icon: MessageSquare },
               { id: 'model', label: 'Model', icon: Brain },
@@ -56,14 +57,16 @@ export function AdminPanel() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as typeof activeTab)}
-                className={`flex items-center gap-3 px-4 py-3 md:py-2 rounded-lg text-sm transition whitespace-nowrap flex-1 md:flex-none justify-center md:justify-start ${
+                className={`flex items-center gap-2 md:gap-3 px-3 md:px-4 py-2.5 md:py-2 min-h-[44px] min-w-[44px] rounded-lg text-sm transition whitespace-nowrap flex-shrink-0 md:flex-shrink md:flex-1 justify-center md:justify-start touch-manipulation ${
                   activeTab === tab.id
-                    ? 'bg-cyan-600/20 text-cyan-300'
-                    : 'text-zinc-400 hover:bg-zinc-800'
+                    ? 'bg-cyan-600/20 text-cyan-300 border border-cyan-500/30'
+                    : 'text-zinc-400 hover:bg-zinc-800 active:bg-zinc-700'
                 }`}
+                aria-selected={activeTab === tab.id}
+                role="tab"
               >
-                <tab.icon className="w-5 h-5 md:w-4 md:h-4" />
-                <span className="hidden md:inline">{tab.label}</span>
+                <tab.icon className="w-5 h-5 md:w-4 md:h-4 flex-shrink-0" />
+                <span className="text-xs md:text-sm">{tab.label}</span>
               </button>
             ))}
           </div>
@@ -104,27 +107,28 @@ export function AdminPanel() {
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 md:px-6 py-4 border-t border-zinc-800 bg-zinc-900 flex-shrink-0">
+        <div className="flex items-center justify-between px-4 md:px-6 py-3 md:py-4 border-t border-zinc-800 bg-zinc-900 flex-shrink-0 gap-2">
           <button
             onClick={() => updateAgentConfig({
               systemPrompt: useStore.getState().agentConfig.systemPrompt
             })}
-            className="flex items-center gap-2 px-3 md:px-4 py-2 text-zinc-400 hover:text-white transition text-sm md:text-base"
+            className="flex items-center gap-2 px-3 md:px-4 py-2.5 min-h-[44px] text-zinc-400 hover:text-white active:text-white hover:bg-zinc-800 active:bg-zinc-700 rounded-lg transition text-sm md:text-base touch-manipulation"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-4 h-4 flex-shrink-0" />
             <span className="hidden md:inline">Reset to Default</span>
             <span className="md:hidden">Reset</span>
           </button>
           <button
             onClick={handleSave}
-            className={`flex items-center gap-2 px-4 md:px-6 py-2 rounded-lg transition text-sm md:text-base ${
+            className={`flex items-center justify-center gap-2 px-4 md:px-6 py-2.5 min-h-[44px] rounded-lg transition text-sm md:text-base touch-manipulation ${
               saved
                 ? 'bg-green-600 text-white'
-                : 'bg-cyan-600 hover:bg-cyan-500 text-white'
+                : 'bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-400 text-white'
             }`}
           >
-            {saved ? <Check className="w-4 h-4" /> : <Save className="w-4 h-4" />}
-            {saved ? 'Saved!' : 'Save Changes'}
+            {saved ? <Check className="w-4 h-4 flex-shrink-0" /> : <Save className="w-4 h-4 flex-shrink-0" />}
+            <span>{saved ? 'Saved!' : 'Save'}</span>
+            <span className="hidden sm:inline">{saved ? '' : 'Changes'}</span>
           </button>
         </div>
       </div>
@@ -143,15 +147,15 @@ function PromptTab({
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-white mb-2">System Prompt</label>
-        <p className="text-sm text-zinc-400 mb-4">
+        <p className="text-xs sm:text-sm text-zinc-400 mb-3 md:mb-4">
           This prompt defines how the AI assistant behaves. You can customize its personality,
           capabilities, and instructions.
         </p>
         <textarea
           value={systemPrompt}
           onChange={(e) => onUpdate(e.target.value)}
-          rows={20}
-          className="w-full p-4 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-sm font-mono resize-none focus:outline-none focus:border-cyan-500 transition"
+          rows={12}
+          className="w-full p-3 md:p-4 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-xs sm:text-sm font-mono resize-none focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition min-h-[200px] md:min-h-[300px]"
           placeholder="Enter system prompt..."
         />
       </div>
@@ -167,13 +171,13 @@ function ModelTab({
   onUpdate: (updates: Partial<AgentConfig>) => void;
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5 md:space-y-6">
       <div>
-        <label className="block text-sm font-medium text-white mb-2">Model</label>
+        <label className="block text-xs sm:text-sm font-medium text-white mb-1.5 md:mb-2">Model</label>
         <select
           value={config.model}
           onChange={(e) => onUpdate({ model: e.target.value })}
-          className="w-full p-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-cyan-500 transition"
+          className="w-full p-2.5 md:p-3 min-h-[44px] bg-zinc-800 border border-zinc-700 rounded-xl text-sm md:text-base text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition touch-manipulation"
         >
           {Object.entries(MODELS).map(([name, id]) => (
             <option key={id} value={id}>{name} ({id})</option>
@@ -182,7 +186,7 @@ function ModelTab({
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-white mb-2">
+        <label className="block text-xs sm:text-sm font-medium text-white mb-1.5 md:mb-2">
           Temperature: {config.temperature}
         </label>
         <input
@@ -192,21 +196,21 @@ function ModelTab({
           step="0.1"
           value={config.temperature}
           onChange={(e) => onUpdate({ temperature: parseFloat(e.target.value) })}
-          className="w-full accent-cyan-500"
+          className="w-full h-2 accent-cyan-500 touch-manipulation"
         />
-        <div className="flex justify-between text-xs text-zinc-500 mt-1">
+        <div className="flex justify-between text-[10px] sm:text-xs text-zinc-500 mt-1">
           <span>Precise (0)</span>
           <span>Creative (2)</span>
         </div>
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-white mb-2">Max Tokens</label>
+        <label className="block text-xs sm:text-sm font-medium text-white mb-1.5 md:mb-2">Max Tokens</label>
         <input
           type="number"
           value={config.maxTokens}
           onChange={(e) => onUpdate({ maxTokens: parseInt(e.target.value) })}
-          className="w-full p-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-cyan-500 transition"
+          className="w-full p-2.5 md:p-3 min-h-[44px] bg-zinc-800 border border-zinc-700 rounded-xl text-sm md:text-base text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500/50 transition touch-manipulation"
         />
       </div>
     </div>

@@ -241,47 +241,47 @@ export function VoicePanel({ onTranscript }: VoicePanelProps) {
     <>
       {/* Microphone Permission Consent Dialog */}
       {showConsentDialog && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" role="dialog" aria-modal="true" aria-labelledby="consent-title">
-          <div className="w-full max-w-md bg-zinc-900 rounded-2xl border border-cyan-500/30 p-6 shadow-2xl shadow-cyan-500/10">
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4" role="dialog" aria-modal="true" aria-labelledby="consent-title">
+          <div className="w-full sm:max-w-md bg-zinc-900 rounded-t-2xl sm:rounded-2xl border-t sm:border border-cyan-500/30 p-5 sm:p-6 shadow-2xl shadow-cyan-500/10 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                <Mic className="w-6 h-6 text-cyan-400" />
+              <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                <Mic className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
               </div>
-              <div>
-                <h3 id="consent-title" className="text-lg font-semibold text-white">Microphone Access Required</h3>
-                <p className="text-sm text-zinc-400">For voice input feature</p>
-              </div>
-            </div>
-
-            <div className="bg-zinc-800/50 rounded-xl p-4 mb-4 space-y-2">
-              <div className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-zinc-300">Your voice data is processed locally in your browser</p>
-              </div>
-              <div className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-zinc-300">No audio recordings are stored or transmitted</p>
-              </div>
-              <div className="flex items-start gap-2">
-                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
-                <p className="text-sm text-zinc-300">You can revoke access at any time in browser settings</p>
+              <div className="min-w-0 flex-1">
+                <h3 id="consent-title" className="text-base sm:text-lg font-semibold text-white">Microphone Access Required</h3>
+                <p className="text-xs sm:text-sm text-zinc-400">For voice input feature</p>
               </div>
             </div>
 
-            <p className="text-sm text-zinc-400 mb-6">
+            <div className="bg-zinc-800/50 rounded-xl p-3 sm:p-4 mb-4 space-y-2">
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-xs sm:text-sm text-zinc-300">Your voice data is processed locally in your browser</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-xs sm:text-sm text-zinc-300">No audio recordings are stored or transmitted</p>
+              </div>
+              <div className="flex items-start gap-2">
+                <ShieldCheck className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <p className="text-xs sm:text-sm text-zinc-300">You can revoke access at any time in browser settings</p>
+              </div>
+            </div>
+
+            <p className="text-xs sm:text-sm text-zinc-400 mb-5 sm:mb-6">
               Clicking &ldquo;Allow&rdquo; will prompt your browser to request microphone permission.
             </p>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-3">
               <button
                 onClick={() => setShowConsentDialog(false)}
-                className="flex-1 px-4 py-3 rounded-xl border border-zinc-700 text-zinc-300 hover:bg-zinc-800 transition"
+                className="flex-1 px-4 py-3 min-h-[48px] rounded-xl border border-zinc-700 text-zinc-300 hover:bg-zinc-800 active:bg-zinc-700 transition text-sm sm:text-base touch-manipulation"
               >
                 Cancel
               </button>
               <button
                 onClick={requestMicrophoneAccess}
-                className="flex-1 px-4 py-3 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-medium transition"
+                className="flex-1 px-4 py-3 min-h-[48px] rounded-xl bg-cyan-600 hover:bg-cyan-500 active:bg-cyan-400 text-white font-medium transition text-sm sm:text-base touch-manipulation"
               >
                 Allow Microphone
               </button>
