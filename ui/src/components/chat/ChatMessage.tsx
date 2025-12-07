@@ -36,35 +36,35 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
   }, []);
 
   return (
-    <div className={`group py-3 sm:py-5 transition-colors ${
+    <div className={`group py-2 sm:py-3 md:py-5 transition-colors ${
       isUser
         ? 'bg-transparent'
-        : 'rounded-xl sm:rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-3 sm:px-4'
+        : 'rounded-xl sm:rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-2.5 sm:px-3 md:px-4'
     }`}>
-      <div className="flex gap-2.5 sm:gap-4">
+      <div className="flex gap-2 sm:gap-3 md:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
-          <div className={`w-7 h-7 sm:w-9 sm:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg ${
+          <div className={`w-6 h-6 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-lg sm:rounded-xl flex items-center justify-center shadow-lg ${
             isUser
               ? 'bg-zinc-800 text-zinc-400'
               : 'bg-emerald-600 text-white'
           }`}>
             {isUser ? (
-              <User className="w-4 h-4 sm:w-5 sm:h-5" />
+              <User className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
             ) : (
-              <BrainCircuit className="w-4 h-4 sm:w-5 sm:h-5" />
+              <BrainCircuit className="w-3.5 h-3.5 sm:w-4 sm:h-4 md:w-5 md:h-5" />
             )}
           </div>
         </div>
 
         {/* Content */}
-        <div className="flex-1 min-w-0 space-y-2 sm:space-y-3">
+        <div className="flex-1 min-w-0 space-y-1.5 sm:space-y-2 md:space-y-3 max-w-full overflow-hidden">
           {/* Header */}
-          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
-            <span className="font-medium text-xs sm:text-sm text-zinc-200">
+          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 flex-wrap">
+            <span className="font-medium text-[11px] sm:text-xs md:text-sm text-zinc-200">
               {isUser ? 'You' : 'Legal AI'}
             </span>
-            <span className="text-[10px] sm:text-xs text-zinc-500">
+            <span className="text-[9px] sm:text-[10px] md:text-xs text-zinc-500">
               {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
@@ -79,11 +79,11 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
           )}
 
           {/* Message Content */}
-          <div className="prose prose-invert prose-sm max-w-none text-sm sm:text-base">
+          <div className="prose prose-invert prose-sm max-w-none text-[13px] sm:text-sm md:text-base break-words">
             {message.isStreaming && !message.content ? (
-              <div className="flex items-center gap-2 sm:gap-3 text-zinc-400 py-1.5 sm:py-2">
+              <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 text-zinc-400 py-1 sm:py-1.5 md:py-2">
                 <SynapseLoader size="sm" />
-                <span className="text-xs sm:text-sm animate-pulse">Processing...</span>
+                <span className="text-[11px] sm:text-xs md:text-sm animate-pulse">Processing...</span>
               </div>
             ) : (
               <ReactMarkdown
@@ -106,11 +106,11 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
                     const isCopied = copiedId === codeId;
 
                     return (
-                      <div className="relative group/code my-4">
+                      <div className="relative group/code my-2 sm:my-3 md:my-4">
                         {/* Header */}
-                        <div className="flex items-center justify-between px-4 py-2 bg-zinc-900 border border-white/10 border-b-0 rounded-t-xl">
-                          <span className="text-xs text-zinc-400 font-medium">{match[1]}</span>
-                          <div className="flex items-center gap-1 opacity-0 group-hover/code:opacity-100 transition-opacity">
+                        <div className="flex items-center justify-between px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 bg-zinc-900 border border-white/10 border-b-0 rounded-t-lg sm:rounded-t-xl">
+                          <span className="text-[10px] sm:text-xs text-zinc-400 font-medium">{match[1]}</span>
+                          <div className="flex items-center gap-0.5 sm:gap-1 opacity-100 sm:opacity-0 sm:group-hover/code:opacity-100 transition-opacity">
                             <button
                               onClick={() => copyToClipboard(codeContent, codeId)}
                               className={`p-1.5 rounded-lg transition-all flex items-center gap-1 ${
@@ -147,8 +147,8 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
                           </div>
                         </div>
                         {/* Code */}
-                        <pre className="bg-zinc-950/80 p-4 rounded-b-xl border border-white/10 border-t-0 overflow-x-auto">
-                          <code className={`${className} text-[13px]`} {...props}>
+                        <pre className="bg-zinc-950/80 p-2 sm:p-3 md:p-4 rounded-b-lg sm:rounded-b-xl border border-white/10 border-t-0 overflow-x-auto text-[11px] sm:text-xs md:text-[13px]">
+                          <code className={`${className}`} {...props}>
                             {children}
                           </code>
                         </pre>
@@ -156,29 +156,29 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
                     );
                   },
                   p({ children }) {
-                    return <p className="mb-3 last:mb-0 leading-relaxed text-zinc-300">{children}</p>;
+                    return <p className="mb-2 sm:mb-3 last:mb-0 leading-relaxed text-zinc-300">{children}</p>;
                   },
                   ul({ children }) {
-                    return <ul className="mb-3 pl-4 space-y-1 list-disc marker:text-emerald-500">{children}</ul>;
+                    return <ul className="mb-2 sm:mb-3 pl-3 sm:pl-4 space-y-0.5 sm:space-y-1 list-disc marker:text-emerald-500">{children}</ul>;
                   },
                   ol({ children }) {
-                    return <ol className="mb-3 pl-4 space-y-1 list-decimal marker:text-emerald-500">{children}</ol>;
+                    return <ol className="mb-2 sm:mb-3 pl-3 sm:pl-4 space-y-0.5 sm:space-y-1 list-decimal marker:text-emerald-500">{children}</ol>;
                   },
                   li({ children }) {
                     return <li className="text-zinc-300">{children}</li>;
                   },
                   h1({ children }) {
-                    return <h1 className="text-xl font-bold text-white mb-3 mt-4 first:mt-0">{children}</h1>;
+                    return <h1 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-3 mt-3 sm:mt-4 first:mt-0">{children}</h1>;
                   },
                   h2({ children }) {
-                    return <h2 className="text-lg font-semibold text-white mb-2 mt-4 first:mt-0">{children}</h2>;
+                    return <h2 className="text-base sm:text-lg font-semibold text-white mb-1.5 sm:mb-2 mt-3 sm:mt-4 first:mt-0">{children}</h2>;
                   },
                   h3({ children }) {
-                    return <h3 className="text-base font-semibold text-white mb-2 mt-3 first:mt-0">{children}</h3>;
+                    return <h3 className="text-sm sm:text-base font-semibold text-white mb-1.5 sm:mb-2 mt-2 sm:mt-3 first:mt-0">{children}</h3>;
                   },
                   blockquote({ children }) {
                     return (
-                      <blockquote className="border-l-2 border-emerald-500/50 pl-4 my-3 text-zinc-400 italic">
+                      <blockquote className="border-l-2 border-emerald-500/50 pl-2 sm:pl-3 md:pl-4 my-2 sm:my-3 text-zinc-400 italic">
                         {children}
                       </blockquote>
                     );
@@ -204,31 +204,31 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
 
           {/* Artifacts */}
           {message.artifacts && message.artifacts.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1.5 sm:pt-2">
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-1.5 md:pt-2">
               {message.artifacts.map((artifact) => (
                 <button
                   key={artifact.id}
                   onClick={() => handleArtifactClick(artifact)}
-                  className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-2 sm:py-2.5 bg-zinc-900/50 rounded-lg sm:rounded-xl border border-white/10 hover:border-emerald-500/30 active:border-emerald-500/30 transition-all group/artifact touch-target"
+                  className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 md:py-2.5 bg-zinc-900/50 rounded-lg sm:rounded-xl border border-white/10 hover:border-emerald-500/30 active:border-emerald-500/30 transition-all group/artifact touch-target"
                 >
-                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg flex items-center justify-center ${
+                  <div className={`w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 rounded-md sm:rounded-lg flex items-center justify-center ${
                     artifact.type === 'code'
                       ? 'bg-emerald-900/20'
                       : 'bg-zinc-800'
                   }`}>
                     {artifact.type === 'code' ? (
-                      <Code className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />
+                      <Code className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-emerald-400" />
                     ) : (
-                      <FileText className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-400 group-hover/artifact:text-emerald-400 transition-colors" />
+                      <FileText className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-zinc-400 group-hover/artifact:text-emerald-400 transition-colors" />
                     )}
                   </div>
                   <div className="text-left">
-                    <div className="text-xs sm:text-sm font-medium text-zinc-200 group-hover/artifact:text-emerald-300 transition-colors truncate max-w-[100px] sm:max-w-none">
+                    <div className="text-[11px] sm:text-xs md:text-sm font-medium text-zinc-200 group-hover/artifact:text-emerald-300 transition-colors truncate max-w-[80px] sm:max-w-[100px] md:max-w-none">
                       {artifact.title}
                     </div>
-                    <div className="text-[10px] sm:text-xs text-zinc-500">{artifact.type}</div>
+                    <div className="text-[9px] sm:text-[10px] md:text-xs text-zinc-500">{artifact.type}</div>
                   </div>
-                  <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-600 group-hover/artifact:text-emerald-400 ml-1 sm:ml-2 transition-colors flex-shrink-0" />
+                  <ExternalLink className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-zinc-600 group-hover/artifact:text-emerald-400 ml-0.5 sm:ml-1 md:ml-2 transition-colors flex-shrink-0" />
                 </button>
               ))}
             </div>
@@ -245,13 +245,13 @@ function ToolCallDisplay({ toolCall }: { toolCall: ToolCall }) {
   const getStatusIcon = () => {
     switch (toolCall.status) {
       case 'running':
-        return <Loader2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400 animate-spin" />;
+        return <Loader2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-emerald-400 animate-spin" />;
       case 'completed':
-        return <CheckCircle2 className="w-3 h-3 sm:w-4 sm:h-4 text-emerald-400" />;
+        return <CheckCircle2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-emerald-400" />;
       case 'error':
-        return <AlertCircle className="w-3 h-3 sm:w-4 sm:h-4 text-red-400" />;
+        return <AlertCircle className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-red-400" />;
       default:
-        return <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-zinc-500" />;
+        return <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3 md:w-4 md:h-4 text-zinc-500" />;
     }
   };
 
@@ -269,28 +269,28 @@ function ToolCallDisplay({ toolCall }: { toolCall: ToolCall }) {
   };
 
   return (
-    <div className="space-y-1.5 sm:space-y-2">
+    <div className="space-y-1 sm:space-y-1.5 md:space-y-2">
       <button
         onClick={() => toolCall.result && setExpanded(!expanded)}
-        className={`inline-flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border text-xs sm:text-sm ${getStatusColor()} ${toolCall.result ? 'cursor-pointer hover:bg-white/5 active:bg-white/5' : ''} touch-target`}
+        className={`inline-flex items-center gap-1 sm:gap-1.5 md:gap-2 px-1.5 sm:px-2 md:px-3 py-1 sm:py-1.5 md:py-2 rounded-lg sm:rounded-xl border text-[10px] sm:text-xs md:text-sm ${getStatusColor()} ${toolCall.result ? 'cursor-pointer hover:bg-white/5 active:bg-white/5' : ''} touch-target`}
       >
         {getStatusIcon()}
-        <span className="text-emerald-400 font-medium truncate max-w-[120px] sm:max-w-none">{toolCall.name}</span>
+        <span className="text-emerald-400 font-medium truncate max-w-[80px] sm:max-w-[120px] md:max-w-none">{toolCall.name}</span>
         {toolCall.arguments && Object.keys(toolCall.arguments).length > 0 && (
-          <span className="text-zinc-500 text-[10px] sm:text-xs hidden sm:inline">
+          <span className="text-zinc-500 text-[9px] sm:text-[10px] md:text-xs hidden md:inline">
             ({Object.entries(toolCall.arguments).slice(0, 2).map(([k, v]) =>
               `${k}: ${String(v).slice(0, 20)}${String(v).length > 20 ? '...' : ''}`
             ).join(', ')})
           </span>
         )}
         {toolCall.result && (
-          <span className="text-zinc-500 text-[10px] sm:text-xs ml-0.5 sm:ml-1">
+          <span className="text-zinc-500 text-[9px] sm:text-[10px] md:text-xs ml-0.5">
             {expanded ? '▼' : '▶'}
           </span>
         )}
       </button>
       {expanded && toolCall.result && (
-        <div className="ml-2 sm:ml-4 p-2 sm:p-3 bg-black/40 rounded-lg border border-white/10 text-xs sm:text-sm text-zinc-300 whitespace-pre-wrap font-mono max-h-32 sm:max-h-48 overflow-auto">
+        <div className="ml-1.5 sm:ml-2 md:ml-4 p-1.5 sm:p-2 md:p-3 bg-black/40 rounded-lg border border-white/10 text-[10px] sm:text-xs md:text-sm text-zinc-300 whitespace-pre-wrap font-mono max-h-24 sm:max-h-32 md:max-h-48 overflow-auto">
           {toolCall.result}
         </div>
       )}

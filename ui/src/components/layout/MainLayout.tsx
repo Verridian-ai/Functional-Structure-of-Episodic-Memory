@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import {
-  MessageSquare, FileText, Settings, Menu, Plus,
-  ChevronLeft, Trash2, Brain, Sun, Moon, Home, Network, Sparkles
+  MessageSquare, Menu, Plus, ChevronLeft, Trash2, Brain,
+  Sun, Moon, Home, Network, Sparkles, X
 } from 'lucide-react';
 import Link from 'next/link';
 import { useStore } from '@/lib/store';
@@ -15,7 +15,7 @@ interface MainLayoutProps {
 }
 
 export function MainLayout({ children, onNewChat }: MainLayoutProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
@@ -70,18 +70,19 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
     setTouchStart(null);
   };
 
-  // Mobile responsiveness: close sidebar by default on mobile
+  // Mobile responsiveness: detect screen size and adjust sidebar
   useEffect(() => {
     const handleResize = () => {
         const width = window.innerWidth;
-        // Close sidebar on mobile (< 768px), open on tablet+ (>= 768px)
-        if (width < 768) {
+
+        // Close sidebar on mobile/tablet (< 1024px), open on desktop (>= 1024px)
+        if (width < 1024) {
             setSidebarOpen(false);
         } else {
             setSidebarOpen(true);
         }
     };
-    
+
     // Initial check
     handleResize();
 
@@ -104,26 +105,36 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       <div className="fixed inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 pointer-events-none z-[0]" />
       <div className="fixed inset-0 gradient-mesh pointer-events-none z-[1]" />
       
-      {/* Mobile Overlay */}
-      {sidebarOpen && (
-        <div 
-            className="fixed inset-0 bg-black/50 z-20 md:hidden backdrop-blur-sm"
-            onClick={() => setSidebarOpen(false)}
-        />
-      )}
+      {/* Mobile Overlay - Backdrop when sidebar is open on mobile/tablet */}
+      <div
+        className={`
+          fixed inset-0 bg-black/60 backdrop-blur-sm
+          transition-opacity duration-300 ease-in-out
+          lg:hidden
+          ${sidebarOpen ? 'opacity-100 z-40' : 'opacity-0 z-[-1] pointer-events-none'}
+        `}
+        onClick={() => setSidebarOpen(false)}
+        aria-hidden="true"
+      />
 
       {/* Sidebar */}
       <aside
         className={`
-            fixed md:relative z-30 h-full
-            ${sidebarOpen ? 'translate-x-0 w-[280px] sm:w-[300px] md:w-[320px] lg:w-80' : '-translate-x-full md:translate-x-0 md:w-0'}
-            flex flex-col bg-zinc-950/95 backdrop-blur-3xl border-r border-white/5 transition-all duration-300 ease-in-out overflow-hidden shadow-2xl
+          fixed lg:relative h-full
+          w-[280px] sm:w-[300px] md:w-[320px] lg:w-80
+          flex flex-col bg-zinc-950/98 lg:bg-zinc-950/95 backdrop-blur-3xl
+          border-r border-white/5
+          transition-transform duration-300 ease-in-out
+          shadow-2xl lg:shadow-xl
+          ${sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full z-50'}
+          lg:translate-x-0 lg:z-30
+          ${!sidebarOpen ? 'lg:w-0 lg:min-w-0 lg:border-r-0' : ''}
         `}
       >
-        {/* Sidebar Header Section - Logo */}
-        <div className="flex-shrink-0 pt-4 sm:pt-5 md:pt-6 pb-4" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
-          {/* Logo - Switch based on theme */}
-          <div className="flex items-center gap-2.5 sm:gap-3">
+        {/* Sidebar Header Section - Logo and Close Button */}
+        <div className="flex-shrink-0 pt-4 sm:pt-5 md:pt-6 pb-4 px-4">
+          {/* Logo and Close Button Row */}
+          <div className="flex items-center justify-between">
             <div className="relative w-32 h-12 sm:w-36 sm:h-14 md:w-40 md:h-16 flex items-center justify-center flex-shrink-0">
               <Image
                 src={theme === 'dark' ? '/Law_OS_Dark_Mode_Logo.png' : '/Law_OS_Light_Mode_Logo.png'}
@@ -134,16 +145,24 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                 priority
               />
             </div>
+            {/* Mobile Close Button - Only visible on mobile/tablet */}
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden p-2.5 hover:bg-white/10 active:bg-white/15 rounded-xl transition-colors touch-target"
+              aria-label="Close sidebar"
+            >
+              <X className="w-5 h-5 text-zinc-400" />
+            </button>
           </div>
         </div>
 
         {/* New Chat Button */}
-        <div className="flex-shrink-0 mb-6" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        <div className="flex-shrink-0 mb-6 px-4">
           <button
             id="new-project-button"
             onClick={() => {
                 onNewChat();
-                if (window.innerWidth < 768) setSidebarOpen(false);
+                if (window.innerWidth < 1024) setSidebarOpen(false);
             }}
             className="group w-full flex items-center justify-center gap-2.5 px-4 h-11 sm:h-12 bg-white/[0.08] hover:bg-white/[0.12] border border-white/10 hover:border-white/20 text-white rounded-xl sm:rounded-2xl font-semibold transition-all duration-200 active:scale-[0.98] touch-target shadow-sm"
           >
@@ -153,7 +172,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         </div>
 
         {/* Search Section */}
-        <div className="flex-shrink-0 mb-6" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        <div className="flex-shrink-0 mb-6 px-4">
           <input
             type="text"
             value={searchQuery}
@@ -164,13 +183,13 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         </div>
 
         {/* Recent Activity Label */}
-        <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-3" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        <div className="mb-3 flex items-center justify-between border-b border-white/5 pb-3 px-4">
             <span className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider">Recents</span>
             <span className="text-[10px] text-zinc-500 font-mono bg-white/5 px-1.5 py-0.5 rounded">{filteredConversations.length}</span>
         </div>
 
         {/* Conversations List */}
-        <div className="flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        <div className="flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar px-4">
           {filteredConversations.length === 0 ? (
             <div className="empty-state-container flex flex-col items-center justify-center py-12 sm:py-16 px-4 text-center rounded-2xl mt-4">
               <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-5 rounded-xl sm:rounded-2xl bg-zinc-800/50 border border-dashed border-zinc-600/50 flex items-center justify-center">
@@ -197,7 +216,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                   }`}
                   onClick={() => {
                       setCurrentConversation(conv.id);
-                      if (window.innerWidth < 768) setSidebarOpen(false);
+                      if (window.innerWidth < 1024) setSidebarOpen(false);
                   }}
                 >
                   <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 transition-colors ${
@@ -242,7 +261,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         </div>
 
         {/* Sidebar Footer */}
-        <div className="flex-shrink-0 py-3 border-t border-white/10 safe-area-pb" style={{ paddingLeft: '16px', paddingRight: '16px' }}>
+        <div className="flex-shrink-0 py-3 border-t border-white/10 safe-area-pb px-4">
             {/* Dashboard Button */}
             <button
                 className="w-full flex items-center gap-3 px-3 py-2.5 mb-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/[0.05] transition-all"
@@ -281,12 +300,14 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-w-0 relative z-[2]">
-        {/* Top Bar - Responsive */}
-        <header className="flex-shrink-0 flex items-center justify-between px-3 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-4 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5 safe-area-pt">
-          <div className="flex items-center gap-2 sm:gap-3">
+        {/* Top Bar - Fully Responsive Header */}
+        <header className="flex-shrink-0 flex items-center justify-between px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5 safe-area-pt min-h-[56px] sm:min-h-[64px]">
+          {/* Left Section - Menu Button and Mobile Logo */}
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+            {/* Hamburger/Sidebar Toggle Button */}
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 sm:p-2.5 hover:bg-white/5 active:bg-white/10 rounded-lg sm:rounded-xl transition-colors touch-target"
+              className="p-2.5 hover:bg-white/5 active:bg-white/10 rounded-xl transition-colors touch-target flex items-center justify-center"
               aria-label={sidebarOpen ? 'Close sidebar' : 'Open sidebar'}
             >
               {sidebarOpen ? (
@@ -295,31 +316,58 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                 <Menu className="w-5 h-5 sm:w-6 sm:h-6 text-zinc-400" />
               )}
             </button>
+
+            {/* Mobile Logo - Only visible on mobile/tablet when sidebar is closed */}
+            {!sidebarOpen && (
+              <div className="lg:hidden flex items-center">
+                <Image
+                  src={theme === 'dark' ? '/Law_OS_Dark_Mode_Logo.png' : '/Law_OS_Light_Mode_Logo.png'}
+                  alt="LAW OS"
+                  width={80}
+                  height={32}
+                  className="object-contain h-7 sm:h-8 w-auto"
+                  priority
+                />
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Knowledge Graph Quick Access */}
+          {/* Right Section - Action Buttons */}
+          <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 flex-shrink-0">
+            {/* Knowledge Graph Quick Access - Icon only on very small screens */}
             <Link
               href="/visualize"
-              className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-cyan-500/10 hover:bg-cyan-500/20 rounded-full border border-cyan-500/30 hover:border-cyan-500/50 transition-all group"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:px-3 sm:py-2 bg-cyan-500/10 hover:bg-cyan-500/20 rounded-full border border-cyan-500/30 hover:border-cyan-500/50 transition-all group touch-target"
               title="Open Knowledge Graph"
             >
-              <Network className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-cyan-400 group-hover:text-cyan-300" />
-              <span className="text-[10px] sm:text-xs text-cyan-300 hidden sm:inline">Graph</span>
+              <Network className="w-4 h-4 text-cyan-400 group-hover:text-cyan-300" />
+              <span className="text-xs text-cyan-300 hidden sm:inline">Graph</span>
             </Link>
 
-            {/* Model Badge - Condensed on mobile */}
-            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 sm:py-2 bg-white/5 rounded-full border border-white/10">
-              <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full status-online bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)]" />
-              <span className="text-[10px] sm:text-xs text-zinc-300 hidden min-[375px]:inline">Gemini 3 Pro</span>
-              <span className="text-[10px] sm:text-xs text-zinc-300 min-[375px]:hidden">AI</span>
+            {/* Model Badge - Responsive sizing */}
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-white/5 rounded-full border border-white/10">
+              <div className="w-2 h-2 rounded-full status-online bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.4)] flex-shrink-0" />
+              <span className="text-[10px] sm:text-xs text-zinc-300 hidden sm:inline truncate max-w-[100px] md:max-w-none">Gemini 3 Pro</span>
             </div>
 
-            {/* Knowledge Base Badge - Hidden on mobile */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+            {/* Knowledge Base Badge - Hidden on mobile and tablet */}
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
               <Brain className="w-3.5 h-3.5 text-zinc-300" />
               <span className="text-xs text-zinc-300">GSW Connected</span>
             </div>
+
+            {/* Theme Toggle Button - Visible on small screens only */}
+            <button
+              onClick={toggleTheme}
+              className="sm:hidden p-2.5 hover:bg-white/5 active:bg-white/10 rounded-xl transition-colors touch-target flex items-center justify-center"
+              aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            >
+              {theme === 'dark' ? (
+                <Moon className="w-5 h-5 text-amber-400" />
+              ) : (
+                <Sun className="w-5 h-5 text-amber-500" />
+              )}
+            </button>
           </div>
         </header>
 

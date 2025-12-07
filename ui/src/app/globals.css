@@ -309,6 +309,60 @@
   background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
 }
 
+/* ===========================================
+   HEADER - MOBILE RESPONSIVE ENHANCEMENTS
+   =========================================== */
+
+/* Mobile header adjustments */
+@media (max-width: 639px) {
+  header {
+    min-height: 56px !important;
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  /* Tighter spacing on very small screens */
+  header > div {
+    gap: 0.375rem !important;
+  }
+
+  /* Mobile logo in header - proper sizing */
+  header img[alt="LAW OS"] {
+    height: 1.75rem !important;
+    width: auto !important;
+  }
+}
+
+/* Tablet header adjustments */
+@media (min-width: 640px) and (max-width: 1023px) {
+  header {
+    min-height: 64px !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  header img[alt="LAW OS"] {
+    height: 2rem !important;
+    width: auto !important;
+  }
+}
+
+/* Header action buttons - touch-friendly */
+header button,
+header a {
+  transition: all 0.15s ease-out;
+}
+
+header button:active,
+header a:active {
+  transform: scale(0.95);
+}
+
+/* Light mode mobile header logo */
+[data-theme="light"] header img[alt="LAW OS"] {
+  filter: none !important;
+}
+
 /* Light mode main content area - Warm cream gradient */
 [data-theme="light"] main {
   background: linear-gradient(180deg, #faf8f5 0%, #f5f2ed 50%, #f0ece5 100%) !important;
@@ -512,6 +566,30 @@ body {
 .touch-target {
   min-height: 44px;
   min-width: 44px;
+}
+
+/* Touch manipulation for better touch response */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Thin scrollbar utility */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar-thumb-zinc-700::-webkit-scrollbar-thumb {
+  background: rgba(63, 63, 70, 0.6);
+  border-radius: 2px;
+}
+
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 /* Prevent text selection on touch */
@@ -1326,4 +1404,438 @@ body {
     0 0 0 1px rgba(255, 255, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     0 0 40px rgba(16, 185, 129, 0.15);
+}
+
+/* ===========================================
+   MOBILE SIDEBAR ENHANCEMENTS
+   =========================================== */
+
+/* Mobile sidebar slide animation - Enhanced shadow for overlay effect */
+@media (max-width: 1023px) {
+  aside {
+    box-shadow:
+      4px 0 20px rgba(0, 0, 0, 0.3),
+      8px 0 40px rgba(0, 0, 0, 0.2) !important;
+  }
+}
+
+/* Sidebar close button hover effect */
+aside button[aria-label="Close sidebar"]:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+aside button[aria-label="Close sidebar"]:active {
+  background: rgba(255, 255, 255, 0.15);
+  transform: scale(0.95);
+}
+
+/* Light mode mobile sidebar enhancements */
+[data-theme="light"] aside {
+  box-shadow:
+    4px 0 30px rgba(0, 0, 0, 0.08),
+    2px 0 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+@media (max-width: 1023px) {
+  [data-theme="light"] aside {
+    box-shadow:
+      4px 0 30px rgba(0, 0, 0, 0.15),
+      8px 0 50px rgba(0, 0, 0, 0.1) !important;
+  }
+}
+
+/* Mobile sidebar close button for light mode */
+[data-theme="light"] aside button[aria-label="Close sidebar"] svg {
+  color: #4a4a4a !important;
+}
+
+[data-theme="light"] aside button[aria-label="Close sidebar"]:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] aside button[aria-label="Close sidebar"]:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* ===========================================
+   CANVAS PANEL - LIGHT/DARK MODE SUPPORT
+   =========================================== */
+
+/* Canvas Panel Container - Base dark mode styling */
+.canvas-panel {
+  background: rgba(9, 9, 11, 1);
+  color: #fafafa;
+}
+
+@media (min-width: 768px) {
+  .canvas-panel {
+    background: rgba(9, 9, 11, 0.4);
+  }
+}
+
+/* Canvas Panel - Light mode styling */
+[data-theme="light"] .canvas-panel {
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 100%) !important;
+  color: var(--text-primary) !important;
+  border-color: rgba(120, 100, 80, 0.12) !important;
+  box-shadow:
+    -2px 0 20px rgba(0, 0, 0, 0.04),
+    -1px 0 4px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* Canvas header - Light mode */
+[data-theme="light"] .canvas-panel .canvas-header {
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 100%) !important;
+  border-color: rgba(120, 100, 80, 0.08) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-header h2 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-header .text-zinc-400 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-header .text-white {
+  color: var(--text-primary) !important;
+}
+
+/* Canvas header buttons - Light mode */
+[data-theme="light"] .canvas-panel button {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel button:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel button.bg-white\/10,
+[data-theme="light"] .canvas-panel button[class*="bg-white"] {
+  background: rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Canvas header badge - Light mode */
+[data-theme="light"] .canvas-panel .bg-white\/5 {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: var(--text-tertiary) !important;
+}
+
+/* Canvas tabs - Light mode */
+[data-theme="light"] .canvas-panel .canvas-tabs {
+  background: transparent !important;
+  border-color: rgba(120, 100, 80, 0.08) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-tabs button {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-tabs button:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-tabs button.bg-white\/10 {
+  background: rgba(251, 191, 36, 0.12) !important;
+  border-color: rgba(251, 191, 36, 0.25) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Canvas content area - Light mode */
+[data-theme="light"] .canvas-panel .canvas-content {
+  background: transparent !important;
+}
+
+/* Canvas empty state - Light mode */
+[data-theme="light"] .canvas-panel .canvas-empty-state {
+  color: var(--text-tertiary) !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-empty-state svg {
+  color: var(--text-tertiary) !important;
+  opacity: 0.4 !important;
+}
+
+[data-theme="light"] .canvas-panel .canvas-empty-state p {
+  color: var(--text-secondary) !important;
+}
+
+/* Canvas footer - Light mode */
+[data-theme="light"] .canvas-panel .canvas-footer {
+  background: rgba(0, 0, 0, 0.02) !important;
+  border-color: rgba(120, 100, 80, 0.08) !important;
+  color: var(--text-tertiary) !important;
+}
+
+/* Canvas layout menu dropdown - Light mode */
+[data-theme="light"] .canvas-panel .layout-menu {
+  background: #ffffff !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu h3,
+[data-theme="light"] .canvas-panel .layout-menu h4 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu .text-zinc-400,
+[data-theme="light"] .canvas-panel .layout-menu .text-zinc-500 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu .bg-zinc-800 {
+  background: #f5f2ed !important;
+  border: 1px solid rgba(120, 100, 80, 0.1) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu .bg-zinc-800:hover {
+  background: #ebe7e0 !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu .text-zinc-300 {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu select {
+  background: #ffffff !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .layout-menu .border-zinc-800 {
+  border-color: rgba(120, 100, 80, 0.1) !important;
+}
+
+/* Canvas image modal - Light mode */
+[data-theme="light"] .canvas-panel .image-modal-backdrop {
+  background: rgba(255, 255, 255, 0.9) !important;
+}
+
+[data-theme="light"] .canvas-panel .image-modal {
+  background: #ffffff !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.15),
+    0 8px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .canvas-panel .image-modal h3 {
+  color: #d97706 !important;
+}
+
+[data-theme="light"] .canvas-panel .image-modal textarea {
+  background: #faf8f5 !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .canvas-panel .image-modal textarea::placeholder {
+  color: var(--text-tertiary) !important;
+}
+
+/* Canvas export menu - Light mode */
+[data-theme="light"] .canvas-panel .export-menu {
+  background: #ffffff !important;
+  border-color: rgba(120, 100, 80, 0.12) !important;
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .canvas-panel .export-menu button {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel .export-menu button:hover {
+  background: #f5f2ed !important;
+  color: var(--text-primary) !important;
+}
+
+/* Canvas prose/content - Light mode */
+[data-theme="light"] .canvas-panel .prose-invert {
+  --tw-prose-body: var(--text-primary) !important;
+  --tw-prose-headings: var(--text-primary) !important;
+  --tw-prose-lead: var(--text-secondary) !important;
+  --tw-prose-links: #d97706 !important;
+  --tw-prose-bold: var(--text-primary) !important;
+  --tw-prose-counters: var(--text-secondary) !important;
+  --tw-prose-bullets: var(--text-tertiary) !important;
+  --tw-prose-hr: rgba(120, 100, 80, 0.15) !important;
+  --tw-prose-quotes: var(--text-primary) !important;
+  --tw-prose-quote-borders: rgba(120, 100, 80, 0.3) !important;
+  --tw-prose-code: #d97706 !important;
+  --tw-prose-pre-code: var(--text-primary) !important;
+  --tw-prose-pre-bg: #f5f2ed !important;
+}
+
+[data-theme="light"] .canvas-panel .text-zinc-300,
+[data-theme="light"] .canvas-panel code {
+  color: var(--text-primary) !important;
+}
+
+/* Canvas editing textarea - Light mode */
+[data-theme="light"] .canvas-panel textarea {
+  background: transparent !important;
+  color: var(--text-primary) !important;
+}
+
+/* Canvas mobile close button override - Light mode */
+[data-theme="light"] .canvas-panel .mobile-close-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .canvas-panel .mobile-close-btn:hover {
+  background: rgba(255, 255, 255, 1) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Canvas highlighted selection - Light mode */
+[data-theme="light"] .canvas-panel .selection\:bg-yellow-500\/50::selection {
+  background: rgba(251, 191, 36, 0.4) !important;
+}
+
+/* Canvas panel container on page.tsx - Light mode */
+[data-theme="light"] .canvas-panel-container {
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 100%) !important;
+  border-color: rgba(120, 100, 80, 0.12) !important;
+}
+
+/* Mobile close button - Light mode */
+[data-theme="light"] .mobile-close-btn {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(120, 100, 80, 0.15) !important;
+}
+
+[data-theme="light"] .mobile-close-btn:hover {
+  background: rgba(255, 255, 255, 1) !important;
+}
+
+[data-theme="light"] .mobile-close-btn svg {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .mobile-close-btn:hover svg {
+  color: var(--text-primary) !important;
+}
+
+/* ===========================================
+   CHAT INTERFACE MOBILE ENHANCEMENTS
+   =========================================== */
+
+/* Mobile chat input fixed positioning */
+@media (max-width: 767px) {
+  .chat-input-fixed {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background: rgba(9, 9, 11, 0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Quick actions horizontal scroll on mobile */
+@media (max-width: 767px) {
+  .quick-actions-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 8px;
+    margin: 0 -8px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .quick-actions-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .quick-actions-scroll > * {
+    scroll-snap-align: start;
+    flex-shrink: 0;
+  }
+}
+
+/* Message bubble max-width on mobile */
+@media (max-width: 479px) {
+  .chat-message-content {
+    max-width: calc(100vw - 48px);
+  }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .chat-message-content {
+    max-width: calc(100vw - 64px);
+  }
+}
+
+/* Smooth momentum scrolling for chat */
+.chat-scroll-container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+}
+
+/* Prevent input zoom on iOS (already 16px but reinforce) */
+@media (max-width: 767px) {
+  textarea, input[type="text"], input[type="search"] {
+    font-size: 16px !important;
+  }
+}
+
+/* Chat input container mobile shadow */
+@media (max-width: 767px) {
+  .chat-input-container {
+    box-shadow:
+      0 -4px 20px rgba(0, 0, 0, 0.3),
+      0 -1px 6px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+  }
+}
+
+/* Light mode mobile chat input */
+[data-theme="light"] .chat-input-container {
+  box-shadow:
+    0 -4px 20px rgba(0, 0, 0, 0.08),
+    0 -1px 6px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+}
+
+/* Better prose readability on mobile */
+@media (max-width: 479px) {
+  .prose p, .prose li {
+    line-height: 1.7;
+  }
+
+  .prose h1, .prose h2, .prose h3 {
+    line-height: 1.3;
+  }
+}
+
+/* Code block horizontal scroll on mobile */
+@media (max-width: 767px) {
+  .prose pre {
+    margin-left: -8px;
+    margin-right: -8px;
+    border-radius: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .prose pre code {
+    font-size: 11px;
+  }
 }

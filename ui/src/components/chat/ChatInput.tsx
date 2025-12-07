@@ -216,11 +216,11 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
   ];
 
   return (
-    <div className="flex-shrink-0 fixed bottom-0 left-0 right-0 p-3 sm:p-4 md:absolute md:bottom-6 md:left-1/2 md:-translate-x-1/2 w-full md:max-w-4xl z-20 safe-area-pb">
-      <div className="w-full px-2 sm:px-4 md:px-0">
+    <div className="w-full p-2 sm:p-3 md:p-4">
+      <div className="w-full max-w-4xl mx-auto">
         {/* Starter Prompts - Hidden when welcome screen is shown, only show when there are messages */}
         {messages.length > 0 && !input && (
-            <div id="quick-actions-container" className="flex items-center gap-2 mb-3 sm:mb-4 animate-fade-in-up overflow-x-auto scrollbar-hide pb-1 sm:pb-0 sm:flex-wrap sm:justify-center -mx-2 px-2 sm:mx-0 sm:px-0">
+            <div id="quick-actions-container" className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3 animate-fade-in-up overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory md:flex-wrap md:justify-center md:overflow-visible -mx-2 px-2 md:mx-0 md:px-0">
                 {quickActions.map((action, i) => (
                     <button
                         key={i}
@@ -229,11 +229,11 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                             action.action();
                             textareaRef.current?.focus();
                         }}
-                        className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-xs sm:text-sm text-zinc-300 hover:bg-white/10 active:bg-white/10 hover:text-white hover:border-emerald-500/30 transition-all active:scale-95 shadow-lg whitespace-nowrap flex-shrink-0 touch-target"
+                        className="flex items-center gap-1.5 px-2.5 sm:px-3 md:px-4 py-2 sm:py-2.5 bg-black/40 backdrop-blur-md border border-white/10 rounded-full text-xs sm:text-sm text-zinc-300 hover:bg-white/10 active:bg-white/10 hover:text-white hover:border-emerald-500/30 transition-all active:scale-95 shadow-lg whitespace-nowrap flex-shrink-0 snap-start touch-target"
                     >
-                        <action.icon className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-emerald-400 flex-shrink-0" />
-                        <span className="hidden sm:inline">{action.label}</span>
-                        <span className="sm:hidden">{action.label.split(' ')[0]}</span>
+                        <action.icon className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400 flex-shrink-0" />
+                        <span className="hidden min-[480px]:inline">{action.label}</span>
+                        <span className="min-[480px]:hidden">{action.label.split(' ')[0]}</span>
                     </button>
                 ))}
             </div>
@@ -274,10 +274,10 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
         {/* Input Container - Mobile optimized with light/dark theme support */}
       <div
         id="chat-input-container"
-        className={`relative flex items-end gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-[1.5rem] sm:rounded-[2rem] border transition-all duration-300 chat-input-container ${
+        className={`relative flex items-end gap-1 sm:gap-1.5 md:gap-2 p-1 sm:p-1.5 md:p-2 rounded-2xl sm:rounded-[1.75rem] md:rounded-[2rem] border transition-all duration-300 chat-input-container ${
           isFocused
-            ? 'bg-black/60 border-amber-500/50 shadow-[0_0_20px_rgba(251,191,36,0.15)] sm:shadow-[0_0_30px_rgba(251,191,36,0.2)] backdrop-blur-xl'
-            : 'bg-black/40 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-lg'
+            ? 'bg-black/70 border-amber-500/50 shadow-[0_0_15px_rgba(251,191,36,0.12)] sm:shadow-[0_0_20px_rgba(251,191,36,0.15)] md:shadow-[0_0_30px_rgba(251,191,36,0.2)] backdrop-blur-xl'
+            : 'bg-black/50 border-white/10 hover:border-white/20 backdrop-blur-lg shadow-lg'
         }`}
       >
           {/* Hidden File Input */}
@@ -293,11 +293,11 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           {/* Attachment Button - Touch-friendly 44px Target */}
           <button
             onClick={triggerFileInput}
-            className="flex-shrink-0 w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center text-zinc-400 hover:text-emerald-400 active:text-emerald-400 transition-colors hover:bg-emerald-500/10 active:bg-emerald-500/10 rounded-full active:scale-95 group touch-target"
+            className="flex-shrink-0 w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 flex items-center justify-center text-zinc-400 hover:text-emerald-400 active:text-emerald-400 transition-colors hover:bg-emerald-500/10 active:bg-emerald-500/10 rounded-full active:scale-95 group touch-target"
             title="Attach file"
           >
             <div className="relative">
-                <PlusCircle className="w-5 h-5 sm:w-6 sm:h-6 group-hover:rotate-90 transition-transform duration-300 stroke-[1.5]" />
+                <PlusCircle className="w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 group-hover:rotate-90 transition-transform duration-300 stroke-[1.5]" />
                 {attachedFiles.length > 0 && (
                   <span className="absolute -top-1 -right-1 w-3.5 h-3.5 sm:w-4 sm:h-4 bg-emerald-500 text-white text-[9px] sm:text-[10px] font-bold rounded-full flex items-center justify-center">
                     {attachedFiles.length}
@@ -317,12 +317,12 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
             placeholder="Message the assistant..."
             disabled={disabled}
             rows={1}
-            className="flex-1 py-2.5 sm:py-3 bg-transparent resize-none outline-none text-white placeholder:text-zinc-500 min-h-[40px] sm:min-h-[44px] max-h-[150px] sm:max-h-[200px] text-[16px] leading-relaxed"
+            className="flex-1 py-2 sm:py-2.5 md:py-3 px-1 sm:px-2 bg-transparent resize-none outline-none text-white placeholder:text-zinc-500 min-h-[36px] sm:min-h-[40px] md:min-h-[44px] max-h-[120px] sm:max-h-[150px] md:max-h-[200px] text-[16px] leading-relaxed"
           />
 
           {/* Right Side Buttons */}
-          <div className="flex items-center gap-1 sm:gap-2 pr-0.5 sm:pr-1">
-            {/* Voice Button - Touch-friendly 44px Target, hidden on very small screens */}
+          <div className="flex items-center gap-0.5 sm:gap-1 md:gap-1.5 pr-0.5">
+            {/* Voice Button - Touch-friendly 44px Target, visible on all screens */}
             {settings.voiceEnabled && (
               <button
                 id="voice-input-button"
@@ -330,7 +330,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                   play('click');
                   toggleVoice();
                 }}
-                className={`hidden min-[375px]:flex w-10 h-10 sm:w-11 sm:h-11 items-center justify-center rounded-full transition-all duration-300 touch-target ${
+                className={`flex w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 items-center justify-center rounded-full transition-all duration-300 touch-target ${
                   voice.isListening
                     ? 'bg-red-500 text-white shadow-lg shadow-red-500/40 animate-pulse'
                     : 'text-zinc-400 hover:text-emerald-400 active:text-emerald-400 hover:bg-emerald-500/10 active:bg-emerald-500/10'
@@ -338,9 +338,9 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                 title={voice.isListening ? 'Stop listening' : 'Start voice input'}
               >
                 {voice.isListening ? (
-                  <AudioLines className="w-5 h-5 sm:w-6 sm:h-6 animate-wave stroke-[1.5]" />
+                  <AudioLines className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 animate-wave stroke-[1.5]" />
                 ) : (
-                  <Mic className="w-5 h-5 sm:w-6 sm:h-6 stroke-[1.5]" />
+                  <Mic className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 stroke-[1.5]" />
                 )}
               </button>
             )}
@@ -352,23 +352,23 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
                   play('click');
                   onStop?.();
                 }}
-                className="w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 active:bg-white/20 transition-all touch-target"
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 active:bg-white/20 transition-all touch-target"
                 title="Stop generating"
               >
-                <div className="w-3 h-3 bg-white rounded-[2px]" />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-white rounded-[2px]" />
               </button>
             ) : (
               <button
                 onClick={handleSend}
                 disabled={(!input.trim() && attachedFiles.length === 0) || disabled}
-                className={`w-10 h-10 sm:w-11 sm:h-11 flex items-center justify-center rounded-full transition-all transform active:scale-95 touch-target ${
+                className={`w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 flex items-center justify-center rounded-full transition-all transform active:scale-95 touch-target ${
                   input.trim() || attachedFiles.length > 0
                     ? 'bg-emerald-600 text-white shadow-lg hover:bg-emerald-500 active:bg-emerald-500 shadow-emerald-500/30'
                     : 'bg-zinc-800/50 text-zinc-600 cursor-not-allowed'
                 }`}
                 title="Send message"
               >
-                <ArrowUp className="w-5 h-5 sm:w-6 sm:h-6 stroke-[2]" />
+                <ArrowUp className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 stroke-[2]" />
               </button>
             )}
           </div>

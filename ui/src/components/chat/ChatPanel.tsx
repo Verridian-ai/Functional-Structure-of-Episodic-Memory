@@ -180,8 +180,8 @@ export function ChatPanel() {
   return (
     <div className="flex flex-col h-full relative overflow-hidden">
       {/* Messages - Flex child that takes remaining space */}
-      <div className="flex-1 overflow-y-auto scroll-smooth touch-scroll pb-32 sm:pb-36 md:pb-28">
-        <div className="w-full max-w-4xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 md:py-8">
+      <div className="flex-1 overflow-y-auto scroll-smooth touch-scroll pb-44 sm:pb-48 md:pb-36">
+        <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-6 md:py-8">
           {messages.length === 0 ? (
             <WelcomeScreen onSuggestionClick={handleSend} />
           ) : (
@@ -204,9 +204,9 @@ export function ChatPanel() {
         </div>
       </div>
 
-      {/* Input - Flex child that stays at bottom */}
-      <div className="flex-shrink-0 w-full border-t border-white/5 bg-zinc-950/80 backdrop-blur-md p-3 sm:p-4 md:p-6 z-10">
-        <div className="max-w-4xl mx-auto">
+      {/* Input - Fixed at bottom on mobile, flex child on desktop */}
+      <div className="fixed bottom-0 left-0 right-0 md:relative md:flex-shrink-0 w-full border-t border-white/5 bg-zinc-950/95 md:bg-zinc-950/80 backdrop-blur-xl md:backdrop-blur-md z-30 safe-area-pb">
+        <div className="max-w-4xl mx-auto px-0 md:px-0">
           <ChatInput
             onSend={handleSend}
             onStop={handleStop}
