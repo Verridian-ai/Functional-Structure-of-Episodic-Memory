@@ -18,6 +18,9 @@ type Node = {
   court?: string;
   date?: string;
   type?: 'case' | 'statute' | 'concept';
+  state?: string;
+  domain?: string;
+  courtLevel?: string;
 };
 
 type Edge = {
@@ -35,60 +38,111 @@ type GraphData = {
     loadedNodes: number;
     loadedEdges: number;
   };
+  filters?: {
+    availableStates: string[];
+    availableDomains: string[];
+    availableCourtLevels: string[];
+  };
 };
 
-// --- Instanced Nodes Component (U4.1) ---
-function InstancedNodes({ nodes, onNodeClick }: { nodes: Node[], onNodeClick: (node: Node) => void }) {
-  const meshRef = useRef<THREE.InstancedMesh>(null);
-  const tempObject = useMemo(() => new THREE.Object3D(), []);
-  const colorObject = useMemo(() => new THREE.Color(), []);
+type FilterState = {
+  state: string;
+  domain: string;
+  courtLevel: string;
+};
 
-  useEffect(() => {
-    if (!meshRef.current) return;
+// Custom shader for circular glowing points
+const vertexShader = `
+  attribute float size;
+  varying vec3 vColor;
+  void main() {
+    vColor = color;
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = size * (300.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+  }
+`;
 
-    // Update instances
+const fragmentShader = `
+  varying vec3 vColor;
+  void main() {
+    // Create circular point with soft glow
+    vec2 center = gl_PointCoord - vec2(0.5);
+    float dist = length(center);
+
+    // Soft circular falloff with glow
+    float alpha = 1.0 - smoothstep(0.3, 0.5, dist);
+    float glow = exp(-dist * 4.0) * 0.5;
+
+    // Combine base color with glow
+    vec3 finalColor = vColor * (1.0 + glow);
+
+    if (dist > 0.5) discard;
+
+    gl_FragColor = vec4(finalColor, alpha);
+  }
+`;
+
+// --- Points-based Nodes Component for colored tensor visualization ---
+function ColoredNodes({ nodes, onNodeClick }: { nodes: Node[], onNodeClick: (node: Node) => void }) {
+  const pointsRef = useRef<THREE.Points>(null);
+
+  const { geometry, shaderMaterial } = useMemo(() => {
+    const positions = new Float32Array(nodes.length * 3);
+    const colors = new Float32Array(nodes.length * 3);
+    const sizes = new Float32Array(nodes.length);
+    const tempColor = new THREE.Color();
+
     nodes.forEach((node, i) => {
-      const { x, y, z, size, color, uncertainty } = node;
-      
-      // Position & Scale
-      tempObject.position.set(x, y, z);
-      tempObject.scale.set(size, size, size);
-      tempObject.updateMatrix();
-      meshRef.current!.setMatrixAt(i, tempObject.matrix);
-      
-      // Color (Mix based on uncertainty for Heatmap U4.5)
-      // Base color -> Red based on uncertainty
-      colorObject.set(color);
-      if (uncertainty > 0.5) {
-          colorObject.lerp(new THREE.Color('red'), (uncertainty - 0.5) * 2);
-      }
-      
-      meshRef.current!.setColorAt(i, colorObject);
+      // Position
+      positions[i * 3] = node.x;
+      positions[i * 3 + 1] = node.y;
+      positions[i * 3 + 2] = node.z;
+
+      // Color from court type - boost saturation
+      tempColor.set(node.color);
+      colors[i * 3] = Math.min(1.0, tempColor.r * 1.2);
+      colors[i * 3 + 1] = Math.min(1.0, tempColor.g * 1.2);
+      colors[i * 3 + 2] = Math.min(1.0, tempColor.b * 1.2);
+
+      // Size - varied for visual interest
+      sizes[i] = (node.size + 0.5) * 2.5;
     });
 
-    meshRef.current.instanceMatrix.needsUpdate = true;
-    if (meshRef.current.instanceColor) meshRef.current.instanceColor.needsUpdate = true;
-  }, [nodes, tempObject, colorObject]);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    geo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {},
+      vertexShader,
+      fragmentShader,
+      vertexColors: true,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+
+    return { geometry: geo, shaderMaterial: material };
+  }, [nodes]);
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    const instanceId = e.instanceId;
-    if (instanceId !== undefined) {
-      onNodeClick(nodes[instanceId]);
+    if (e.index !== undefined && nodes[e.index]) {
+      onNodeClick(nodes[e.index]);
     }
   };
 
   return (
-    <instancedMesh
-      ref={meshRef}
-      args={[undefined, undefined, nodes.length]}
+    <points
+      ref={pointsRef}
+      geometry={geometry}
+      material={shaderMaterial}
       onClick={handleClick}
       onPointerOver={() => document.body.style.cursor = 'pointer'}
       onPointerOut={() => document.body.style.cursor = 'auto'}
-    >
-      <sphereGeometry args={[1, 16, 16]} />
-      <meshStandardMaterial attach="material" toneMapped={false} roughness={0.5} metalness={0.5} />
-    </instancedMesh>
+    />
   );
 }
 
@@ -117,7 +171,13 @@ function Edges({ edges, nodes }: { edges: Edge[], nodes: Node[] }) {
 
   return (
     <lineSegments geometry={linesGeometry}>
-      <lineBasicMaterial attach="material" color="#ffffff" opacity={0.1} transparent />
+      <lineBasicMaterial
+        attach="material"
+        color="#4488ff"
+        opacity={0.3}
+        transparent
+        linewidth={1}
+      />
     </lineSegments>
   );
 }
@@ -127,26 +187,143 @@ export default function LegalGraph3D() {
   const [data, setData] = useState<GraphData>({ nodes: [], edges: [] });
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState<FilterState>({
+    state: 'all',
+    domain: 'all',
+    courtLevel: 'all',
+  });
+  const [availableFilters, setAvailableFilters] = useState<{
+    states: string[];
+    domains: string[];
+    courtLevels: string[];
+  }>({ states: [], domains: [], courtLevels: [] });
+
+  // Fetch data with filters
+  const fetchGraph = async (currentFilters: FilterState) => {
+    setLoading(true);
+    const params = new URLSearchParams();
+    if (currentFilters.state !== 'all') params.set('state', currentFilters.state);
+    if (currentFilters.domain !== 'all') params.set('domain', currentFilters.domain);
+    if (currentFilters.courtLevel !== 'all') params.set('courtLevel', currentFilters.courtLevel);
+
+    try {
+      const res = await fetch(`/api/graph?${params.toString()}`);
+      const graphData = await res.json();
+      setData(graphData);
+      if (graphData.filters) {
+        setAvailableFilters({
+          states: graphData.filters.availableStates || [],
+          domains: graphData.filters.availableDomains || [],
+          courtLevels: graphData.filters.availableCourtLevels || [],
+        });
+      }
+    } catch (error) {
+      console.error('Failed to fetch graph:', error);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
-    // Fetch Data
-    fetch('/api/graph')
-      .then(res => res.json())
-      .then(data => {
-        setData(data);
-        setLoading(false);
-      });
+    fetchGraph(filters);
   }, []);
+
+  const handleFilterChange = (filterType: keyof FilterState, value: string) => {
+    const newFilters = { ...filters, [filterType]: value };
+    setFilters(newFilters);
+    fetchGraph(newFilters);
+  };
 
   return (
     <div className="w-full h-full relative bg-zinc-950">
       {/* Overlay UI (U4.4) */}
       <div className="absolute top-4 left-4 z-10 pointer-events-none">
-        <div className="bg-zinc-900/80 backdrop-blur-md border border-zinc-700 p-4 rounded-lg pointer-events-auto max-w-xs">
+        <div className="bg-zinc-900/90 backdrop-blur-md border border-zinc-700 p-4 rounded-lg pointer-events-auto max-w-sm">
           <h2 className="text-white font-bold text-lg mb-2">Legal Citation Network</h2>
+
+          {/* Filter Controls */}
+          <div className="space-y-2 mb-4 pb-3 border-b border-zinc-700">
+            <div className="text-xs text-cyan-400 font-medium mb-2">Filter Knowledge Graph</div>
+
+            {/* State/Jurisdiction Filter */}
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-zinc-400 w-20">State:</label>
+              <select
+                value={filters.state}
+                onChange={(e) => handleFilterChange('state', e.target.value)}
+                className="flex-1 bg-zinc-800 border border-zinc-600 rounded px-2 py-1 text-xs text-white focus:border-cyan-500 focus:outline-none"
+              >
+                <option value="all">All States</option>
+                {availableFilters.states.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Legal Domain Filter */}
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-zinc-400 w-20">Domain:</label>
+              <select
+                value={filters.domain}
+                onChange={(e) => handleFilterChange('domain', e.target.value)}
+                className="flex-1 bg-zinc-800 border border-zinc-600 rounded px-2 py-1 text-xs text-white focus:border-cyan-500 focus:outline-none"
+              >
+                <option value="all">All Domains</option>
+                {availableFilters.domains.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Court Level Filter */}
+            <div className="flex items-center gap-2">
+              <label className="text-xs text-zinc-400 w-20">Level:</label>
+              <select
+                value={filters.courtLevel}
+                onChange={(e) => handleFilterChange('courtLevel', e.target.value)}
+                className="flex-1 bg-zinc-800 border border-zinc-600 rounded px-2 py-1 text-xs text-white focus:border-cyan-500 focus:outline-none"
+              >
+                <option value="all">All Levels</option>
+                {availableFilters.courtLevels.map(cl => (
+                  <option key={cl} value={cl}>{cl}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Active Filters Display */}
+            {(filters.state !== 'all' || filters.domain !== 'all' || filters.courtLevel !== 'all') && (
+              <div className="flex flex-wrap gap-1 mt-2">
+                {filters.state !== 'all' && (
+                  <span className="px-2 py-0.5 bg-cyan-500/20 text-cyan-400 rounded text-xs">
+                    {filters.state}
+                  </span>
+                )}
+                {filters.domain !== 'all' && (
+                  <span className="px-2 py-0.5 bg-pink-500/20 text-pink-400 rounded text-xs">
+                    {filters.domain}
+                  </span>
+                )}
+                {filters.courtLevel !== 'all' && (
+                  <span className="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 rounded text-xs">
+                    {filters.courtLevel}
+                  </span>
+                )}
+                <button
+                  onClick={() => {
+                    const resetFilters = { state: 'all', domain: 'all', courtLevel: 'all' };
+                    setFilters(resetFilters);
+                    fetchGraph(resetFilters);
+                  }}
+                  className="px-2 py-0.5 bg-zinc-700 hover:bg-zinc-600 text-zinc-300 rounded text-xs"
+                >
+                  Clear
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Stats */}
           <div className="text-zinc-400 text-sm space-y-1">
-            <p>Interactive 3D visualization of case law citations.</p>
-            <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="bg-zinc-800/50 p-2 rounded">
                 <div className="text-zinc-500">Loaded Nodes</div>
                 <div className="text-white font-mono text-lg">{data.nodes.length.toLocaleString()}</div>
@@ -163,33 +340,54 @@ export default function LegalGraph3D() {
             )}
           </div>
 
-          {/* Color Legend */}
+          {/* Color Legend - Expanded Categories */}
           <div className="mt-3 pt-3 border-t border-zinc-700">
-            <div className="text-xs text-zinc-500 mb-2">Court Types</div>
-            <div className="grid grid-cols-2 gap-1 text-xs">
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#f472b6]" />
-                <span className="text-zinc-400">Family</span>
+            <div className="text-xs text-zinc-500 mb-2">Court Hierarchy</div>
+            <div className="space-y-2 text-xs">
+              {/* Apex */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#fbbf24] shadow-sm shadow-yellow-500/50" />
+                <span className="text-zinc-300 font-medium">High Court (HCA)</span>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#60a5fa]" />
-                <span className="text-zinc-400">Federal</span>
+              {/* Federal */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#3b82f6] shadow-sm shadow-blue-500/50" />
+                <span className="text-zinc-400">Federal Court</span>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#34d399]" />
-                <span className="text-zinc-400">Supreme</span>
+              {/* Supreme Courts */}
+              <div className="pl-2 border-l border-zinc-700 space-y-1">
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#22c55e]" />
+                  <span className="text-zinc-500">NSW Supreme</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#10b981]" />
+                  <span className="text-zinc-500">VIC Supreme</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2 h-2 rounded-full bg-[#14b8a6]" />
+                  <span className="text-zinc-500">QLD Supreme</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
-                <span className="text-zinc-400">Criminal</span>
+              {/* Appeals */}
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-[#a855f7] shadow-sm shadow-purple-500/50" />
+                <span className="text-zinc-400">Courts of Appeal</span>
               </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#a78bfa]" />
-                <span className="text-zinc-400">Appeals</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <div className="w-2 h-2 rounded-full bg-[#fbbf24]" />
-                <span className="text-zinc-400">High Court</span>
+              {/* Specialized */}
+              <div className="flex flex-wrap gap-2 mt-1">
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-[#ec4899]" />
+                  <span className="text-zinc-500">Family</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
+                  <span className="text-zinc-500">Criminal</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-[#f97316]" />
+                  <span className="text-zinc-500">Tribunal</span>
+                </div>
               </div>
             </div>
           </div>
@@ -198,8 +396,19 @@ export default function LegalGraph3D() {
             <div className="mt-4 pt-4 border-t border-zinc-700 animate-in fade-in slide-in-from-top-2">
               <h3 className="text-cyan-400 font-mono font-bold text-sm">{selectedNode.label || selectedNode.id.slice(0, 40)}</h3>
               <p className="text-xs text-zinc-500 mt-1 truncate">{selectedNode.id}</p>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {selectedNode.state && (
+                  <span className="px-1.5 py-0.5 bg-cyan-500/20 text-cyan-400 rounded text-xs">{selectedNode.state}</span>
+                )}
+                {selectedNode.domain && (
+                  <span className="px-1.5 py-0.5 bg-pink-500/20 text-pink-400 rounded text-xs">{selectedNode.domain}</span>
+                )}
+                {selectedNode.courtLevel && (
+                  <span className="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 rounded text-xs">{selectedNode.courtLevel}</span>
+                )}
+              </div>
               {selectedNode.court && (
-                <p className="text-xs text-zinc-400 mt-1">Court: {selectedNode.court}</p>
+                <p className="text-xs text-zinc-400 mt-2">Court: {selectedNode.court}</p>
               )}
               {selectedNode.date && (
                 <p className="text-xs text-zinc-400">Date: {selectedNode.date}</p>
@@ -231,20 +440,22 @@ export default function LegalGraph3D() {
       )}
 
       {/* 3D Scene */}
-      <Canvas camera={{ position: [0, 0, 100], fov: 60 }}>
+      <Canvas camera={{ position: [0, 0, 150], fov: 75 }}>
         <color attach="background" args={['#09090b']} /> {/* zinc-950 */}
-        
-        {/* Lighting */}
-        <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} />
-        
+
+        {/* Enhanced Lighting for vibrant tensor nodes */}
+        <ambientLight intensity={1.2} />
+        <pointLight position={[100, 100, 100]} intensity={2.0} color="#ffffff" />
+        <pointLight position={[-100, -100, -100]} intensity={2.0} color="#ffffff" />
+        <pointLight position={[0, 100, 0]} intensity={1.5} color="#ffffff" />
+
         {/* Controls */}
         <OrbitControls enableDamping dampingFactor={0.1} rotateSpeed={0.5} zoomSpeed={0.5} />
 
         {/* Content */}
         {!loading && (
           <>
-            <InstancedNodes nodes={data.nodes} onNodeClick={setSelectedNode} />
+            <ColoredNodes nodes={data.nodes} onNodeClick={setSelectedNode} />
             <Edges edges={data.edges} nodes={data.nodes} />
             
             {/* Selected Node Highlight */}
