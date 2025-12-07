@@ -589,7 +589,7 @@ This mirrors how humans actually remember - achieving **85% accuracy** vs 77% fo
 
 ### 📊 Classification Architecture
 
-The system employs a sophisticated **multi-dimensional classification architecture** that processes 232,560 legal documents across 22 broad domains and 95+ subcategories:
+The system employs a sophisticated **multi-dimensional classification architecture** that processes 232,560 legal documents across 21 broad domains and 103 subcategories:
 
 ```mermaid
 flowchart TB
@@ -598,7 +598,7 @@ flowchart TB
     DOC --> LEG[Legislation Detection]
     DOC --> CASE[Case Law Recognition]
 
-    EXTRACT --> COURT[Court Hierarchy<br/>106+ Court Codes]
+    EXTRACT --> COURT[Court Hierarchy<br/>80 Court Codes]
 
     KW --> BOOST[10-Factor BOOST Scoring]
     LEG --> BOOST
@@ -681,7 +681,7 @@ class MultiDomainClassification:
 
 ### 🏛️ Enhanced Court Code Coverage
 
-The system recognizes **106+ court codes** across all Australian jurisdictions:
+The system recognizes **80 court codes** across all Australian jurisdictions:
 
 | Jurisdiction | Court Types | Coverage | Examples |
 |--------------|-------------|----------|----------|
@@ -698,7 +698,7 @@ The system recognizes **106+ court codes** across all Australian jurisdictions:
 
 ### 📖 Domain Coverage
 
-**22 Broad Domains** with **95+ Subcategories**:
+**21 Broad Domains** with **103 Subcategories**:
 
 <table>
 <tr>
@@ -792,9 +792,10 @@ def _determine_binding_status(court_info: CourtInfo) -> BindingStatus:
 | **Total Keywords** | 16,407 |
 | **Legal Categories** | 95+ |
 | **Primary Domains** | 22 |
-| **Court Codes** | 106+ |
+| **Court Codes** | 80 |
 | **Legislation Patterns** | 500+ |
 | **Landmark Cases** | 150+ |
+| **Ontology Terms** | 633 |
 
 ### 🚀 Using the Enhanced Classifier
 
@@ -1451,9 +1452,10 @@ A critical foundation of this project is the **comprehensive multi-domain classi
 | **Total Keywords** | 16,407 |
 | **Legal Categories** | 95+ |
 | **Primary Domains** | 22 |
-| **Court Codes** | 106+ |
+| **Court Codes** | 80 |
 | **Legislation Patterns** | 500+ |
 | **Landmark Cases** | 150+ |
+| **Ontology Terms** | 633 |
 | **BOOST Factors** | 10 |
 
 ### 🧠 Multi-Dimensional Classification Approach
@@ -1465,7 +1467,7 @@ flowchart TB
     DOC[Legal Document] --> KW[Keyword Analysis<br/>16,407 domain-specific terms]
     DOC --> LEG[Legislation Extraction<br/>500+ statute patterns]
     DOC --> CASE[Case Citation Parsing<br/>150+ landmark cases]
-    DOC --> COURT[Court Hierarchy<br/>106+ court codes]
+    DOC --> COURT[Court Hierarchy<br/>80 court codes]
 
     KW --> BOOST[10-Factor BOOST Scoring]
     LEG --> BOOST
@@ -1488,11 +1490,11 @@ The classification system was built through extensive research across **22 speci
 | Domain | Keywords | Coverage |
 |--------|----------|----------|
 | **Family Law** | 2,100+ | Comprehensive |
-| **Criminal Law** | 1,850+ | Comprehensive |
+| **Criminal Law** | 1,176 | Comprehensive |
 | **Property Law** | 1,650+ | Comprehensive |
 | **Commercial Law** | 2,200+ | Comprehensive |
-| **Employment Law** | 1,450+ | Comprehensive |
-| **Administrative Law** | 1,300+ | Comprehensive |
+| **Employment Law** | 1,165 | Comprehensive |
+| **Administrative Law** | 713 | Comprehensive |
 
 </td>
 <td width="50%" valign="top">
@@ -1827,13 +1829,13 @@ graph TB
 | **src/pipeline/** | `orchestrator.py`, `config.py` | **NEW** Unified pipeline orchestration, YAML configs |
 | **src/benchmarking/** | `continuous_monitor.py`, `accuracy_tracker.py` | **NEW** 6-metric scoring, historical tracking |
 | **src/retrieval/** | `hybrid_retriever.py`, `gsw_retriever.py`, `vsa_validator.py` | **NEW** Hybrid GSW+BM25, VSA validation |
-| **src/ingestion/** | `multi_domain_classifier.py`, `corpus_domain_extractor.py` | **ENHANCED** 10-factor BOOST, 106+ courts, authority scoring |
+| **src/ingestion/** | `multi_domain_classifier.py`, `corpus_domain_extractor.py` | **ENHANCED** 10-factor BOOST, 80 courts, authority scoring |
 | **src/gsw/** | `legal_operator.py`, `workspace.py` | 6-task extraction pipeline, TOON persistence |
 | **src/tem/** | `model.py`, `action_space.py` | PyTorch TEM, legal action definitions |
-| **src/vsa/** | `legal_vsa.py`, `ontology.py` | Hyperdimensional logic, legal rules |
+| **src/vsa/** | `legal_vsa.py`, `ontology.py` | Hyperdimensional logic, 633-term ontology (6 categories) |
+| **src/logic/** | `ontology_seed.py`, `gsw_schema.py`, `authority.py` | 633 ontology terms: Assets (104), Outcomes (104), Events (166), Roles (102), States (99), Relationships (58); Court hierarchy, Pydantic models |
 | **src/agency/** | `agent.py`, `generative_model.py` | POMDP agent, A/B/C/D matrices |
 | **src/agents/** | Various tools | LangChain integration |
-| **src/logic/** | `authority.py`, schemas | Court hierarchy, Pydantic models |
 | **src/utils/** | `toon.py` | **UPDATED** TOON encoder/decoder with workspace support |
 | **configs/** | `default.yaml`, `production.yaml`, `test.yaml` | **NEW** Pipeline configuration files |
 | **scripts/** | `run_unified_pipeline.py`, `run_benchmark_suite.py`, etc. | **NEW** 9 automation scripts |

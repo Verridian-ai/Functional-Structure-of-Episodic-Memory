@@ -2,21 +2,21 @@
 
 ## Overview
 
-The Australian Legal Corpus Classification System organizes legal documents into a hierarchical taxonomy with **22 broad domains** and **95+ granular subcategories**. Each category is supported by curated keyword dictionaries totaling **16,407+ terms**.
+The Australian Legal Corpus Classification System organizes legal documents into a hierarchical taxonomy with **21 broad domains** and **103 granular subcategories**. Each category is supported by curated keyword dictionaries totaling **16,495 terms**.
 
 ---
 
 ## Domain Taxonomy Structure
 
 ```
-Broad Domain (22)
-  └── Subcategory (95+)
-      └── Keywords (16,407+)
+Broad Domain (21)
+  └── Subcategory (103)
+      └── Keywords (16,495)
 ```
 
 ---
 
-## 22 Broad Domains
+## 21 Broad Domains
 
 | # | Domain | Subcategories | Description |
 |---|--------|---------------|-------------|
@@ -41,7 +41,8 @@ Broad Domain (22)
 | 19 | **Sports** | 6 | Sports law, anti-doping, integrity |
 | 20 | **Tax** | 12 | Federal and state taxation |
 | 21 | **Torts** | 9 | Negligence, defamation, compensation |
-| 22 | **Unclassified** | - | Fallback category |
+
+Note: "Unclassified" is a fallback category used when no domain matches with sufficient confidence, not counted as a primary domain.
 
 ---
 
@@ -418,7 +419,7 @@ Many documents span multiple domains:
 | Administrative | 6 | 1,100+ |
 | Others | 33 | 2,407+ |
 
-**Total**: 16,407+ keywords across 95 categories
+**Total**: 16,495 keywords across 103 categories
 
 ### Keyword Types
 

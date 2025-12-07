@@ -291,10 +291,10 @@ class EnhancedDomainClassifier:
     def __init__(self):
         """
         Initialize classifier with:
-        - 16,407+ keyword patterns
+        - 16,495 keyword patterns
         - 500+ legislation mappings
         - 150+ landmark cases
-        - 106+ court codes
+        - 80 court codes
         """
 ```
 
@@ -734,7 +734,7 @@ class BindingStatus(Enum):
 
 **Type**: `Dict[str, List[str]]`
 
-Maps 95 categories to 16,407+ keywords.
+Maps 103 categories to 16,495 keywords.
 
 ```python
 CLASSIFICATION_MAP = {
@@ -816,7 +816,7 @@ LEGISLATION_TO_DOMAIN = {
 
 **Type**: `Dict[str, Dict]`
 
-Maps 106+ court codes to metadata.
+Maps 80 court codes to metadata.
 
 ```python
 COURT_CODES = {
