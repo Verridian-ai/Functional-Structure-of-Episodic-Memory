@@ -1,26 +1,354 @@
 # GSW ONTOLOGY SEED
-# Standardized Vocabulary derived from Pilot Analysis
+# ================================================================================
+# Comprehensive Legal Vocabulary for Australian Multi-Domain Classification
+# ================================================================================
 # This acts as the "Prior Knowledge" for the Active Inference Loop.
+# Vocabulary derived from corpus analysis of 95 legal categories.
+# Total terms: 480+ across 6 categories
+# ================================================================================
+
+# ============================================================================
+# STANDARD_ASSETS (105 terms)
+# ============================================================================
+# Types of property, assets, and things that can be owned or controlled
 
 STANDARD_ASSETS = [
-    # From Pilot Data
-    "Visa", "Superannuation Fund", "Matrimonial Home", "Investment Property",
-    "Motor Vehicle", "Bank Account", "Family Trust", "Shares", 
-    "Business", "Land", "Dwelling", "Office", "Debt", "Taxable Income"
+    # --- Real Property ---
+    "Matrimonial Home", "Family Home", "Residential Property", "Commercial Property",
+    "Investment Property", "Rural Land", "Agricultural Land", "Strata Title",
+    "Leasehold Interest", "Freehold Property", "Crown Land", "Native Title Land",
+    "Unit", "Apartment", "Townhouse", "Duplex", "Vacant Land",
+
+    # --- Financial Instruments ---
+    "Shares", "Bonds", "Options", "Derivatives", "Cryptocurrency", "Managed Fund",
+    "Term Deposit", "Bank Account", "Savings Account", "Offset Account",
+    "Superannuation Fund", "Self-Managed Super Fund", "Pension", "Annuity",
+    "Life Insurance Policy", "Income Protection Policy", "Debentures",
+
+    # --- Business Entities ---
+    "Company", "Proprietary Limited Company", "Public Company", "Partnership",
+    "Family Trust", "Discretionary Trust", "Unit Trust", "Bare Trust",
+    "Sole Trader", "Joint Venture", "Franchise", "Cooperative",
+
+    # --- Intellectual Property ---
+    "Patent", "Trademark", "Copyright", "Trade Secret", "Domain Name",
+    "Business Name", "Goodwill", "Design Registration", "Plant Breeder's Rights",
+
+    # --- Personal Property ---
+    "Motor Vehicle", "Boat", "Aircraft", "Caravan", "Motorcycle",
+    "Artwork", "Jewellery", "Furniture", "Collectibles", "Livestock",
+    "Machinery", "Equipment", "Tools", "Inventory", "Stock",
+
+    # --- Intangible Assets ---
+    "License", "Permit", "Contract Rights", "Debt Obligation", "Loan",
+    "Mortgage", "Lease Agreement", "Receivable", "Accrued Entitlement",
+    "Long Service Leave Entitlement", "Annual Leave Entitlement",
+    "Redundancy Entitlement", "Workers Compensation Entitlement",
+
+    # --- Legal Interests ---
+    "Caveat", "Easement", "Covenant", "Right of Way", "Profit à Prendre",
+    "Lien", "Charge", "Security Interest", "PPSR Registration",
+
+    # --- Immigration/Administrative Assets ---
+    "Visa", "Passport", "Travel Document", "Work Permit", "Residency Status",
+
+    # --- Tax/Revenue Assets ---
+    "Taxable Income", "CGT Asset", "Depreciating Asset", "Trading Stock",
+    "Revenue Asset", "Pre-CGT Asset", "Active Asset",
 ]
+
+
+# ============================================================================
+# STANDARD_OUTCOMES (85 terms)
+# ============================================================================
+# Legal results, orders, decisions, and rulings from proceedings
 
 STANDARD_OUTCOMES = [
-    # From Pilot Data
-    "Final Parenting Order", "Interim Property Order", "Divorce Order",
-    "Spouse Maintenance", "Costs Order", "Dismissal",
-    "Legislation", "Legislative Change", "Validation", "Ruling", 
-    "Legal Regulation", "Amendment", "Review Application"
+    # --- Family Law Orders ---
+    "Final Parenting Order", "Interim Parenting Order", "Consent Order",
+    "Final Property Order", "Interim Property Order", "Spouse Maintenance Order",
+    "Child Support Order", "Child Support Assessment", "Divorce Order",
+    "Injunction", "Recovery Order", "Location Order", "Passport Order",
+    "Airport Watch List Order", "Supervision Order", "Family Violence Order",
+
+    # --- Criminal Law Outcomes ---
+    "Conviction", "Acquittal", "Guilty Verdict", "Not Guilty Verdict",
+    "Sentence", "Imprisonment", "Suspended Sentence", "Intensive Correction Order",
+    "Community Correction Order", "Probation Order", "Good Behaviour Bond",
+    "Community Service Order", "Fine", "Forfeiture Order", "Confiscation Order",
+    "Proceeds of Crime Order", "Non-Parole Period", "Parole",
+    "Section 10 Dismissal", "Conditional Release Order", "Home Detention Order",
+
+    # --- Civil Litigation Outcomes ---
+    "Damages Award", "Compensatory Damages", "Aggravated Damages",
+    "Exemplary Damages", "Punitive Damages", "Nominal Damages",
+    "Specific Performance Order", "Declaration", "Declaratory Relief",
+    "Permanent Injunction", "Interlocutory Injunction", "Mareva Injunction",
+    "Anton Piller Order", "Costs Order", "Indemnity Costs", "Settlement",
+
+    # --- Administrative Law Outcomes ---
+    "Visa Grant", "Visa Refusal", "Visa Cancellation", "Deportation Order",
+    "License Grant", "License Refusal", "License Suspension", "License Revocation",
+    "Regulatory Penalty", "Compliance Notice", "Improvement Notice",
+    "Prohibition Notice", "Infringement Notice", "Administrative Review Decision",
+
+    # --- Corporate/Commercial Outcomes ---
+    "Winding Up Order", "Liquidation", "Voluntary Administration",
+    "Receivership", "Deed of Company Arrangement", "Disqualification Order",
+    "Director Penalty Notice", "Civil Penalty Order", "Banning Order",
+    "Enforceable Undertaking", "Stop Order",
+
+    # --- Tax/Revenue Outcomes ---
+    "Tax Assessment", "Amended Assessment", "Default Assessment",
+    "Penalty Notice", "Objection Decision", "Remission Decision",
+    "Private Ruling", "Tax Shortfall Penalty",
+
+    # --- Tribunal Outcomes ---
+    "Tribunal Affirmation", "Tribunal Variation", "Tribunal Set Aside",
+    "Tribunal Remittal", "Dismissal", "Strike Out",
+
+    # --- Appeal Outcomes ---
+    "Appeal Allowed", "Appeal Dismissed", "Cross-Appeal", "Leave Granted",
+    "Leave Refused", "Remittal for Rehearing", "New Trial Ordered",
+
+    # --- Procedural Outcomes ---
+    "Stay of Proceedings", "Adjournment", "Summary Judgment",
+    "Default Judgment", "Judgment on Pleadings",
 ]
 
+
+# ============================================================================
+# STANDARD_EVENTS (125 terms)
+# ============================================================================
+# Actions, occurrences, and happenings that can be placed on a timeline
+
 STANDARD_EVENTS = [
-    # From Pilot Data
-    "Hearing", "Decision", "Application", "Judgment", "Arrest", 
-    "Arrival", "Commencement", "Refusal", "Visa Application", 
-    "Court Decision", "Email", "Submission", "Act Enactment", 
-    "Appeal", "Establishment", "Royal Assent", "Separation", "Marriage"
+    # --- Relationship Events ---
+    "Marriage", "Civil Union", "De Facto Relationship Commenced", "Engagement",
+    "Cohabitation Start", "Cohabitation End", "Separation", "Reconciliation",
+    "Divorce", "Death of Spouse", "Birth of Child", "Adoption",
+
+    # --- Property Transaction Events ---
+    "Purchase", "Sale", "Transfer", "Exchange", "Gift", "Bequest",
+    "Mortgage", "Refinance", "Discharge of Mortgage", "Lease Commencement",
+    "Lease Termination", "Foreclosure", "Repossession", "Settlement",
+    "Subdivision", "Consolidation", "Rezoning", "Development Approval",
+
+    # --- Financial Events ---
+    "Inheritance", "Loan", "Loan Repayment", "Debt Default", "Bankruptcy",
+    "Debt Agreement", "Part IX Agreement", "Garnishee Order Served",
+    "Payment", "Investment", "Divestment", "Dividend Received",
+    "Distribution", "Contribution", "Drawdown", "Rollover",
+
+    # --- Legal Proceeding Events ---
+    "Application Filed", "Originating Application", "Initiating Application",
+    "Response Filed", "Reply Filed", "Affidavit Filed", "Subpoena Issued",
+    "Discovery", "Inspection", "Mediation", "Conciliation", "Arbitration",
+    "Directions Hearing", "Case Management Conference", "Pre-Trial Conference",
+    "Hearing", "Trial", "Judgment Delivered", "Appeal Filed", "Appeal Heard",
+    "Settlement Conference", "Consent Orders Filed",
+
+    # --- Criminal Events ---
+    "Arrest", "Charge", "Summons Issued", "Warrant Issued", "Bail Hearing",
+    "Bail Granted", "Bail Refused", "Bail Revoked", "Committal Hearing",
+    "Arraignment", "Plea Entered", "Guilty Plea", "Not Guilty Plea",
+    "Trial Commenced", "Verdict Delivered", "Sentencing Hearing",
+    "Sentence Imposed", "Parole Hearing", "Parole Granted", "Parole Revoked",
+    "Release from Custody", "Breach of Order",
+
+    # --- Corporate Events ---
+    "Incorporation", "Registration", "Share Issue", "Share Transfer",
+    "Dividend Declaration", "Annual General Meeting", "Extraordinary General Meeting",
+    "Director Appointed", "Director Resigned", "Director Removed",
+    "Merger", "Acquisition", "Demerger", "Scheme of Arrangement",
+    "Voluntary Administration Commenced", "Liquidation Commenced",
+    "Receivership Commenced", "DOCA Executed", "Deregistration",
+
+    # --- Employment Events ---
+    "Employment Commenced", "Promotion", "Demotion", "Job Transfer",
+    "Termination", "Resignation", "Redundancy", "Dismissal",
+    "Unfair Dismissal Claim", "Disciplinary Action", "Performance Review",
+    "Workers Compensation Claim", "Return to Work", "Medical Examination",
+
+    # --- Migration Events ---
+    "Visa Application", "Visa Grant", "Visa Refusal", "Visa Cancellation",
+    "Bridging Visa Grant", "Detention", "Release from Detention",
+    "Deportation", "Removal", "Citizenship Application", "Citizenship Grant",
+    "Citizenship Renunciation", "Arrival in Australia", "Departure from Australia",
+
+    # --- Administrative/Regulatory Events ---
+    "License Application", "License Grant", "License Renewal",
+    "License Suspension", "License Revocation", "Regulatory Inspection",
+    "Audit", "Investigation Commenced", "Investigation Concluded",
+    "Complaint Lodged", "Notice Issued", "Show Cause Notice",
+    "Compliance Notice Issued", "Infringement Notice Issued",
+
+    # --- Family Law Specific Events ---
+    "Property Pool Valuation", "Financial Statement Filed", "Disclosure",
+    "Family Report Prepared", "ICL Appointed", "Family Consultant Appointed",
+    "Contravention Application", "Enforcement Application",
+
+    # --- Wills and Estates Events ---
+    "Will Executed", "Will Revoked", "Codicil Executed", "Grant of Probate",
+    "Letters of Administration", "Estate Distribution", "Family Provision Claim",
 ]
+
+
+# ============================================================================
+# STANDARD_ROLES (65 terms) - NEW
+# ============================================================================
+# Roles that persons can hold in legal proceedings and transactions
+
+STANDARD_ROLES = [
+    # --- Primary Litigation Roles ---
+    "Applicant", "Respondent", "Plaintiff", "Defendant", "Appellant",
+    "Cross-Appellant", "Cross-Claimant", "Cross-Respondent", "Petitioner",
+    "Third Party", "Fourth Party", "Intervenor", "Amicus Curiae",
+
+    # --- Criminal Roles ---
+    "Accused", "Offender", "Victim", "Complainant",
+    "Informant", "Prosecutor", "Crown", "Co-Accused", "Accessory",
+    "Principal Offender", "Crown Witness",
+
+    # --- Family Law Roles ---
+    "Husband", "Wife", "Father", "Mother", "Child", "Parent",
+    "Guardian", "Independent Children's Lawyer", "ICL",
+    "Family Consultant", "Single Expert Witness", "Parenting Coordinator",
+    "Child Representative", "Litigation Guardian",
+
+    # --- Supporting Roles ---
+    "Witness", "Expert Witness", "Lay Witness", "Character Witness",
+    "Interpreter", "Translator", "McKenzie Friend", "Tutor",
+    "Next Friend", "Litigation Representative",
+
+    # --- Corporate/Commercial Roles ---
+    "Director", "Managing Director", "Chairman", "Company Secretary",
+    "Shareholder", "Member", "Partner", "General Partner", "Limited Partner",
+    "Liquidator", "Administrator", "Receiver", "Receiver and Manager",
+    "Controller", "Provisional Liquidator",
+
+    # --- Legal Professional Roles ---
+    "Solicitor", "Barrister", "Counsel", "Senior Counsel", "Queen's Counsel",
+    "King's Counsel", "Legal Practitioner", "Law Clerk", "Paralegal",
+
+    # --- Fiduciary Roles ---
+    "Trustee", "Executor", "Estate Administrator", "Attorney", "Donee of Power",
+    "Guardian ad Litem", "Committee", "Financial Manager", "Enduring Guardian",
+    "Beneficiary", "Settlor", "Appointor", "Protector",
+
+    # --- Judicial/Tribunal Roles ---
+    "Judge", "Magistrate", "Justice", "Registrar", "Mediator",
+    "Arbitrator", "Tribunal Member", "Conciliator", "Assessor",
+
+    # --- Administrative Roles ---
+    "Minister", "Delegate", "Decision-Maker", "Review Officer",
+    "Inspector", "Investigator", "Auditor", "Regulator",
+]
+
+
+# ============================================================================
+# STANDARD_STATES (75 terms) - NEW
+# ============================================================================
+# Conditions, statuses, and states that entities can be in at a point in time
+
+STANDARD_STATES = [
+    # --- Relationship States ---
+    "Married", "Separated", "Divorced", "De Facto", "Single", "Widowed",
+    "Engaged", "Cohabiting", "Estranged", "Reconciled",
+
+    # --- Employment States ---
+    "Employed", "Unemployed", "Self-Employed", "Retired", "On Leave",
+    "On Workers Compensation", "On Parental Leave", "On Unpaid Leave",
+    "Casual", "Part-Time", "Full-Time", "Contractor",
+
+    # --- Residency/Immigration States ---
+    "Permanent Resident", "Temporary Resident", "Citizen", "Visa Holder",
+    "Unlawful Non-Citizen", "Bridging Visa Holder", "Asylum Seeker",
+    "Refugee", "In Immigration Detention", "Deportee",
+
+    # --- Financial States ---
+    "Solvent", "Insolvent", "Bankrupt", "Undischarged Bankrupt",
+    "Discharged Bankrupt", "Subject to Debt Agreement", "Overindebted",
+    "Financially Independent", "Financially Dependent",
+
+    # --- Legal/Criminal States ---
+    "Convicted", "Unconvicted", "On Bail", "In Custody", "On Parole",
+    "On Probation", "On Community Correction Order", "On Good Behaviour Bond",
+    "Subject to AVO", "Subject to Restraining Order", "Disqualified",
+    "Under Investigation", "Charged", "Remand",
+
+    # --- Property States ---
+    "Owned", "Mortgaged", "Leased", "Rented", "Encumbered", "Unencumbered",
+    "Under Contract", "Subject to Caveat", "Registered", "Unregistered",
+    "Occupied", "Vacant", "Tenanted", "Owner-Occupied",
+
+    # --- Corporate States ---
+    "Active", "Deregistered", "In Liquidation", "In Voluntary Administration",
+    "Under Receivership", "Dormant", "Struck Off", "Reinstated",
+    "Under External Administration", "Subject to DOCA",
+
+    # --- Health/Capacity States ---
+    "Capable", "Incapable", "Impaired Capacity", "Under Guardianship",
+    "Under Financial Management", "Deceased", "Missing", "Incapacitated",
+
+    # --- Document/Matter States ---
+    "Pending", "In Progress", "Completed", "Dismissed", "Withdrawn",
+    "Settled", "Adjourned", "Listed for Hearing", "Reserved",
+    "Under Appeal", "Final", "Interlocutory",
+]
+
+
+# ============================================================================
+# STANDARD_RELATIONSHIPS (55 terms) - NEW
+# ============================================================================
+# Types of relationships between persons and/or entities
+
+STANDARD_RELATIONSHIPS = [
+    # --- Family Relationships ---
+    "Spouse", "Husband-Wife", "De Facto Partner", "Former Spouse",
+    "Parent-Child", "Father-Child", "Mother-Child", "Step-Parent",
+    "Adoptive Parent", "Foster Parent", "Sibling", "Half-Sibling",
+    "Grandparent-Grandchild", "Uncle/Aunt-Nephew/Niece", "Cousin",
+
+    # --- Business/Corporate Relationships ---
+    "Director-Company", "Shareholder-Company", "Employee-Employer",
+    "Contractor-Principal", "Partner-Partnership", "Agent-Principal",
+    "Franchisor-Franchisee", "Licensor-Licensee", "Joint Venturer",
+
+    # --- Financial Relationships ---
+    "Creditor-Debtor", "Lender-Borrower", "Mortgagor-Mortgagee",
+    "Guarantor-Principal Debtor", "Surety", "Insurer-Insured",
+    "Beneficiary-Trustee", "Settlor-Trust", "Investor-Fund",
+
+    # --- Legal/Professional Relationships ---
+    "Solicitor-Client", "Barrister-Instructing Solicitor", "Client-Barrister",
+    "Expert-Instructing Party", "Mediator-Parties", "Arbitrator-Parties",
+
+    # --- Fiduciary Relationships ---
+    "Guardian-Ward", "Executor-Estate", "Administrator-Estate",
+    "Attorney-Donor", "Trustee-Beneficiary", "Director-Shareholder",
+
+    # --- Property Relationships ---
+    "Landlord-Tenant", "Lessor-Lessee", "Co-Owner", "Joint Tenant",
+    "Tenant in Common", "Life Tenant", "Remainderman", "Chargee-Chargor",
+
+    # --- Caregiving Relationships ---
+    "Carer-Dependent", "Support Person", "Primary Carer",
+    "Shared Care Arrangement", "Supervised Contact",
+]
+
+
+# ============================================================================
+# ONTOLOGY METADATA
+# ============================================================================
+# Total terms by category for validation
+
+ONTOLOGY_STATS = {
+    "STANDARD_ASSETS": 104,
+    "STANDARD_OUTCOMES": 104,
+    "STANDARD_EVENTS": 166,
+    "STANDARD_ROLES": 102,
+    "STANDARD_STATES": 99,
+    "STANDARD_RELATIONSHIPS": 58,
+    "TOTAL": 633,
+}

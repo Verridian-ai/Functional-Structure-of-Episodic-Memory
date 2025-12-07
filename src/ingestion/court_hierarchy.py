@@ -474,6 +474,196 @@ COURT_CODES = {
         'authority_score': 50,
         'domain_hint': 'Employment',
     },
+
+    # --- ADDITIONAL SPECIALIST TRIBUNALS (Agent 3 additions) ---
+    'SSAT': {
+        'name': 'Social Security Appeals Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Administrative',
+    },
+    'MRT': {
+        'name': 'Migration Review Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Administrative',
+    },
+    'RRT': {
+        'name': 'Refugee Review Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Administrative',
+    },
+    'IPC': {
+        'name': 'Information and Privacy Commission',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 35,
+        'domain_hint': 'Administrative',
+    },
+    'OAIC': {
+        'name': 'Office of the Australian Information Commissioner',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 35,
+        'domain_hint': 'Administrative',
+    },
+    'VET': {
+        'name': 'Veterans Entitlements Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Administrative',
+    },
+
+    # --- NORFOLK ISLAND ---
+    'NISC': {
+        'name': 'Norfolk Island Supreme Court',
+        'level': 'superior_trial',
+        'jurisdiction': 'NI',
+        'binding': 'lower_ni',
+        'authority_score': 70,
+    },
+
+    # --- CORONERS COURTS ---
+    'NSWCOR': {
+        'name': 'NSW Coroners Court',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 45,
+        'domain_hint': 'Criminal',
+    },
+    'VICCOR': {
+        'name': 'Victorian Coroners Court',
+        'level': 'specialist',
+        'jurisdiction': 'VIC',
+        'binding': False,
+        'authority_score': 45,
+        'domain_hint': 'Criminal',
+    },
+
+    # --- CHILDREN'S COURTS ---
+    'NSWCC': {
+        'name': 'NSW Childrens Court',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Family',
+    },
+    'VChC': {
+        'name': 'Victorian Childrens Court',
+        'level': 'specialist',
+        'jurisdiction': 'VIC',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Family',
+    },
+
+    # --- DRUG COURTS ---
+    'NSWDC_Drug': {
+        'name': 'NSW Drug Court',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 40,
+        'domain_hint': 'Criminal',
+    },
+
+    # --- DUST DISEASES TRIBUNAL ---
+    'DDT': {
+        'name': 'Dust Diseases Tribunal of NSW',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': 'dust_diseases',
+        'authority_score': 65,
+        'domain_hint': 'Torts',
+    },
+
+    # --- NATIVE TITLE TRIBUNAL ---
+    'NNTT': {
+        'name': 'National Native Title Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'Commonwealth',
+        'binding': False,
+        'authority_score': 50,
+        'domain_hint': 'Property',
+    },
+
+    # --- GUARDIANSHIP TRIBUNALS ---
+    'NSWGT': {
+        'name': 'NSW Guardianship Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 35,
+        'domain_hint': 'Family',
+    },
+
+    # --- MENTAL HEALTH REVIEW TRIBUNALS ---
+    'MHRT': {
+        'name': 'Mental Health Review Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 35,
+        'domain_hint': 'Administrative',
+    },
+
+    # --- COMPENSATION COURTS ---
+    'WCC': {
+        'name': 'Workers Compensation Commission',
+        'level': 'tribunal',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 50,
+        'domain_hint': 'Employment',
+    },
+    'WCAT': {
+        'name': 'Workers Compensation Appeals Tribunal',
+        'level': 'tribunal',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 55,
+        'domain_hint': 'Employment',
+    },
+
+    # --- HISTORICAL COURTS (superseded but still cited) ---
+    'CCA': {
+        'name': 'Court of Criminal Appeal (Historical)',
+        'level': 'superior_appellate',
+        'jurisdiction': 'Multiple',
+        'binding': False,
+        'authority_score': 70,
+        'domain_hint': 'Criminal',
+    },
+    'IRC_NSW': {
+        'name': 'Industrial Relations Commission of NSW',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': 'nsw_industrial',
+        'authority_score': 60,
+        'domain_hint': 'Employment',
+    },
+
+    # --- COSTS ASSESSMENT ---
+    'COSTSASS': {
+        'name': 'Costs Assessment (NSW)',
+        'level': 'specialist',
+        'jurisdiction': 'NSW',
+        'binding': False,
+        'authority_score': 30,
+    },
 }
 
 
@@ -590,8 +780,18 @@ REPORT_SERIES = {
 # ============================================================================
 
 def get_court_info(court_code: str) -> Optional[Dict]:
-    """Get court information by code."""
-    return COURT_CODES.get(court_code.upper())
+    """Get court information by code (case-insensitive lookup)."""
+    if not court_code:
+        return None
+    # Try exact match first
+    if court_code in COURT_CODES:
+        return COURT_CODES[court_code]
+    # Try case-insensitive match
+    code_upper = court_code.upper()
+    for key in COURT_CODES:
+        if key.upper() == code_upper:
+            return COURT_CODES[key]
+    return None
 
 
 def get_hierarchy_level(court_code: str) -> int:
@@ -622,10 +822,11 @@ def get_domain_hint(court_code: str) -> Optional[str]:
 
 def extract_court_from_citation(citation: str) -> Optional[str]:
     """Extract court code from a medium neutral citation."""
-    pattern = re.compile(r'\[\d{4}\]\s*([A-Z]{2,10})\s*\d+')
+    # Pattern matches court codes with mixed case (e.g., FamCA, NSWSC, HCA)
+    pattern = re.compile(r'\[\d{4}\]\s*([A-Za-z]{2,10})\s*\d+')
     match = pattern.search(citation)
     if match:
-        return match.group(1).upper()
+        return match.group(1)  # Return as-is, lookup handles case
     return None
 
 
