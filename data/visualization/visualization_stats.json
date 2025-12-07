@@ -1,0 +1,913 @@
+{
+  "generated_at": "2025-12-07T20:48:59.417437",
+  "total_nodes": 5000,
+  "total_edges": 6906,
+  "by_state": {
+    "NSW": 3533,
+    "Federal": 1467
+  },
+  "by_domain": {
+    "Property": 77,
+    "Family": 30,
+    "Administrative": 38,
+    "Criminal": 54,
+    "Health": 8,
+    "Unclassified": 4771,
+    "Privacy": 8,
+    "Torts": 11,
+    "Procedural": 1,
+    "Equity": 2
+  },
+  "by_court_level": {
+    "superior_trial": 1151,
+    "superior_appellate": 2495,
+    "default": 666,
+    "apex": 688
+  },
+  "by_court": {
+    "NSWSC": 511,
+    "FCA": 639,
+    "FCAFC": 140,
+    "default": 666,
+    "HCA": 688,
+    "NSWCA": 2355,
+    "SASC": 1
+  },
+  "extraction_stats": {
+    "extraction_completed": "2025-12-07T20:37:23.848824",
+    "total_documents": 100,
+    "domain_stats": {
+      "Family": {
+        "document_count": 8,
+        "by_type": {
+          "secondary_legislation": 4,
+          "decision": 4
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "commonwealth": 3,
+          "new_south_wales": 1,
+          "south_australia": 1
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "federal_court_of_australia": 2,
+          "nsw_caselaw": 1,
+          "high_court_of_australia": 1,
+          "south_australian_legislation": 1
+        },
+        "by_category": {
+          "Family_Legislation": 3,
+          "Family_General": 5
+        },
+        "by_court": {
+          "FCA": 2,
+          "NSWSC": 1,
+          "HCA": 1
+        },
+        "by_court_level": {
+          "superior_trial": 3,
+          "apex": 1
+        },
+        "date_range": {
+          "min": "2002-04-02",
+          "max": "2024-03-15"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Proclamation under the Commonwealth Powers (De Facto Relationships) Act 2006 (Tas)",
+          "Threatened Species Protection Order 2021 (Tas)",
+          "BWK Elders (Australia) Pty Ltd v Westgate Wool Company Pty Ltd (No.4) [2002] FCA 369",
+          "CJT v Office of the Children\u2019s Guardian [2016] NSWSC 738",
+          "Latec Investments Ltd v Hotel Terrigal Pty Ltd [1965] HCA 17",
+          "Status of Children (Parentage Testing) Regulations 2017 (Tas)",
+          "Societe Civile et Agricole du Vieux Chateau Certan v Kreglinger (Australia) Pty Ltd [2024] FCA 248",
+          "Family Relationships Regulations 2010 (SA)"
+        ],
+        "top_legislation_refs": {
+          "Crimes Act 1900": 1,
+          "Tribunal Legislation": 1,
+          "Supreme Court Legislation": 1,
+          "Status of Children Legislation": 1,
+          "Competition and Consumer Act 2010": 1,
+          "Australian Consumer Law": 1,
+          "Trade Marks Act 1995": 1,
+          "NEL": 1,
+          "Relationships Legislation": 1,
+          "Oaths Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Administrative": {
+        "document_count": 11,
+        "by_type": {
+          "secondary_legislation": 5,
+          "primary_legislation": 2,
+          "decision": 3,
+          "bill": 1
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "new_south_wales": 2,
+          "south_australia": 3,
+          "queensland": 1,
+          "commonwealth": 2
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "nsw_legislation": 1,
+          "south_australian_legislation": 3,
+          "queensland_legislation": 1,
+          "nsw_caselaw": 1,
+          "federal_court_of_australia": 2
+        },
+        "by_category": {
+          "Administrative_Legislation": 7,
+          "Admin_Review": 3,
+          "Admin_Migration": 1
+        },
+        "by_court": {
+          "NSWCATAD": 1,
+          "FCA": 2
+        },
+        "by_court_level": {
+          "tribunal": 1,
+          "superior_trial": 2
+        },
+        "date_range": {
+          "min": "2004-10-06",
+          "max": "2023-11-23"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Local Government Order 2004 (Tas)",
+          "Proclamation under the Industrial Hemp Act 2015 (Tas)",
+          "Government Advertising Act 2011 (NSW)",
+          "Freedom of Information (Fees and Charges) Regulations 2018 (SA)",
+          "Local Government (Procedures at Meetings) Regulations 2013 (SA)",
+          "Agricultural Chemicals Distribution Control Regulation 2021 (Qld)",
+          "Local Government Amendment (Targeted Review) Act 2017 (Tas)",
+          "Auld v Independent Liquor and Gaming Authority [2018] NSWCATAD 25",
+          "APG16 v Minister for Immigration and Border Protection [2018] FCA 831",
+          "Electoral (Control of Corflutes) Amendment Bill 2024 (SA)"
+        ],
+        "top_legislation_refs": {
+          "Local Government Legislation": 4,
+          "Migration Act 1958": 2,
+          "Federal Court Rules": 2,
+          "Constitution": 2,
+          "Titles Legislation": 1,
+          "Hemp Legislation": 1,
+          "Government Advertising Legislation": 1,
+          "Employment Legislation": 1,
+          "Freedom of Information Legislation": 1,
+          "Environmental Planning and Assessment Act": 1,
+          "Tribunal Legislation": 1,
+          "Liquor Legislation": 1,
+          "Administration Legislation": 1,
+          "Amendment Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Criminal": {
+        "document_count": 18,
+        "by_type": {
+          "primary_legislation": 2,
+          "secondary_legislation": 3,
+          "decision": 12,
+          "bill": 1
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "commonwealth": 3,
+          "new_south_wales": 9,
+          "south_australia": 3
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "high_court_of_australia": 1,
+          "nsw_caselaw": 9,
+          "south_australian_legislation": 3,
+          "federal_court_of_australia": 2
+        },
+        "by_category": {
+          "Criminal_Legislation": 6,
+          "Criminal_General": 12
+        },
+        "by_court": {
+          "HCA": 1,
+          "NSWCATAD": 1,
+          "NSWSC": 2,
+          "NSWLEC": 2,
+          "NSWCCA": 2,
+          "FCA": 2,
+          "NSWCA": 2
+        },
+        "by_court_level": {
+          "apex": 1,
+          "tribunal": 1,
+          "superior_trial": 4,
+          "specialist": 2,
+          "superior_appellate": 4
+        },
+        "date_range": {
+          "min": "2002-03-27",
+          "max": "2022-09-01"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Police Miscellaneous Amendments Act (No. 2) 2009 (Repealed) (Tas)",
+          "Proclamation under the Police Offences Amendment (Public Drunkenness) Act 2000 (Tas)",
+          "Penalty Units and Other Penalties Act 1987 (Tas)",
+          "Muir v Open Brethren [1956] HCA 14",
+          "Fisher v Commissioner for Fair Trading [2018] NSWCATAD 301",
+          "Victims of Crime (Compensation) Amendment Bill 2023 (SA)",
+          "R v Xie (No 13) [2015] NSWSC 2125",
+          "Hardie v North Sydney City Council [2006] NSWLEC 45",
+          "Coroners Regulations 2020 (SA)",
+          "RJS v Regina [2007] NSWCCA 241"
+        ],
+        "top_legislation_refs": {
+          "NGL": 5,
+          "Evidence Act 1995": 3,
+          "Evidence Act": 3,
+          "Fences Legislation": 2,
+          "NEL": 2,
+          "Crimes Act 1900": 2,
+          "Corporations Act 2001": 2,
+          "Corporations Act": 2,
+          "Federal Court Rules": 2,
+          "Repeal Legislation": 1,
+          "Penalties Legislation": 1,
+          "Interpretation Legislation": 1,
+          "Crime Legislation": 1,
+          "Amendment Legislation": 1,
+          "Evidence Legislation": 1,
+          "Coroners Legislation": 1,
+          "Jury Legislation": 1,
+          "ACL": 1,
+          "Criminal Procedure Act": 1,
+          "Australian Securities and Investments Commission Act 2001": 1
+        },
+        "top_case_refs": {
+          "ASIC v Rich": 1
+        }
+      },
+      "Commercial": {
+        "document_count": 8,
+        "by_type": {
+          "primary_legislation": 4,
+          "secondary_legislation": 3,
+          "bill": 1
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "south_australia": 2,
+          "new_south_wales": 2,
+          "queensland": 1
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "south_australian_legislation": 2,
+          "nsw_legislation": 2,
+          "queensland_legislation": 1
+        },
+        "by_category": {
+          "Commercial_Legislation": 8
+        },
+        "by_court": {},
+        "by_court_level": {},
+        "date_range": {
+          "min": "2001-07-15",
+          "max": "2024-08-20"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Corporations (Ancillary Provisions) Act 2001 (Tas)",
+          "Proclamation under the Financial Management Act 2016 (Tas)",
+          "Small Business Commissioner Regulations 2012 (SA)",
+          "Riverbank Act 1997 (SA)",
+          "Conveyancers Licensing Act 2003 (NSW)",
+          "Retail Shop Leases Amendment Bill 2015 (Qld)",
+          "Financial Agreement Ratification Act 1928 (NSW)",
+          "Proclamation under the Personal Property Securities (Commonwealth Powers) Act 2010 (Tas)"
+        ],
+        "top_legislation_refs": {
+          "Corporations Act 2001": 2,
+          "Corporations Act": 2,
+          "Constitution": 2,
+          "Australian Securities and Investments Commission Act 2001": 1,
+          "Real Property Act": 1,
+          "Bank Legislation": 1,
+          "Property Legislation": 1,
+          "Conveyancing Act": 1,
+          "Amendment Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Property": {
+        "document_count": 17,
+        "by_type": {
+          "secondary_legislation": 2,
+          "primary_legislation": 8,
+          "decision": 7
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "new_south_wales": 5,
+          "south_australia": 5,
+          "commonwealth": 3,
+          "queensland": 1
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "nsw_caselaw": 4,
+          "south_australian_legislation": 5,
+          "nsw_legislation": 1,
+          "federal_court_of_australia": 3,
+          "queensland_legislation": 1
+        },
+        "by_category": {
+          "Property_Legislation": 4,
+          "Prop_Real": 13
+        },
+        "by_court": {
+          "NSWSC": 3,
+          "FCA": 3,
+          "NSWLEC": 1
+        },
+        "by_court_level": {
+          "superior_trial": 6,
+          "specialist": 1
+        },
+        "date_range": {
+          "min": "1914-12-17",
+          "max": "2024-07-01"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Proclamation under the Land Use Planning and Approvals Amendment Act 2013 (Tas)",
+          "Survey Co-ordination Act 1944 (Tas)",
+          "Insurance Australia Limited t/as NRMA Insurance v Banos (No 2) [2013] NSWSC 1668",
+          "Tanlane Pty Ltd v Moorebank Recyclers Pty Ltd (No 2) [2011] NSWSC 1286",
+          "Adelaide Dolphin Sanctuary Act 2005 (SA)",
+          "Land and Business (Sale and Conveyancing) Act 1994 (SA)",
+          "Lord Howe Island Regulation 2014 (2014-497) (NSW)",
+          "United Firefighters' Union of Australia v Metropolitan Fire Brigades Board [1998] FCA 1119",
+          "Bickle v State of Victoria (Victoria Police) [2020] FCA 168",
+          "Commissioner of Taxation v Northumberland Development Co Pty Ltd [1995] FCA 588"
+        ],
+        "top_legislation_refs": {
+          "Real Property Act": 3,
+          "Property Legislation": 3,
+          "Federal Court Rules": 3,
+          "NGL": 3,
+          "Local Government Legislation": 2,
+          "Amendment Legislation": 1,
+          "State Service Legislation": 1,
+          "Motor Accidents Compensation Act": 1,
+          "Conveyancing Act": 1,
+          "Conveyancing Legislation": 1,
+          "Relationships Legislation": 1,
+          "Wildlife Legislation": 1,
+          "Fair Trading Legislation": 1,
+          "Land Legislation": 1,
+          "Interpretation Legislation": 1,
+          "Constitution": 1,
+          "Disability Discrimination Act 1992": 1,
+          "Income Tax Assessment Act 1936": 1,
+          "Transport Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Procedural": {
+        "document_count": 5,
+        "by_type": {
+          "secondary_legislation": 3,
+          "bill": 1,
+          "decision": 1
+        },
+        "by_jurisdiction": {
+          "tasmania": 3,
+          "south_australia": 1,
+          "commonwealth": 1
+        },
+        "by_source": {
+          "tasmanian_legislation": 3,
+          "south_australian_legislation": 1,
+          "federal_court_of_australia": 1
+        },
+        "by_category": {
+          "Procedural_Legislation": 4,
+          "Proc_Civil": 1
+        },
+        "by_court": {
+          "FCA": 1
+        },
+        "by_court_level": {
+          "superior_trial": 1
+        },
+        "date_range": {
+          "min": "1999-05-10",
+          "max": "2016-01-06"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Supreme Court Amendment (Subpoena) Rules 2009 (Tas)",
+          "Return to Work Corporation of South Australia (Constitution of Board) Amendment Bill 2022 (SA)",
+          "Civil Process (Table of Fees for Execution) Amendment Rules 2012 (Tas)",
+          "Supreme Court Amendment (Miscellaneous) Rules 2015 (Tas)",
+          "Adlam v Bauer [1999] FCA 634"
+        ],
+        "top_legislation_refs": {
+          "Civil Procedure Act": 2,
+          "Supreme Court Rules": 2,
+          "Civil Procedure Legislation": 2,
+          "Constitution": 1,
+          "Amendment Legislation": 1,
+          "Civil Process Legislation": 1,
+          "Federal Court Rules": 1,
+          "NGL": 1
+        },
+        "top_case_refs": {}
+      },
+      "Resources": {
+        "document_count": 13,
+        "by_type": {
+          "primary_legislation": 7,
+          "secondary_legislation": 5,
+          "bill": 1
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 2,
+          "tasmania": 6,
+          "queensland": 2,
+          "south_australia": 3
+        },
+        "by_source": {
+          "nsw_legislation": 2,
+          "tasmanian_legislation": 6,
+          "queensland_legislation": 2,
+          "south_australian_legislation": 3
+        },
+        "by_category": {
+          "Resources_Legislation": 13
+        },
+        "by_court": {},
+        "by_court_level": {},
+        "date_range": {
+          "min": "2007-09-01",
+          "max": "2024-05-31"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Broken Hill to South Australian Border Railway Agreement Act 1968 (NSW)",
+          "Proclamation under the Passenger Transport Services Act 2011 (Tas)",
+          "Transport Operations (Passenger Transport) Standard 2010 (Qld)",
+          "Terrorism (Surface Transport Security) Act 2011 (SA)",
+          "Living Marine Resources Management (Miscellaneous Amendments) Act 2007 (Tas)",
+          "Supported Residential Facilities Act 1992 (SA)",
+          "South Australian Forestry Corporation Act 2000 (SA)",
+          "Electricity Supply Industry (Miscellaneous Amendments) Act 2005 (Repealed) (Tas)",
+          "Fisheries (Marine Plant) Rules 2017 (Tas)",
+          "Mines Legislation (Resources Safety) Amendment Bill 2017 (Qld)"
+        ],
+        "top_legislation_refs": {
+          "Corporations Act": 2,
+          "Heavy Vehicle National Law": 1,
+          "Weapons Legislation": 1,
+          "Criminal Code": 1,
+          "Freedom of Information Legislation": 1,
+          "Local Government Legislation": 1,
+          "Relationships Legislation": 1,
+          "Real Property Act": 1,
+          "Corporations Legislation": 1,
+          "Property Legislation": 1,
+          "Repeal Legislation": 1,
+          "Health Legislation": 1,
+          "Amendment Legislation": 1,
+          "Corporations Act 2001": 1,
+          "Mining Act": 1
+        },
+        "top_case_refs": {}
+      },
+      "Privacy": {
+        "document_count": 3,
+        "by_type": {
+          "decision": 3
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 1,
+          "commonwealth": 2
+        },
+        "by_source": {
+          "nsw_caselaw": 1,
+          "federal_court_of_australia": 2
+        },
+        "by_category": {
+          "Privacy_Data": 3
+        },
+        "by_court": {
+          "NSWIRComm": 1,
+          "FCA": 1,
+          "FCAFC": 1
+        },
+        "by_court_level": {
+          "superior_trial": 1,
+          "superior_appellate": 1
+        },
+        "date_range": {
+          "min": "2004-08-03",
+          "max": "2023-11-16"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Da Silva and Sunlake Real Estate Pty Ltd t/as L J Hooker Morisset [2004] NSWIRComm 381",
+          "AGV20 v Minister for Immigration, Citizenship and Multicultural Affairs [2023] FCA 1430",
+          "SPLB v Minister for Immigration & Multicultural & Indigenous Affairs [2004] FCAFC 198"
+        ],
+        "top_legislation_refs": {
+          "Federal Court Rules": 2,
+          "Constitution": 1,
+          "NGL": 1,
+          "Tribunal Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Health": {
+        "document_count": 5,
+        "by_type": {
+          "decision": 2,
+          "secondary_legislation": 2,
+          "primary_legislation": 1
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 2,
+          "tasmania": 3
+        },
+        "by_source": {
+          "nsw_caselaw": 2,
+          "tasmanian_legislation": 3
+        },
+        "by_category": {
+          "Health_Mental": 2,
+          "Health_Legislation": 3
+        },
+        "by_court": {
+          "NSWCATGD": 2
+        },
+        "by_court_level": {},
+        "date_range": {
+          "min": "2016-02-01",
+          "max": "2024-09-01"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "OBQ [2020] NSWCATGD 59",
+          "OKC [2016] NSWCATGD 2",
+          "Public Health (Smoke-free Areas) Regulations 2024 (Tas)",
+          "Disability Services Act 2011 (Tas)",
+          "Health Service Establishments Regulations 2021 (Tas)"
+        ],
+        "top_legislation_refs": {
+          "Guardianship Act": 2,
+          "Tribunal Legislation": 2,
+          "Guardianship Legislation": 2,
+          "Powers of Attorney Act": 1,
+          "Public Health Act": 1,
+          "Health Legislation": 1,
+          "Development Legislation": 1,
+          "Health Practitioner Regulation National Law": 1
+        },
+        "top_case_refs": {}
+      },
+      "Education": {
+        "document_count": 3,
+        "by_type": {
+          "primary_legislation": 3
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 2,
+          "tasmania": 1
+        },
+        "by_source": {
+          "nsw_legislation": 2,
+          "tasmanian_legislation": 1
+        },
+        "by_category": {
+          "Education_Legislation": 3
+        },
+        "by_court": {},
+        "by_court_level": {},
+        "date_range": {
+          "min": "1967-03-14",
+          "max": "2018-01-01"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Technical Education Trust Funds Act 1967 (NSW)",
+          "Building and Construction Industry Training Fund Amendment Act 2016 (Repealed) (Tas)",
+          "University and College Lands (Saint Andrew\u2019s College) Act 1967 (NSW)"
+        ],
+        "top_legislation_refs": {
+          "Trustee Act": 1,
+          "Trustee Legislation": 1,
+          "Amendment Legislation": 1,
+          "Conveyancing Act": 1,
+          "Conveyancing Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Torts": {
+        "document_count": 6,
+        "by_type": {
+          "decision": 4,
+          "primary_legislation": 1,
+          "secondary_legislation": 1
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 4,
+          "tasmania": 2
+        },
+        "by_source": {
+          "nsw_caselaw": 4,
+          "tasmanian_legislation": 2
+        },
+        "by_category": {
+          "Tort_Negligence": 5,
+          "Torts_Legislation": 1
+        },
+        "by_court": {
+          "NSWSC": 4
+        },
+        "by_court_level": {
+          "superior_trial": 4
+        },
+        "date_range": {
+          "min": "2003-02-06",
+          "max": "2023-07-01"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "LNCP002 Pty Ltd v Feridun Akcan (No 2) [2021] NSWSC 1018",
+          "Rules Publication Act 1953 (Tas)",
+          "OLIVE v STATE OF NEW SOUTH WALES [2003] NSWSC 356",
+          "Portelli v Tabriska Pty Ltd & 4 Ors [2006] NSWSC 1204",
+          "Davis v Greater Western Area Health Service [2005] NSWSC 1206",
+          "Defamation Order 2023 (Tas)"
+        ],
+        "top_legislation_refs": {
+          "Uniform Civil Procedure Rules": 3,
+          "Civil Procedure Act": 2,
+          "UCPR": 1,
+          "NGL": 1,
+          "Constitution": 1,
+          "Civil Procedure Legislation": 1,
+          "Defamation Act": 1,
+          "Defamation Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Employment": {
+        "document_count": 2,
+        "by_type": {
+          "secondary_legislation": 1,
+          "primary_legislation": 1
+        },
+        "by_jurisdiction": {
+          "south_australia": 1,
+          "tasmania": 1
+        },
+        "by_source": {
+          "south_australian_legislation": 1,
+          "tasmanian_legislation": 1
+        },
+        "by_category": {
+          "Employment_Legislation": 2
+        },
+        "by_court": {},
+        "by_court_level": {},
+        "date_range": {
+          "min": "2009-09-01",
+          "max": "2020-11-27"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Superannuation (Lyell McEwin Employees) Regulations 2009 (SA)",
+          "Parliamentary Salaries, Superannuation and Allowances Act 2012 (Tas)"
+        ],
+        "top_legislation_refs": {
+          "Superannuation Industry (Supervision) Act 1993": 1,
+          "SIS Act": 1,
+          "Superannuation Legislation": 1,
+          "Constitution": 1,
+          "Amendment Legislation": 1
+        },
+        "top_case_refs": {}
+      },
+      "Environment": {
+        "document_count": 1,
+        "by_type": {
+          "primary_legislation": 1
+        },
+        "by_jurisdiction": {
+          "new_south_wales": 1
+        },
+        "by_source": {
+          "nsw_legislation": 1
+        },
+        "by_category": {
+          "Environment_Legislation": 1
+        },
+        "by_court": {},
+        "by_court_level": {},
+        "date_range": {
+          "min": "2023-07-14",
+          "max": "2023-07-14"
+        },
+        "text_length_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "authority_stats": {
+          "min": 0,
+          "max": 0,
+          "mean": 0,
+          "count": 0
+        },
+        "sample_citations": [
+          "Plantations and Reafforestation Act 1999 (NSW)"
+        ],
+        "top_legislation_refs": {
+          "Conveyancing Act": 1,
+          "Environmental Planning and Assessment Act": 1,
+          "Forestry Legislation": 1,
+          "Conveyancing Legislation": 1,
+          "Reafforestation Legislation": 1,
+          "Administration Legislation": 1
+        },
+        "top_case_refs": {}
+      }
+    },
+    "overlap_stats": {
+      "single_domain": 60,
+      "multi_domain": 40,
+      "top_pairs": {
+        "('Animal', 'Health')": 37,
+        "('Animal', 'Family')": 37,
+        "('Family', 'Health')": 37,
+        "('Administrative', 'Animal')": 37,
+        "('Animal', 'Torts')": 37,
+        "('Animal', 'Property')": 37,
+        "('Property', 'Torts')": 37,
+        "('Property', 'Unclassified')": 37,
+        "('Specialized', 'Unclassified')": 37,
+        "('Property', 'Specialized')": 37,
+        "('Criminal', 'Equity')": 36,
+        "('Equity', 'Family')": 36,
+        "('Administrative', 'Equity')": 36,
+        "('Equity', 'Privacy')": 36,
+        "('Animal', 'Equity')": 36,
+        "('Equity', 'Torts')": 36,
+        "('Equity', 'Unclassified')": 36,
+        "('Equity', 'Property')": 36,
+        "('Equity', 'Procedural')": 36,
+        "('Equity', 'Specialized')": 36
+      }
+    }
+  }
+}
