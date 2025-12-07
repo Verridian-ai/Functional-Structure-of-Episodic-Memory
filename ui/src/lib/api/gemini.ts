@@ -331,7 +331,7 @@ export async function streamChat(
   apiKey?: string
 ) {
   const client = getClient(apiKey);
-  let formattedMessages = toOpenAIMessages(messages, config.systemPrompt);
+  const formattedMessages = toOpenAIMessages(messages, config.systemPrompt);
   const enabledTools = TOOL_DEFINITIONS.filter(t =>
     config.enabledTools.includes(t.function.name)
   );
@@ -358,7 +358,7 @@ export async function streamChat(
 
       const currentToolCalls: Map<number, ToolCall> = new Map();
       let currentContent = '';
-      let argumentsBuffer: Map<number, string> = new Map();
+      const argumentsBuffer: Map<number, string> = new Map();
 
       for await (const chunk of stream) {
         const delta = chunk.choices[0]?.delta;

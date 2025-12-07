@@ -319,10 +319,10 @@ export function useIdleCallback<T extends (...args: Parameters<T>) => void>(
 
   return useCallback(
     (...args: Parameters<T>) => {
-      const ric = window.requestIdleCallback || ((cb) => setTimeout(cb, 1));
-      ric(() => callbackRef.current(...args), options);
+      const ric = window.requestIdleCallback || ((cb: IdleRequestCallback) => setTimeout(cb, 1));
+      ric(() => callbackRef.current(...args), { timeout: options.timeout });
     },
-    [options.timeout]
+    [options]
   );
 }
 

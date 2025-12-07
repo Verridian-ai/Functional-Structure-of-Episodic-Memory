@@ -265,7 +265,7 @@ export function OnboardingModal() {
               className="flex items-center gap-2 px-6 py-4 rounded-2xl text-zinc-400 hover:text-white transition-colors hover:bg-white/5"
             >
               <Zap className="w-4 h-4" />
-              Skip, I know what I'm doing
+              Skip, I know what I&apos;m doing
             </button>
           </div>
 
