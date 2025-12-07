@@ -51,6 +51,15 @@ type FilterState = {
   courtLevel: string;
 };
 
+type ViewMode = 'standard' | 'court-hierarchy' | 'domain-clusters' | 'density';
+
+const VIEW_MODES: { id: ViewMode; label: string; description: string }[] = [
+  { id: 'standard', label: 'Standard', description: 'Default 3D scatter view' },
+  { id: 'court-hierarchy', label: 'Court Hierarchy', description: 'Vertical layers by court level' },
+  { id: 'domain-clusters', label: 'Domain Clusters', description: 'Group by legal domain' },
+  { id: 'density', label: 'Density', description: 'Node size by connections' },
+];
+
 // Custom shader for circular glowing points
 const vertexShader = `
   attribute float size;
@@ -197,6 +206,8 @@ export default function LegalGraph3D() {
     domains: string[];
     courtLevels: string[];
   }>({ states: [], domains: [], courtLevels: [] });
+  const [viewMode, setViewMode] = useState<ViewMode>('standard');
+  const [showViewMenu, setShowViewMenu] = useState(false);
 
   // Fetch data with filters
   const fetchGraph = async (currentFilters: FilterState) => {
@@ -233,8 +244,82 @@ export default function LegalGraph3D() {
     fetchGraph(newFilters);
   };
 
+  // Transform nodes based on view mode
+  const transformedNodes = useMemo(() => {
+    if (!data.nodes.length) return data.nodes;
+
+    switch (viewMode) {
+      case 'court-hierarchy': {
+        // Arrange nodes in vertical layers by court level
+        const levelOrder: Record<string, number> = {
+          'Apex': 4,
+          'Appeals': 3,
+          'Supreme': 2,
+          'Federal': 2.5,
+          'Specialized': 1,
+          'Criminal': 1,
+          'Circuit': 1,
+          'Tribunal': 0,
+          'Other': -1,
+        };
+        return data.nodes.map(node => ({
+          ...node,
+          y: (levelOrder[node.courtLevel || 'Other'] || 0) * 25 + (Math.random() - 0.5) * 10,
+          x: node.x * 0.8,
+          z: node.z * 0.8,
+        }));
+      }
+      case 'domain-clusters': {
+        // Cluster nodes by legal domain in a ring
+        const domains = [...new Set(data.nodes.map(n => n.domain || 'General'))];
+        const domainAngles: Record<string, number> = {};
+        domains.forEach((d, i) => {
+          domainAngles[d] = (i / domains.length) * Math.PI * 2;
+        });
+        return data.nodes.map(node => {
+          const angle = domainAngles[node.domain || 'General'] || 0;
+          const radius = 40 + Math.random() * 30;
+          return {
+            ...node,
+            x: Math.cos(angle) * radius + (Math.random() - 0.5) * 15,
+            z: Math.sin(angle) * radius + (Math.random() - 0.5) * 15,
+            y: (Math.random() - 0.5) * 40,
+          };
+        });
+      }
+      case 'density': {
+        // Keep positions but vary size based on edge connections
+        const connectionCount: Record<string, number> = {};
+        data.edges.forEach(e => {
+          connectionCount[e.source] = (connectionCount[e.source] || 0) + 1;
+          connectionCount[e.target] = (connectionCount[e.target] || 0) + 1;
+        });
+        const maxConnections = Math.max(...Object.values(connectionCount), 1);
+        return data.nodes.map(node => ({
+          ...node,
+          size: 0.3 + (connectionCount[node.id] || 0) / maxConnections * 2,
+        }));
+      }
+      default:
+        return data.nodes;
+    }
+  }, [data.nodes, data.edges, viewMode]);
+
   return (
     <div className="w-full h-full relative bg-zinc-950">
+      {/* Top Navigation Bar */}
+      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+        <a
+          href="/"
+          className="flex items-center gap-2 px-4 py-2 bg-zinc-900/90 backdrop-blur-md border border-zinc-700 hover:border-cyan-500/50 rounded-lg text-white hover:text-cyan-400 transition-all group"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span className="text-sm font-medium">Back to Chat</span>
+        </a>
+      </div>
+
       {/* Overlay UI (U4.4) */}
       <div className="absolute top-4 left-4 z-10 pointer-events-none">
         <div className="bg-zinc-900/90 backdrop-blur-md border border-zinc-700 p-4 rounded-lg pointer-events-auto max-w-sm">
@@ -319,6 +404,49 @@ export default function LegalGraph3D() {
                 </button>
               </div>
             )}
+          </div>
+
+          {/* View Mode Selector */}
+          <div className="mt-3 pt-3 border-t border-zinc-700">
+            <div className="text-xs text-cyan-400 font-medium mb-2">View Mode</div>
+            <div className="relative">
+              <button
+                onClick={() => setShowViewMenu(!showViewMenu)}
+                className="w-full flex items-center justify-between gap-2 bg-zinc-800 border border-zinc-600 rounded px-3 py-2 text-sm text-white hover:border-cyan-500 focus:border-cyan-500 focus:outline-none transition-colors"
+              >
+                <span>{VIEW_MODES.find(m => m.id === viewMode)?.label || 'Standard'}</span>
+                <svg className={`w-4 h-4 transition-transform ${showViewMenu ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+
+              {showViewMenu && (
+                <div className="absolute top-full left-0 right-0 mt-1 bg-zinc-800 border border-zinc-600 rounded-lg shadow-xl z-50 overflow-hidden">
+                  {VIEW_MODES.map(mode => (
+                    <button
+                      key={mode.id}
+                      onClick={() => {
+                        setViewMode(mode.id);
+                        setShowViewMenu(false);
+                      }}
+                      className={`w-full px-3 py-2.5 text-left hover:bg-zinc-700 transition-colors ${
+                        viewMode === mode.id ? 'bg-cyan-500/20 border-l-2 border-cyan-500' : ''
+                      }`}
+                    >
+                      <div className="text-sm text-white font-medium">{mode.label}</div>
+                      <div className="text-xs text-zinc-400">{mode.description}</div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Current view mode badge */}
+            <div className="mt-2 flex items-center gap-2">
+              <span className="px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded text-xs font-medium">
+                {VIEW_MODES.find(m => m.id === viewMode)?.label}
+              </span>
+            </div>
           </div>
 
           {/* Stats */}
@@ -455,8 +583,8 @@ export default function LegalGraph3D() {
         {/* Content */}
         {!loading && (
           <>
-            <ColoredNodes nodes={data.nodes} onNodeClick={setSelectedNode} />
-            <Edges edges={data.edges} nodes={data.nodes} />
+            <ColoredNodes nodes={transformedNodes} onNodeClick={setSelectedNode} />
+            <Edges edges={data.edges} nodes={transformedNodes} />
             
             {/* Selected Node Highlight */}
             {selectedNode && (
