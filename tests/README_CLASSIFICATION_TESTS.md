@@ -57,7 +57,7 @@ Comprehensive integration test suite for validating the classification pipeline,
 - Ensures no major domains are missing
 
 ### 3. test_court_hierarchy_integration.py
-**Purpose**: Validate all 106+ court codes and hierarchy relationships
+**Purpose**: Validate all 80 court codes and hierarchy relationships
 
 **Coverage**:
 - All Australian court codes (Federal, State, Territory)

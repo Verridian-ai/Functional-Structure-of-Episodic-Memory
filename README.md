@@ -513,7 +513,7 @@ flowchart TB
     DOC[Legal Document] --> PIPELINE
 
     subgraph PIPELINE["Pipeline Orchestrator"]
-        CLASSIFY[Multi-Domain Classification<br/>22 Domains, 95+ Categories] --> EXTRACT[Auto-GSW Trigger<br/>Priority Queue]
+        CLASSIFY[Multi-Domain Classification<br/>21 Domains, 103 Categories] --> EXTRACT[Auto-GSW Trigger<br/>Priority Queue]
         EXTRACT --> BUILD[Knowledge Graph<br/>SPCNet]
         BUILD --> INDEX[Vector Indexing<br/>Hybrid Search]
     end
@@ -1310,7 +1310,7 @@ python -m src.ingestion.corpus_domain_extractor \
 - Primary domain + confidence score
 - Secondary domains (up to 5)
 - 10-factor BOOST breakdown
-- Court hierarchy metadata (106+ codes)
+- Court hierarchy metadata (80 codes)
 - Extracted legislation references
 - Extracted case citations
 - Authority scores (0-100)
