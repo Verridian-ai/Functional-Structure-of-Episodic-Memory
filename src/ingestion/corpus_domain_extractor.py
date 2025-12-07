@@ -261,15 +261,8 @@ class DomainClassifier:
                 if domain_hint:
                     enhanced_meta['domain_hint'] = domain_hint
 
-        # Different strategies for legislation vs decisions
-        if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
-            primary_domain, primary_category, all_matches = self._classify_legislation(citation, jurisdiction)
-        else:
-            primary_domain, primary_category, all_matches = self._classify_decision(
-                citation, text, jurisdiction, enhanced_meta
-            )
-
-        # Extract legislation and case references (limit text for speed)
+        # Extract legislation and case references BEFORE classification
+        # so BOOST 4 (legislation-based) and BOOST 5 (case-based) can be applied
         search_text = f"{citation} {text[:5000]}"
         search_text_lower = search_text.lower()
 
@@ -280,6 +273,14 @@ class DomainClassifier:
         case_refs = self._extract_cases_fast(search_text_lower)
         if case_refs:
             enhanced_meta['case_refs'] = case_refs[:10]
+
+        # Different strategies for legislation vs decisions
+        if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
+            primary_domain, primary_category, all_matches = self._classify_legislation(citation, jurisdiction)
+        else:
+            primary_domain, primary_category, all_matches = self._classify_decision(
+                citation, text, jurisdiction, enhanced_meta
+            )
 
         return primary_domain, primary_category, all_matches, enhanced_meta
 
@@ -446,80 +447,6 @@ class DomainClassifier:
 # ============================================================================
 # FILE MANAGER
 # ============================================================================
-
-# ============================================================================
-# FILE MANAGER
-# ============================================================================
-
-class ToonFileManager:
-    """Manages output file handles for TOON domain files."""
-
-    def __init__(self, output_dir: Path, append: bool = False):
-        self.output_dir = output_dir
-        self.handles: Dict[str, TextIO] = {}
-        self.append = append
-        self.legislation_path = output_dir / "legislation" / "acts.toon"
-
-    def __enter__(self) -> "ToonFileManager":
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        (self.output_dir / "cases").mkdir(exist_ok=True)
-        (self.output_dir / "legislation").mkdir(exist_ok=True)
-
-        # We don't pre-open all files for TOON to allow for lazy creation/headers
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        for handle in self.handles.values():
-            handle.close()
-
-    def write(self, domain: str, doc: Dict[str, Any]) -> None:
-        """Write document to appropriate TOON file."""
-        doc_type = doc.get("type", "")
-
-        # Determine target file and table name
-        if doc_type in ['primary_legislation', 'secondary_legislation', 'bill']:
-            target_path = self.legislation_path
-            table_name = "Legislation"
-            key = "legislation"
-        else:
-            # Case Law -> Organized by Domain
-            domain_dir = self.output_dir / "cases" / domain
-            domain_dir.mkdir(exist_ok=True)
-            target_path = domain_dir / f"{domain}.toon"
-            table_name = f"Cases_{domain}"
-            key = domain
-
-        # Get or create handle
-        if key not in self.handles:
-            mode = 'a' if self.append and target_path.exists() else 'w'
-            f = open(target_path, mode, encoding='utf-8')
-            self.handles[key] = f
-
-            # Write header if new file or overwriting
-            if mode == 'w':
-                # We can't write the full TOON header "Name[Count]{cols}" yet because we stream.
-                # Standard TOON expects a count.
-                # For streaming, we might need a variant or just buffer.
-                # However, for "perfect accuracy" and standard TOON, we usually batch.
-                # Given strict streaming requirement, we will append rows and
-                # relied on a post-processing step OR use a "Streaming TOON" concept (not standard).
-                #
-                # ALTERNATIVE: Write as separate TOON blocks per batch?
-                # Or just write CSV-like lines but that violates "Name[Count]".
-                #
-                # Let's check `src/utils/toon.py`. It writes a block.
-                # To support streaming to one file, we should probably write one block per document
-                # OR (better) write a header with specific count if we knew it found
-                # OR just write blocks of N documents.
-                #
-                # DECISION: We will buffer in memory until X docs for that domain, then flushing a block.
-                pass
-
-        # We actually need to Buffer per domain to write valid TOON blocks
-        # So we won't write immediately to file handle in this method if we strictly follow TOON.
-        # But `ToonFileManager` interface assumes `write` writes.
-        # Let's change this class to buffer.
-        pass # Replaced by buffered implementation below
 
 class BufferedToonFileManager:
     """Manages output file handles and buffers for TOON domain files."""
