@@ -62,8 +62,8 @@ def parse_args():
     parser.add_argument(
         "--stages", "-s",
         nargs="+",
-        choices=["classify", "gsw", "graph", "index"],
-        help="Stages to run (default: all)"
+        choices=["classify", "gsw", "graph", "index", "viz"],
+        help="Stages to run (default: all). 'viz' generates frontend visualization data."
     )
 
     # Resume

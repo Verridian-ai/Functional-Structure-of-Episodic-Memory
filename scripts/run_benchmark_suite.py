@@ -252,7 +252,7 @@ def benchmark_vsa_validation() -> Dict[str, float]:
     print(f"  Composite: {metrics['composite_score']:.3f}")
 
     target_met = metrics['vsa_confidence'] >= TARGET_SCORES['vsa_confidence']
-    print(f"  Target Met: {'✓ YES' if target_met else '✗ NO'} (target: {TARGET_SCORES['vsa_confidence']:.2f})")
+    print(f"  Target Met: {'YES' if target_met else 'NO'} (target: {TARGET_SCORES['vsa_confidence']:.2f})")
 
     return metrics
 

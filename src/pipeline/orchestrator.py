@@ -196,6 +196,8 @@ class FullPipeline:
                     result = self._run_graph_building()
                 elif stage == "index":
                     result = self._run_indexing()
+                elif stage == "viz":
+                    result = self._run_visualization()
                 else:
                     print(f"[Warning] Unknown stage: {stage}")
                     continue
@@ -610,6 +612,75 @@ class FullPipeline:
             duration_seconds=0,
             statistics={"skipped": True, "reason": "Not implemented"}
         )
+
+    def _run_visualization(self) -> StageResult:
+        """
+        Stage 5: Generate visualization data for frontend.
+
+        This stage:
+        - Loads processed graph data
+        - Generates 3D coordinates for nodes
+        - Resolves citation patterns for edge matching
+        - Creates visualization_data.json for the frontend
+        - Copies data to ui/public/data/ for direct access
+        """
+        print("[Viz] Generating visualization data...")
+
+        try:
+            # Import the visualization generator
+            scripts_dir = Path(__file__).resolve().parents[2] / 'scripts'
+            sys.path.insert(0, str(scripts_dir))
+
+            from generate_visualization_data import generate_visualization_data
+
+            # Run the generator
+            output_dir = Path('data/visualization')
+            result_data = generate_visualization_data(
+                processed_dir=self.config.output_dir,
+                workspace_dir=self.config.workspace_dir,
+                graph_dir=self.config.graph_dir,
+                output_dir=output_dir,
+                limit=self.config.document_limit or 10000
+            )
+
+            # Extract statistics
+            node_count = len(result_data.get('nodes', []))
+            edge_count = len(result_data.get('edges', []))
+
+            print(f"[Viz] Generated {node_count} nodes and {edge_count} edges")
+
+            return StageResult(
+                stage="viz",
+                success=True,
+                duration_seconds=0,
+                documents_processed=node_count,
+                statistics={
+                    "nodes": node_count,
+                    "edges": edge_count,
+                    "output_file": str(output_dir / 'visualization_data.json'),
+                    "frontend_file": "ui/public/data/graph.json"
+                }
+            )
+
+        except ImportError as e:
+            print(f"[Viz Error] Could not import visualization generator: {e}")
+            return StageResult(
+                stage="viz",
+                success=False,
+                duration_seconds=0,
+                errors=[f"Import error: {e}"]
+            )
+
+        except Exception as e:
+            print(f"[Viz Error] Visualization generation failed: {e}")
+            import traceback
+            traceback.print_exc()
+            return StageResult(
+                stage="viz",
+                success=False,
+                duration_seconds=0,
+                errors=[str(e)]
+            )
 
     def _save_checkpoint(self) -> None:
         """Save pipeline state to checkpoint file."""
