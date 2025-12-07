@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Australian Legal Corpus Classification System is a sophisticated multi-dimensional document classifier designed to categorize legal documents across 22 broad legal domains and 95+ granular subcategories. The system employs a 10-factor BOOST scoring methodology to achieve high-accuracy classification with confidence metrics.
+The Australian Legal Corpus Classification System is a sophisticated multi-dimensional document classifier designed to categorize legal documents across 21 broad legal domains and 103 granular subcategories. The system employs a 10-factor BOOST scoring methodology to achieve high-accuracy classification with confidence metrics.
 
 ## System Architecture
 
@@ -28,10 +28,10 @@ MultiDomainClassification Output
 
 The system evaluates documents across four primary dimensions:
 
-1. **Keyword Patterns**: 16,407+ legal terms across 95 categories
+1. **Keyword Patterns**: 16,495 legal terms across 103 categories
 2. **Legislation References**: 500+ Acts mapped to domains
 3. **Landmark Case Citations**: 150+ key precedents
-4. **Court Hierarchy**: 106+ court codes with authority scores
+4. **Court Hierarchy**: 80 court codes with authority scores
 
 ---
 
@@ -326,7 +326,7 @@ confidence = category_score / sum(all_category_scores)
 
 ## Classification Categories
 
-### 22 Broad Domains
+### 21 Broad Domains
 
 1. **Administrative** - Judicial review, migration, FOI
 2. **Animal** - Animal welfare
@@ -349,9 +349,10 @@ confidence = category_score / sum(all_category_scores)
 19. **Sports** - Sports law, anti-doping
 20. **Tax** - Federal and state taxation
 21. **Torts** - Negligence, defamation, compensation
-22. **Unclassified** - Fallback category
 
-### 95+ Granular Subcategories
+Note: "Unclassified" is a fallback category used when no domain matches with sufficient confidence, not counted as a primary domain.
+
+### 103 Granular Subcategories
 
 See [DOMAIN_TAXONOMY.md](DOMAIN_TAXONOMY.md) for complete category listing.
 
@@ -365,7 +366,7 @@ See [DOMAIN_TAXONOMY.md](DOMAIN_TAXONOMY.md) for complete category listing.
 2. **Court Extraction**: Parse citation for court code
 3. **Authority Scoring**: Assign 0-100 authority score
 4. **Citation Analysis**: Extract legislation and case references
-5. **Keyword Matching**: Match against 16,407+ terms
+5. **Keyword Matching**: Match against 16,495 terms
 6. **BOOST Application**: Apply 10 scoring factors
 7. **Domain Attribution**: Calculate primary + secondary domains
 8. **Confidence Scoring**: Compute confidence metrics
