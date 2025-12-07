@@ -49,7 +49,7 @@ export class LegalEvidenceDetector {
     };
   }
 
-  private computeEVI(element: any, context: CaseContext): number {
+  private computeEVI(element: { importance: number; accessibility: number }, context: CaseContext): number {
     // EVI = Impact * Entropy * Reduction_Probability
     
     // 1. Impact: How much does this change the outcome?
