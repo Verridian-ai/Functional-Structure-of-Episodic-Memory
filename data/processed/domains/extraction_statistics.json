@@ -1,5 +1,5 @@
 {
-  "extraction_completed": "2025-12-06T14:29:58.114261",
+  "extraction_completed": "2025-12-25T14:59:58.459553",
   "total_documents": 100,
   "domain_stats": {
     "Family": {
@@ -99,7 +99,8 @@
       },
       "by_category": {
         "Administrative_Legislation": 7,
-        "Admin_Review": 4
+        "Admin_Review": 3,
+        "Admin_Migration": 1
       },
       "by_court": {
         "NSWCATAD": 1,
@@ -314,17 +315,17 @@
       "top_case_refs": {}
     },
     "Property": {
-      "document_count": 18,
+      "document_count": 17,
       "by_type": {
         "secondary_legislation": 2,
         "primary_legislation": 8,
-        "decision": 8
+        "decision": 7
       },
       "by_jurisdiction": {
         "tasmania": 3,
         "new_south_wales": 5,
         "south_australia": 5,
-        "commonwealth": 4,
+        "commonwealth": 3,
         "queensland": 1
       },
       "by_source": {
@@ -332,20 +333,20 @@
         "nsw_caselaw": 4,
         "south_australian_legislation": 5,
         "nsw_legislation": 1,
-        "federal_court_of_australia": 4,
+        "federal_court_of_australia": 3,
         "queensland_legislation": 1
       },
       "by_category": {
         "Property_Legislation": 4,
-        "Prop_Real": 14
+        "Prop_Real": 13
       },
       "by_court": {
         "NSWSC": 3,
-        "FCA": 4,
+        "FCA": 3,
         "NSWLEC": 1
       },
       "by_court_level": {
-        "superior_trial": 7,
+        "superior_trial": 6,
         "specialist": 1
       },
       "date_range": {
@@ -377,10 +378,10 @@
         "Commissioner of Taxation v Northumberland Development Co Pty Ltd [1995] FCA 588"
       ],
       "top_legislation_refs": {
-        "Federal Court Rules": 4,
-        "NGL": 4,
         "Real Property Act": 3,
         "Property Legislation": 3,
+        "Federal Court Rules": 3,
+        "NGL": 3,
         "Local Government Legislation": 2,
         "Amendment Legislation": 1,
         "State Service Legislation": 1,
@@ -400,26 +401,34 @@
       "top_case_refs": {}
     },
     "Procedural": {
-      "document_count": 4,
+      "document_count": 5,
       "by_type": {
         "secondary_legislation": 3,
-        "bill": 1
+        "bill": 1,
+        "decision": 1
       },
       "by_jurisdiction": {
         "tasmania": 3,
-        "south_australia": 1
+        "south_australia": 1,
+        "commonwealth": 1
       },
       "by_source": {
         "tasmanian_legislation": 3,
-        "south_australian_legislation": 1
+        "south_australian_legislation": 1,
+        "federal_court_of_australia": 1
       },
       "by_category": {
-        "Procedural_Legislation": 4
+        "Procedural_Legislation": 4,
+        "Proc_Civil": 1
       },
-      "by_court": {},
-      "by_court_level": {},
+      "by_court": {
+        "FCA": 1
+      },
+      "by_court_level": {
+        "superior_trial": 1
+      },
       "date_range": {
-        "min": "2009-06-24",
+        "min": "1999-05-10",
         "max": "2016-01-06"
       },
       "text_length_stats": {
@@ -438,7 +447,8 @@
         "Supreme Court Amendment (Subpoena) Rules 2009 (Tas)",
         "Return to Work Corporation of South Australia (Constitution of Board) Amendment Bill 2022 (SA)",
         "Civil Process (Table of Fees for Execution) Amendment Rules 2012 (Tas)",
-        "Supreme Court Amendment (Miscellaneous) Rules 2015 (Tas)"
+        "Supreme Court Amendment (Miscellaneous) Rules 2015 (Tas)",
+        "Adlam v Bauer [1999] FCA 634"
       ],
       "top_legislation_refs": {
         "Civil Procedure Act": 2,
@@ -446,7 +456,9 @@
         "Civil Procedure Legislation": 2,
         "Constitution": 1,
         "Amendment Legislation": 1,
-        "Civil Process Legislation": 1
+        "Civil Process Legislation": 1,
+        "Federal Court Rules": 1,
+        "NGL": 1
       },
       "top_case_refs": {}
     },
@@ -538,6 +550,7 @@
         "Privacy_Data": 3
       },
       "by_court": {
+        "NSWIRComm": 1,
         "FCA": 1,
         "FCAFC": 1
       },
@@ -840,25 +853,25 @@
     "multi_domain": 40,
     "top_pairs": {
       "('Family', 'Health')": 37,
-      "('Animal', 'Family')": 37,
       "('Animal', 'Health')": 37,
+      "('Animal', 'Family')": 37,
+      "('Property', 'Unclassified')": 37,
       "('Specialized', 'Unclassified')": 37,
+      "('Animal', 'Property')": 37,
       "('Property', 'Specialized')": 37,
-      "('Animal', 'Torts')": 37,
       "('Property', 'Torts')": 37,
       "('Administrative', 'Animal')": 37,
-      "('Animal', 'Property')": 37,
-      "('Property', 'Unclassified')": 37,
-      "('Family', 'Specialized')": 36,
-      "('Family', 'Privacy')": 36,
-      "('Family', 'Torts')": 36,
-      "('Equity', 'Family')": 36,
-      "('Administrative', 'Family')": 36,
-      "('Family', 'Procedural')": 36,
-      "('Criminal', 'Family')": 36,
-      "('Family', 'Unclassified')": 36,
-      "('Family', 'Property')": 36,
-      "('Privacy', 'Specialized')": 36
+      "('Animal', 'Torts')": 37,
+      "('Health', 'Unclassified')": 36,
+      "('Health', 'Property')": 36,
+      "('Health', 'Privacy')": 36,
+      "('Health', 'Specialized')": 36,
+      "('Administrative', 'Health')": 36,
+      "('Criminal', 'Health')": 36,
+      "('Health', 'Procedural')": 36,
+      "('Health', 'Torts')": 36,
+      "('Equity', 'Health')": 36,
+      "('Animal', 'Unclassified')": 36
     }
   }
 }
