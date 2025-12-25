@@ -193,3 +193,7 @@ data/processed/domains/legislation/
 
 # Assets generated during development
 assets/images/ui-*/
+
+# Benchmark generated files
+data/benchmarks/*.db
+data/benchmarks/*_report.json
