@@ -672,7 +672,8 @@ if __name__ == "__main__":
                 if result['type'] == 'actor':
                     print(f"   Roles: {', '.join(result['roles']) if result['roles'] else 'None'}")
                     if result['states']:
-                        print(f"   States: {', '.join([f'{s["name"]}={s["value"]}' for s in result['states'][:2]])}")
+                        states_str = ', '.join([f"{s['name']}={s['value']}" for s in result['states'][:2]])
+                        print(f"   States: {states_str}")
                 elif result['type'] == 'verb_phrase':
                     print(f"   Action: {result['verb']} (Agent: {result['agent']})")
         else:
