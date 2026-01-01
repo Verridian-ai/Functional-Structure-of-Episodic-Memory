@@ -6,11 +6,14 @@ including overlap analysis and GSW processing priorities.
 """
 
 import json
+import logging
 import sys
 from pathlib import Path
 from collections import Counter
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
@@ -266,8 +269,8 @@ Based on: existing infrastructure, legal importance, volume, and data quality.
                     if year_max - year_min > 10:
                         score += self.PRIORITY_WEIGHTS["temporal_coverage"]
                         rationale.append("Good temporal coverage")
-                except:
-                    pass
+                except (ValueError, TypeError) as e:
+                    logger.debug(f"Failed to parse temporal coverage dates: {e}")
 
             priorities.append({
                 "domain": domain_name,

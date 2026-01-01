@@ -141,6 +141,17 @@ class LegalSpacetime:
                 },
                 timeout=60.0
             )
+        else:
+            # Setup Google Generative AI client
+            try:
+                import google.generativeai as genai
+                genai.configure(api_key=self.api_key)
+                self.genai_model = genai.GenerativeModel('gemini-1.5-flash')
+            except ImportError:
+                raise ImportError(
+                    "google-generativeai package required for direct Google API. "
+                    "Install with: pip install google-generativeai"
+                )
 
     def link_entities(
         self,
@@ -218,7 +229,33 @@ class LegalSpacetime:
 
             return result["choices"][0]["message"]["content"]
         else:
-            raise NotImplementedError("Direct Google API not implemented")
+            # Use direct Google Generative AI API
+            import google.generativeai as genai
+
+            # Combine system and user prompts for Gemini
+            full_prompt = f"{SPACETIME_SYSTEM_PROMPT}\n\n{user_prompt}"
+
+            # Configure generation settings
+            generation_config = genai.GenerationConfig(
+                temperature=0.1,
+                max_output_tokens=4000,
+            )
+
+            response = self.genai_model.generate_content(
+                full_prompt,
+                generation_config=generation_config
+            )
+
+            # Track token usage if available
+            if hasattr(response, 'usage_metadata'):
+                tracker = get_cost_tracker(self.model)
+                tracker.add_usage(
+                    "spacetime",
+                    getattr(response.usage_metadata, 'prompt_token_count', 0),
+                    getattr(response.usage_metadata, 'candidates_token_count', 0)
+                )
+
+            return response.text
 
     def _repair_json(self, text: str) -> str:
         """Attempt to repair common JSON issues."""

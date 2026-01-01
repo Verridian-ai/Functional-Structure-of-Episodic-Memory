@@ -1,3 +1,4 @@
+import logging
 import os
 import json
 import asyncio
@@ -5,6 +6,8 @@ from typing import Optional, Union, Dict, Any
 from openai import AsyncOpenAI
 from pydantic import ValidationError
 from src.logic.schema import LegalCase
+
+logger = logging.getLogger(__name__)
 
 # OpenRouter Model Strings
 # Gemini 2.5 Flash - $0.30/1M input, $2.50/1M output, 1M context
@@ -96,7 +99,7 @@ class TheOperator:
         # Thinking Config: For EXPERIMENTAL_MODEL, pass the reasoning parameters via extra_body.
         extra_params = {}
         
-        print(f"DEBUG: Operator using model {self.model_name} with params: {extra_params}")
+        logger.debug(f"Operator using model {self.model_name} with params: {extra_params}")
 
         # ATTEMPT 1: Selected Model (Experiment or Production)
         try:
@@ -113,7 +116,7 @@ class TheOperator:
         except Exception as e:
             # Fallback Logic
             if self.is_experimental:
-                print(f"⚠️ Gemini 3 Pro unavailable ({e}). Falling back to Stable 2.5 Flash.")
+                logger.warning(f"Gemini 3 Pro unavailable ({e}). Falling back to Stable 2.5 Flash.")
                 try:
                     response = await self.client.chat.completions.create(
                         model=PRODUCTION_MODEL,
@@ -124,10 +127,10 @@ class TheOperator:
                     )
                     response_text = response.choices[0].message.content
                 except Exception as e2:
-                    print(f"❌ Production Model also failed: {e2}")
+                    logger.error(f"Production Model also failed: {e2}")
                     return None
             else:
-                print(f"❌ Production Model failed: {e}")
+                logger.error(f"Production Model failed: {e}")
                 return None
 
         if not response_text:
@@ -153,13 +156,13 @@ class TheOperator:
             return case
 
         except json.JSONDecodeError:
-            print("Operator Error: Model returned invalid JSON.")
+            logger.error("Operator Error: Model returned invalid JSON.")
             return None
         except ValidationError as e:
-            print(f"Operator Error: Schema Validation Failed. {e}")
+            logger.error(f"Operator Error: Schema Validation Failed. {e}")
             return None
         except Exception as e:
-            print(f"Operator Error: {e}")
+            logger.error(f"Operator Error: {e}")
             return None
 
     async def review_extraction(self, text: str, case: LegalCase) -> LegalCase:

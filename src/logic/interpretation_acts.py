@@ -74,6 +74,138 @@ MODAL_VERBS = {
 
 
 # ============================================================================
+# PUBLIC HOLIDAYS
+# ============================================================================
+
+# National public holidays (apply to all jurisdictions)
+NATIONAL_HOLIDAYS = [
+    # Fixed date holidays (month, day)
+    (1, 1),   # New Year's Day
+    (1, 26),  # Australia Day
+    (4, 25),  # ANZAC Day
+    (12, 25), # Christmas Day
+    (12, 26), # Boxing Day
+]
+
+# State-specific public holidays (month, day)
+STATE_SPECIFIC_HOLIDAYS = {
+    "New South Wales": [
+        (8, 1),  # Bank Holiday (first Monday of August - approximate)
+    ],
+    "Victoria": [
+        (3, 11),  # Labour Day (second Monday of March - approximate)
+        (11, 1),  # Melbourne Cup (first Tuesday of November - approximate)
+    ],
+    "Queensland": [
+        (5, 1),   # Labour Day (first Monday of May - approximate)
+        (8, 14),  # Royal Queensland Show (Brisbane only - approximate)
+    ],
+    "Western Australia": [
+        (3, 4),   # Labour Day (first Monday of March - approximate)
+        (6, 3),   # Western Australia Day (first Monday of June - approximate)
+    ],
+    "South Australia": [
+        (3, 11),  # Adelaide Cup (second Monday of March - approximate)
+        (10, 7),  # Labour Day (first Monday of October - approximate)
+        (12, 24), # Christmas Eve (7pm onwards, treated as partial holiday)
+        (12, 31), # New Year's Eve (7pm onwards, treated as partial holiday)
+    ],
+    "Tasmania": [
+        (3, 11),  # Eight Hours Day (second Monday of March - approximate)
+    ],
+    "Australian Capital Territory": [
+        (3, 11),  # Canberra Day (second Monday of March - approximate)
+        (6, 2),   # Reconciliation Day (27 May or closest Monday - approximate)
+    ],
+    "Northern Territory": [
+        (5, 1),   # May Day (first Monday of May - approximate)
+        (8, 1),   # Picnic Day (first Monday of August - approximate)
+    ],
+    "Commonwealth": [],  # Uses national holidays only
+}
+
+
+def calculate_easter(year: int) -> Tuple[int, int]:
+    """
+    Calculate Easter Sunday for a given year using the Anonymous Gregorian algorithm.
+
+    Returns:
+        Tuple of (month, day) for Easter Sunday
+    """
+    a = year % 19
+    b = year // 100
+    c = year % 100
+    d = b // 4
+    e = b % 4
+    f = (b + 8) // 25
+    g = (b - f + 1) // 3
+    h = (19 * a + b - d - g + 15) % 30
+    i = c // 4
+    k = c % 4
+    l = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 22 * l) // 451
+    month = (h + l - 7 * m + 114) // 31
+    day = ((h + l - 7 * m + 114) % 31) + 1
+    return (month, day)
+
+
+def get_easter_holidays(year: int) -> List[Tuple[int, int]]:
+    """
+    Get Easter-related public holidays for a year.
+
+    Returns:
+        List of (month, day) tuples for Good Friday, Easter Saturday,
+        Easter Sunday, and Easter Monday
+    """
+    easter_month, easter_day = calculate_easter(year)
+
+    # Create datetime for Easter Sunday
+    easter = datetime(year, easter_month, easter_day)
+
+    # Calculate related dates
+    good_friday = easter - timedelta(days=2)
+    easter_saturday = easter - timedelta(days=1)
+    easter_monday = easter + timedelta(days=1)
+
+    return [
+        (good_friday.month, good_friday.day),
+        (easter_saturday.month, easter_saturday.day),
+        (easter_month, easter_day),
+        (easter_monday.month, easter_monday.day),
+    ]
+
+
+def is_public_holiday(date: datetime, jurisdiction: str = "Commonwealth") -> bool:
+    """
+    Check if a date is a public holiday for a given jurisdiction.
+
+    Args:
+        date: The date to check
+        jurisdiction: The Australian jurisdiction
+
+    Returns:
+        True if the date is a public holiday
+    """
+    month_day = (date.month, date.day)
+
+    # Check national holidays
+    if month_day in NATIONAL_HOLIDAYS:
+        return True
+
+    # Check Easter holidays (variable dates)
+    easter_holidays = get_easter_holidays(date.year)
+    if month_day in easter_holidays:
+        return True
+
+    # Check state-specific holidays
+    state_holidays = STATE_SPECIFIC_HOLIDAYS.get(jurisdiction, [])
+    if month_day in state_holidays:
+        return True
+
+    return False
+
+
+# ============================================================================
 # DATA STRUCTURES
 # ============================================================================
 

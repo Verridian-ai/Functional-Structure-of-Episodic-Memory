@@ -9,14 +9,20 @@ Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 Phase 6: Integration with Retrieval Pipeline
 """
 
+import json
+import logging
 import re
 import torch
-from typing import Dict, List, Optional, Tuple
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple, Set
 from pathlib import Path
 
 from src.vsa.legal_vsa import LegalVSA, get_vsa_service
 from src.vsa.encoder import GSWVSAEncoder
 from src.logic.gsw_schema import GlobalWorkspace
+from src.vsa.ontology import CONCEPTS, ROLES, RELATIONSHIPS, LOGIC_RULES
+
+logger = logging.getLogger(__name__)
 
 
 class VSAValidator:
@@ -44,16 +50,67 @@ class VSAValidator:
         if ontology_path and ontology_path.exists():
             self.load_ontology(ontology_path)
 
-    def load_ontology(self, ontology_path: Path):
+    def load_ontology(self, ontology_path: Path) -> None:
         """
-        Load additional ontology rules from file.
+        Load additional ontology rules from external JSON file.
+
+        The ontology file should be a JSON with the following structure:
+        {
+            "concepts": ["CONCEPT1", "CONCEPT2", ...],
+            "roles": ["ROLE1", "ROLE2", ...],
+            "relationships": ["REL1", "REL2", ...],
+            "logic_rules": [
+                ["SUBJECT", "RELATION", "OBJECT"],
+                ...
+            ]
+        }
 
         Args:
-            ontology_path: Path to ontology file
+            ontology_path: Path to ontology JSON file
         """
-        # TODO: Implement ontology loading from external file
-        # For now, we rely on the ontology defined in src/vsa/ontology.py
-        pass
+        try:
+            with open(ontology_path, 'r', encoding='utf-8') as f:
+                ontology_data = json.load(f)
+
+            # Load additional concepts into VSA vocabulary
+            if 'concepts' in ontology_data:
+                for concept in ontology_data['concepts']:
+                    # Register concept in VSA if not already present
+                    if concept.upper() not in self._get_known_concepts():
+                        self.vsa.get_vector(concept.upper())
+                logger.info(f"Loaded {len(ontology_data['concepts'])} additional concepts")
+
+            # Load additional roles
+            if 'roles' in ontology_data:
+                for role in ontology_data['roles']:
+                    self.vsa.get_vector(role.upper())
+                logger.info(f"Loaded {len(ontology_data['roles'])} additional roles")
+
+            # Load additional relationships
+            if 'relationships' in ontology_data:
+                for rel in ontology_data['relationships']:
+                    self.vsa.get_vector(rel.upper())
+                logger.info(f"Loaded {len(ontology_data['relationships'])} additional relationships")
+
+            # Store logic rules for validation
+            if 'logic_rules' in ontology_data:
+                self._external_logic_rules = [
+                    tuple(rule) for rule in ontology_data['logic_rules']
+                ]
+                logger.info(f"Loaded {len(self._external_logic_rules)} additional logic rules")
+
+            logger.info(f"Successfully loaded ontology from {ontology_path}")
+
+        except json.JSONDecodeError as e:
+            logger.error(f"Failed to parse ontology file {ontology_path}: {e}")
+            raise ValueError(f"Invalid JSON in ontology file: {e}")
+        except IOError as e:
+            logger.error(f"Failed to read ontology file {ontology_path}: {e}")
+            raise
+
+    def _get_known_concepts(self) -> Set[str]:
+        """Get set of known concepts from base ontology."""
+        return set(CONCEPTS + ROLES + RELATIONSHIPS)
 
     def validate_response(
         self,
@@ -410,10 +467,17 @@ class EnhancedVSAValidator(VSAValidator):
 
         Args:
             response: The response text
-            context: Context dictionary
+            context: Context dictionary with optional keys:
+                - 'date': Reference date for temporal validation
+                - 'date_range': Tuple of (start_date, end_date) for range checks
+                - 'entities': List of known entity names
+                - 'case_parties': List of party names in the case
 
         Returns:
-            Context validation results
+            Context validation results with:
+                - temporal_consistency: bool
+                - entity_consistency: bool
+                - issues: List of identified issues
         """
         checks = {
             'temporal_consistency': True,
@@ -422,15 +486,257 @@ class EnhancedVSAValidator(VSAValidator):
         }
 
         # Check temporal consistency
-        if 'date' in context:
-            # Extract dates from response and check consistency
-            # TODO: Implement date extraction and validation
-            pass
+        if 'date' in context or 'date_range' in context:
+            temporal_result = self._validate_temporal_consistency(response, context)
+            checks['temporal_consistency'] = temporal_result['consistent']
+            checks['issues'].extend(temporal_result['issues'])
 
         # Check entity consistency
-        if 'entities' in context:
-            # Verify mentioned entities exist in context
-            # TODO: Implement entity cross-referencing
-            pass
+        if 'entities' in context or 'case_parties' in context:
+            entity_result = self._validate_entity_consistency(response, context)
+            checks['entity_consistency'] = entity_result['consistent']
+            checks['issues'].extend(entity_result['issues'])
 
         return checks
+
+    def _extract_dates_from_text(self, text: str) -> List[Tuple[str, datetime]]:
+        """
+        Extract dates from text with their string representation.
+
+        Args:
+            text: Text to extract dates from
+
+        Returns:
+            List of (date_string, datetime) tuples
+        """
+        extracted_dates = []
+
+        # Common date patterns
+        patterns = [
+            # ISO format: 2024-01-15
+            (r'\b(\d{4}-\d{1,2}-\d{1,2})\b', '%Y-%m-%d'),
+            # Australian format: 15/01/2024 or 15-01-2024
+            (r'\b(\d{1,2}[/-]\d{1,2}[/-]\d{4})\b', None),  # Multiple formats
+            # Written format: 15 January 2024
+            (r'\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b', '%d %B %Y'),
+            # Written format: January 15, 2024
+            (r'\b((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b', None),
+            # Year only: 2024
+            (r'\b((?:19|20)\d{2})\b(?!\s*-)', '%Y'),
+        ]
+
+        for pattern, date_format in patterns:
+            matches = re.finditer(pattern, text, re.IGNORECASE)
+            for match in matches:
+                date_str = match.group(1)
+                parsed_date = self._parse_date(date_str, date_format)
+                if parsed_date:
+                    extracted_dates.append((date_str, parsed_date))
+
+        return extracted_dates
+
+    def _parse_date(self, date_str: str, preferred_format: Optional[str] = None) -> Optional[datetime]:
+        """
+        Parse a date string into a datetime object.
+
+        Args:
+            date_str: The date string to parse
+            preferred_format: Preferred strptime format
+
+        Returns:
+            Parsed datetime or None if parsing fails
+        """
+        formats_to_try = []
+
+        if preferred_format:
+            formats_to_try.append(preferred_format)
+
+        # Add common formats
+        formats_to_try.extend([
+            '%Y-%m-%d',
+            '%d/%m/%Y',
+            '%d-%m-%Y',
+            '%m/%d/%Y',
+            '%d %B %Y',
+            '%B %d, %Y',
+            '%B %d %Y',
+            '%Y',
+        ])
+
+        for fmt in formats_to_try:
+            try:
+                return datetime.strptime(date_str.strip().replace(',', ''), fmt)
+            except ValueError:
+                continue
+
+        return None
+
+    def _validate_temporal_consistency(self, response: str, context: Dict) -> Dict:
+        """
+        Validate temporal consistency of response against context.
+
+        Args:
+            response: The response text
+            context: Context with 'date' or 'date_range'
+
+        Returns:
+            Dictionary with 'consistent' bool and 'issues' list
+        """
+        result = {'consistent': True, 'issues': []}
+
+        # Extract dates from response
+        extracted_dates = self._extract_dates_from_text(response)
+
+        if not extracted_dates:
+            # No dates to validate
+            return result
+
+        # Get reference date(s) from context
+        reference_date = None
+        date_range = None
+
+        if 'date' in context:
+            ref = context['date']
+            if isinstance(ref, datetime):
+                reference_date = ref
+            elif isinstance(ref, str):
+                reference_date = self._parse_date(ref)
+
+        if 'date_range' in context:
+            range_tuple = context['date_range']
+            if len(range_tuple) == 2:
+                start = range_tuple[0] if isinstance(range_tuple[0], datetime) else self._parse_date(str(range_tuple[0]))
+                end = range_tuple[1] if isinstance(range_tuple[1], datetime) else self._parse_date(str(range_tuple[1]))
+                if start and end:
+                    date_range = (start, end)
+
+        # Validate extracted dates
+        for date_str, extracted_date in extracted_dates:
+            # Check against reference date (if provided)
+            if reference_date:
+                # Allow some tolerance for year-only comparisons
+                if extracted_date.year > datetime.now().year + 1:
+                    result['consistent'] = False
+                    result['issues'].append(
+                        f"Future date detected: '{date_str}' is after current year"
+                    )
+
+            # Check against date range (if provided)
+            if date_range:
+                start_date, end_date = date_range
+                # Only check if we have a full date (not just year)
+                if extracted_date.month != 1 or extracted_date.day != 1:
+                    if extracted_date < start_date or extracted_date > end_date:
+                        result['consistent'] = False
+                        result['issues'].append(
+                            f"Date '{date_str}' outside expected range "
+                            f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})"
+                        )
+
+            # Check for impossible dates (before relevant legal system)
+            if extracted_date.year < 1901:  # Pre-Federation Australia
+                result['consistent'] = False
+                result['issues'].append(
+                    f"Unlikely historical date: '{date_str}' predates Australian Federation"
+                )
+
+        return result
+
+    def _validate_entity_consistency(self, response: str, context: Dict) -> Dict:
+        """
+        Validate entity consistency - check that mentioned entities exist in context.
+
+        Args:
+            response: The response text
+            context: Context with 'entities' or 'case_parties'
+
+        Returns:
+            Dictionary with 'consistent' bool and 'issues' list
+        """
+        result = {'consistent': True, 'issues': []}
+
+        # Gather known entities from context
+        known_entities: Set[str] = set()
+
+        if 'entities' in context:
+            for entity in context['entities']:
+                if isinstance(entity, str):
+                    known_entities.add(entity.lower())
+                elif isinstance(entity, dict) and 'name' in entity:
+                    known_entities.add(entity['name'].lower())
+
+        if 'case_parties' in context:
+            for party in context['case_parties']:
+                if isinstance(party, str):
+                    known_entities.add(party.lower())
+
+        if not known_entities:
+            # No entities to cross-reference
+            return result
+
+        # Extract potential entity mentions from response
+        # Look for capitalized words/phrases that might be names
+        potential_entities = self._extract_entity_mentions(response)
+
+        # Check for entities mentioned in response but not in context
+        # This could indicate hallucinated entities
+        unrecognized_entities = []
+        for entity in potential_entities:
+            entity_lower = entity.lower()
+            # Check if entity matches any known entity (partial match)
+            if not any(
+                known in entity_lower or entity_lower in known
+                for known in known_entities
+            ):
+                # Additional check: skip common legal terms that look like names
+                legal_terms = {
+                    'court', 'judge', 'applicant', 'respondent', 'child',
+                    'property', 'order', 'act', 'section', 'family',
+                    'parenting', 'consent', 'hearing', 'trial'
+                }
+                if entity_lower not in legal_terms:
+                    unrecognized_entities.append(entity)
+
+        # Flag if we find potential hallucinated entities
+        if unrecognized_entities:
+            # Only flag if there are multiple unrecognized entities
+            # or if the entity appears to be a proper name
+            significant_unrecognized = [
+                e for e in unrecognized_entities
+                if len(e.split()) >= 2 or e[0].isupper()
+            ]
+
+            if len(significant_unrecognized) >= 2:
+                result['consistent'] = False
+                result['issues'].append(
+                    f"Potentially unrecognized entities mentioned: "
+                    f"{', '.join(significant_unrecognized[:5])}"
+                )
+
+        return result
+
+    def _extract_entity_mentions(self, text: str) -> List[str]:
+        """
+        Extract potential entity mentions from text.
+
+        Args:
+            text: Text to extract entities from
+
+        Returns:
+            List of potential entity strings
+        """
+        entities = []
+
+        # Pattern for proper nouns (capitalized words)
+        # Match sequences of capitalized words
+        pattern = r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b'
+        matches = re.findall(pattern, text)
+
+        # Filter out sentence starters and common terms
+        for match in matches:
+            # Skip if it's at the start of a sentence (preceded by . ! ? or start)
+            # This is a simplified check
+            if len(match) > 2:
+                entities.append(match)
+
+        return list(set(entities))

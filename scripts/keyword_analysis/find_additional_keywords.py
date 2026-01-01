@@ -1,5 +1,8 @@
 import json
+import logging
 from collections import Counter
+
+logger = logging.getLogger(__name__)
 
 # Additional specific keywords to look for
 additional_terms = Counter()
@@ -176,7 +179,7 @@ for filepath in files:
                         if term.lower() in text:
                             additional_terms[f'{category}::{term}'] += 1
     except Exception as e:
-        pass
+        logger.error(f"Error processing files: {e}")
 
 # Print findings grouped by category
 print('ADDITIONAL EMPLOYMENT KEYWORDS FOUND')
