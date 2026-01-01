@@ -7,14 +7,15 @@ Rule-based and LLM-based entity matching for reconciliation.
 
 import json
 import re
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.logic.gsw_schema import Actor, GlobalWorkspace
 
-from .reconciler_prompts import RECONCILE_SYSTEM_PROMPT, RECONCILE_USER_PROMPT
 from src.utils.toon import ToonEncoder
+
 from .cost_tracker import get_cost_tracker
+from .reconciler_prompts import RECONCILE_SYSTEM_PROMPT, RECONCILE_USER_PROMPT
 
 
 class EntityMatcher:
@@ -26,20 +27,17 @@ class EntityMatcher:
 
     def __init__(
         self,
-        client: Optional[Any] = None,
+        client: Any | None = None,
         model: str = "google/gemini-2.5-flash",
-        use_toon: bool = True
+        use_toon: bool = True,
     ):
         self.client = client
         self.model = model
         self.use_toon = use_toon
 
     def reconcile_entities(
-        self,
-        new_actors: List["Actor"],
-        workspace: "GlobalWorkspace",
-        chunk_text: str
-    ) -> List[Dict[str, Any]]:
+        self, new_actors: list["Actor"], workspace: "GlobalWorkspace", chunk_text: str
+    ) -> list[dict[str, Any]]:
         """
         Find matches between new actors and existing workspace actors.
         """
@@ -57,40 +55,38 @@ class EntityMatcher:
         return self.rule_based_reconcile(new_actors, workspace)
 
     def llm_reconcile(
-        self,
-        new_actors: List["Actor"],
-        workspace: "GlobalWorkspace",
-        chunk_text: str
-    ) -> List[Dict[str, Any]]:
+        self, new_actors: list["Actor"], workspace: "GlobalWorkspace", chunk_text: str
+    ) -> list[dict[str, Any]]:
         """Use LLM for entity reconciliation."""
         # Build existing entities summary
         existing_summary = []
         for actor in list(workspace.actors.values())[:50]:  # Limit for context
-            existing_summary.append({
-                "id": actor.id,
-                "name": actor.name,
-                "aliases": actor.aliases,
-                "roles": actor.roles,
-                "type": actor.actor_type.value
-            })
+            existing_summary.append(
+                {
+                    "id": actor.id,
+                    "name": actor.name,
+                    "aliases": actor.aliases,
+                    "roles": actor.roles,
+                    "type": actor.actor_type.value,
+                }
+            )
 
         # Build new entities summary
         new_summary = []
         for actor in new_actors:
-            new_summary.append({
-                "id": actor.id,
-                "name": actor.name,
-                "aliases": actor.aliases,
-                "roles": actor.roles,
-                "type": actor.actor_type.value
-            })
+            new_summary.append(
+                {
+                    "id": actor.id,
+                    "name": actor.name,
+                    "aliases": actor.aliases,
+                    "roles": actor.roles,
+                    "type": actor.actor_type.value,
+                }
+            )
 
         # Build unanswered questions summary
         unanswered = workspace.get_unanswered_questions()[:20]
-        questions_summary = [
-            {"id": q.id, "question": q.question_text}
-            for q in unanswered
-        ]
+        questions_summary = [{"id": q.id, "question": q.question_text} for q in unanswered]
 
         # Format entities using TOON (~71% token reduction) or JSON
         if self.use_toon:
@@ -106,7 +102,7 @@ class EntityMatcher:
             existing_entities=existing_str,
             new_entities=new_str,
             unanswered_questions=questions_str,
-            chunk_text=chunk_text[:5000]
+            chunk_text=chunk_text[:5000],
         )
 
         response = self.client.post(
@@ -115,11 +111,11 @@ class EntityMatcher:
                 "model": self.model,
                 "messages": [
                     {"role": "system", "content": RECONCILE_SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
                 "temperature": 0.1,
-                "max_tokens": 4000
-            }
+                "max_tokens": 4000,
+            },
         )
         response.raise_for_status()
         result = response.json()
@@ -129,9 +125,7 @@ class EntityMatcher:
         if usage:
             tracker = get_cost_tracker(self.model)
             tracker.add_usage(
-                "reconciler",
-                usage.get("prompt_tokens", 0),
-                usage.get("completion_tokens", 0)
+                "reconciler", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0)
             )
 
         content = result["choices"][0]["message"]["content"]
@@ -139,13 +133,13 @@ class EntityMatcher:
         # Parse response
         cleaned = content.strip()
         if cleaned.startswith("```"):
-            cleaned = re.sub(r'^```(?:json)?\n?', '', cleaned)
-            cleaned = re.sub(r'\n?```$', '', cleaned)
+            cleaned = re.sub(r"^```(?:json)?\n?", "", cleaned)
+            cleaned = re.sub(r"\n?```$", "", cleaned)
 
         try:
             data = json.loads(cleaned)
         except json.JSONDecodeError:
-            match = re.search(r'\{[\s\S]*\}', cleaned)
+            match = re.search(r"\{[\s\S]*\}", cleaned)
             if match:
                 json_str = match.group()
                 try:
@@ -161,10 +155,8 @@ class EntityMatcher:
         return data.get("entity_matches", [])
 
     def rule_based_reconcile(
-        self,
-        new_actors: List["Actor"],
-        workspace: "GlobalWorkspace"
-    ) -> List[Dict[str, Any]]:
+        self, new_actors: list["Actor"], workspace: "GlobalWorkspace"
+    ) -> list[dict[str, Any]]:
         """
         Rule-based entity reconciliation fallback.
 
@@ -215,21 +207,20 @@ class EntityMatcher:
                     )
 
                 if match_found:
-                    matches.append({
-                        "new_entity_id": new_actor.id,
-                        "existing_entity_id": existing_id,
-                        "confidence": 0.8,
-                        "reason": reason
-                    })
+                    matches.append(
+                        {
+                            "new_entity_id": new_actor.id,
+                            "existing_entity_id": existing_id,
+                            "confidence": 0.8,
+                            "reason": reason,
+                        }
+                    )
                     break  # Only match to one existing entity
 
         return matches
 
     def _check_role_match(
-        self,
-        new_name: str,
-        new_aliases: List[str],
-        existing_actor: "Actor"
+        self, new_name: str, new_aliases: list[str], existing_actor: "Actor"
     ) -> tuple:
         """Check for role-based entity matches."""
         # Match "the husband"/"the wife" patterns
@@ -252,23 +243,23 @@ class EntityMatcher:
 
     def _repair_json(self, text: str) -> str:
         """Attempt to repair common JSON issues from LLM output."""
-        text = re.sub(r',(\s*[}\]])', r'\1', text)
-        text = re.sub(r'}\s*{', '},{', text)
-        text = re.sub(r']\s*\[', '],[', text)
-        open_braces = text.count('{') - text.count('}')
-        open_brackets = text.count('[') - text.count(']')
+        text = re.sub(r",(\s*[}\]])", r"\1", text)
+        text = re.sub(r"}\s*{", "},{", text)
+        text = re.sub(r"]\s*\[", "],[", text)
+        open_braces = text.count("{") - text.count("}")
+        open_brackets = text.count("[") - text.count("]")
         if open_braces > 0 or open_brackets > 0:
-            last_comma = max(text.rfind(',{'), text.rfind(',['), text.rfind(',"'))
+            last_comma = max(text.rfind(",{"), text.rfind(",["), text.rfind(',"'))
             if last_comma > len(text) // 2:
                 text = text[:last_comma]
-            text += ']' * open_brackets + '}' * open_braces
+            text += "]" * open_brackets + "}" * open_braces
         return text
 
     # =========================================================================
     # TOON Formatting Helpers (~71% token reduction)
     # =========================================================================
 
-    def _format_actors_toon(self, actors: List[Dict]) -> str:
+    def _format_actors_toon(self, actors: list[dict]) -> str:
         """
         Format actors in TOON format for compact LLM prompts.
 
@@ -289,17 +280,13 @@ class EntityMatcher:
             roles = a.get("roles", [])
             roles_str = "|".join(roles) if roles else ""
 
-            data.append([
-                a.get("id", ""),
-                a.get("name", ""),
-                a.get("type", ""),
-                aliases_str,
-                roles_str
-            ])
+            data.append(
+                [a.get("id", ""), a.get("name", ""), a.get("type", ""), aliases_str, roles_str]
+            )
 
         return ToonEncoder.encode("Actors", headers, data)
 
-    def _format_questions_toon(self, questions: List[Dict]) -> str:
+    def _format_questions_toon(self, questions: list[dict]) -> str:
         """
         Format questions in TOON format for compact LLM prompts.
 
@@ -312,9 +299,6 @@ class EntityMatcher:
             return "No unanswered questions."
 
         headers = ["id", "question"]
-        data = [
-            [q.get("id", ""), q.get("question", "")]
-            for q in questions
-        ]
+        data = [[q.get("id", ""), q.get("question", "")] for q in questions]
 
         return ToonEncoder.encode("Questions", headers, data)

@@ -11,10 +11,9 @@ Requirements:
 
 import asyncio
 import os
+
 from multi_judge import (
     JudgeModel,
-    JudgeEvaluation,
-    AggregatedEvaluation,
     MultiJudgeEvaluator,
 )
 
@@ -29,7 +28,9 @@ async def example_evaluation():
         return
 
     # Sample data
-    query = "What are the main provisions of the Australian Family Law Act regarding property division?"
+    query = (
+        "What are the main provisions of the Australian Family Law Act regarding property division?"
+    )
 
     context = """
     The Family Law Act 1975 (Cth) establishes the framework for property division
@@ -62,22 +63,18 @@ async def example_evaluation():
 
     # Evaluate the response
     try:
-        result = await evaluator.evaluate_response(
-            query=query,
-            response=response,
-            context=context
-        )
+        result = await evaluator.evaluate_response(query=query, response=response, context=context)
 
         # Display results
         print("=" * 60)
         print("EVALUATION RESULTS")
         print("=" * 60)
-        print(f"\nOverall Scores:")
+        print("\nOverall Scores:")
         print(f"  Mean Score:      {result.mean_score:.2f}/10")
         print(f"  Median Score:    {result.median_score:.2f}/10")
         print(f"  Consensus Level: {result.consensus_level:.2%}")
 
-        print(f"\nIndividual Judge Scores:")
+        print("\nIndividual Judge Scores:")
         for eval in result.individual_evaluations:
             print(f"  {eval.model.name:12} {eval.score:.2f}/10")
 
@@ -101,6 +98,7 @@ async def example_evaluation():
     except Exception as e:
         print(f"Error during evaluation: {e}")
         import traceback
+
         traceback.print_exc()
 
 
@@ -112,9 +110,7 @@ async def example_custom_evaluation():
         return
 
     # Use only GPT-4o and Claude
-    evaluator = MultiJudgeEvaluator(
-        judges=[JudgeModel.GPT4O, JudgeModel.CLAUDE]
-    )
+    evaluator = MultiJudgeEvaluator(judges=[JudgeModel.GPT4O, JudgeModel.CLAUDE])
 
     query = "Explain the concept of constructive trust in property law."
     context = "Constructive trust is an equitable remedy..."

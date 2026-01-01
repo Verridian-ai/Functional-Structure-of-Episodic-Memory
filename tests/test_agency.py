@@ -6,22 +6,15 @@ Tests the POMDP specification, generative model, and agent logic
 for the Legal Research Agent.
 """
 
-import pytest
-import numpy as np
 from unittest.mock import patch
 
-from src.agency.pomdp import (
-    HiddenState,
-    Observation,
-    Action,
-    NUM_STATES,
-    NUM_OBS,
-    NUM_ACTIONS
-)
-from src.agency.generative_model import build_generative_model
-from src.agency.agent import LegalResearchAgent
-from src.utils.math_utils import normalize, softmax, kl_divergence, entropy
+import numpy as np
+import pytest
 
+from src.agency.agent import LegalResearchAgent
+from src.agency.generative_model import build_generative_model
+from src.agency.pomdp import NUM_ACTIONS, NUM_OBS, NUM_STATES, Action, HiddenState, Observation
+from src.utils.math_utils import entropy, kl_divergence, normalize, softmax
 
 # =============================================================================
 # POMDP Tests
@@ -65,7 +58,7 @@ class TestPOMDPSpec:
 
     def test_action_count(self):
         """Test that NUM_ACTIONS matches Action count."""
-        assert NUM_ACTIONS == len(Action)
+        assert len(Action) == NUM_ACTIONS
 
     def test_enum_values_are_sequential(self):
         """Test that enum values are sequential (1-indexed from auto())."""
@@ -398,7 +391,7 @@ class TestAgentIntegration:
         ]
 
         for obs in observations:
-            action = agent.step(obs)
+            agent.step(obs)
 
         # After seeing GOAL_SIGNAL_ON, belief should shift toward GOAL_MET
         goal_met_idx = HiddenState.GOAL_MET.value - 1

@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from collections import Counter
+
 
 def generate_narrative_report(json_path: str, output_path: str):
     """
@@ -8,12 +8,12 @@ def generate_narrative_report(json_path: str, output_path: str):
     Metrics: Role Volatility, Causal Density, Anchoring.
     """
     print(f"[Narrator] Auditing Narrative Integrity from {json_path}...")
-    
+
     if not Path(json_path).exists():
         print("Snapshot not found.")
         return
 
-    with open(json_path, 'r', encoding='utf-8') as f:
+    with open(json_path, encoding="utf-8") as f:
         data = json.load(f)
 
     persons = data.get("persons", [])
@@ -25,7 +25,7 @@ def generate_narrative_report(json_path: str, output_path: str):
     # To track evolution, we need to look at 'Role' states if they exist, or infer from timeline descriptions.
     # For this Pilot version, we'll check if multiple people have the SAME name but different roles (merging failures)
     # OR if we have States named "Role" or similar.
-    
+
     # Ideally, we want: John (2015: Husband) -> John (2018: Respondent)
     # We'll count how many Persons have a defined Role.
     defined_roles = [p for p in persons if p.get("role_in_case")]
@@ -36,13 +36,14 @@ def generate_narrative_report(json_path: str, output_path: str):
     causal_states = 0
     for state in states:
         s_date = state.get("start_date")
-        if not s_date: continue
-        
+        if not s_date:
+            continue
+
         # Look for event on same date
         trigger = next((e for e in timeline if e.get("date") == s_date), None)
         if trigger:
             causal_states += 1
-            
+
     causal_density = causal_states / len(states) if states else 0
 
     # 3. Spatiotemporal Anchoring
@@ -71,9 +72,10 @@ def generate_narrative_report(json_path: str, output_path: str):
 - If **Anchoring** is low, enable "Date Inference" logic in the Reconciler.
 """
 
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(output_path, "w", encoding="utf-8") as f:
         f.write(report)
     print(f"[Narrator] Narrative Report generated at {output_path}")
+
 
 if __name__ == "__main__":
     generate_narrative_report("data/processed/graph_snapshot.json", "NARRATIVE_INTEGRITY_REPORT.md")

@@ -5,21 +5,21 @@ GSW Tracing Decorators
 Decorators for tracing GSW operations.
 """
 
-import time
 import asyncio
 import functools
-from typing import Any, Callable, TypeVar, Union
+import time
+from collections.abc import Callable
+from typing import Any, TypeVar
 
 from .models import OperationType
 
-
 # Type variables for generic decorators
-F = TypeVar('F', bound=Callable[..., Any])
-AsyncF = TypeVar('AsyncF', bound=Callable[..., Any])
+F = TypeVar("F", bound=Callable[..., Any])
+AsyncF = TypeVar("AsyncF", bound=Callable[..., Any])
 
 
 def trace_gsw_operation(
-    operation_type: Union[str, OperationType] = OperationType.GRAPH_TRAVERSAL,
+    operation_type: str | OperationType = OperationType.GRAPH_TRAVERSAL,
     name: str = None,
     capture_input: bool = True,
     capture_output: bool = True,
@@ -36,11 +36,14 @@ def trace_gsw_operation(
         async def extract(text: str) -> List[Entity]:
             ...
     """
+
     def decorator(func: F) -> F:
         from .tracer_core import GSWTracer
         from .utils import safe_serialize
 
-        op_type = OperationType(operation_type) if isinstance(operation_type, str) else operation_type
+        op_type = (
+            OperationType(operation_type) if isinstance(operation_type, str) else operation_type
+        )
         span_name = name or func.__name__
 
         @functools.wraps(func)
@@ -53,7 +56,14 @@ def trace_gsw_operation(
             with tracer.trace_span(
                 name=span_name,
                 operation_type=op_type,
-                input_data={"args": str(args)[:500], "kwargs": {k: str(v)[:200] for k, v in kwargs.items()}} if capture_input else None,
+                input_data=(
+                    {
+                        "args": str(args)[:500],
+                        "kwargs": {k: str(v)[:200] for k, v in kwargs.items()},
+                    }
+                    if capture_input
+                    else None
+                ),
             ) as span:
                 try:
                     result = func(*args, **kwargs)
@@ -74,7 +84,14 @@ def trace_gsw_operation(
             async with tracer.async_trace_span(
                 name=span_name,
                 operation_type=op_type,
-                input_data={"args": str(args)[:500], "kwargs": {k: str(v)[:200] for k, v in kwargs.items()}} if capture_input else None,
+                input_data=(
+                    {
+                        "args": str(args)[:500],
+                        "kwargs": {k: str(v)[:200] for k, v in kwargs.items()},
+                    }
+                    if capture_input
+                    else None
+                ),
             ) as span:
                 try:
                     result = await func(*args, **kwargs)
@@ -125,6 +142,7 @@ def trace_llm_generation(
         async def generate_response(prompt: str) -> str:
             ...
     """
+
     def decorator(func: F) -> F:
         from .tracer_core import GSWTracer
 
@@ -191,6 +209,7 @@ def score_retrieval_accuracy(
             score = compute_recall(results, expected)
             return results, score
     """
+
     def decorator(func: F) -> F:
         from .tracer_core import GSWTracer
 

@@ -6,9 +6,10 @@ Main scorer class for evaluating GSW retrieval operations.
 """
 
 import logging
-from typing import Any, Callable, Dict, List, Optional, Set
-from datetime import datetime
 import re
+from collections.abc import Callable
+from datetime import datetime
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +41,7 @@ class RetrievalScorer:
 
     def __init__(
         self,
-        weights: Optional[ScoringWeights] = None,
+        weights: ScoringWeights | None = None,
         target_score: float = 0.95,
     ):
         """
@@ -59,12 +60,10 @@ class RetrievalScorer:
 
         # Legal patterns for citation checking
         self._section_pattern = re.compile(
-            r"(?:section|s|sec\.?)\s*(\d+[A-Z]*(?:\(\d+\))?(?:\([a-z]\))?)",
-            re.IGNORECASE
+            r"(?:section|s|sec\.?)\s*(\d+[A-Z]*(?:\(\d+\))?(?:\([a-z]\))?)", re.IGNORECASE
         )
         self._case_pattern = re.compile(
-            r"\[(\d{4})\]\s*(FamCA|FamCAFC|HCA|FCA|FCCA|FCWA|FLC)\s*(\d+)",
-            re.IGNORECASE
+            r"\[(\d{4})\]\s*(FamCA|FamCAFC|HCA|FCA|FCCA|FCWA|FLC)\s*(\d+)", re.IGNORECASE
         )
 
     # =========================================================================
@@ -74,11 +73,11 @@ class RetrievalScorer:
     def score_retrieval(
         self,
         query: str,
-        retrieved_entities: List[Dict[str, Any]],
-        expected_entities: Optional[List[Dict[str, Any]]] = None,
-        response_text: Optional[str] = None,
-        ground_truth_response: Optional[str] = None,
-        workspace_state: Optional[Any] = None,
+        retrieved_entities: list[dict[str, Any]],
+        expected_entities: list[dict[str, Any]] | None = None,
+        response_text: str | None = None,
+        ground_truth_response: str | None = None,
+        workspace_state: Any | None = None,
     ) -> AccuracyMetrics:
         """
         Perform comprehensive scoring of a retrieval operation.
@@ -115,9 +114,7 @@ class RetrievalScorer:
         )
 
         # Temporal Coherence
-        metrics.temporal_coherence = self.score_temporal_coherence(
-            retrieved_entities
-        )
+        metrics.temporal_coherence = self.score_temporal_coherence(retrieved_entities)
 
         # Legal Precision (requires response text)
         if response_text:
@@ -165,8 +162,8 @@ class RetrievalScorer:
 
     def score_entity_relevance(
         self,
-        retrieved: List[Dict[str, Any]],
-        expected: List[Dict[str, Any]],
+        retrieved: list[dict[str, Any]],
+        expected: list[dict[str, Any]],
     ) -> float:
         """
         Score entity relevance against ground truth.
@@ -190,7 +187,7 @@ class RetrievalScorer:
     def score_entity_relevance_heuristic(
         self,
         query: str,
-        retrieved: List[Dict[str, Any]],
+        retrieved: list[dict[str, Any]],
     ) -> float:
         """
         Heuristic scoring when no ground truth is available.
@@ -212,7 +209,21 @@ class RetrievalScorer:
 
         # 2. Query keyword overlap
         query_words = set(query.lower().split())
-        stop_words = {"the", "a", "an", "is", "are", "was", "were", "my", "our", "what", "how", "when", "why"}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "my",
+            "our",
+            "what",
+            "how",
+            "when",
+            "why",
+        }
         query_words -= stop_words
 
         entity_words = set()
@@ -235,8 +246,8 @@ class RetrievalScorer:
     def score_structural_accuracy(
         self,
         query: str,
-        retrieved: List[Dict[str, Any]],
-        workspace: Optional[Any] = None,
+        retrieved: list[dict[str, Any]],
+        workspace: Any | None = None,
     ) -> float:
         """
         Score how well the graph structure matches the query.
@@ -282,14 +293,18 @@ class RetrievalScorer:
         if any(term in query_lower for term in ["property", "custody", "parenting", "division"]):
             has_applicant = any("applicant" in str(r).lower() for r in flat_roles)
             has_respondent = any("respondent" in str(r).lower() for r in flat_roles)
-            party_score = 1.0 if (has_applicant and has_respondent) else 0.5 if (has_applicant or has_respondent) else 0.0
+            party_score = (
+                1.0
+                if (has_applicant and has_respondent)
+                else 0.5 if (has_applicant or has_respondent) else 0.0
+            )
             scores.append(party_score)
 
         return sum(scores) / len(scores) if scores else 0.0
 
     def score_temporal_coherence(
         self,
-        retrieved: List[Dict[str, Any]],
+        retrieved: list[dict[str, Any]],
     ) -> float:
         """
         Score temporal coherence of retrieved entities.
@@ -320,7 +335,9 @@ class RetrievalScorer:
             scores.append(valid_dates / total_dates)
 
         # 2. Check temporal ordering of states
-        states = [e for e in retrieved if e.get("type") == "state" or "state" in e.get("entity_type", "")]
+        states = [
+            e for e in retrieved if e.get("type") == "state" or "state" in e.get("entity_type", "")
+        ]
 
         if len(states) >= 2:
             ordered_states = self._check_state_ordering(states)
@@ -379,7 +396,7 @@ class RetrievalScorer:
     def score_citation_accuracy(
         self,
         response_text: str,
-        valid_sections: Optional[Set[str]] = None,
+        valid_sections: set[str] | None = None,
     ) -> float:
         """
         Score accuracy of statutory citations.
@@ -395,11 +412,26 @@ class RetrievalScorer:
 
         # Common valid Family Law Act sections
         common_sections = {
-            "60B", "60C", "60CC", "60CA", "60D",
-            "61DA", "64B", "65DAA", "65DAC",
-            "68B", "68C",
-            "74", "75", "79", "79A",
-            "90", "90A", "90B", "90C", "90SM",
+            "60B",
+            "60C",
+            "60CC",
+            "60CA",
+            "60D",
+            "61DA",
+            "64B",
+            "65DAA",
+            "65DAC",
+            "68B",
+            "68C",
+            "74",
+            "75",
+            "79",
+            "79A",
+            "90",
+            "90A",
+            "90B",
+            "90C",
+            "90SM",
         }
 
         valid_set = valid_sections or common_sections
@@ -407,7 +439,7 @@ class RetrievalScorer:
         valid_count = 0
         for section in section_matches:
             # Normalize section number
-            section_num = re.sub(r'[^\dA-Za-z]', '', section).upper()
+            section_num = re.sub(r"[^\dA-Za-z]", "", section).upper()
             if any(section_num.startswith(v) for v in valid_set):
                 valid_count += 1
 
@@ -417,7 +449,7 @@ class RetrievalScorer:
         self,
         query: str,
         response: str,
-        ground_truth: Optional[str] = None,
+        ground_truth: str | None = None,
     ) -> float:
         """
         Score how completely the response answers the query.
@@ -433,32 +465,47 @@ class RetrievalScorer:
         scores.append(length_score)
 
         # 2. Query term coverage
-        query_terms = set(query.lower().split()) - {"the", "a", "an", "is", "my", "what", "how", "when", "why", "are"}
+        query_terms = set(query.lower().split()) - {
+            "the",
+            "a",
+            "an",
+            "is",
+            "my",
+            "what",
+            "how",
+            "when",
+            "why",
+            "are",
+        }
         response_lower = response.lower()
         covered = sum(1 for term in query_terms if term in response_lower)
         term_coverage = covered / len(query_terms) if query_terms else 1.0
         scores.append(term_coverage)
 
         # 3. Has structure (sections, bullet points, etc.)
-        has_structure = any([
-            "##" in response,
-            "1." in response or "1)" in response,
-            "- " in response or "* " in response,
-            ":" in response,
-        ])
+        has_structure = any(
+            [
+                "##" in response,
+                "1." in response or "1)" in response,
+                "- " in response or "* " in response,
+                ":" in response,
+            ]
+        )
         scores.append(1.0 if has_structure else 0.7)
 
         # 4. Ground truth comparison (if available)
         if ground_truth:
             gt_terms = set(ground_truth.lower().split())
-            overlap = len(gt_terms & set(response_lower.split())) / len(gt_terms) if gt_terms else 0.0
+            overlap = (
+                len(gt_terms & set(response_lower.split())) / len(gt_terms) if gt_terms else 0.0
+            )
             scores.append(overlap)
 
         return sum(scores) / len(scores)
 
     def score_role_binding(
         self,
-        retrieved: List[Dict[str, Any]],
+        retrieved: list[dict[str, Any]],
     ) -> float:
         """
         Score accuracy of role-entity bindings.
@@ -470,7 +517,7 @@ class RetrievalScorer:
             return 1.0
 
         # Group entities by role
-        role_entities: Dict[str, List[str]] = {}
+        role_entities: dict[str, list[str]] = {}
 
         for entity in retrieved:
             roles = entity.get("roles", entity.get("role", []))
@@ -515,18 +562,18 @@ class RetrievalScorer:
     def _compute_composite_score(self, metrics: AccuracyMetrics) -> float:
         """Compute weighted composite score."""
         return (
-            self.weights.entity_relevance * metrics.entity_relevance +
-            self.weights.structural_accuracy * metrics.structural_accuracy +
-            self.weights.temporal_coherence * metrics.temporal_coherence +
-            self.weights.legal_precision * metrics.legal_precision +
-            self.weights.answer_completeness * metrics.answer_completeness
+            self.weights.entity_relevance * metrics.entity_relevance
+            + self.weights.structural_accuracy * metrics.structural_accuracy
+            + self.weights.temporal_coherence * metrics.temporal_coherence
+            + self.weights.legal_precision * metrics.legal_precision
+            + self.weights.answer_completeness * metrics.answer_completeness
         )
 
     def _count_retrieval_stats(
         self,
         metrics: AccuracyMetrics,
-        retrieved: List[Dict[str, Any]],
-        expected: List[Dict[str, Any]],
+        retrieved: list[dict[str, Any]],
+        expected: list[dict[str, Any]],
     ):
         """Count TP, FP, FN for precision/recall calculation."""
         retrieved_ids = {self._get_entity_id(e) for e in retrieved}
@@ -540,7 +587,7 @@ class RetrievalScorer:
     # HELPERS
     # =========================================================================
 
-    def _get_entity_id(self, entity: Dict[str, Any]) -> str:
+    def _get_entity_id(self, entity: dict[str, Any]) -> str:
         """Extract entity ID from various formats."""
         return entity.get("id", entity.get("entity_id", entity.get("actor_id", str(entity))))
 
@@ -566,7 +613,7 @@ class RetrievalScorer:
 
         return False
 
-    def _check_state_ordering(self, states: List[Dict[str, Any]]) -> bool:
+    def _check_state_ordering(self, states: list[dict[str, Any]]) -> bool:
         """Check if states are chronologically ordered."""
         dates = []
 

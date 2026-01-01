@@ -12,15 +12,15 @@ Phase 6: Integration with Retrieval Pipeline
 import json
 import logging
 import re
-import torch
 from datetime import datetime
-from typing import Dict, List, Optional, Tuple, Set
 from pathlib import Path
 
-from src.vsa.legal_vsa import LegalVSA, get_vsa_service
-from src.vsa.encoder import GSWVSAEncoder
+import torch
+
 from src.logic.gsw_schema import GlobalWorkspace
-from src.vsa.ontology import CONCEPTS, ROLES, RELATIONSHIPS, LOGIC_RULES
+from src.vsa.encoder import GSWVSAEncoder
+from src.vsa.legal_vsa import get_vsa_service
+from src.vsa.ontology import CONCEPTS, RELATIONSHIPS, ROLES
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ class VSAValidator:
     4. Providing calibrated confidence scores
     """
 
-    def __init__(self, ontology_path: Optional[Path] = None):
+    def __init__(self, ontology_path: Path | None = None):
         """
         Initialize the VSA validator.
 
@@ -69,34 +69,34 @@ class VSAValidator:
             ontology_path: Path to ontology JSON file
         """
         try:
-            with open(ontology_path, 'r', encoding='utf-8') as f:
+            with open(ontology_path, encoding="utf-8") as f:
                 ontology_data = json.load(f)
 
             # Load additional concepts into VSA vocabulary
-            if 'concepts' in ontology_data:
-                for concept in ontology_data['concepts']:
+            if "concepts" in ontology_data:
+                for concept in ontology_data["concepts"]:
                     # Register concept in VSA if not already present
                     if concept.upper() not in self._get_known_concepts():
                         self.vsa.get_vector(concept.upper())
                 logger.info(f"Loaded {len(ontology_data['concepts'])} additional concepts")
 
             # Load additional roles
-            if 'roles' in ontology_data:
-                for role in ontology_data['roles']:
+            if "roles" in ontology_data:
+                for role in ontology_data["roles"]:
                     self.vsa.get_vector(role.upper())
                 logger.info(f"Loaded {len(ontology_data['roles'])} additional roles")
 
             # Load additional relationships
-            if 'relationships' in ontology_data:
-                for rel in ontology_data['relationships']:
+            if "relationships" in ontology_data:
+                for rel in ontology_data["relationships"]:
                     self.vsa.get_vector(rel.upper())
-                logger.info(f"Loaded {len(ontology_data['relationships'])} additional relationships")
+                logger.info(
+                    f"Loaded {len(ontology_data['relationships'])} additional relationships"
+                )
 
             # Store logic rules for validation
-            if 'logic_rules' in ontology_data:
-                self._external_logic_rules = [
-                    tuple(rule) for rule in ontology_data['logic_rules']
-                ]
+            if "logic_rules" in ontology_data:
+                self._external_logic_rules = [tuple(rule) for rule in ontology_data["logic_rules"]]
                 logger.info(f"Loaded {len(self._external_logic_rules)} additional logic rules")
 
             logger.info(f"Successfully loaded ontology from {ontology_path}")
@@ -104,20 +104,15 @@ class VSAValidator:
         except json.JSONDecodeError as e:
             logger.error(f"Failed to parse ontology file {ontology_path}: {e}")
             raise ValueError(f"Invalid JSON in ontology file: {e}")
-        except IOError as e:
+        except OSError as e:
             logger.error(f"Failed to read ontology file {ontology_path}: {e}")
             raise
 
-    def _get_known_concepts(self) -> Set[str]:
+    def _get_known_concepts(self) -> set[str]:
         """Get set of known concepts from base ontology."""
         return set(CONCEPTS + ROLES + RELATIONSHIPS)
 
-    def validate_response(
-        self,
-        query: str,
-        response: str,
-        workspace: GlobalWorkspace
-    ) -> Dict:
+    def validate_response(self, query: str, response: str, workspace: GlobalWorkspace) -> dict:
         """
         Validate response against workspace knowledge.
 
@@ -144,17 +139,12 @@ class VSAValidator:
         if not claims:
             # No claims to validate - neutral response
             return {
-                'total_claims': 0,
-                'valid_claims': 0,
-                'overall_confidence': 0.5,
-                'hallucination_detected': False,
-                'severity': {
-                    'high_risk': 0,
-                    'medium_risk': 0,
-                    'low_risk': 0,
-                    'verified': 0
-                },
-                'individual_validations': []
+                "total_claims": 0,
+                "valid_claims": 0,
+                "overall_confidence": 0.5,
+                "hallucination_detected": False,
+                "severity": {"high_risk": 0, "medium_risk": 0, "low_risk": 0, "verified": 0},
+                "individual_validations": [],
             }
 
         # Validate each claim
@@ -172,20 +162,22 @@ class VSAValidator:
             # Perform VSA-based hallucination check
             vsa_check = self.vsa.verify_no_hallucination(claim_concepts)
 
-            validations.append({
-                'claim': claim,
-                'similarity': similarity,
-                'valid': similarity > 0.7,
-                'confidence': self._calibrate_confidence(similarity),
-                'vsa_valid': vsa_check['valid'],
-                'vsa_confidence': vsa_check['confidence'],
-                'concepts': claim_concepts
-            })
+            validations.append(
+                {
+                    "claim": claim,
+                    "similarity": similarity,
+                    "valid": similarity > 0.7,
+                    "confidence": self._calibrate_confidence(similarity),
+                    "vsa_valid": vsa_check["valid"],
+                    "vsa_confidence": vsa_check["confidence"],
+                    "concepts": claim_concepts,
+                }
+            )
 
         # Aggregate results
         return self._aggregate_validations(validations)
 
-    def _extract_claims(self, response: str) -> List[str]:
+    def _extract_claims(self, response: str) -> list[str]:
         """
         Extract factual claims from response text.
 
@@ -198,7 +190,7 @@ class VSAValidator:
         claims = []
 
         # Split into sentences (handle multiple punctuation marks)
-        sentences = re.split(r'[.!?]+', response)
+        sentences = re.split(r"[.!?]+", response)
 
         for sentence in sentences:
             sentence = sentence.strip()
@@ -222,28 +214,50 @@ class VSAValidator:
             True if sentence appears to be a factual statement
         """
         # Skip questions
-        if sentence.endswith('?'):
+        if sentence.endswith("?"):
             return False
 
         # Skip opinions (modal verbs indicating uncertainty)
-        opinion_markers = ['may', 'might', 'could', 'possibly', 'perhaps',
-                          'probably', 'maybe', 'seems', 'appears']
+        opinion_markers = [
+            "may",
+            "might",
+            "could",
+            "possibly",
+            "perhaps",
+            "probably",
+            "maybe",
+            "seems",
+            "appears",
+        ]
         sentence_lower = sentence.lower()
 
         # Check for opinion markers at word boundaries
-        if any(re.search(r'\b' + marker + r'\b', sentence_lower)
-               for marker in opinion_markers):
+        if any(re.search(r"\b" + marker + r"\b", sentence_lower) for marker in opinion_markers):
             return False
 
         # Has factual indicators (verbs of being, temporal markers, etc.)
-        factual_markers = ['is', 'was', 'has', 'had', 'on', 'in', 'held',
-                          'ordered', 'filed', 'granted', 'denied', 'married',
-                          'divorced', 'separated', 'born', 'dated']
+        factual_markers = [
+            "is",
+            "was",
+            "has",
+            "had",
+            "on",
+            "in",
+            "held",
+            "ordered",
+            "filed",
+            "granted",
+            "denied",
+            "married",
+            "divorced",
+            "separated",
+            "born",
+            "dated",
+        ]
 
-        return any(re.search(r'\b' + marker + r'\b', sentence_lower)
-                  for marker in factual_markers)
+        return any(re.search(r"\b" + marker + r"\b", sentence_lower) for marker in factual_markers)
 
-    def _extract_concepts(self, claim: str) -> List[str]:
+    def _extract_concepts(self, claim: str) -> list[str]:
         """
         Extract key concepts from a claim.
 
@@ -255,21 +269,58 @@ class VSAValidator:
         """
         # Simple extraction: get meaningful words
         # Remove common stop words
-        stop_words = {'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at',
-                     'to', 'for', 'of', 'with', 'by', 'from', 'as', 'is', 'was',
-                     'are', 'were', 'been', 'be', 'have', 'has', 'had', 'do',
-                     'does', 'did', 'will', 'would', 'should', 'could', 'may',
-                     'might', 'must', 'can', 'this', 'that', 'these', 'those'}
+        stop_words = {
+            "the",
+            "a",
+            "an",
+            "and",
+            "or",
+            "but",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "of",
+            "with",
+            "by",
+            "from",
+            "as",
+            "is",
+            "was",
+            "are",
+            "were",
+            "been",
+            "be",
+            "have",
+            "has",
+            "had",
+            "do",
+            "does",
+            "did",
+            "will",
+            "would",
+            "should",
+            "could",
+            "may",
+            "might",
+            "must",
+            "can",
+            "this",
+            "that",
+            "these",
+            "those",
+        }
 
         # Extract words (alphanumeric with potential hyphens)
-        words = re.findall(r'\b[a-zA-Z][\w-]*\b', claim.lower())
+        words = re.findall(r"\b[a-zA-Z][\w-]*\b", claim.lower())
 
         # Filter stop words and short words
         concepts = [w for w in words if w not in stop_words and len(w) > 2]
 
         return concepts
 
-    def _encode_claim(self, concepts: List[str]) -> torch.Tensor:
+    def _encode_claim(self, concepts: list[str]) -> torch.Tensor:
         """
         Encode a claim as a hypervector.
 
@@ -323,7 +374,7 @@ class VSAValidator:
             # Ensure non-negative
             return max(0.0, (similarity + 1.0) * 0.2)
 
-    def _aggregate_validations(self, validations: List[Dict]) -> Dict:
+    def _aggregate_validations(self, validations: list[dict]) -> dict:
         """
         Aggregate individual claim validations.
 
@@ -334,18 +385,18 @@ class VSAValidator:
             Aggregated validation results
         """
         total_claims = len(validations)
-        valid_claims = sum(1 for v in validations if v['valid'])
+        valid_claims = sum(1 for v in validations if v["valid"])
 
         # Overall confidence is average of valid claims
         # If no valid claims, use average of all claims
-        confidences = [v['confidence'] for v in validations if v['valid']]
+        confidences = [v["confidence"] for v in validations if v["valid"]]
         if not confidences:
-            confidences = [v['confidence'] for v in validations]
+            confidences = [v["confidence"] for v in validations]
 
         overall_confidence = sum(confidences) / len(confidences) if confidences else 0.0
 
         # Factor in VSA validation results
-        vsa_confidences = [v['vsa_confidence'] for v in validations]
+        vsa_confidences = [v["vsa_confidence"] for v in validations]
         avg_vsa_confidence = sum(vsa_confidences) / len(vsa_confidences) if vsa_confidences else 0.0
 
         # Weighted combination of similarity-based and VSA-based confidence
@@ -354,36 +405,32 @@ class VSAValidator:
         combined_confidence = (overall_confidence * 0.6) + (avg_vsa_confidence * 0.4)
 
         # Flag hallucination if any claim has very low similarity
-        hallucination_detected = any(v['similarity'] < 0.3 for v in validations)
+        hallucination_detected = any(v["similarity"] < 0.3 for v in validations)
 
         # Also flag if VSA detects issues
-        vsa_issues_detected = any(not v['vsa_valid'] for v in validations)
+        vsa_issues_detected = any(not v["vsa_valid"] for v in validations)
         hallucination_detected = hallucination_detected or vsa_issues_detected
 
         # Severity breakdown
         severity = {
-            'high_risk': sum(1 for v in validations if v['similarity'] < 0.3),
-            'medium_risk': sum(1 for v in validations if 0.3 <= v['similarity'] < 0.5),
-            'low_risk': sum(1 for v in validations if 0.5 <= v['similarity'] < 0.7),
-            'verified': sum(1 for v in validations if v['similarity'] >= 0.7)
+            "high_risk": sum(1 for v in validations if v["similarity"] < 0.3),
+            "medium_risk": sum(1 for v in validations if 0.3 <= v["similarity"] < 0.5),
+            "low_risk": sum(1 for v in validations if 0.5 <= v["similarity"] < 0.7),
+            "verified": sum(1 for v in validations if v["similarity"] >= 0.7),
         }
 
         return {
-            'total_claims': total_claims,
-            'valid_claims': valid_claims,
-            'overall_confidence': combined_confidence,
-            'similarity_confidence': overall_confidence,
-            'vsa_confidence': avg_vsa_confidence,
-            'hallucination_detected': hallucination_detected,
-            'severity': severity,
-            'individual_validations': validations
+            "total_claims": total_claims,
+            "valid_claims": valid_claims,
+            "overall_confidence": combined_confidence,
+            "similarity_confidence": overall_confidence,
+            "vsa_confidence": avg_vsa_confidence,
+            "hallucination_detected": hallucination_detected,
+            "severity": severity,
+            "individual_validations": validations,
         }
 
-    def validate_claim(
-        self,
-        claim: str,
-        workspace: GlobalWorkspace
-    ) -> Dict:
+    def validate_claim(self, claim: str, workspace: GlobalWorkspace) -> dict:
         """
         Validate a single claim against workspace.
 
@@ -408,14 +455,14 @@ class VSAValidator:
         vsa_check = self.vsa.verify_no_hallucination(concepts)
 
         return {
-            'claim': claim,
-            'concepts': concepts,
-            'similarity': similarity,
-            'confidence': self._calibrate_confidence(similarity),
-            'valid': similarity > 0.7,
-            'vsa_valid': vsa_check['valid'],
-            'vsa_issues': vsa_check['issues'],
-            'vsa_confidence': vsa_check['confidence']
+            "claim": claim,
+            "concepts": concepts,
+            "similarity": similarity,
+            "confidence": self._calibrate_confidence(similarity),
+            "valid": similarity > 0.7,
+            "vsa_valid": vsa_check["valid"],
+            "vsa_issues": vsa_check["issues"],
+            "vsa_confidence": vsa_check["confidence"],
         }
 
 
@@ -427,17 +474,13 @@ class EnhancedVSAValidator(VSAValidator):
     - Cross-reference checking
     """
 
-    def __init__(self, ontology_path: Optional[Path] = None):
+    def __init__(self, ontology_path: Path | None = None):
         super().__init__(ontology_path)
         self.validation_cache = {}  # Cache for repeated validations
 
     def validate_with_context(
-        self,
-        query: str,
-        response: str,
-        workspace: GlobalWorkspace,
-        context: Optional[Dict] = None
-    ) -> Dict:
+        self, query: str, response: str, workspace: GlobalWorkspace, context: dict | None = None
+    ) -> dict:
         """
         Validate response with additional context.
 
@@ -455,13 +498,11 @@ class EnhancedVSAValidator(VSAValidator):
 
         # Add context-specific checks if provided
         if context:
-            base_validation['context_checks'] = self._validate_context(
-                response, context
-            )
+            base_validation["context_checks"] = self._validate_context(response, context)
 
         return base_validation
 
-    def _validate_context(self, response: str, context: Dict) -> Dict:
+    def _validate_context(self, response: str, context: dict) -> dict:
         """
         Validate response against additional context.
 
@@ -479,27 +520,23 @@ class EnhancedVSAValidator(VSAValidator):
                 - entity_consistency: bool
                 - issues: List of identified issues
         """
-        checks = {
-            'temporal_consistency': True,
-            'entity_consistency': True,
-            'issues': []
-        }
+        checks = {"temporal_consistency": True, "entity_consistency": True, "issues": []}
 
         # Check temporal consistency
-        if 'date' in context or 'date_range' in context:
+        if "date" in context or "date_range" in context:
             temporal_result = self._validate_temporal_consistency(response, context)
-            checks['temporal_consistency'] = temporal_result['consistent']
-            checks['issues'].extend(temporal_result['issues'])
+            checks["temporal_consistency"] = temporal_result["consistent"]
+            checks["issues"].extend(temporal_result["issues"])
 
         # Check entity consistency
-        if 'entities' in context or 'case_parties' in context:
+        if "entities" in context or "case_parties" in context:
             entity_result = self._validate_entity_consistency(response, context)
-            checks['entity_consistency'] = entity_result['consistent']
-            checks['issues'].extend(entity_result['issues'])
+            checks["entity_consistency"] = entity_result["consistent"]
+            checks["issues"].extend(entity_result["issues"])
 
         return checks
 
-    def _extract_dates_from_text(self, text: str) -> List[Tuple[str, datetime]]:
+    def _extract_dates_from_text(self, text: str) -> list[tuple[str, datetime]]:
         """
         Extract dates from text with their string representation.
 
@@ -514,15 +551,21 @@ class EnhancedVSAValidator(VSAValidator):
         # Common date patterns
         patterns = [
             # ISO format: 2024-01-15
-            (r'\b(\d{4}-\d{1,2}-\d{1,2})\b', '%Y-%m-%d'),
+            (r"\b(\d{4}-\d{1,2}-\d{1,2})\b", "%Y-%m-%d"),
             # Australian format: 15/01/2024 or 15-01-2024
-            (r'\b(\d{1,2}[/-]\d{1,2}[/-]\d{4})\b', None),  # Multiple formats
+            (r"\b(\d{1,2}[/-]\d{1,2}[/-]\d{4})\b", None),  # Multiple formats
             # Written format: 15 January 2024
-            (r'\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b', '%d %B %Y'),
+            (
+                r"\b(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b",
+                "%d %B %Y",
+            ),
             # Written format: January 15, 2024
-            (r'\b((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b', None),
+            (
+                r"\b((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})\b",
+                None,
+            ),
             # Year only: 2024
-            (r'\b((?:19|20)\d{2})\b(?!\s*-)', '%Y'),
+            (r"\b((?:19|20)\d{2})\b(?!\s*-)", "%Y"),
         ]
 
         for pattern, date_format in patterns:
@@ -535,7 +578,7 @@ class EnhancedVSAValidator(VSAValidator):
 
         return extracted_dates
 
-    def _parse_date(self, date_str: str, preferred_format: Optional[str] = None) -> Optional[datetime]:
+    def _parse_date(self, date_str: str, preferred_format: str | None = None) -> datetime | None:
         """
         Parse a date string into a datetime object.
 
@@ -552,26 +595,28 @@ class EnhancedVSAValidator(VSAValidator):
             formats_to_try.append(preferred_format)
 
         # Add common formats
-        formats_to_try.extend([
-            '%Y-%m-%d',
-            '%d/%m/%Y',
-            '%d-%m-%Y',
-            '%m/%d/%Y',
-            '%d %B %Y',
-            '%B %d, %Y',
-            '%B %d %Y',
-            '%Y',
-        ])
+        formats_to_try.extend(
+            [
+                "%Y-%m-%d",
+                "%d/%m/%Y",
+                "%d-%m-%Y",
+                "%m/%d/%Y",
+                "%d %B %Y",
+                "%B %d, %Y",
+                "%B %d %Y",
+                "%Y",
+            ]
+        )
 
         for fmt in formats_to_try:
             try:
-                return datetime.strptime(date_str.strip().replace(',', ''), fmt)
+                return datetime.strptime(date_str.strip().replace(",", ""), fmt)
             except ValueError:
                 continue
 
         return None
 
-    def _validate_temporal_consistency(self, response: str, context: Dict) -> Dict:
+    def _validate_temporal_consistency(self, response: str, context: dict) -> dict:
         """
         Validate temporal consistency of response against context.
 
@@ -582,7 +627,7 @@ class EnhancedVSAValidator(VSAValidator):
         Returns:
             Dictionary with 'consistent' bool and 'issues' list
         """
-        result = {'consistent': True, 'issues': []}
+        result = {"consistent": True, "issues": []}
 
         # Extract dates from response
         extracted_dates = self._extract_dates_from_text(response)
@@ -595,18 +640,26 @@ class EnhancedVSAValidator(VSAValidator):
         reference_date = None
         date_range = None
 
-        if 'date' in context:
-            ref = context['date']
+        if "date" in context:
+            ref = context["date"]
             if isinstance(ref, datetime):
                 reference_date = ref
             elif isinstance(ref, str):
                 reference_date = self._parse_date(ref)
 
-        if 'date_range' in context:
-            range_tuple = context['date_range']
+        if "date_range" in context:
+            range_tuple = context["date_range"]
             if len(range_tuple) == 2:
-                start = range_tuple[0] if isinstance(range_tuple[0], datetime) else self._parse_date(str(range_tuple[0]))
-                end = range_tuple[1] if isinstance(range_tuple[1], datetime) else self._parse_date(str(range_tuple[1]))
+                start = (
+                    range_tuple[0]
+                    if isinstance(range_tuple[0], datetime)
+                    else self._parse_date(str(range_tuple[0]))
+                )
+                end = (
+                    range_tuple[1]
+                    if isinstance(range_tuple[1], datetime)
+                    else self._parse_date(str(range_tuple[1]))
+                )
                 if start and end:
                     date_range = (start, end)
 
@@ -616,8 +669,8 @@ class EnhancedVSAValidator(VSAValidator):
             if reference_date:
                 # Allow some tolerance for year-only comparisons
                 if extracted_date.year > datetime.now().year + 1:
-                    result['consistent'] = False
-                    result['issues'].append(
+                    result["consistent"] = False
+                    result["issues"].append(
                         f"Future date detected: '{date_str}' is after current year"
                     )
 
@@ -627,22 +680,22 @@ class EnhancedVSAValidator(VSAValidator):
                 # Only check if we have a full date (not just year)
                 if extracted_date.month != 1 or extracted_date.day != 1:
                     if extracted_date < start_date or extracted_date > end_date:
-                        result['consistent'] = False
-                        result['issues'].append(
+                        result["consistent"] = False
+                        result["issues"].append(
                             f"Date '{date_str}' outside expected range "
                             f"({start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')})"
                         )
 
             # Check for impossible dates (before relevant legal system)
             if extracted_date.year < 1901:  # Pre-Federation Australia
-                result['consistent'] = False
-                result['issues'].append(
+                result["consistent"] = False
+                result["issues"].append(
                     f"Unlikely historical date: '{date_str}' predates Australian Federation"
                 )
 
         return result
 
-    def _validate_entity_consistency(self, response: str, context: Dict) -> Dict:
+    def _validate_entity_consistency(self, response: str, context: dict) -> dict:
         """
         Validate entity consistency - check that mentioned entities exist in context.
 
@@ -653,20 +706,20 @@ class EnhancedVSAValidator(VSAValidator):
         Returns:
             Dictionary with 'consistent' bool and 'issues' list
         """
-        result = {'consistent': True, 'issues': []}
+        result = {"consistent": True, "issues": []}
 
         # Gather known entities from context
-        known_entities: Set[str] = set()
+        known_entities: set[str] = set()
 
-        if 'entities' in context:
-            for entity in context['entities']:
+        if "entities" in context:
+            for entity in context["entities"]:
                 if isinstance(entity, str):
                     known_entities.add(entity.lower())
-                elif isinstance(entity, dict) and 'name' in entity:
-                    known_entities.add(entity['name'].lower())
+                elif isinstance(entity, dict) and "name" in entity:
+                    known_entities.add(entity["name"].lower())
 
-        if 'case_parties' in context:
-            for party in context['case_parties']:
+        if "case_parties" in context:
+            for party in context["case_parties"]:
                 if isinstance(party, str):
                     known_entities.add(party.lower())
 
@@ -684,15 +737,23 @@ class EnhancedVSAValidator(VSAValidator):
         for entity in potential_entities:
             entity_lower = entity.lower()
             # Check if entity matches any known entity (partial match)
-            if not any(
-                known in entity_lower or entity_lower in known
-                for known in known_entities
-            ):
+            if not any(known in entity_lower or entity_lower in known for known in known_entities):
                 # Additional check: skip common legal terms that look like names
                 legal_terms = {
-                    'court', 'judge', 'applicant', 'respondent', 'child',
-                    'property', 'order', 'act', 'section', 'family',
-                    'parenting', 'consent', 'hearing', 'trial'
+                    "court",
+                    "judge",
+                    "applicant",
+                    "respondent",
+                    "child",
+                    "property",
+                    "order",
+                    "act",
+                    "section",
+                    "family",
+                    "parenting",
+                    "consent",
+                    "hearing",
+                    "trial",
                 }
                 if entity_lower not in legal_terms:
                     unrecognized_entities.append(entity)
@@ -702,20 +763,19 @@ class EnhancedVSAValidator(VSAValidator):
             # Only flag if there are multiple unrecognized entities
             # or if the entity appears to be a proper name
             significant_unrecognized = [
-                e for e in unrecognized_entities
-                if len(e.split()) >= 2 or e[0].isupper()
+                e for e in unrecognized_entities if len(e.split()) >= 2 or e[0].isupper()
             ]
 
             if len(significant_unrecognized) >= 2:
-                result['consistent'] = False
-                result['issues'].append(
+                result["consistent"] = False
+                result["issues"].append(
                     f"Potentially unrecognized entities mentioned: "
                     f"{', '.join(significant_unrecognized[:5])}"
                 )
 
         return result
 
-    def _extract_entity_mentions(self, text: str) -> List[str]:
+    def _extract_entity_mentions(self, text: str) -> list[str]:
         """
         Extract potential entity mentions from text.
 
@@ -729,7 +789,7 @@ class EnhancedVSAValidator(VSAValidator):
 
         # Pattern for proper nouns (capitalized words)
         # Match sequences of capitalized words
-        pattern = r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b'
+        pattern = r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)\b"
         matches = re.findall(pattern, text)
 
         # Filter out sentence starters and common terms

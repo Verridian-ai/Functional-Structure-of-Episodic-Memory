@@ -27,10 +27,12 @@ References:
 import torch
 import torch.nn as nn
 
+
 class LIFNeuron(nn.Module):
     """
     Leaky Integrate-and-Fire Neuron with Surrogate Gradient.
     """
+
     def __init__(self, tau: float = 2.0, threshold: float = 1.0):
         super().__init__()
         self.tau = tau
@@ -39,15 +41,16 @@ class LIFNeuron(nn.Module):
 
     def forward(self, input_current: torch.Tensor, membrane_pot: torch.Tensor) -> torch.Tensor:
         # V[t] = V[t-1] * decay + I[t]
-        membrane_pot = membrane_pot * (1 - 1/self.tau) + input_current
-        
+        membrane_pot = membrane_pot * (1 - 1 / self.tau) + input_current
+
         # Spike if V > Threshold
         spikes = self.act(membrane_pot - self.threshold)
-        
+
         # Reset membrane potential (soft reset)
         membrane_pot = membrane_pot - spikes * self.threshold
-        
+
         return spikes, membrane_pot
+
 
 class SurrogateHeaviside(torch.autograd.Function):
     """
@@ -55,6 +58,7 @@ class SurrogateHeaviside(torch.autograd.Function):
     Forward: 1 if x > 0 else 0
     Backward: Sigmoid derivative approximation
     """
+
     @staticmethod
     def forward(ctx, input):
         ctx.save_for_backward(input)
@@ -62,12 +66,13 @@ class SurrogateHeaviside(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output):
-        input, = ctx.saved_tensors
+        (input,) = ctx.saved_tensors
         # Sigmoid derivative approximation: alpha * sigmoid(x) * (1 - sigmoid(x))
         alpha = 10.0
         sigmoid = torch.sigmoid(alpha * input)
         grad_input = grad_output * (alpha * sigmoid * (1 - sigmoid))
         return grad_input
+
 
 class SpikingTransitionModule(nn.Module):
     """
@@ -81,6 +86,7 @@ class SpikingTransitionModule(nn.Module):
     of spikes within a theta cycle encodes the position/state in the
     abstract structural space.
     """
+
     def __init__(self, hidden_dim: int, action_dim: int):
         super().__init__()
         self.hidden_dim = hidden_dim
@@ -90,10 +96,7 @@ class SpikingTransitionModule(nn.Module):
         self.neuron = LIFNeuron()
 
     def forward(
-        self,
-        spikes_prev: torch.Tensor,
-        mem_prev: torch.Tensor,
-        action_idx: torch.Tensor
+        self, spikes_prev: torch.Tensor, mem_prev: torch.Tensor, action_idx: torch.Tensor
     ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Apply spiking transition dynamics.
@@ -123,7 +126,9 @@ class SpikingTransitionModule(nn.Module):
 
         return spikes_next, mem_next
 
-    def init_state(self, batch_size: int, device: torch.device = None) -> tuple[torch.Tensor, torch.Tensor]:
+    def init_state(
+        self, batch_size: int, device: torch.device = None
+    ) -> tuple[torch.Tensor, torch.Tensor]:
         """
         Initialize the spiking state for a new sequence.
 
@@ -150,6 +155,7 @@ class SpikingMemoryModule(nn.Module):
     spike-timing considerations. The relative timing of pre and post
     synaptic spikes determines the strength and sign of plasticity.
     """
+
     def __init__(self, hidden_dim: int, tau_plus: float = 20.0, tau_minus: float = 20.0):
         super().__init__()
         self.hidden_dim = hidden_dim
@@ -176,7 +182,7 @@ class SpikingMemoryModule(nn.Module):
         spikes_post: torch.Tensor,
         trace_pre: torch.Tensor,
         trace_post: torch.Tensor,
-        eta: float = 0.01
+        eta: float = 0.01,
     ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """
         STDP-based memory update.
@@ -199,8 +205,8 @@ class SpikingMemoryModule(nn.Module):
             trace_post_new: Updated post-synaptic trace
         """
         # Update eligibility traces (exponential decay + spike contribution)
-        trace_pre_new = trace_pre * (1 - 1/self.tau_plus) + spikes_pre
-        trace_post_new = trace_post * (1 - 1/self.tau_minus) + spikes_post
+        trace_pre_new = trace_pre * (1 - 1 / self.tau_plus) + spikes_pre
+        trace_post_new = trace_post * (1 - 1 / self.tau_minus) + spikes_post
 
         # LTP: post spike when pre trace is active
         # (Batch, Hidden_post, 1) x (Batch, 1, Hidden_pre)
@@ -213,4 +219,3 @@ class SpikingMemoryModule(nn.Module):
         M_new = M + eta * (ltp - 0.5 * ltd)
 
         return M_new, trace_pre_new, trace_post_new
-

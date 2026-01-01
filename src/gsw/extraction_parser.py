@@ -5,12 +5,18 @@ Extraction Parser
 Parsing helpers for converting LLM response data into schema objects.
 """
 
-from typing import Dict, Any
+from typing import Any
 from uuid import uuid4
 
 from src.logic.gsw_schema import (
-    Actor, ActorType, State, VerbPhrase, PredictiveQuestion,
-    SpatioTemporalLink, QuestionType, LinkType
+    Actor,
+    ActorType,
+    LinkType,
+    PredictiveQuestion,
+    QuestionType,
+    SpatioTemporalLink,
+    State,
+    VerbPhrase,
 )
 
 
@@ -20,7 +26,7 @@ class ExtractionParser:
     """
 
     @staticmethod
-    def parse_actor(data: Dict[str, Any], chunk_id: str) -> Actor:
+    def parse_actor(data: dict[str, Any], chunk_id: str) -> Actor:
         """Parse actor from response data."""
         # Parse states
         states = []
@@ -32,7 +38,7 @@ class ExtractionParser:
                 value=state_data.get("value", ""),
                 start_date=state_data.get("start_date"),
                 end_date=state_data.get("end_date"),
-                source_chunk_id=chunk_id
+                source_chunk_id=chunk_id,
             )
             states.append(state)
 
@@ -50,11 +56,11 @@ class ExtractionParser:
             aliases=data.get("aliases", []),
             roles=data.get("roles", []),
             states=states,
-            source_chunk_ids=[chunk_id]
+            source_chunk_ids=[chunk_id],
         )
 
     @staticmethod
-    def parse_verb_phrase(data: Dict[str, Any], chunk_id: str) -> VerbPhrase:
+    def parse_verb_phrase(data: dict[str, Any], chunk_id: str) -> VerbPhrase:
         """Parse verb phrase from response data."""
         # Ensure agent_id is string or None (LLM sometimes returns [])
         agent_id = data.get("agent_id")
@@ -72,14 +78,16 @@ class ExtractionParser:
             verb=data.get("verb", ""),
             agent_id=agent_id,
             patient_ids=patient_ids,
-            temporal_id=data.get("temporal_id") if isinstance(data.get("temporal_id"), str) else None,
+            temporal_id=(
+                data.get("temporal_id") if isinstance(data.get("temporal_id"), str) else None
+            ),
             spatial_id=data.get("spatial_id") if isinstance(data.get("spatial_id"), str) else None,
             is_implicit=data.get("is_implicit", False),
-            source_chunk_id=chunk_id
+            source_chunk_id=chunk_id,
         )
 
     @staticmethod
-    def parse_question(data: Dict[str, Any], chunk_id: str) -> PredictiveQuestion:
+    def parse_question(data: dict[str, Any], chunk_id: str) -> PredictiveQuestion:
         """Parse predictive question from response data."""
         # Parse question type
         q_type_str = data.get("question_type", "what").lower()
@@ -96,11 +104,11 @@ class ExtractionParser:
             answerable=data.get("answerable", False),
             answer_text=data.get("answer_text"),
             answer_entity_id=data.get("answer_entity_id"),
-            source_chunk_id=chunk_id
+            source_chunk_id=chunk_id,
         )
 
     @staticmethod
-    def parse_link(data: Dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
+    def parse_link(data: dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
         """Parse spatio-temporal link from response data."""
         tag_type_str = data.get("tag_type", "temporal").lower()
         try:
@@ -113,5 +121,5 @@ class ExtractionParser:
             linked_entity_ids=data.get("linked_entity_ids", []),
             tag_type=tag_type,
             tag_value=data.get("tag_value"),
-            source_chunk_id=chunk_id
+            source_chunk_id=chunk_id,
         )

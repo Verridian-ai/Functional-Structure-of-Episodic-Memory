@@ -6,11 +6,11 @@ Wrapper classes for LangFuse spans with helper methods.
 """
 
 import time
-from typing import Any, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from .tracer_core import GSWTracer
     from .models import GraphActivation, TraversalResult
+    from .tracer_core import GSWTracer
 
 
 class SpanWrapper:
@@ -20,17 +20,17 @@ class SpanWrapper:
         self._span = span
         self._start_time = start_time
         self._tracer = tracer
-        self._sub_timers: Dict[str, float] = {}
+        self._sub_timers: dict[str, float] = {}
 
     def set_output(self, output: Any):
         """Set the output of the span."""
         self._span.update(output=output)
 
-    def set_metadata(self, metadata: Dict[str, Any]):
+    def set_metadata(self, metadata: dict[str, Any]):
         """Add metadata to the span."""
         self._span.update(metadata=metadata)
 
-    def event(self, name: str, metadata: Optional[Dict[str, Any]] = None):
+    def event(self, name: str, metadata: dict[str, Any] | None = None):
         """Record an event within the span."""
         self._span.event(name=name, metadata=metadata)
 
@@ -58,7 +58,7 @@ class SpanWrapper:
         """Record a traversal result within this span."""
         self._tracer.trace_full_traversal(result, self)
 
-    def score(self, name: str, value: float, comment: Optional[str] = None):
+    def score(self, name: str, value: float, comment: str | None = None):
         """Score this span's operation."""
         self._tracer.score_retrieval(
             name=name,
@@ -71,15 +71,32 @@ class SpanWrapper:
 class DummySpan:
     """Dummy span when tracing is disabled."""
 
-    def set_output(self, output: Any): pass
-    def set_metadata(self, metadata: Dict[str, Any]): pass
-    def event(self, name: str, metadata: Optional[Dict[str, Any]] = None): pass
-    def start_sub_timer(self, name: str): pass
-    def stop_sub_timer(self, name: str) -> float: return 0.0
-    def get_elapsed_ms(self) -> float: return 0.0
-    def record_graph_activation(self, activation: "GraphActivation"): pass
-    def record_traversal(self, result: "TraversalResult"): pass
-    def score(self, name: str, value: float, comment: Optional[str] = None): pass
+    def set_output(self, output: Any):
+        pass
+
+    def set_metadata(self, metadata: dict[str, Any]):
+        pass
+
+    def event(self, name: str, metadata: dict[str, Any] | None = None):
+        pass
+
+    def start_sub_timer(self, name: str):
+        pass
+
+    def stop_sub_timer(self, name: str) -> float:
+        return 0.0
+
+    def get_elapsed_ms(self) -> float:
+        return 0.0
+
+    def record_graph_activation(self, activation: "GraphActivation"):
+        pass
+
+    def record_traversal(self, result: "TraversalResult"):
+        pass
+
+    def score(self, name: str, value: float, comment: str | None = None):
+        pass
 
 
 # Legacy aliases for backwards compatibility

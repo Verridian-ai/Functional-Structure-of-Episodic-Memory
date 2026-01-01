@@ -12,12 +12,12 @@ This module integrates with LangFuse to provide visibility into:
 - Session-level patterns
 """
 
+import hashlib
+import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set, TYPE_CHECKING
 from enum import Enum
-import json
-import hashlib
+from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
     from .langfuse_tracer import GSWTracer
@@ -25,6 +25,7 @@ if TYPE_CHECKING:
 
 class SessionEventType(str, Enum):
     """Types of events in an episodic session."""
+
     QUERY = "query"
     ENTITY_ACTIVATED = "entity_activated"
     ENTITY_ADDED = "entity_added"
@@ -41,9 +42,10 @@ class SessionEventType(str, Enum):
 @dataclass
 class SessionEvent:
     """A single event in the session timeline."""
+
     event_type: SessionEventType
     timestamp: datetime
-    data: Dict[str, Any]
+    data: dict[str, Any]
     turn_number: int
     context_size_before: int
     context_size_after: int
@@ -52,13 +54,14 @@ class SessionEvent:
 @dataclass
 class EntityActivation:
     """Tracks activation of an entity across session turns."""
+
     entity_id: str
     entity_type: str
-    entity_name: Optional[str]
+    entity_name: str | None
     first_activated_turn: int
     activation_count: int = 1
     last_activated_turn: int = 0
-    relevance_scores: List[float] = field(default_factory=list)
+    relevance_scores: list[float] = field(default_factory=list)
 
     def record_activation(self, turn: int, relevance: float = 1.0):
         """Record another activation of this entity."""
@@ -68,7 +71,11 @@ class EntityActivation:
 
     @property
     def avg_relevance(self) -> float:
-        return sum(self.relevance_scores) / len(self.relevance_scores) if self.relevance_scores else 0.0
+        return (
+            sum(self.relevance_scores) / len(self.relevance_scores)
+            if self.relevance_scores
+            else 0.0
+        )
 
     @property
     def persistence(self) -> int:
@@ -79,24 +86,25 @@ class EntityActivation:
 @dataclass
 class ContextWindow:
     """Represents the current episodic memory context window."""
-    actors: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    states: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    verb_phrases: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    questions: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    spatio_temporal_links: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+
+    actors: dict[str, dict[str, Any]] = field(default_factory=dict)
+    states: dict[str, dict[str, Any]] = field(default_factory=dict)
+    verb_phrases: dict[str, dict[str, Any]] = field(default_factory=dict)
+    questions: dict[str, dict[str, Any]] = field(default_factory=dict)
+    spatio_temporal_links: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     @property
     def total_entities(self) -> int:
         return (
-            len(self.actors) +
-            len(self.states) +
-            len(self.verb_phrases) +
-            len(self.questions) +
-            len(self.spatio_temporal_links)
+            len(self.actors)
+            + len(self.states)
+            + len(self.verb_phrases)
+            + len(self.questions)
+            + len(self.spatio_temporal_links)
         )
 
     @property
-    def size_breakdown(self) -> Dict[str, int]:
+    def size_breakdown(self) -> dict[str, int]:
         return {
             "actors": len(self.actors),
             "states": len(self.states),
@@ -105,7 +113,7 @@ class ContextWindow:
             "spatio_temporal_links": len(self.spatio_temporal_links),
         }
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "total_entities": self.total_entities,
             "breakdown": self.size_breakdown,
@@ -115,29 +123,33 @@ class ContextWindow:
 
     def compute_hash(self) -> str:
         """Compute a hash of the context state for change detection."""
-        content = json.dumps({
-            "actors": sorted(self.actors.keys()),
-            "states": sorted(self.states.keys()),
-            "verb_phrases": sorted(self.verb_phrases.keys()),
-            "questions": sorted(self.questions.keys()),
-            "links": sorted(self.spatio_temporal_links.keys()),
-        }, sort_keys=True)
+        content = json.dumps(
+            {
+                "actors": sorted(self.actors.keys()),
+                "states": sorted(self.states.keys()),
+                "verb_phrases": sorted(self.verb_phrases.keys()),
+                "questions": sorted(self.questions.keys()),
+                "links": sorted(self.spatio_temporal_links.keys()),
+            },
+            sort_keys=True,
+        )
         return hashlib.md5(content.encode()).hexdigest()[:12]
 
 
 @dataclass
 class SessionState:
     """Complete state of a session at a point in time."""
+
     turn_number: int
     timestamp: datetime
     query: str
     context: ContextWindow
     context_hash: str
-    active_entity_ids: Set[str]
-    newly_added_entities: Set[str]
-    answered_questions: Set[str]
-    pending_questions: Set[str]
-    confidence_score: Optional[float] = None
+    active_entity_ids: set[str]
+    newly_added_entities: set[str]
+    answered_questions: set[str]
+    pending_questions: set[str]
+    confidence_score: float | None = None
 
 
 class EpisodicSessionTracker:
@@ -182,17 +194,17 @@ class EpisodicSessionTracker:
         self.max_history = max_history
 
         # Session timeline
-        self.events: List[SessionEvent] = []
-        self.states: List[SessionState] = []
+        self.events: list[SessionEvent] = []
+        self.states: list[SessionState] = []
         self.current_turn: int = 0
 
         # Entity tracking
-        self.entity_activations: Dict[str, EntityActivation] = {}
-        self.entity_relationships: Dict[str, Set[str]] = {}  # entity_id -> related entity_ids
+        self.entity_activations: dict[str, EntityActivation] = {}
+        self.entity_relationships: dict[str, set[str]] = {}  # entity_id -> related entity_ids
 
         # Current context
         self.current_context = ContextWindow()
-        self.previous_context_hash: Optional[str] = None
+        self.previous_context_hash: str | None = None
 
         # Session metadata
         self.created_at = datetime.utcnow()
@@ -244,8 +256,8 @@ class EpisodicSessionTracker:
 
     def end_turn(
         self,
-        response: Optional[str] = None,
-        confidence: Optional[float] = None,
+        response: str | None = None,
+        confidence: float | None = None,
     ):
         """
         End the current turn and record state.
@@ -275,7 +287,9 @@ class EpisodicSessionTracker:
             self._record_event(
                 SessionEventType.CONTEXT_EXPANDED,
                 {
-                    "previous_size": len(self.states[-2].active_entity_ids) if len(self.states) > 1 else 0,
+                    "previous_size": (
+                        len(self.states[-2].active_entity_ids) if len(self.states) > 1 else 0
+                    ),
                     "new_size": len(state.active_entity_ids),
                     "new_entities": list(state.newly_added_entities)[:10],
                 },
@@ -313,9 +327,9 @@ class EpisodicSessionTracker:
         self,
         entity_id: str,
         entity_type: str,
-        entity_name: Optional[str] = None,
+        entity_name: str | None = None,
         relevance: float = 1.0,
-        connected_entities: Optional[List[str]] = None,
+        connected_entities: list[str] | None = None,
     ):
         """
         Record that an entity was activated during retrieval.
@@ -362,7 +376,7 @@ class EpisodicSessionTracker:
         self,
         entity_id: str,
         entity_type: str,
-        entity_name: Optional[str] = None,
+        entity_name: str | None = None,
         source: str = "extraction",
     ):
         """Record that a new entity was added to the workspace."""
@@ -398,12 +412,12 @@ class EpisodicSessionTracker:
 
     def update_context(
         self,
-        workspace: Optional[Any] = None,
-        actors: Optional[Dict] = None,
-        states: Optional[Dict] = None,
-        verb_phrases: Optional[Dict] = None,
-        questions: Optional[Dict] = None,
-        spatio_temporal_links: Optional[Dict] = None,
+        workspace: Any | None = None,
+        actors: dict | None = None,
+        states: dict | None = None,
+        verb_phrases: dict | None = None,
+        questions: dict | None = None,
+        spatio_temporal_links: dict | None = None,
     ):
         """
         Update the tracked context window.
@@ -420,23 +434,23 @@ class EpisodicSessionTracker:
         """
         if workspace is not None:
             # Extract from GlobalWorkspace
-            if hasattr(workspace, 'actors'):
+            if hasattr(workspace, "actors"):
                 self.current_context.actors = {
                     k: self._entity_to_dict(v) for k, v in workspace.actors.items()
                 }
-            if hasattr(workspace, 'states'):
+            if hasattr(workspace, "states"):
                 self.current_context.states = {
                     k: self._entity_to_dict(v) for k, v in workspace.states.items()
                 }
-            if hasattr(workspace, 'verb_phrases'):
+            if hasattr(workspace, "verb_phrases"):
                 self.current_context.verb_phrases = {
                     k: self._entity_to_dict(v) for k, v in workspace.verb_phrases.items()
                 }
-            if hasattr(workspace, 'questions'):
+            if hasattr(workspace, "questions"):
                 self.current_context.questions = {
                     k: self._entity_to_dict(v) for k, v in workspace.questions.items()
                 }
-            if hasattr(workspace, 'spatio_temporal_links'):
+            if hasattr(workspace, "spatio_temporal_links"):
                 self.current_context.spatio_temporal_links = {
                     k: self._entity_to_dict(v) for k, v in workspace.spatio_temporal_links.items()
                 }
@@ -472,7 +486,7 @@ class EpisodicSessionTracker:
     def record_spatio_temporal_link(
         self,
         link_id: str,
-        linked_entities: List[str],
+        linked_entities: list[str],
         link_type: str,
         link_value: str,
     ):
@@ -491,7 +505,7 @@ class EpisodicSessionTracker:
     # ANALYTICS & REPORTING
     # =========================================================================
 
-    def get_session_summary(self) -> Dict[str, Any]:
+    def get_session_summary(self) -> dict[str, Any]:
         """
         Get a summary of the session for analytics.
 
@@ -505,7 +519,9 @@ class EpisodicSessionTracker:
             "total_queries": self.total_queries,
             "metrics": {
                 "entities_activated": len(self.entity_activations),
-                "unique_entity_types": len(set(a.entity_type for a in self.entity_activations.values())),
+                "unique_entity_types": len(
+                    set(a.entity_type for a in self.entity_activations.values())
+                ),
                 "questions_answered": self.questions_answered,
                 "questions_generated": self.questions_generated,
                 "context_growth": self._compute_context_growth(),
@@ -516,7 +532,7 @@ class EpisodicSessionTracker:
             "context_evolution": self._get_context_evolution(),
         }
 
-    def get_context_growth_chart_data(self) -> List[Dict[str, Any]]:
+    def get_context_growth_chart_data(self) -> list[dict[str, Any]]:
         """Get data suitable for plotting context growth over turns."""
         return [
             {
@@ -528,14 +544,13 @@ class EpisodicSessionTracker:
             for state in self.states
         ]
 
-    def get_entity_activation_timeline(self) -> Dict[str, List[int]]:
+    def get_entity_activation_timeline(self) -> dict[str, list[int]]:
         """Get which turns each entity was active in."""
         timeline = {}
         for entity_id, activation in self.entity_activations.items():
-            timeline[entity_id] = list(range(
-                activation.first_activated_turn,
-                activation.last_activated_turn + 1
-            ))
+            timeline[entity_id] = list(
+                range(activation.first_activated_turn, activation.last_activated_turn + 1)
+            )
         return timeline
 
     def export_to_langfuse(self):
@@ -556,7 +571,7 @@ class EpisodicSessionTracker:
     # PRIVATE HELPERS
     # =========================================================================
 
-    def _record_event(self, event_type: SessionEventType, data: Dict[str, Any]):
+    def _record_event(self, event_type: SessionEventType, data: dict[str, Any]):
         """Record an event in the session timeline."""
         event = SessionEvent(
             event_type=event_type,
@@ -571,9 +586,9 @@ class EpisodicSessionTracker:
 
         # Prune old events if needed
         if len(self.events) > self.max_history:
-            self.events = self.events[-self.max_history:]
+            self.events = self.events[-self.max_history :]
 
-    def _entity_to_dict(self, entity: Any) -> Dict[str, Any]:
+    def _entity_to_dict(self, entity: Any) -> dict[str, Any]:
         """Convert an entity object to a dict."""
         if hasattr(entity, "to_dict"):
             return entity.to_dict()
@@ -581,7 +596,7 @@ class EpisodicSessionTracker:
             return {k: v for k, v in entity.__dict__.items() if not k.startswith("_")}
         return {"value": str(entity)}
 
-    def _get_newly_added_entities(self) -> Set[str]:
+    def _get_newly_added_entities(self) -> set[str]:
         """Get entities added in the current turn."""
         if len(self.states) < 2:
             return set(self.entity_activations.keys())
@@ -590,19 +605,20 @@ class EpisodicSessionTracker:
         current_entities = set(self.entity_activations.keys())
         return current_entities - previous_entities
 
-    def _get_answered_questions(self) -> Set[str]:
+    def _get_answered_questions(self) -> set[str]:
         """Get IDs of answered questions."""
         return {
-            q_id for q_id, q_data in self.current_context.questions.items()
+            q_id
+            for q_id, q_data in self.current_context.questions.items()
             if q_data.get("answer") or q_data.get("is_answered")
         }
 
-    def _get_pending_questions(self) -> Set[str]:
+    def _get_pending_questions(self) -> set[str]:
         """Get IDs of unanswered questions."""
         answered = self._get_answered_questions()
         return set(self.current_context.questions.keys()) - answered
 
-    def _compute_context_growth(self) -> Dict[str, Any]:
+    def _compute_context_growth(self) -> dict[str, Any]:
         """Compute context growth metrics."""
         if len(self.states) < 2:
             return {"growth_rate": 0, "total_change": 0}
@@ -618,7 +634,7 @@ class EpisodicSessionTracker:
             "avg_growth_per_turn": (last_size - first_size) / max(len(self.states) - 1, 1),
         }
 
-    def _get_top_entities(self, n: int = 10) -> List[Dict[str, Any]]:
+    def _get_top_entities(self, n: int = 10) -> list[dict[str, Any]]:
         """Get top N entities by activation count."""
         sorted_entities = sorted(
             self.entity_activations.values(),
@@ -638,14 +654,14 @@ class EpisodicSessionTracker:
             for a in sorted_entities[:n]
         ]
 
-    def _get_entity_type_distribution(self) -> Dict[str, int]:
+    def _get_entity_type_distribution(self) -> dict[str, int]:
         """Get count of entities by type."""
-        distribution: Dict[str, int] = {}
+        distribution: dict[str, int] = {}
         for activation in self.entity_activations.values():
             distribution[activation.entity_type] = distribution.get(activation.entity_type, 0) + 1
         return distribution
 
-    def _get_context_evolution(self) -> List[Dict[str, int]]:
+    def _get_context_evolution(self) -> list[dict[str, int]]:
         """Get context size evolution over turns."""
         return [
             {

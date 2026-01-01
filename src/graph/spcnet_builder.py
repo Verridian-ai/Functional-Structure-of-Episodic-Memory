@@ -16,44 +16,51 @@ Usage:
     python -m src.graph.spcnet_builder --input_dir data/by_court --output_dir data/processed/graph
 """
 
-import json
-import re
 import argparse
-from pathlib import Path
-from typing import Dict, List, Set, Tuple
-from collections import defaultdict
-from datetime import datetime
+import json
 import logging
+import re
+from collections import defaultdict
+from pathlib import Path
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 logger = logging.getLogger(__name__)
 
 # Regex for Australian Case Citations (Enhanced)
 # Matches: [2023] HCA 1, [2020] FamCA 100, (2023) 123 CLR 456, etc.
 CITATION_PATTERNS = [
-    re.compile(r'\[(\d{4})\]\s+([A-Za-z]{2,10})\s+(\d+)'),  # [2023] HCA 1, [2020] FamCA 100
-    re.compile(r'\((\d{4})\)\s+(\d+)\s+([A-Za-z]{2,10})\s+(\d+)'),  # (2023) 97 ALJR 123
+    re.compile(r"\[(\d{4})\]\s+([A-Za-z]{2,10})\s+(\d+)"),  # [2023] HCA 1, [2020] FamCA 100
+    re.compile(r"\((\d{4})\)\s+(\d+)\s+([A-Za-z]{2,10})\s+(\d+)"),  # (2023) 97 ALJR 123
 ]
 
 # Action type patterns for citation context analysis
 ACTION_PATTERNS = {
-    'followed': re.compile(r'\b(follow(?:ing|ed|s)?|appli(?:ed|es|ying)|adopt(?:ed|s|ing))\b', re.IGNORECASE),
-    'distinguished': re.compile(r'\b(distinguish(?:ed|es|ing)?|differ(?:s|ed|ent)?)\b', re.IGNORECASE),
-    'overruled': re.compile(r'\b(overrul(?:ed|es|ing)?|overturn(?:ed|s|ing)?|reject(?:ed|s|ing)?)\b', re.IGNORECASE),
-    'considered': re.compile(r'\b(consider(?:ed|s|ing)?|discuss(?:ed|es|ing)?|analyz(?:ed|es|ing)?)\b', re.IGNORECASE),
+    "followed": re.compile(
+        r"\b(follow(?:ing|ed|s)?|appli(?:ed|es|ying)|adopt(?:ed|s|ing))\b", re.IGNORECASE
+    ),
+    "distinguished": re.compile(
+        r"\b(distinguish(?:ed|es|ing)?|differ(?:s|ed|ent)?)\b", re.IGNORECASE
+    ),
+    "overruled": re.compile(
+        r"\b(overrul(?:ed|es|ing)?|overturn(?:ed|s|ing)?|reject(?:ed|s|ing)?)\b", re.IGNORECASE
+    ),
+    "considered": re.compile(
+        r"\b(consider(?:ed|s|ing)?|discuss(?:ed|es|ing)?|analyz(?:ed|es|ing)?)\b", re.IGNORECASE
+    ),
 }
 
 from src.utils.toon import ToonDecoder, ToonEncoder
+
 
 class SPCNetBuilder:
     def __init__(self, input_dir: Path, output_dir: Path):
         self.input_dir = input_dir
         self.output_dir = output_dir
-        self.nodes: Dict[str, Dict] = {}  # Full Citation -> Metadata
-        self.edges: List[Tuple[str, str, str]] = []  # (Source, Target, Type)
-        self.citation_index: Set[str] = set()  # Full citations
-        self.short_to_full: Dict[str, str] = {}  # Short form -> Full citation mapping
+        self.nodes: dict[str, dict] = {}  # Full Citation -> Metadata
+        self.edges: list[tuple[str, str, str]] = []  # (Source, Target, Type)
+        self.citation_index: set[str] = set()  # Full citations
+        self.short_to_full: dict[str, str] = {}  # Short form -> Full citation mapping
 
     def _extract_short_citation(self, full_citation: str) -> str:
         """
@@ -87,30 +94,30 @@ class SPCNetBuilder:
     def _index_nodes(self):
         """Scan all files to build the node index."""
         # Support both JSONL and TOON formats
-        jsonl_files = list(self.input_dir.rglob('*.jsonl'))
-        toon_files = list(self.input_dir.rglob('*.toon'))
+        jsonl_files = list(self.input_dir.rglob("*.jsonl"))
+        toon_files = list(self.input_dir.rglob("*.toon"))
 
         # Process JSONL files (current format)
         for file_path in jsonl_files:
             try:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, encoding="utf-8") as f:
                     for line in f:
                         if not line.strip():
                             continue
                         doc = json.loads(line)
-                        citation = doc.get('citation', '').strip()
+                        citation = doc.get("citation", "").strip()
 
                         if citation:
-                            classification = doc.get('_classification', {})
+                            classification = doc.get("_classification", {})
                             self.nodes[citation] = {
-                                'id': citation,
-                                'title': doc.get('citation', ''),
-                                'date': doc.get('date', ''),
-                                'court': classification.get('court', ''),
-                                'type': doc.get('type', 'case'),
-                                'domain': classification.get('primary_domain', ''),
-                                'category': classification.get('primary_category', ''),
-                                'text': doc.get('text', '')  # Store for edge extraction
+                                "id": citation,
+                                "title": doc.get("citation", ""),
+                                "date": doc.get("date", ""),
+                                "court": classification.get("court", ""),
+                                "type": doc.get("type", "case"),
+                                "domain": classification.get("primary_domain", ""),
+                                "category": classification.get("primary_category", ""),
+                                "text": doc.get("text", ""),  # Store for edge extraction
                             }
                             self.citation_index.add(citation)
 
@@ -124,25 +131,25 @@ class SPCNetBuilder:
 
         # Process TOON files (future format)
         for file_path in toon_files:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
 
             try:
                 tables = ToonDecoder.decode(content)
                 for table_name, rows in tables.items():
                     for row in rows:
-                        citation = row.get('citation')
+                        citation = row.get("citation")
                         if citation:
                             citation = citation.strip()
                             self.nodes[citation] = {
-                                'id': citation,
-                                'title': row.get('category', ''),
-                                'date': '',
-                                'court': row.get('court', ''),
-                                'type': row.get('type', 'case'),
-                                'domain': row.get('domain', ''),
-                                'category': row.get('category', ''),
-                                'text': row.get('text', '')
+                                "id": citation,
+                                "title": row.get("category", ""),
+                                "date": "",
+                                "court": row.get("court", ""),
+                                "type": row.get("type", "case"),
+                                "domain": row.get("domain", ""),
+                                "category": row.get("category", ""),
+                                "text": row.get("text", ""),
                             }
                             self.citation_index.add(citation)
 
@@ -154,7 +161,7 @@ class SPCNetBuilder:
                 logger.error(f"Error parsing TOON {file_path}: {e}")
                 continue
 
-    def _extract_citations_from_text(self, text: str, source_citation: str) -> List[str]:
+    def _extract_citations_from_text(self, text: str, source_citation: str) -> list[str]:
         """
         Extract all unique citations from text using multiple patterns.
         Filters out self-references by comparing short forms.
@@ -186,7 +193,7 @@ class SPCNetBuilder:
         # Find position of citation in text
         citation_pos = text.find(cited_case)
         if citation_pos == -1:
-            return 'cited'
+            return "cited"
 
         # Extract context window (500 chars before/after)
         context_start = max(0, citation_pos - 500)
@@ -198,7 +205,7 @@ class SPCNetBuilder:
             if pattern.search(context):
                 return action
 
-        return 'cited'  # Default
+        return "cited"  # Default
 
     def _extract_edges(self):
         """Extract citation edges from indexed nodes."""
@@ -208,7 +215,7 @@ class SPCNetBuilder:
         edges_matched = 0
 
         for citation, node in self.nodes.items():
-            text = node.get('text', '')
+            text = node.get("text", "")
             if not text:
                 continue
 
@@ -227,7 +234,9 @@ class SPCNetBuilder:
                     self.edges.append((citation, full_target, action.upper()))
                     edges_matched += 1
 
-        logger.info(f"Found {edges_found} citation patterns, matched {edges_matched} to indexed nodes")
+        logger.info(
+            f"Found {edges_found} citation patterns, matched {edges_matched} to indexed nodes"
+        )
         logger.info(f"Extracted {len(self.edges)} citation relationships")
 
     def _export(self):
@@ -242,17 +251,19 @@ class SPCNetBuilder:
         node_headers = ["id", "title", "court", "type", "domain", "category", "date"]
         node_rows = []
         for n in self.nodes.values():
-            node_rows.append([
-                n['id'],
-                n['title'],
-                n['court'],
-                n['type'],
-                n['domain'],
-                n.get('category', ''),
-                n.get('date', '')
-            ])
+            node_rows.append(
+                [
+                    n["id"],
+                    n["title"],
+                    n["court"],
+                    n["type"],
+                    n["domain"],
+                    n.get("category", ""),
+                    n.get("date", ""),
+                ]
+            )
 
-        with open(nodes_path, 'w', encoding='utf-8') as f:
+        with open(nodes_path, "w", encoding="utf-8") as f:
             f.write(ToonEncoder.encode("Nodes", node_headers, node_rows))
 
         logger.info(f"Exporting edges to {edges_path}")
@@ -260,28 +271,28 @@ class SPCNetBuilder:
         edge_headers = ["source", "target", "action"]
         edge_rows = [[s, t, r] for s, t, r in self.edges]
 
-        with open(edges_path, 'w', encoding='utf-8') as f:
+        with open(edges_path, "w", encoding="utf-8") as f:
             f.write(ToonEncoder.encode("Edges", edge_headers, edge_rows))
 
         # Generate and export statistics
-        logger.info(f"Generating statistics...")
+        logger.info("Generating statistics...")
         stats = self._generate_statistics()
 
-        with open(stats_path, 'w', encoding='utf-8') as f:
+        with open(stats_path, "w", encoding="utf-8") as f:
             json.dump(stats, f, indent=2)
 
         logger.info(f"Graph statistics saved to {stats_path}")
 
         # Print summary
         logger.info("=" * 60)
-        logger.info(f"GRAPH BUILD COMPLETE")
+        logger.info("GRAPH BUILD COMPLETE")
         logger.info(f"Nodes: {stats['node_count']}")
         logger.info(f"Edges: {stats['edge_count']}")
         logger.info(f"Graph Density: {stats['density']:.6f}")
         logger.info(f"Avg Out-Degree: {stats['avg_out_degree']:.2f}")
         logger.info("=" * 60)
 
-    def _generate_statistics(self) -> Dict:
+    def _generate_statistics(self) -> dict:
         """Generate graph statistics."""
         node_count = len(self.nodes)
         edge_count = len(self.edges)
@@ -306,32 +317,43 @@ class SPCNetBuilder:
         # Domain distribution
         domain_counts = defaultdict(int)
         for node in self.nodes.values():
-            domain = node.get('domain', 'Unknown')
+            domain = node.get("domain", "Unknown")
             domain_counts[domain] += 1
 
         return {
-            'node_count': node_count,
-            'edge_count': edge_count,
-            'density': density,
-            'avg_out_degree': avg_out_degree,
-            'avg_in_degree': avg_in_degree,
-            'max_out_degree': max(out_degree.values()) if out_degree else 0,
-            'max_in_degree': max(in_degree.values()) if in_degree else 0,
-            'action_distribution': dict(action_counts),
-            'domain_distribution': dict(domain_counts),
-            'isolated_nodes': node_count - len(set(out_degree.keys()) | set(in_degree.keys()))
+            "node_count": node_count,
+            "edge_count": edge_count,
+            "density": density,
+            "avg_out_degree": avg_out_degree,
+            "avg_in_degree": avg_in_degree,
+            "max_out_degree": max(out_degree.values()) if out_degree else 0,
+            "max_in_degree": max(in_degree.values()) if in_degree else 0,
+            "action_distribution": dict(action_counts),
+            "domain_distribution": dict(domain_counts),
+            "isolated_nodes": node_count - len(set(out_degree.keys()) | set(in_degree.keys())),
         }
+
 
 def main():
     parser = argparse.ArgumentParser(description="Build Hier-SPCNet from OALC data.")
-    parser.add_argument('--input_dir', type=Path, default=Path('data/by_court'), help="Directory containing JSONL files.")
-    parser.add_argument('--output_dir', type=Path, default=Path('data/processed/graph'), help="Output directory for graph data.")
-    
+    parser.add_argument(
+        "--input_dir",
+        type=Path,
+        default=Path("data/by_court"),
+        help="Directory containing JSONL files.",
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=Path,
+        default=Path("data/processed/graph"),
+        help="Output directory for graph data.",
+    )
+
     args = parser.parse_args()
-    
+
     builder = SPCNetBuilder(args.input_dir, args.output_dir)
     builder.build()
 
-if __name__ == '__main__':
-    main()
 
+if __name__ == "__main__":
+    main()

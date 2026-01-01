@@ -7,9 +7,8 @@ Provides search and retrieval capabilities for statutory provisions.
 """
 
 import json
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 import re
+from pathlib import Path
 
 
 class CorpusLoader:
@@ -28,9 +27,9 @@ class CorpusLoader:
             corpus_dir: Directory containing statutory JSON files
         """
         self.corpus_dir = Path(corpus_dir)
-        self.acts: Dict[str, Dict] = {}
-        self.section_index: Dict[str, List[Dict]] = {}  # section_number -> [provisions]
-        self.keyword_index: Dict[str, List[Dict]] = {}  # keyword -> [provisions]
+        self.acts: dict[str, dict] = {}
+        self.section_index: dict[str, list[dict]] = {}  # section_number -> [provisions]
+        self.keyword_index: dict[str, list[dict]] = {}  # keyword -> [provisions]
 
         if not self.corpus_dir.exists():
             print(f"[CorpusLoader] Warning: Corpus directory {corpus_dir} does not exist")
@@ -53,12 +52,12 @@ class CorpusLoader:
 
         for json_file in json_files:
             try:
-                with open(json_file, 'r', encoding='utf-8') as f:
+                with open(json_file, encoding="utf-8") as f:
                     data = json.load(f)
 
                     # Extract act information
-                    if 'act' in data:
-                        act_name = data['act'].get('name', json_file.stem)
+                    if "act" in data:
+                        act_name = data["act"].get("name", json_file.stem)
                         self.acts[act_name] = data
                         print(f"[CorpusLoader] Loaded {act_name}")
                     else:
@@ -76,25 +75,25 @@ class CorpusLoader:
         print("[CorpusLoader] Building indices...")
 
         for act_name, act_data in self.acts.items():
-            sections = act_data.get('sections', [])
+            sections = act_data.get("sections", [])
 
             for section in sections:
                 # Index by section number
-                section_num = section.get('section', '')
+                section_num = section.get("section", "")
                 if section_num:
                     if section_num not in self.section_index:
                         self.section_index[section_num] = []
 
                     # Add act metadata to section
                     section_with_act = section.copy()
-                    section_with_act['act_name'] = act_name
-                    section_with_act['act_citation'] = act_data['act'].get('citation', '')
-                    section_with_act['act_url'] = act_data['act'].get('url', '')
+                    section_with_act["act_name"] = act_name
+                    section_with_act["act_citation"] = act_data["act"].get("citation", "")
+                    section_with_act["act_url"] = act_data["act"].get("url", "")
 
                     self.section_index[section_num].append(section_with_act)
 
                 # Index by keywords
-                keywords = section.get('keywords', [])
+                keywords = section.get("keywords", [])
                 for keyword in keywords:
                     keyword_lower = keyword.lower()
                     if keyword_lower not in self.keyword_index:
@@ -103,9 +102,11 @@ class CorpusLoader:
                     if section_with_act not in self.keyword_index[keyword_lower]:
                         self.keyword_index[keyword_lower].append(section_with_act)
 
-        print(f"[CorpusLoader] Indexed {len(self.section_index)} sections, {len(self.keyword_index)} keywords")
+        print(
+            f"[CorpusLoader] Indexed {len(self.section_index)} sections, {len(self.keyword_index)} keywords"
+        )
 
-    def get_section(self, section_number: str, act_name: Optional[str] = None) -> Optional[Dict]:
+    def get_section(self, section_number: str, act_name: str | None = None) -> dict | None:
         """
         Retrieve a specific section by number.
 
@@ -123,14 +124,14 @@ class CorpusLoader:
 
         if act_name:
             for section in sections:
-                if section.get('act_name') == act_name:
+                if section.get("act_name") == act_name:
                     return section
             return None
 
         # Return first match if no act specified
         return sections[0]
 
-    def search_by_keyword(self, keyword: str, top_k: int = 5) -> List[Dict]:
+    def search_by_keyword(self, keyword: str, top_k: int = 5) -> list[dict]:
         """
         Search for sections by keyword.
 
@@ -157,7 +158,7 @@ class CorpusLoader:
 
         return results[:top_k]
 
-    def search_by_text(self, query: str, top_k: int = 5) -> List[Dict]:
+    def search_by_text(self, query: str, top_k: int = 5) -> list[dict]:
         """
         Search for sections by text content.
 
@@ -169,40 +170,44 @@ class CorpusLoader:
             List of matching sections with relevance scores
         """
         query_lower = query.lower()
-        query_terms = set(re.findall(r'\w+', query_lower))
+        query_terms = set(re.findall(r"\w+", query_lower))
 
         results = []
 
         for act_name, act_data in self.acts.items():
-            sections = act_data.get('sections', [])
+            sections = act_data.get("sections", [])
 
             for section in sections:
                 # Score based on term overlap
-                section_text = ' '.join([
-                    section.get('title', ''),
-                    section.get('summary', ''),
-                    section.get('legal_test', ''),
-                    ' '.join(section.get('keywords', []))
-                ]).lower()
+                section_text = " ".join(
+                    [
+                        section.get("title", ""),
+                        section.get("summary", ""),
+                        section.get("legal_test", ""),
+                        " ".join(section.get("keywords", [])),
+                    ]
+                ).lower()
 
-                section_terms = set(re.findall(r'\w+', section_text))
+                section_terms = set(re.findall(r"\w+", section_text))
                 overlap = len(query_terms.intersection(section_terms))
 
                 if overlap > 0:
                     section_with_act = section.copy()
-                    section_with_act['act_name'] = act_name
-                    section_with_act['act_citation'] = act_data['act'].get('citation', '')
-                    section_with_act['act_url'] = act_data['act'].get('url', '')
-                    section_with_act['relevance_score'] = overlap / len(query_terms)
+                    section_with_act["act_name"] = act_name
+                    section_with_act["act_citation"] = act_data["act"].get("citation", "")
+                    section_with_act["act_url"] = act_data["act"].get("url", "")
+                    section_with_act["relevance_score"] = overlap / len(query_terms)
 
                     results.append(section_with_act)
 
         # Sort by relevance score
-        results.sort(key=lambda x: x.get('relevance_score', 0), reverse=True)
+        results.sort(key=lambda x: x.get("relevance_score", 0), reverse=True)
 
         return results[:top_k]
 
-    def get_related_provisions(self, section_number: str, act_name: Optional[str] = None) -> List[Dict]:
+    def get_related_provisions(
+        self, section_number: str, act_name: str | None = None
+    ) -> list[dict]:
         """
         Get provisions related to a given section.
 
@@ -221,7 +226,7 @@ class CorpusLoader:
             return []
 
         # Get keywords from base section
-        base_keywords = set(kw.lower() for kw in base_section.get('keywords', []))
+        base_keywords = set(kw.lower() for kw in base_section.get("keywords", []))
 
         if not base_keywords:
             return []
@@ -229,41 +234,41 @@ class CorpusLoader:
         related = []
 
         for act_name, act_data in self.acts.items():
-            sections = act_data.get('sections', [])
+            sections = act_data.get("sections", [])
 
             for section in sections:
                 # Skip the same section
-                if section.get('section') == section_number:
+                if section.get("section") == section_number:
                     continue
 
                 # Calculate keyword overlap
-                section_keywords = set(kw.lower() for kw in section.get('keywords', []))
+                section_keywords = set(kw.lower() for kw in section.get("keywords", []))
                 overlap = len(base_keywords.intersection(section_keywords))
 
                 if overlap > 0:
                     section_with_act = section.copy()
-                    section_with_act['act_name'] = act_name
-                    section_with_act['act_citation'] = act_data['act'].get('citation', '')
-                    section_with_act['act_url'] = act_data['act'].get('url', '')
-                    section_with_act['keyword_overlap'] = overlap
+                    section_with_act["act_name"] = act_name
+                    section_with_act["act_citation"] = act_data["act"].get("citation", "")
+                    section_with_act["act_url"] = act_data["act"].get("url", "")
+                    section_with_act["keyword_overlap"] = overlap
 
                     related.append(section_with_act)
 
         # Sort by keyword overlap
-        related.sort(key=lambda x: x.get('keyword_overlap', 0), reverse=True)
+        related.sort(key=lambda x: x.get("keyword_overlap", 0), reverse=True)
 
         return related[:10]
 
-    def get_all_acts(self) -> List[Dict]:
+    def get_all_acts(self) -> list[dict]:
         """
         Get metadata for all loaded acts.
 
         Returns:
             List of act metadata dictionaries
         """
-        return [act_data['act'] for act_data in self.acts.values() if 'act' in act_data]
+        return [act_data["act"] for act_data in self.acts.values() if "act" in act_data]
 
-    def get_sections_by_legal_test(self, legal_test: str) -> List[Dict]:
+    def get_sections_by_legal_test(self, legal_test: str) -> list[dict]:
         """
         Get sections by legal test name.
 
@@ -277,16 +282,16 @@ class CorpusLoader:
         results = []
 
         for act_name, act_data in self.acts.items():
-            sections = act_data.get('sections', [])
+            sections = act_data.get("sections", [])
 
             for section in sections:
-                section_legal_test = section.get('legal_test', '').lower()
+                section_legal_test = section.get("legal_test", "").lower()
 
                 if legal_test_lower in section_legal_test or section_legal_test in legal_test_lower:
                     section_with_act = section.copy()
-                    section_with_act['act_name'] = act_name
-                    section_with_act['act_citation'] = act_data['act'].get('citation', '')
-                    section_with_act['act_url'] = act_data['act'].get('url', '')
+                    section_with_act["act_name"] = act_name
+                    section_with_act["act_citation"] = act_data["act"].get("citation", "")
+                    section_with_act["act_url"] = act_data["act"].get("url", "")
 
                     results.append(section_with_act)
 

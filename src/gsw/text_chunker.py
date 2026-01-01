@@ -5,14 +5,10 @@ Text Chunker
 Utilities for splitting legal text into processable chunks.
 """
 
-from typing import List, Tuple
-
 
 def chunk_legal_text(
-    text: str,
-    max_chunk_size: int = 15000,
-    overlap: int = 500
-) -> List[Tuple[str, int, int]]:
+    text: str, max_chunk_size: int = 15000, overlap: int = 500
+) -> list[tuple[str, int, int]]:
     """
     Split legal text into chunks for processing.
 
@@ -40,13 +36,13 @@ def chunk_legal_text(
             break
 
         # Try to find a paragraph break
-        para_break = text.rfind('\n\n', start + overlap, end)
+        para_break = text.rfind("\n\n", start + overlap, end)
         if para_break > start + overlap:
             end = para_break
 
         # Or sentence break
         else:
-            sent_break = text.rfind('. ', start + overlap, end)
+            sent_break = text.rfind(". ", start + overlap, end)
             if sent_break > start + overlap:
                 end = sent_break + 1
 

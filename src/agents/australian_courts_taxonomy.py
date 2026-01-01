@@ -11,27 +11,29 @@ Usage:
     binding = is_binding_precedent(precedent_court="NSWSC", current_court="NSWDC")
 """
 
-from typing import Dict, List, Optional, Set, Literal
 from dataclasses import dataclass
 from enum import Enum
-
+from typing import Literal
 
 # ============================================================================
 # ENUMS
 # ============================================================================
 
+
 class CourtLevel(Enum):
     """Court hierarchy level."""
-    APEX = 1          # High Court
-    APPELLATE = 2     # Courts of Appeal, Full Courts
-    SUPERIOR = 3      # Supreme Courts, Federal Court
+
+    APEX = 1  # High Court
+    APPELLATE = 2  # Courts of Appeal, Full Courts
+    SUPERIOR = 3  # Supreme Courts, Federal Court
     INTERMEDIATE = 4  # District/County Courts
-    LOWER = 5         # Magistrates/Local Courts
-    TRIBUNAL = 6      # Administrative tribunals
+    LOWER = 5  # Magistrates/Local Courts
+    TRIBUNAL = 6  # Administrative tribunals
 
 
 class Jurisdiction(Enum):
     """Jurisdiction type."""
+
     FEDERAL = "federal"
     NSW = "nsw"
     VIC = "vic"
@@ -45,6 +47,7 @@ class Jurisdiction(Enum):
 
 class CourtType(Enum):
     """Type of judicial body."""
+
     COURT = "court"
     TRIBUNAL = "tribunal"
     COURT_OF_RECORD = "court_of_record"  # Special status (e.g., QCAT)
@@ -52,6 +55,7 @@ class CourtType(Enum):
 
 class ReportType(Enum):
     """Law report type."""
+
     AUTHORIZED = "authorized"
     UNOFFICIAL = "unofficial"
     MEDIUM_NEUTRAL = "medium_neutral"
@@ -62,9 +66,11 @@ class ReportType(Enum):
 # DATA STRUCTURES
 # ============================================================================
 
+
 @dataclass
 class CourtInfo:
     """Complete information about a court."""
+
     abbreviation: str
     full_name: str
     jurisdiction: Jurisdiction
@@ -72,33 +78,34 @@ class CourtInfo:
     court_type: CourtType
 
     # Binding relationships
-    binds: List[str]  # List of court abbreviations this court binds
-    bound_by: List[str]  # List of court abbreviations that bind this court
+    binds: list[str]  # List of court abbreviations this court binds
+    bound_by: list[str]  # List of court abbreviations that bind this court
 
     # Citation format
     medium_neutral_format: str  # e.g., "[YEAR] HCA [NUMBER]"
-    authorized_reports: List[str]  # e.g., ["CLR"]
+    authorized_reports: list[str]  # e.g., ["CLR"]
 
     # Status
     active: bool  # False for defunct courts (e.g., FamCA)
-    replaced_by: Optional[str] = None  # If defunct, what replaced it
+    replaced_by: str | None = None  # If defunct, what replaced it
 
     # Special characteristics
     can_overrule_self: bool = False
     is_court_of_record: bool = False
 
     # Appeals
-    appeals_to: Optional[str] = None
+    appeals_to: str | None = None
 
 
 @dataclass
 class LawReportInfo:
     """Information about a law report series."""
+
     abbreviation: str
     full_name: str
     report_type: ReportType
     coverage: str  # Which courts/areas
-    publisher: Optional[str] = None
+    publisher: str | None = None
     citation_format: str = "(Year) Volume Report Page"
 
 
@@ -106,12 +113,10 @@ class LawReportInfo:
 # COURT TAXONOMY
 # ============================================================================
 
-COURTS: Dict[str, CourtInfo] = {
-
+COURTS: dict[str, CourtInfo] = {
     # ========================================================================
     # FEDERAL COURTS
     # ========================================================================
-
     "HCA": CourtInfo(
         abbreviation="HCA",
         full_name="High Court of Australia",
@@ -125,9 +130,8 @@ COURTS: Dict[str, CourtInfo] = {
         active=True,
         can_overrule_self=True,
         is_court_of_record=True,
-        appeals_to=None  # Apex court
+        appeals_to=None,  # Apex court
     ),
-
     "FCAFC": CourtInfo(
         abbreviation="FCAFC",
         full_name="Federal Court of Australia Full Court",
@@ -140,9 +144,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["FCR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "FCA": CourtInfo(
         abbreviation="FCA",
         full_name="Federal Court of Australia",
@@ -155,9 +158,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["FCR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="FCAFC"
+        appeals_to="FCAFC",
     ),
-
     "FedCFamC": CourtInfo(
         abbreviation="FedCFamC",
         full_name="Federal Circuit and Family Court of Australia",
@@ -170,9 +172,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["FamLR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="FCAFC"
+        appeals_to="FCAFC",
     ),
-
     # Defunct federal courts
     "FamCA": CourtInfo(
         abbreviation="FamCA",
@@ -187,9 +188,8 @@ COURTS: Dict[str, CourtInfo] = {
         active=False,
         replaced_by="FedCFamC",
         is_court_of_record=True,
-        appeals_to="FamCAFC"
+        appeals_to="FamCAFC",
     ),
-
     "FamCAFC": CourtInfo(
         abbreviation="FamCAFC",
         full_name="Family Court of Australia Full Court",
@@ -203,9 +203,8 @@ COURTS: Dict[str, CourtInfo] = {
         active=False,
         replaced_by="FedCFamC",
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "FCCA": CourtInfo(
         abbreviation="FCCA",
         full_name="Federal Circuit Court of Australia",
@@ -219,9 +218,8 @@ COURTS: Dict[str, CourtInfo] = {
         active=False,
         replaced_by="FedCFamC",
         is_court_of_record=True,
-        appeals_to="FCA"
+        appeals_to="FCA",
     ),
-
     "AATA": CourtInfo(
         abbreviation="AATA",
         full_name="Administrative Appeals Tribunal",
@@ -235,13 +233,11 @@ COURTS: Dict[str, CourtInfo] = {
         active=False,
         replaced_by="ART",
         is_court_of_record=False,
-        appeals_to="FCA"
+        appeals_to="FCA",
     ),
-
     # ========================================================================
     # NEW SOUTH WALES
     # ========================================================================
-
     "NSWCA": CourtInfo(
         abbreviation="NSWCA",
         full_name="Court of Appeal of New South Wales",
@@ -254,9 +250,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["NSWLR", "NSWCAR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "NSWCCA": CourtInfo(
         abbreviation="NSWCCA",
         full_name="Court of Criminal Appeal of New South Wales",
@@ -269,9 +264,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["NSWLR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "NSWSC": CourtInfo(
         abbreviation="NSWSC",
         full_name="Supreme Court of New South Wales",
@@ -284,9 +278,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["NSWLR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="NSWCA"
+        appeals_to="NSWCA",
     ),
-
     "NSWDC": CourtInfo(
         abbreviation="NSWDC",
         full_name="District Court of New South Wales",
@@ -299,9 +292,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="NSWCA"
+        appeals_to="NSWCA",
     ),
-
     "NSWLC": CourtInfo(
         abbreviation="NSWLC",
         full_name="Local Court of New South Wales",
@@ -314,9 +306,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="NSWDC"
+        appeals_to="NSWDC",
     ),
-
     "NCAT": CourtInfo(
         abbreviation="NCAT",
         full_name="NSW Civil and Administrative Tribunal",
@@ -329,13 +320,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,  # NOT a court of record
-        appeals_to="NSWCA"
+        appeals_to="NSWCA",
     ),
-
     # ========================================================================
     # VICTORIA
     # ========================================================================
-
     "VSCA": CourtInfo(
         abbreviation="VSCA",
         full_name="Court of Appeal of Victoria",
@@ -348,9 +337,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["VR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "VSC": CourtInfo(
         abbreviation="VSC",
         full_name="Supreme Court of Victoria",
@@ -363,9 +351,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["VR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="VSCA"
+        appeals_to="VSCA",
     ),
-
     "VCC": CourtInfo(
         abbreviation="VCC",
         full_name="County Court of Victoria",
@@ -378,9 +365,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="VSCA"
+        appeals_to="VSCA",
     ),
-
     "VMC": CourtInfo(
         abbreviation="VMC",
         full_name="Magistrates' Court of Victoria",
@@ -393,9 +379,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="VCC"
+        appeals_to="VCC",
     ),
-
     "VCAT": CourtInfo(
         abbreviation="VCAT",
         full_name="Victorian Civil and Administrative Tribunal",
@@ -408,13 +393,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,  # NOT a court of record
-        appeals_to="VSCA"
+        appeals_to="VSCA",
     ),
-
     # ========================================================================
     # QUEENSLAND
     # ========================================================================
-
     "QCA": CourtInfo(
         abbreviation="QCA",
         full_name="Court of Appeal of Queensland",
@@ -427,9 +410,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["Qd R"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "QSC": CourtInfo(
         abbreviation="QSC",
         full_name="Supreme Court of Queensland",
@@ -442,9 +424,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["Qd R"],
         active=True,
         is_court_of_record=True,
-        appeals_to="QCA"
+        appeals_to="QCA",
     ),
-
     "QDC": CourtInfo(
         abbreviation="QDC",
         full_name="District Court of Queensland",
@@ -457,9 +438,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="QCA"
+        appeals_to="QCA",
     ),
-
     "QMC": CourtInfo(
         abbreviation="QMC",
         full_name="Magistrates Court of Queensland",
@@ -472,9 +452,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="QDC"
+        appeals_to="QDC",
     ),
-
     "QCAT": CourtInfo(
         abbreviation="QCAT",
         full_name="Queensland Civil and Administrative Tribunal",
@@ -487,13 +466,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,  # UNIQUE among tribunals
-        appeals_to="QCA"
+        appeals_to="QCA",
     ),
-
     # ========================================================================
     # SOUTH AUSTRALIA
     # ========================================================================
-
     "SASCFC": CourtInfo(
         abbreviation="SASCFC",
         full_name="Full Court of the Supreme Court of South Australia",
@@ -506,9 +483,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["SASR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "SASC": CourtInfo(
         abbreviation="SASC",
         full_name="Supreme Court of South Australia",
@@ -521,9 +497,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["SASR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="SASCFC"
+        appeals_to="SASCFC",
     ),
-
     "SADC": CourtInfo(
         abbreviation="SADC",
         full_name="District Court of South Australia",
@@ -536,9 +511,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="SASCFC"
+        appeals_to="SASCFC",
     ),
-
     "SAMC": CourtInfo(
         abbreviation="SAMC",
         full_name="Magistrates Court of South Australia",
@@ -551,9 +525,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="SADC"
+        appeals_to="SADC",
     ),
-
     "SACAT": CourtInfo(
         abbreviation="SACAT",
         full_name="South Australian Civil and Administrative Tribunal",
@@ -566,13 +539,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,
-        appeals_to="SASCFC"
+        appeals_to="SASCFC",
     ),
-
     # ========================================================================
     # WESTERN AUSTRALIA
     # ========================================================================
-
     "WASCA": CourtInfo(
         abbreviation="WASCA",
         full_name="Court of Appeal of Western Australia",
@@ -585,9 +556,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["WAR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "WASC": CourtInfo(
         abbreviation="WASC",
         full_name="Supreme Court of Western Australia",
@@ -600,9 +570,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["WAR"],
         active=True,
         is_court_of_record=True,
-        appeals_to="WASCA"
+        appeals_to="WASCA",
     ),
-
     "WADC": CourtInfo(
         abbreviation="WADC",
         full_name="District Court of Western Australia",
@@ -615,9 +584,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="WASCA"
+        appeals_to="WASCA",
     ),
-
     "WAMC": CourtInfo(
         abbreviation="WAMC",
         full_name="Magistrates Court of Western Australia",
@@ -630,9 +598,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="WADC"
+        appeals_to="WADC",
     ),
-
     "WASAT": CourtInfo(
         abbreviation="WASAT",
         full_name="State Administrative Tribunal of Western Australia",
@@ -645,13 +612,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,
-        appeals_to="WASCA"
+        appeals_to="WASCA",
     ),
-
     # ========================================================================
     # TASMANIA
     # ========================================================================
-
     "TASCCA": CourtInfo(
         abbreviation="TASCCA",
         full_name="Court of Criminal Appeal of Tasmania",
@@ -664,9 +629,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["Tas R"],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "TASSC": CourtInfo(
         abbreviation="TASSC",
         full_name="Supreme Court of Tasmania",
@@ -679,9 +643,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=["Tas R"],
         active=True,
         is_court_of_record=True,
-        appeals_to="TASCCA"
+        appeals_to="TASCCA",
     ),
-
     "TASMC": CourtInfo(
         abbreviation="TASMC",
         full_name="Magistrates Court of Tasmania",
@@ -694,13 +657,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="TASSC"
+        appeals_to="TASSC",
     ),
-
     # ========================================================================
     # AUSTRALIAN CAPITAL TERRITORY
     # ========================================================================
-
     "ACTSC": CourtInfo(
         abbreviation="ACTSC",
         full_name="Supreme Court of the Australian Capital Territory",
@@ -713,9 +674,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "ACTMC": CourtInfo(
         abbreviation="ACTMC",
         full_name="Magistrates Court of the Australian Capital Territory",
@@ -728,9 +688,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="ACTSC"
+        appeals_to="ACTSC",
     ),
-
     "ACAT": CourtInfo(
         abbreviation="ACAT",
         full_name="ACT Civil and Administrative Tribunal",
@@ -743,13 +702,11 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,
-        appeals_to="ACTSC"
+        appeals_to="ACTSC",
     ),
-
     # ========================================================================
     # NORTHERN TERRITORY
     # ========================================================================
-
     "NTCA": CourtInfo(
         abbreviation="NTCA",
         full_name="Court of Appeal of the Northern Territory",
@@ -762,9 +719,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="HCA"
+        appeals_to="HCA",
     ),
-
     "NTSC": CourtInfo(
         abbreviation="NTSC",
         full_name="Supreme Court of the Northern Territory",
@@ -777,9 +733,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="NTCA"
+        appeals_to="NTCA",
     ),
-
     "NTLC": CourtInfo(
         abbreviation="NTLC",
         full_name="Local Court of the Northern Territory",
@@ -792,9 +747,8 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=True,
-        appeals_to="NTSC"
+        appeals_to="NTSC",
     ),
-
     "NTCAT": CourtInfo(
         abbreviation="NTCAT",
         full_name="Northern Territory Civil and Administrative Tribunal",
@@ -807,7 +761,7 @@ COURTS: Dict[str, CourtInfo] = {
         authorized_reports=[],
         active=True,
         is_court_of_record=False,
-        appeals_to="NTSC"
+        appeals_to="NTSC",
     ),
 }
 
@@ -816,104 +770,93 @@ COURTS: Dict[str, CourtInfo] = {
 # LAW REPORT SERIES
 # ============================================================================
 
-LAW_REPORTS: Dict[str, LawReportInfo] = {
+LAW_REPORTS: dict[str, LawReportInfo] = {
     # Federal Authorized
     "CLR": LawReportInfo(
         abbreviation="CLR",
         full_name="Commonwealth Law Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="High Court of Australia",
-        publisher="Lawbook Co."
+        publisher="Lawbook Co.",
     ),
-
     "FCR": LawReportInfo(
         abbreviation="FCR",
         full_name="Federal Court Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Federal Court of Australia",
-        publisher="Lawbook Co."
+        publisher="Lawbook Co.",
     ),
-
     "FamLR": LawReportInfo(
         abbreviation="FamLR",
         full_name="Family Law Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Family Court / Federal Circuit and Family Court",
-        publisher="LexisNexis"
+        publisher="LexisNexis",
     ),
-
     # State Authorized
     "NSWLR": LawReportInfo(
         abbreviation="NSWLR",
         full_name="New South Wales Law Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="NSW Supreme Court",
-        publisher="Lawbook Co."
+        publisher="Lawbook Co.",
     ),
-
     "VR": LawReportInfo(
         abbreviation="VR",
         full_name="Victorian Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Supreme Court of Victoria",
-        publisher="Council of Law Reporting"
+        publisher="Council of Law Reporting",
     ),
-
     "Qd R": LawReportInfo(
         abbreviation="Qd R",
         full_name="Queensland Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Supreme Court of Queensland",
-        publisher="Supreme Court of Queensland Library"
+        publisher="Supreme Court of Queensland Library",
     ),
-
     "SASR": LawReportInfo(
         abbreviation="SASR",
         full_name="South Australian State Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Supreme Court of South Australia",
-        publisher="Supreme Court of South Australia"
+        publisher="Supreme Court of South Australia",
     ),
-
     "WAR": LawReportInfo(
         abbreviation="WAR",
         full_name="Western Australian Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Supreme Court of Western Australia",
-        publisher="Supreme Court of Western Australia"
+        publisher="Supreme Court of Western Australia",
     ),
-
     "Tas R": LawReportInfo(
         abbreviation="Tas R",
         full_name="Tasmanian Reports",
         report_type=ReportType.AUTHORIZED,
         coverage="Supreme Court of Tasmania",
-        publisher="Supreme Court of Tasmania"
+        publisher="Supreme Court of Tasmania",
     ),
-
     # Unofficial
     "ALR": LawReportInfo(
         abbreviation="ALR",
         full_name="Australian Law Reports",
         report_type=ReportType.UNOFFICIAL,
         coverage="Cross-jurisdictional significant cases",
-        publisher="LexisNexis"
+        publisher="LexisNexis",
     ),
-
     "ALJR": LawReportInfo(
         abbreviation="ALJR",
         full_name="Australian Law Journal Reports",
         report_type=ReportType.UNOFFICIAL,
         coverage="HCA and significant appellate decisions",
-        publisher="Lawbook Co."
+        publisher="Lawbook Co.",
     ),
-
     "A Crim R": LawReportInfo(
         abbreviation="A Crim R",
         full_name="Australian Criminal Reports",
         report_type=ReportType.UNOFFICIAL,
         coverage="Criminal law across jurisdictions",
-        publisher="Lawbook Co."
+        publisher="Lawbook Co.",
     ),
 }
 
@@ -922,7 +865,8 @@ LAW_REPORTS: Dict[str, LawReportInfo] = {
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def get_court_info(abbreviation: str) -> Optional[CourtInfo]:
+
+def get_court_info(abbreviation: str) -> CourtInfo | None:
     """Get court information by abbreviation."""
     return COURTS.get(abbreviation.upper())
 
@@ -956,7 +900,9 @@ def is_binding_precedent(precedent_court: str, current_court: str) -> bool:
     return current_court.upper() in [c.upper() for c in prec.binds]
 
 
-def get_binding_relationship(court1: str, court2: str) -> Literal["binds", "bound_by", "persuasive", "equal"]:
+def get_binding_relationship(
+    court1: str, court2: str
+) -> Literal["binds", "bound_by", "persuasive", "equal"]:
     """
     Determine relationship between two courts.
 
@@ -978,17 +924,17 @@ def get_binding_relationship(court1: str, court2: str) -> Literal["binds", "boun
     return "persuasive"
 
 
-def get_courts_by_jurisdiction(jurisdiction: Jurisdiction) -> List[CourtInfo]:
+def get_courts_by_jurisdiction(jurisdiction: Jurisdiction) -> list[CourtInfo]:
     """Get all courts in a jurisdiction."""
     return [c for c in COURTS.values() if c.jurisdiction == jurisdiction and c.active]
 
 
-def get_courts_by_level(level: CourtLevel) -> List[CourtInfo]:
+def get_courts_by_level(level: CourtLevel) -> list[CourtInfo]:
     """Get all courts at a specific level."""
     return [c for c in COURTS.values() if c.level == level and c.active]
 
 
-def parse_medium_neutral_citation(citation: str) -> Optional[Dict[str, str]]:
+def parse_medium_neutral_citation(citation: str) -> dict[str, str] | None:
     """
     Parse a medium neutral citation.
 
@@ -1001,7 +947,7 @@ def parse_medium_neutral_citation(citation: str) -> Optional[Dict[str, str]]:
     import re
 
     # Pattern: [YEAR] COURT NUMBER [PARAGRAPH]
-    pattern = r'\[(\d{4})\]\s+([A-Z]{2,10})\s+(\d+)(?:\s+\[(\d+)\])?'
+    pattern = r"\[(\d{4})\]\s+([A-Z]{2,10})\s+(\d+)(?:\s+\[(\d+)\])?"
     match = re.match(pattern, citation.strip())
 
     if not match:
@@ -1030,7 +976,7 @@ def validate_citation(citation: str) -> bool:
     return court is not None
 
 
-def get_court_hierarchy_path(from_court: str, to_court: str) -> Optional[List[str]]:
+def get_court_hierarchy_path(from_court: str, to_court: str) -> list[str] | None:
     """
     Get the hierarchy path from one court to another.
 

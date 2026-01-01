@@ -5,17 +5,18 @@ Evaluation Utilities
 Batch evaluation and dataset creation for retrieval scoring.
 """
 
-from typing import Any, Callable, Dict, List, Optional, Tuple, TYPE_CHECKING
+from collections.abc import Callable
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .retrieval_scorer import RetrievalScorer
 
 
 def create_evaluation_dataset(
-    queries: List[str],
-    expected_results: List[List[Dict[str, Any]]],
-    ground_truth_responses: Optional[List[str]] = None,
-) -> List[Dict[str, Any]]:
+    queries: list[str],
+    expected_results: list[list[dict[str, Any]]],
+    ground_truth_responses: list[str] | None = None,
+) -> list[dict[str, Any]]:
     """
     Create an evaluation dataset for batch scoring.
 
@@ -46,9 +47,9 @@ def create_evaluation_dataset(
 
 def batch_evaluate(
     scorer: "RetrievalScorer",
-    retrieval_fn: Callable[[str], Tuple[List[Dict], str]],
-    evaluation_dataset: List[Dict[str, Any]],
-) -> Dict[str, Any]:
+    retrieval_fn: Callable[[str], tuple[list[dict], str]],
+    evaluation_dataset: list[dict[str, Any]],
+) -> dict[str, Any]:
     """
     Run batch evaluation on a dataset.
 

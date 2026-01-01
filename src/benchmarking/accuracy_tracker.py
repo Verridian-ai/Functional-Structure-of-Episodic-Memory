@@ -17,13 +17,12 @@ Features:
 Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
-import sqlite3
 import json
-from pathlib import Path
-from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any, Tuple
-from collections import defaultdict
+import sqlite3
 import statistics
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 
 class AccuracyTracker:
@@ -62,7 +61,8 @@ class AccuracyTracker:
         cursor = self.conn.cursor()
 
         # Main benchmark runs table
-        cursor.execute('''
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS benchmark_runs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 timestamp TEXT NOT NULL,
@@ -73,26 +73,34 @@ class AccuracyTracker:
                 run_id TEXT,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             )
-        ''')
+        """
+        )
 
         # Index for faster queries
-        cursor.execute('''
+        cursor.execute(
+            """
             CREATE INDEX IF NOT EXISTS idx_timestamp
             ON benchmark_runs(timestamp)
-        ''')
+        """
+        )
 
-        cursor.execute('''
+        cursor.execute(
+            """
             CREATE INDEX IF NOT EXISTS idx_stage_metric
             ON benchmark_runs(stage, metric_name)
-        ''')
+        """
+        )
 
-        cursor.execute('''
+        cursor.execute(
+            """
             CREATE INDEX IF NOT EXISTS idx_run_id
             ON benchmark_runs(run_id)
-        ''')
+        """
+        )
 
         # Table for tracking benchmark suite runs
-        cursor.execute('''
+        cursor.execute(
+            """
             CREATE TABLE IF NOT EXISTS benchmark_suite_runs (
                 run_id TEXT PRIMARY KEY,
                 start_time TEXT NOT NULL,
@@ -103,16 +111,17 @@ class AccuracyTracker:
                 status TEXT,
                 metadata TEXT
             )
-        ''')
+        """
+        )
 
         self.conn.commit()
 
     def record_benchmark(
         self,
         stage: str,
-        metrics: Dict[str, float],
-        metadata: Optional[Dict[str, Any]] = None,
-        run_id: Optional[str] = None
+        metrics: dict[str, float],
+        metadata: dict[str, Any] | None = None,
+        run_id: str | None = None,
     ) -> None:
         """
         Record benchmark results for a specific stage.
@@ -129,10 +138,13 @@ class AccuracyTracker:
         cursor = self.conn.cursor()
 
         for metric_name, score in metrics.items():
-            cursor.execute('''
+            cursor.execute(
+                """
                 INSERT INTO benchmark_runs (timestamp, stage, metric_name, score, metadata, run_id)
                 VALUES (?, ?, ?, ?, ?, ?)
-            ''', (timestamp, stage, metric_name, score, metadata_json, run_id))
+            """,
+                (timestamp, stage, metric_name, score, metadata_json, run_id),
+            )
 
         self.conn.commit()
 
@@ -144,8 +156,8 @@ class AccuracyTracker:
         total_benchmarks: int,
         benchmarks_passed: int,
         overall_score: float,
-        status: str = 'completed',
-        metadata: Optional[Dict[str, Any]] = None
+        status: str = "completed",
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """
         Record a complete benchmark suite run.
@@ -162,30 +174,30 @@ class AccuracyTracker:
         """
         cursor = self.conn.cursor()
 
-        cursor.execute('''
+        cursor.execute(
+            """
             INSERT OR REPLACE INTO benchmark_suite_runs
             (run_id, start_time, end_time, total_benchmarks, benchmarks_passed,
              overall_score, status, metadata)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        ''', (
-            run_id,
-            start_time.isoformat(),
-            end_time.isoformat(),
-            total_benchmarks,
-            benchmarks_passed,
-            overall_score,
-            status,
-            json.dumps(metadata) if metadata else None
-        ))
+        """,
+            (
+                run_id,
+                start_time.isoformat(),
+                end_time.isoformat(),
+                total_benchmarks,
+                benchmarks_passed,
+                overall_score,
+                status,
+                json.dumps(metadata) if metadata else None,
+            ),
+        )
 
         self.conn.commit()
 
     def get_metric_history(
-        self,
-        metric_name: str,
-        days: int = 30,
-        stage: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, metric_name: str, days: int = 30, stage: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         Get historical metric values.
 
@@ -202,36 +214,40 @@ class AccuracyTracker:
         cursor = self.conn.cursor()
 
         if stage:
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT timestamp, score, metadata, stage
                 FROM benchmark_runs
                 WHERE metric_name = ? AND timestamp > ? AND stage = ?
                 ORDER BY timestamp
-            ''', (metric_name, cutoff, stage))
+            """,
+                (metric_name, cutoff, stage),
+            )
         else:
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT timestamp, score, metadata, stage
                 FROM benchmark_runs
                 WHERE metric_name = ? AND timestamp > ?
                 ORDER BY timestamp
-            ''', (metric_name, cutoff))
+            """,
+                (metric_name, cutoff),
+            )
 
         results = []
         for row in cursor.fetchall():
-            results.append({
-                'timestamp': row['timestamp'],
-                'score': row['score'],
-                'metadata': json.loads(row['metadata']) if row['metadata'] else {},
-                'stage': row['stage']
-            })
+            results.append(
+                {
+                    "timestamp": row["timestamp"],
+                    "score": row["score"],
+                    "metadata": json.loads(row["metadata"]) if row["metadata"] else {},
+                    "stage": row["stage"],
+                }
+            )
 
         return results
 
-    def get_latest_metrics(
-        self,
-        stage: str,
-        limit: int = 1
-    ) -> List[Dict[str, Any]]:
+    def get_latest_metrics(self, stage: str, limit: int = 1) -> list[dict[str, Any]]:
         """
         Get the most recent benchmark results for a stage.
 
@@ -245,47 +261,47 @@ class AccuracyTracker:
         cursor = self.conn.cursor()
 
         # Get unique timestamps for this stage
-        cursor.execute('''
+        cursor.execute(
+            """
             SELECT DISTINCT timestamp
             FROM benchmark_runs
             WHERE stage = ?
             ORDER BY timestamp DESC
             LIMIT ?
-        ''', (stage, limit))
+        """,
+            (stage, limit),
+        )
 
-        timestamps = [row['timestamp'] for row in cursor.fetchall()]
+        timestamps = [row["timestamp"] for row in cursor.fetchall()]
 
         results = []
         for ts in timestamps:
             # Get all metrics for this timestamp
-            cursor.execute('''
+            cursor.execute(
+                """
                 SELECT metric_name, score, metadata
                 FROM benchmark_runs
                 WHERE stage = ? AND timestamp = ?
-            ''', (stage, ts))
+            """,
+                (stage, ts),
+            )
 
             metrics = {}
             metadata = None
             for row in cursor.fetchall():
-                metrics[row['metric_name']] = row['score']
-                if row['metadata'] and not metadata:
-                    metadata = json.loads(row['metadata'])
+                metrics[row["metric_name"]] = row["score"]
+                if row["metadata"] and not metadata:
+                    metadata = json.loads(row["metadata"])
 
-            results.append({
-                'timestamp': ts,
-                'stage': stage,
-                'metrics': metrics,
-                'metadata': metadata or {}
-            })
+            results.append(
+                {"timestamp": ts, "stage": stage, "metrics": metrics, "metadata": metadata or {}}
+            )
 
         return results
 
     def get_trend_analysis(
-        self,
-        metric_name: str,
-        days: int = 30,
-        stage: Optional[str] = None
-    ) -> Dict[str, Any]:
+        self, metric_name: str, days: int = 30, stage: str | None = None
+    ) -> dict[str, Any]:
         """
         Analyze trends for a specific metric.
 
@@ -300,30 +316,26 @@ class AccuracyTracker:
         history = self.get_metric_history(metric_name, days, stage)
 
         if not history:
-            return {
-                'metric': metric_name,
-                'trend': 'no_data',
-                'data_points': 0
-            }
+            return {"metric": metric_name, "trend": "no_data", "data_points": 0}
 
-        scores = [h['score'] for h in history]
+        scores = [h["score"] for h in history]
 
         # Calculate statistics
         analysis = {
-            'metric': metric_name,
-            'stage': stage,
-            'data_points': len(scores),
-            'current_value': scores[-1],
-            'mean': statistics.mean(scores),
-            'median': statistics.median(scores),
-            'min': min(scores),
-            'max': max(scores),
-            'range': max(scores) - min(scores)
+            "metric": metric_name,
+            "stage": stage,
+            "data_points": len(scores),
+            "current_value": scores[-1],
+            "mean": statistics.mean(scores),
+            "median": statistics.median(scores),
+            "min": min(scores),
+            "max": max(scores),
+            "range": max(scores) - min(scores),
         }
 
         # Add standard deviation if enough data
         if len(scores) > 1:
-            analysis['std_dev'] = statistics.stdev(scores)
+            analysis["std_dev"] = statistics.stdev(scores)
 
         # Determine trend direction
         if len(scores) >= 10:
@@ -336,20 +348,20 @@ class AccuracyTracker:
             change_percent = (change / first_half_avg * 100) if first_half_avg != 0 else 0
 
             if abs(change_percent) < 2:
-                trend = 'stable'
+                trend = "stable"
             elif change_percent > 0:
-                trend = 'improving'
+                trend = "improving"
             else:
-                trend = 'declining'
+                trend = "declining"
 
-            analysis['trend'] = trend
-            analysis['change_percent'] = change_percent
+            analysis["trend"] = trend
+            analysis["change_percent"] = change_percent
         else:
-            analysis['trend'] = 'insufficient_data'
+            analysis["trend"] = "insufficient_data"
 
         return analysis
 
-    def get_stage_summary(self, stage: str, days: int = 7) -> Dict[str, Any]:
+    def get_stage_summary(self, stage: str, days: int = 7) -> dict[str, Any]:
         """
         Get summary statistics for all metrics in a stage.
 
@@ -364,31 +376,30 @@ class AccuracyTracker:
 
         cursor = self.conn.cursor()
 
-        cursor.execute('''
+        cursor.execute(
+            """
             SELECT metric_name, AVG(score) as avg_score, MIN(score) as min_score,
                    MAX(score) as max_score, COUNT(*) as count
             FROM benchmark_runs
             WHERE stage = ? AND timestamp > ?
             GROUP BY metric_name
-        ''', (stage, cutoff))
+        """,
+            (stage, cutoff),
+        )
 
-        summary = {
-            'stage': stage,
-            'days': days,
-            'metrics': {}
-        }
+        summary = {"stage": stage, "days": days, "metrics": {}}
 
         for row in cursor.fetchall():
-            summary['metrics'][row['metric_name']] = {
-                'average': row['avg_score'],
-                'min': row['min_score'],
-                'max': row['max_score'],
-                'count': row['count']
+            summary["metrics"][row["metric_name"]] = {
+                "average": row["avg_score"],
+                "min": row["min_score"],
+                "max": row["max_score"],
+                "count": row["count"],
             }
 
         return summary
 
-    def get_suite_history(self, limit: int = 10) -> List[Dict[str, Any]]:
+    def get_suite_history(self, limit: int = 10) -> list[dict[str, Any]]:
         """
         Get history of benchmark suite runs.
 
@@ -400,32 +411,41 @@ class AccuracyTracker:
         """
         cursor = self.conn.cursor()
 
-        cursor.execute('''
+        cursor.execute(
+            """
             SELECT run_id, start_time, end_time, total_benchmarks,
                    benchmarks_passed, overall_score, status, metadata
             FROM benchmark_suite_runs
             ORDER BY start_time DESC
             LIMIT ?
-        ''', (limit,))
+        """,
+            (limit,),
+        )
 
         results = []
         for row in cursor.fetchall():
-            start = datetime.fromisoformat(row['start_time'])
-            end = datetime.fromisoformat(row['end_time']) if row['end_time'] else datetime.now()
+            start = datetime.fromisoformat(row["start_time"])
+            end = datetime.fromisoformat(row["end_time"]) if row["end_time"] else datetime.now()
             duration = (end - start).total_seconds()
 
-            results.append({
-                'run_id': row['run_id'],
-                'start_time': row['start_time'],
-                'end_time': row['end_time'],
-                'duration_seconds': duration,
-                'total_benchmarks': row['total_benchmarks'],
-                'benchmarks_passed': row['benchmarks_passed'],
-                'pass_rate': row['benchmarks_passed'] / row['total_benchmarks'] * 100 if row['total_benchmarks'] > 0 else 0,
-                'overall_score': row['overall_score'],
-                'status': row['status'],
-                'metadata': json.loads(row['metadata']) if row['metadata'] else {}
-            })
+            results.append(
+                {
+                    "run_id": row["run_id"],
+                    "start_time": row["start_time"],
+                    "end_time": row["end_time"],
+                    "duration_seconds": duration,
+                    "total_benchmarks": row["total_benchmarks"],
+                    "benchmarks_passed": row["benchmarks_passed"],
+                    "pass_rate": (
+                        row["benchmarks_passed"] / row["total_benchmarks"] * 100
+                        if row["total_benchmarks"] > 0
+                        else 0
+                    ),
+                    "overall_score": row["overall_score"],
+                    "status": row["status"],
+                    "metadata": json.loads(row["metadata"]) if row["metadata"] else {},
+                }
+            )
 
         return results
 
@@ -442,27 +462,32 @@ class AccuracyTracker:
         cutoff = (datetime.now() - timedelta(days=days)).isoformat()
 
         cursor = self.conn.cursor()
-        cursor.execute('''
+        cursor.execute(
+            """
             SELECT timestamp, stage, metric_name, score, metadata
             FROM benchmark_runs
             WHERE timestamp > ?
             ORDER BY timestamp
-        ''', (cutoff,))
+        """,
+            (cutoff,),
+        )
 
-        with open(output_path, 'w', newline='') as f:
+        with open(output_path, "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(['timestamp', 'stage', 'metric_name', 'score', 'metadata'])
+            writer.writerow(["timestamp", "stage", "metric_name", "score", "metadata"])
 
             for row in cursor.fetchall():
-                writer.writerow([
-                    row['timestamp'],
-                    row['stage'],
-                    row['metric_name'],
-                    row['score'],
-                    row['metadata'] or ''
-                ])
+                writer.writerow(
+                    [
+                        row["timestamp"],
+                        row["stage"],
+                        row["metric_name"],
+                        row["score"],
+                        row["metadata"] or "",
+                    ]
+                )
 
-    def get_alerts(self, threshold: float = 0.80) -> List[Dict[str, Any]]:
+    def get_alerts(self, threshold: float = 0.80) -> list[dict[str, Any]]:
         """
         Get metrics that are currently below threshold.
 
@@ -476,7 +501,8 @@ class AccuracyTracker:
 
         # Get latest score for each metric/stage combination
         cursor = self.conn.cursor()
-        cursor.execute('''
+        cursor.execute(
+            """
             WITH latest_scores AS (
                 SELECT stage, metric_name, MAX(timestamp) as latest_ts
                 FROM benchmark_runs
@@ -490,18 +516,22 @@ class AccuracyTracker:
                 AND br.timestamp = ls.latest_ts
             WHERE br.score < ?
             ORDER BY br.score
-        ''', (threshold,))
+        """,
+            (threshold,),
+        )
 
         for row in cursor.fetchall():
-            severity = 'high' if row['score'] < 0.70 else 'medium'
-            alerts.append({
-                'stage': row['stage'],
-                'metric': row['metric_name'],
-                'score': row['score'],
-                'timestamp': row['timestamp'],
-                'severity': severity,
-                'threshold': threshold
-            })
+            severity = "high" if row["score"] < 0.70 else "medium"
+            alerts.append(
+                {
+                    "stage": row["stage"],
+                    "metric": row["metric_name"],
+                    "score": row["score"],
+                    "timestamp": row["timestamp"],
+                    "severity": severity,
+                    "threshold": threshold,
+                }
+            )
 
         return alerts
 

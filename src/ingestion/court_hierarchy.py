@@ -10,21 +10,20 @@ This module contains:
 """
 
 import re
-from typing import Dict, List, Optional, Tuple
 
 # ============================================================================
 # COURT HIERARCHY LEVELS
 # ============================================================================
 
 HIERARCHY_LEVELS = {
-    'apex': 1,           # High Court only
-    'superior_appellate': 2,  # State/Federal appellate courts
-    'intermediate_appellate': 3,  # Full courts, courts of appeal
-    'superior_trial': 4,  # Supreme Courts single judge
-    'intermediate': 5,    # District/County courts
-    'lower': 6,          # Local/Magistrates courts
-    'tribunal': 7,       # Administrative tribunals
-    'specialist': 8,     # Specialist courts/tribunals
+    "apex": 1,  # High Court only
+    "superior_appellate": 2,  # State/Federal appellate courts
+    "intermediate_appellate": 3,  # Full courts, courts of appeal
+    "superior_trial": 4,  # Supreme Courts single judge
+    "intermediate": 5,  # District/County courts
+    "lower": 6,  # Local/Magistrates courts
+    "tribunal": 7,  # Administrative tribunals
+    "specialist": 8,  # Specialist courts/tribunals
 }
 
 
@@ -34,643 +33,622 @@ HIERARCHY_LEVELS = {
 
 COURT_CODES = {
     # --- FEDERAL COURTS ---
-    'HCA': {
-        'name': 'High Court of Australia',
-        'level': 'apex',
-        'jurisdiction': 'Commonwealth',
-        'binding': True,  # Binds all Australian courts
-        'authority_score': 100,
+    "HCA": {
+        "name": "High Court of Australia",
+        "level": "apex",
+        "jurisdiction": "Commonwealth",
+        "binding": True,  # Binds all Australian courts
+        "authority_score": 100,
     },
-    'FCAFC': {
-        'name': 'Federal Court of Australia Full Court',
-        'level': 'superior_appellate',
-        'jurisdiction': 'Commonwealth',
-        'binding': 'same_jurisdiction',
-        'authority_score': 90,
+    "FCAFC": {
+        "name": "Federal Court of Australia Full Court",
+        "level": "superior_appellate",
+        "jurisdiction": "Commonwealth",
+        "binding": "same_jurisdiction",
+        "authority_score": 90,
     },
-    'FCA': {
-        'name': 'Federal Court of Australia',
-        'level': 'superior_trial',
-        'jurisdiction': 'Commonwealth',
-        'binding': 'lower_federal',
-        'authority_score': 80,
+    "FCA": {
+        "name": "Federal Court of Australia",
+        "level": "superior_trial",
+        "jurisdiction": "Commonwealth",
+        "binding": "lower_federal",
+        "authority_score": 80,
     },
-    'FedCFamC': {
-        'name': 'Federal Circuit and Family Court',
-        'level': 'intermediate',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 60,
+    "FedCFamC": {
+        "name": "Federal Circuit and Family Court",
+        "level": "intermediate",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 60,
     },
-    'FamCA': {
-        'name': 'Family Court of Australia',
-        'level': 'superior_trial',
-        'jurisdiction': 'Commonwealth',
-        'binding': 'family_matters',
-        'authority_score': 75,
-        'domain_hint': 'Family',
+    "FamCA": {
+        "name": "Family Court of Australia",
+        "level": "superior_trial",
+        "jurisdiction": "Commonwealth",
+        "binding": "family_matters",
+        "authority_score": 75,
+        "domain_hint": "Family",
     },
-    'FamCAFC': {
-        'name': 'Family Court of Australia Full Court',
-        'level': 'superior_appellate',
-        'jurisdiction': 'Commonwealth',
-        'binding': 'family_matters',
-        'authority_score': 85,
-        'domain_hint': 'Family',
+    "FamCAFC": {
+        "name": "Family Court of Australia Full Court",
+        "level": "superior_appellate",
+        "jurisdiction": "Commonwealth",
+        "binding": "family_matters",
+        "authority_score": 85,
+        "domain_hint": "Family",
     },
-    'FCCA': {
-        'name': 'Federal Circuit Court of Australia',
-        'level': 'intermediate',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 55,
+    "FCCA": {
+        "name": "Federal Circuit Court of Australia",
+        "level": "intermediate",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 55,
     },
-    'AATA': {
-        'name': 'Administrative Appeals Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "AATA": {
+        "name": "Administrative Appeals Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-    'AAT': {
-        'name': 'Administrative Appeals Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "AAT": {
+        "name": "Administrative Appeals Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-
     # --- NEW SOUTH WALES ---
-    'NSWCA': {
-        'name': 'NSW Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'NSW',
-        'binding': 'nsw_courts',
-        'authority_score': 85,
+    "NSWCA": {
+        "name": "NSW Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "NSW",
+        "binding": "nsw_courts",
+        "authority_score": 85,
     },
-    'NSWCCA': {
-        'name': 'NSW Court of Criminal Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'NSW',
-        'binding': 'nsw_criminal',
-        'authority_score': 85,
-        'domain_hint': 'Criminal',
+    "NSWCCA": {
+        "name": "NSW Court of Criminal Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "NSW",
+        "binding": "nsw_criminal",
+        "authority_score": 85,
+        "domain_hint": "Criminal",
     },
-    'NSWSC': {
-        'name': 'NSW Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'NSW',
-        'binding': 'lower_nsw',
-        'authority_score': 75,
+    "NSWSC": {
+        "name": "NSW Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "NSW",
+        "binding": "lower_nsw",
+        "authority_score": 75,
     },
-    'NSWDC': {
-        'name': 'NSW District Court',
-        'level': 'intermediate',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 50,
+    "NSWDC": {
+        "name": "NSW District Court",
+        "level": "intermediate",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 50,
     },
-    'NSWLC': {
-        'name': 'NSW Local Court',
-        'level': 'lower',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 30,
+    "NSWLC": {
+        "name": "NSW Local Court",
+        "level": "lower",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 30,
     },
-    'NSWLEC': {
-        'name': 'NSW Land and Environment Court',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': 'nsw_environment',
-        'authority_score': 70,
-        'domain_hint': 'Environment',
+    "NSWLEC": {
+        "name": "NSW Land and Environment Court",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": "nsw_environment",
+        "authority_score": 70,
+        "domain_hint": "Environment",
     },
-    'NSWIC': {
-        'name': 'NSW Industrial Court',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': 'nsw_industrial',
-        'authority_score': 65,
-        'domain_hint': 'Employment',
+    "NSWIC": {
+        "name": "NSW Industrial Court",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": "nsw_industrial",
+        "authority_score": 65,
+        "domain_hint": "Employment",
     },
-    'NSWCATAD': {
-        'name': 'NSW Civil and Administrative Tribunal (Admin Div)',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 35,
-        'domain_hint': 'Administrative',
+    "NSWCATAD": {
+        "name": "NSW Civil and Administrative Tribunal (Admin Div)",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 35,
+        "domain_hint": "Administrative",
     },
-    'NCAT': {
-        'name': 'NSW Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 35,
+    "NCAT": {
+        "name": "NSW Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 35,
     },
-
     # --- VICTORIA ---
-    'VSCA': {
-        'name': 'Victorian Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'VIC',
-        'binding': 'vic_courts',
-        'authority_score': 85,
+    "VSCA": {
+        "name": "Victorian Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "VIC",
+        "binding": "vic_courts",
+        "authority_score": 85,
     },
-    'VSC': {
-        'name': 'Victorian Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'VIC',
-        'binding': 'lower_vic',
-        'authority_score': 75,
+    "VSC": {
+        "name": "Victorian Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "VIC",
+        "binding": "lower_vic",
+        "authority_score": 75,
     },
-    'VCC': {
-        'name': 'Victorian County Court',
-        'level': 'intermediate',
-        'jurisdiction': 'VIC',
-        'binding': False,
-        'authority_score': 50,
+    "VCC": {
+        "name": "Victorian County Court",
+        "level": "intermediate",
+        "jurisdiction": "VIC",
+        "binding": False,
+        "authority_score": 50,
     },
-    'VMC': {
-        'name': 'Victorian Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'VIC',
-        'binding': False,
-        'authority_score': 30,
+    "VMC": {
+        "name": "Victorian Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "VIC",
+        "binding": False,
+        "authority_score": 30,
     },
-    'VCAT': {
-        'name': 'Victorian Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'VIC',
-        'binding': False,
-        'authority_score': 35,
+    "VCAT": {
+        "name": "Victorian Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "VIC",
+        "binding": False,
+        "authority_score": 35,
     },
-
     # --- QUEENSLAND ---
-    'QCA': {
-        'name': 'Queensland Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'QLD',
-        'binding': 'qld_courts',
-        'authority_score': 85,
+    "QCA": {
+        "name": "Queensland Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "QLD",
+        "binding": "qld_courts",
+        "authority_score": 85,
     },
-    'QSC': {
-        'name': 'Queensland Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'QLD',
-        'binding': 'lower_qld',
-        'authority_score': 75,
+    "QSC": {
+        "name": "Queensland Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "QLD",
+        "binding": "lower_qld",
+        "authority_score": 75,
     },
-    'QDC': {
-        'name': 'Queensland District Court',
-        'level': 'intermediate',
-        'jurisdiction': 'QLD',
-        'binding': False,
-        'authority_score': 50,
+    "QDC": {
+        "name": "Queensland District Court",
+        "level": "intermediate",
+        "jurisdiction": "QLD",
+        "binding": False,
+        "authority_score": 50,
     },
-    'QMC': {
-        'name': 'Queensland Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'QLD',
-        'binding': False,
-        'authority_score': 30,
+    "QMC": {
+        "name": "Queensland Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "QLD",
+        "binding": False,
+        "authority_score": 30,
     },
-    'QCAT': {
-        'name': 'Queensland Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'QLD',
-        'binding': False,
-        'authority_score': 35,
+    "QCAT": {
+        "name": "Queensland Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "QLD",
+        "binding": False,
+        "authority_score": 35,
     },
-    'ICQ': {
-        'name': 'Industrial Court of Queensland',
-        'level': 'specialist',
-        'jurisdiction': 'QLD',
-        'binding': 'qld_industrial',
-        'authority_score': 65,
-        'domain_hint': 'Employment',
+    "ICQ": {
+        "name": "Industrial Court of Queensland",
+        "level": "specialist",
+        "jurisdiction": "QLD",
+        "binding": "qld_industrial",
+        "authority_score": 65,
+        "domain_hint": "Employment",
     },
-    'QIRC': {
-        'name': 'Queensland Industrial Relations Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'QLD',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Employment',
+    "QIRC": {
+        "name": "Queensland Industrial Relations Commission",
+        "level": "tribunal",
+        "jurisdiction": "QLD",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Employment",
     },
-
     # --- WESTERN AUSTRALIA ---
-    'WASCA': {
-        'name': 'WA Supreme Court Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'WA',
-        'binding': 'wa_courts',
-        'authority_score': 85,
+    "WASCA": {
+        "name": "WA Supreme Court Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "WA",
+        "binding": "wa_courts",
+        "authority_score": 85,
     },
-    'WASC': {
-        'name': 'WA Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'WA',
-        'binding': 'lower_wa',
-        'authority_score': 75,
+    "WASC": {
+        "name": "WA Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "WA",
+        "binding": "lower_wa",
+        "authority_score": 75,
     },
-    'WADC': {
-        'name': 'WA District Court',
-        'level': 'intermediate',
-        'jurisdiction': 'WA',
-        'binding': False,
-        'authority_score': 50,
+    "WADC": {
+        "name": "WA District Court",
+        "level": "intermediate",
+        "jurisdiction": "WA",
+        "binding": False,
+        "authority_score": 50,
     },
-    'WAMC': {
-        'name': 'WA Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'WA',
-        'binding': False,
-        'authority_score': 30,
+    "WAMC": {
+        "name": "WA Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "WA",
+        "binding": False,
+        "authority_score": 30,
     },
-    'SAT': {
-        'name': 'State Administrative Tribunal (WA)',
-        'level': 'tribunal',
-        'jurisdiction': 'WA',
-        'binding': False,
-        'authority_score': 35,
+    "SAT": {
+        "name": "State Administrative Tribunal (WA)",
+        "level": "tribunal",
+        "jurisdiction": "WA",
+        "binding": False,
+        "authority_score": 35,
     },
-    'WAIRC': {
-        'name': 'WA Industrial Relations Commission',
-        'level': 'specialist',
-        'jurisdiction': 'WA',
-        'binding': 'wa_industrial',
-        'authority_score': 60,
-        'domain_hint': 'Employment',
+    "WAIRC": {
+        "name": "WA Industrial Relations Commission",
+        "level": "specialist",
+        "jurisdiction": "WA",
+        "binding": "wa_industrial",
+        "authority_score": 60,
+        "domain_hint": "Employment",
     },
-
     # --- SOUTH AUSTRALIA ---
-    'SASCFC': {
-        'name': 'SA Supreme Court Full Court',
-        'level': 'superior_appellate',
-        'jurisdiction': 'SA',
-        'binding': 'sa_courts',
-        'authority_score': 85,
+    "SASCFC": {
+        "name": "SA Supreme Court Full Court",
+        "level": "superior_appellate",
+        "jurisdiction": "SA",
+        "binding": "sa_courts",
+        "authority_score": 85,
     },
-    'SASC': {
-        'name': 'SA Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'SA',
-        'binding': 'lower_sa',
-        'authority_score': 75,
+    "SASC": {
+        "name": "SA Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "SA",
+        "binding": "lower_sa",
+        "authority_score": 75,
     },
-    'SADC': {
-        'name': 'SA District Court',
-        'level': 'intermediate',
-        'jurisdiction': 'SA',
-        'binding': False,
-        'authority_score': 50,
+    "SADC": {
+        "name": "SA District Court",
+        "level": "intermediate",
+        "jurisdiction": "SA",
+        "binding": False,
+        "authority_score": 50,
     },
-    'SAMC': {
-        'name': 'SA Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'SA',
-        'binding': False,
-        'authority_score': 30,
+    "SAMC": {
+        "name": "SA Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "SA",
+        "binding": False,
+        "authority_score": 30,
     },
-    'SACAT': {
-        'name': 'SA Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'SA',
-        'binding': False,
-        'authority_score': 35,
+    "SACAT": {
+        "name": "SA Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "SA",
+        "binding": False,
+        "authority_score": 35,
     },
-    'SAET': {
-        'name': 'SA Employment Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'SA',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Employment',
+    "SAET": {
+        "name": "SA Employment Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "SA",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Employment",
     },
-
     # --- TASMANIA ---
-    'TASCCA': {
-        'name': 'Tasmanian Court of Criminal Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'TAS',
-        'binding': 'tas_criminal',
-        'authority_score': 85,
-        'domain_hint': 'Criminal',
+    "TASCCA": {
+        "name": "Tasmanian Court of Criminal Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "TAS",
+        "binding": "tas_criminal",
+        "authority_score": 85,
+        "domain_hint": "Criminal",
     },
-    'TASFC': {
-        'name': 'Tasmanian Supreme Court Full Court',
-        'level': 'superior_appellate',
-        'jurisdiction': 'TAS',
-        'binding': 'tas_courts',
-        'authority_score': 85,
+    "TASFC": {
+        "name": "Tasmanian Supreme Court Full Court",
+        "level": "superior_appellate",
+        "jurisdiction": "TAS",
+        "binding": "tas_courts",
+        "authority_score": 85,
     },
-    'TASSC': {
-        'name': 'Tasmanian Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'TAS',
-        'binding': 'lower_tas',
-        'authority_score': 75,
+    "TASSC": {
+        "name": "Tasmanian Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "TAS",
+        "binding": "lower_tas",
+        "authority_score": 75,
     },
-    'TASMC': {
-        'name': 'Tasmanian Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'TAS',
-        'binding': False,
-        'authority_score': 30,
+    "TASMC": {
+        "name": "Tasmanian Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "TAS",
+        "binding": False,
+        "authority_score": 30,
     },
-    'TasCAT': {
-        'name': 'Tasmanian Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'TAS',
-        'binding': False,
-        'authority_score': 35,
+    "TasCAT": {
+        "name": "Tasmanian Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "TAS",
+        "binding": False,
+        "authority_score": 35,
     },
-
     # --- ACT ---
-    'ACTCA': {
-        'name': 'ACT Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'ACT',
-        'binding': 'act_courts',
-        'authority_score': 85,
+    "ACTCA": {
+        "name": "ACT Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "ACT",
+        "binding": "act_courts",
+        "authority_score": 85,
     },
-    'ACTSC': {
-        'name': 'ACT Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'ACT',
-        'binding': 'lower_act',
-        'authority_score': 75,
+    "ACTSC": {
+        "name": "ACT Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "ACT",
+        "binding": "lower_act",
+        "authority_score": 75,
     },
-    'ACTMC': {
-        'name': 'ACT Magistrates Court',
-        'level': 'lower',
-        'jurisdiction': 'ACT',
-        'binding': False,
-        'authority_score': 30,
+    "ACTMC": {
+        "name": "ACT Magistrates Court",
+        "level": "lower",
+        "jurisdiction": "ACT",
+        "binding": False,
+        "authority_score": 30,
     },
-    'ACAT': {
-        'name': 'ACT Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'ACT',
-        'binding': False,
-        'authority_score': 35,
+    "ACAT": {
+        "name": "ACT Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "ACT",
+        "binding": False,
+        "authority_score": 35,
     },
-
     # --- NORTHERN TERRITORY ---
-    'NTCA': {
-        'name': 'NT Court of Appeal',
-        'level': 'superior_appellate',
-        'jurisdiction': 'NT',
-        'binding': 'nt_courts',
-        'authority_score': 85,
+    "NTCA": {
+        "name": "NT Court of Appeal",
+        "level": "superior_appellate",
+        "jurisdiction": "NT",
+        "binding": "nt_courts",
+        "authority_score": 85,
     },
-    'NTSC': {
-        'name': 'NT Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'NT',
-        'binding': 'lower_nt',
-        'authority_score': 75,
+    "NTSC": {
+        "name": "NT Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "NT",
+        "binding": "lower_nt",
+        "authority_score": 75,
     },
-    'NTLC': {
-        'name': 'NT Local Court',
-        'level': 'lower',
-        'jurisdiction': 'NT',
-        'binding': False,
-        'authority_score': 30,
+    "NTLC": {
+        "name": "NT Local Court",
+        "level": "lower",
+        "jurisdiction": "NT",
+        "binding": False,
+        "authority_score": 30,
     },
-    'NTCAT': {
-        'name': 'NT Civil and Administrative Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'NT',
-        'binding': False,
-        'authority_score': 35,
+    "NTCAT": {
+        "name": "NT Civil and Administrative Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "NT",
+        "binding": False,
+        "authority_score": 35,
     },
-
     # --- SPECIALIST COURTS/TRIBUNALS ---
-    'FWC': {
-        'name': 'Fair Work Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Employment',
+    "FWC": {
+        "name": "Fair Work Commission",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Employment",
     },
-    'FWCFB': {
-        'name': 'Fair Work Commission Full Bench',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': 'fwc',
-        'authority_score': 60,
-        'domain_hint': 'Employment',
+    "FWCFB": {
+        "name": "Fair Work Commission Full Bench",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": "fwc",
+        "authority_score": 60,
+        "domain_hint": "Employment",
     },
-    'IRC': {
-        'name': 'Industrial Relations Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Employment',
+    "IRC": {
+        "name": "Industrial Relations Commission",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Employment",
     },
-    'AIRC': {
-        'name': 'Australian Industrial Relations Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Employment',
+    "AIRC": {
+        "name": "Australian Industrial Relations Commission",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Employment",
     },
-
     # --- ADDITIONAL SPECIALIST TRIBUNALS (Agent 3 additions) ---
-    'SSAT': {
-        'name': 'Social Security Appeals Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "SSAT": {
+        "name": "Social Security Appeals Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-    'MRT': {
-        'name': 'Migration Review Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "MRT": {
+        "name": "Migration Review Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-    'RRT': {
-        'name': 'Refugee Review Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "RRT": {
+        "name": "Refugee Review Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-    'IPC': {
-        'name': 'Information and Privacy Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 35,
-        'domain_hint': 'Administrative',
+    "IPC": {
+        "name": "Information and Privacy Commission",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 35,
+        "domain_hint": "Administrative",
     },
-    'OAIC': {
-        'name': 'Office of the Australian Information Commissioner',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 35,
-        'domain_hint': 'Administrative',
+    "OAIC": {
+        "name": "Office of the Australian Information Commissioner",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 35,
+        "domain_hint": "Administrative",
     },
-    'VET': {
-        'name': 'Veterans Entitlements Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Administrative',
+    "VET": {
+        "name": "Veterans Entitlements Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Administrative",
     },
-
     # --- NORFOLK ISLAND ---
-    'NISC': {
-        'name': 'Norfolk Island Supreme Court',
-        'level': 'superior_trial',
-        'jurisdiction': 'NI',
-        'binding': 'lower_ni',
-        'authority_score': 70,
+    "NISC": {
+        "name": "Norfolk Island Supreme Court",
+        "level": "superior_trial",
+        "jurisdiction": "NI",
+        "binding": "lower_ni",
+        "authority_score": 70,
     },
-
     # --- CORONERS COURTS ---
-    'NSWCOR': {
-        'name': 'NSW Coroners Court',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 45,
-        'domain_hint': 'Criminal',
+    "NSWCOR": {
+        "name": "NSW Coroners Court",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 45,
+        "domain_hint": "Criminal",
     },
-    'VICCOR': {
-        'name': 'Victorian Coroners Court',
-        'level': 'specialist',
-        'jurisdiction': 'VIC',
-        'binding': False,
-        'authority_score': 45,
-        'domain_hint': 'Criminal',
+    "VICCOR": {
+        "name": "Victorian Coroners Court",
+        "level": "specialist",
+        "jurisdiction": "VIC",
+        "binding": False,
+        "authority_score": 45,
+        "domain_hint": "Criminal",
     },
-
     # --- CHILDREN'S COURTS ---
-    'NSWCC': {
-        'name': 'NSW Childrens Court',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Family',
+    "NSWCC": {
+        "name": "NSW Childrens Court",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Family",
     },
-    'VChC': {
-        'name': 'Victorian Childrens Court',
-        'level': 'specialist',
-        'jurisdiction': 'VIC',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Family',
+    "VChC": {
+        "name": "Victorian Childrens Court",
+        "level": "specialist",
+        "jurisdiction": "VIC",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Family",
     },
-
     # --- DRUG COURTS ---
-    'NSWDC_Drug': {
-        'name': 'NSW Drug Court',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 40,
-        'domain_hint': 'Criminal',
+    "NSWDC_Drug": {
+        "name": "NSW Drug Court",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 40,
+        "domain_hint": "Criminal",
     },
-
     # --- DUST DISEASES TRIBUNAL ---
-    'DDT': {
-        'name': 'Dust Diseases Tribunal of NSW',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': 'dust_diseases',
-        'authority_score': 65,
-        'domain_hint': 'Torts',
+    "DDT": {
+        "name": "Dust Diseases Tribunal of NSW",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": "dust_diseases",
+        "authority_score": 65,
+        "domain_hint": "Torts",
     },
-
     # --- NATIVE TITLE TRIBUNAL ---
-    'NNTT': {
-        'name': 'National Native Title Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'Commonwealth',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Property',
+    "NNTT": {
+        "name": "National Native Title Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "Commonwealth",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Property",
     },
-
     # --- GUARDIANSHIP TRIBUNALS ---
-    'NSWGT': {
-        'name': 'NSW Guardianship Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 35,
-        'domain_hint': 'Family',
+    "NSWGT": {
+        "name": "NSW Guardianship Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 35,
+        "domain_hint": "Family",
     },
-
     # --- MENTAL HEALTH REVIEW TRIBUNALS ---
-    'MHRT': {
-        'name': 'Mental Health Review Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 35,
-        'domain_hint': 'Administrative',
+    "MHRT": {
+        "name": "Mental Health Review Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 35,
+        "domain_hint": "Administrative",
     },
-
     # --- COMPENSATION COURTS ---
-    'WCC': {
-        'name': 'Workers Compensation Commission',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 50,
-        'domain_hint': 'Employment',
+    "WCC": {
+        "name": "Workers Compensation Commission",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 50,
+        "domain_hint": "Employment",
     },
-    'WCAT': {
-        'name': 'Workers Compensation Appeals Tribunal',
-        'level': 'tribunal',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 55,
-        'domain_hint': 'Employment',
+    "WCAT": {
+        "name": "Workers Compensation Appeals Tribunal",
+        "level": "tribunal",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 55,
+        "domain_hint": "Employment",
     },
-
     # --- HISTORICAL COURTS (superseded but still cited) ---
-    'CCA': {
-        'name': 'Court of Criminal Appeal (Historical)',
-        'level': 'superior_appellate',
-        'jurisdiction': 'Multiple',
-        'binding': False,
-        'authority_score': 70,
-        'domain_hint': 'Criminal',
+    "CCA": {
+        "name": "Court of Criminal Appeal (Historical)",
+        "level": "superior_appellate",
+        "jurisdiction": "Multiple",
+        "binding": False,
+        "authority_score": 70,
+        "domain_hint": "Criminal",
     },
-    'IRC_NSW': {
-        'name': 'Industrial Relations Commission of NSW',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': 'nsw_industrial',
-        'authority_score': 60,
-        'domain_hint': 'Employment',
+    "IRC_NSW": {
+        "name": "Industrial Relations Commission of NSW",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": "nsw_industrial",
+        "authority_score": 60,
+        "domain_hint": "Employment",
     },
-
     # --- COSTS ASSESSMENT ---
-    'COSTSASS': {
-        'name': 'Costs Assessment (NSW)',
-        'level': 'specialist',
-        'jurisdiction': 'NSW',
-        'binding': False,
-        'authority_score': 30,
+    "COSTSASS": {
+        "name": "Costs Assessment (NSW)",
+        "level": "specialist",
+        "jurisdiction": "NSW",
+        "binding": False,
+        "authority_score": 30,
     },
 }
 
@@ -680,17 +658,17 @@ COURT_CODES = {
 # ============================================================================
 
 JURISDICTION_DOMAIN_HINTS = {
-    'family': 'Family',
-    'industrial': 'Employment',
-    'employment': 'Employment',
-    'criminal': 'Criminal',
-    'land': 'Property',
-    'environment': 'Environment',
-    'administrative': 'Administrative',
-    'migration': 'Administrative',
-    'refugee': 'Administrative',
-    'taxation': 'Tax',
-    'revenue': 'Tax',
+    "family": "Family",
+    "industrial": "Employment",
+    "employment": "Employment",
+    "criminal": "Criminal",
+    "land": "Property",
+    "environment": "Environment",
+    "administrative": "Administrative",
+    "migration": "Administrative",
+    "refugee": "Administrative",
+    "taxation": "Tax",
+    "revenue": "Tax",
 }
 
 
@@ -699,86 +677,86 @@ JURISDICTION_DOMAIN_HINTS = {
 # ============================================================================
 
 REPORT_SERIES = {
-    'CLR': {
-        'name': 'Commonwealth Law Reports',
-        'jurisdiction': 'Commonwealth',
-        'court': 'HCA',
-        'authority_score': 100,
+    "CLR": {
+        "name": "Commonwealth Law Reports",
+        "jurisdiction": "Commonwealth",
+        "court": "HCA",
+        "authority_score": 100,
     },
-    'FCR': {
-        'name': 'Federal Court Reports',
-        'jurisdiction': 'Commonwealth',
-        'court': 'FCA',
-        'authority_score': 85,
+    "FCR": {
+        "name": "Federal Court Reports",
+        "jurisdiction": "Commonwealth",
+        "court": "FCA",
+        "authority_score": 85,
     },
-    'ALR': {
-        'name': 'Australian Law Reports',
-        'jurisdiction': 'Commonwealth',
-        'court': 'Multiple',
-        'authority_score': 80,
+    "ALR": {
+        "name": "Australian Law Reports",
+        "jurisdiction": "Commonwealth",
+        "court": "Multiple",
+        "authority_score": 80,
     },
-    'NSWLR': {
-        'name': 'NSW Law Reports',
-        'jurisdiction': 'NSW',
-        'court': 'NSWCA/NSWSC',
-        'authority_score': 80,
+    "NSWLR": {
+        "name": "NSW Law Reports",
+        "jurisdiction": "NSW",
+        "court": "NSWCA/NSWSC",
+        "authority_score": 80,
     },
-    'VR': {
-        'name': 'Victorian Reports',
-        'jurisdiction': 'VIC',
-        'court': 'VSCA/VSC',
-        'authority_score': 80,
+    "VR": {
+        "name": "Victorian Reports",
+        "jurisdiction": "VIC",
+        "court": "VSCA/VSC",
+        "authority_score": 80,
     },
-    'QdR': {
-        'name': 'Queensland Reports',
-        'jurisdiction': 'QLD',
-        'court': 'QCA/QSC',
-        'authority_score': 80,
+    "QdR": {
+        "name": "Queensland Reports",
+        "jurisdiction": "QLD",
+        "court": "QCA/QSC",
+        "authority_score": 80,
     },
-    'SASR': {
-        'name': 'South Australian State Reports',
-        'jurisdiction': 'SA',
-        'court': 'SASC',
-        'authority_score': 80,
+    "SASR": {
+        "name": "South Australian State Reports",
+        "jurisdiction": "SA",
+        "court": "SASC",
+        "authority_score": 80,
     },
-    'WAR': {
-        'name': 'Western Australian Reports',
-        'jurisdiction': 'WA',
-        'court': 'WASC',
-        'authority_score': 80,
+    "WAR": {
+        "name": "Western Australian Reports",
+        "jurisdiction": "WA",
+        "court": "WASC",
+        "authority_score": 80,
     },
-    'TasR': {
-        'name': 'Tasmanian Reports',
-        'jurisdiction': 'TAS',
-        'court': 'TASSC',
-        'authority_score': 80,
+    "TasR": {
+        "name": "Tasmanian Reports",
+        "jurisdiction": "TAS",
+        "court": "TASSC",
+        "authority_score": 80,
     },
-    'FLC': {
-        'name': 'Family Law Cases',
-        'jurisdiction': 'Commonwealth',
-        'court': 'FamCA',
-        'authority_score': 75,
-        'domain_hint': 'Family',
+    "FLC": {
+        "name": "Family Law Cases",
+        "jurisdiction": "Commonwealth",
+        "court": "FamCA",
+        "authority_score": 75,
+        "domain_hint": "Family",
     },
-    'FLR': {
-        'name': 'Federal Law Reports',
-        'jurisdiction': 'Commonwealth',
-        'court': 'Multiple',
-        'authority_score': 75,
+    "FLR": {
+        "name": "Federal Law Reports",
+        "jurisdiction": "Commonwealth",
+        "court": "Multiple",
+        "authority_score": 75,
     },
-    'ACSR': {
-        'name': 'Australian Corporations and Securities Reports',
-        'jurisdiction': 'Commonwealth',
-        'court': 'Multiple',
-        'authority_score': 75,
-        'domain_hint': 'Commercial',
+    "ACSR": {
+        "name": "Australian Corporations and Securities Reports",
+        "jurisdiction": "Commonwealth",
+        "court": "Multiple",
+        "authority_score": 75,
+        "domain_hint": "Commercial",
     },
-    'IR': {
-        'name': 'Industrial Reports',
-        'jurisdiction': 'Multiple',
-        'court': 'IRC/FWC',
-        'authority_score': 60,
-        'domain_hint': 'Employment',
+    "IR": {
+        "name": "Industrial Reports",
+        "jurisdiction": "Multiple",
+        "court": "IRC/FWC",
+        "authority_score": 60,
+        "domain_hint": "Employment",
     },
 }
 
@@ -787,7 +765,8 @@ REPORT_SERIES = {
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def get_court_info(court_code: str) -> Optional[Dict]:
+
+def get_court_info(court_code: str) -> dict | None:
     """Get court information by code (case-insensitive lookup)."""
     if not court_code:
         return None
@@ -806,32 +785,32 @@ def get_hierarchy_level(court_code: str) -> int:
     """Get numeric hierarchy level for a court (1=highest)."""
     info = get_court_info(court_code)
     if info:
-        return HIERARCHY_LEVELS.get(info['level'], 10)
+        return HIERARCHY_LEVELS.get(info["level"], 10)
     return 10  # Unknown courts get lowest priority
 
 
 def get_authority_score(court_code: str) -> int:
     """Get authority score for a court (higher = more authoritative)."""
     info = get_court_info(court_code)
-    return info.get('authority_score', 0) if info else 0
+    return info.get("authority_score", 0) if info else 0
 
 
-def get_jurisdiction(court_code: str) -> Optional[str]:
+def get_jurisdiction(court_code: str) -> str | None:
     """Get jurisdiction for a court code."""
     info = get_court_info(court_code)
-    return info.get('jurisdiction') if info else None
+    return info.get("jurisdiction") if info else None
 
 
-def get_domain_hint(court_code: str) -> Optional[str]:
+def get_domain_hint(court_code: str) -> str | None:
     """Get domain hint for a specialist court."""
     info = get_court_info(court_code)
-    return info.get('domain_hint') if info else None
+    return info.get("domain_hint") if info else None
 
 
-def extract_court_from_citation(citation: str) -> Optional[str]:
+def extract_court_from_citation(citation: str) -> str | None:
     """Extract court code from a medium neutral citation."""
     # Pattern matches court codes with mixed case (e.g., FamCA, NSWSC, HCA)
-    pattern = re.compile(r'\[\d{4}\]\s*([A-Za-z]{2,10})\s*\d+')
+    pattern = re.compile(r"\[\d{4}\]\s*([A-Za-z]{2,10})\s*\d+")
     match = pattern.search(citation)
     if match:
         return match.group(1)  # Return as-is, lookup handles case
@@ -851,7 +830,7 @@ def is_binding_authority(citing_court: str, cited_court: str) -> bool:
         return False
 
     # High Court binds all
-    if cited_court.upper() == 'HCA':
+    if cited_court.upper() == "HCA":
         return True
 
     # Compare hierarchy levels
@@ -860,13 +839,13 @@ def is_binding_authority(citing_court: str, cited_court: str) -> bool:
 
     # Higher court (lower number) generally binds lower court (higher number)
     # But only if same jurisdiction
-    if cited_info.get('jurisdiction') == citing_info.get('jurisdiction'):
+    if cited_info.get("jurisdiction") == citing_info.get("jurisdiction"):
         return cited_level < citing_level
 
     return False
 
 
-def get_report_series_info(series_abbr: str) -> Optional[Dict]:
+def get_report_series_info(series_abbr: str) -> dict | None:
     """Get information about a report series (case-insensitive lookup)."""
     # Try exact match first
     if series_abbr in REPORT_SERIES:

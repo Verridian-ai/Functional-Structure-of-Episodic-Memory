@@ -18,7 +18,7 @@ The "auto" mode:
 
 import sys
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
@@ -54,7 +54,7 @@ class HybridRetriever:
         workspace_dir: Path = None,
         data_dir: Path = None,
         gsw_score_threshold: float = 2.0,
-        blend_results: bool = False
+        blend_results: bool = False,
     ):
         """
         Initialize hybrid retriever.
@@ -79,12 +79,8 @@ class HybridRetriever:
         print("[HybridRetriever] Initialization complete")
 
     def retrieve(
-        self,
-        query: str,
-        top_k: int = 5,
-        mode: str = "auto",
-        domain: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, query: str, top_k: int = 5, mode: str = "auto", domain: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         Retrieve relevant documents/entities.
 
@@ -109,29 +105,31 @@ class HybridRetriever:
         else:
             raise ValueError(f"Unknown mode: {mode}. Use 'auto', 'gsw', or 'bm25'")
 
-    def _retrieve_gsw(self, query: str, top_k: int, domain: Optional[str]) -> List[Dict[str, Any]]:
+    def _retrieve_gsw(self, query: str, top_k: int, domain: str | None) -> list[dict[str, Any]]:
         """Pure GSW retrieval."""
         return self.gsw_retriever.retrieve(query, top_k=top_k, domain=domain)
 
-    def _retrieve_bm25(self, query: str, top_k: int) -> List[Dict[str, Any]]:
+    def _retrieve_bm25(self, query: str, top_k: int) -> list[dict[str, Any]]:
         """Pure BM25 retrieval."""
         bm25_results = self.bm25_retriever.search(query, top_k=top_k)
 
         # Normalize format to match GSW
         normalized = []
         for result in bm25_results:
-            normalized.append({
-                'id': result.get('id'),
-                'type': 'case',
-                'title': result.get('title'),
-                'text_preview': result.get('text_preview'),
-                'score': result.get('score', 0.0),
-                'source': 'bm25'
-            })
+            normalized.append(
+                {
+                    "id": result.get("id"),
+                    "type": "case",
+                    "title": result.get("title"),
+                    "text_preview": result.get("text_preview"),
+                    "score": result.get("score", 0.0),
+                    "source": "bm25",
+                }
+            )
 
         return normalized
 
-    def _retrieve_auto(self, query: str, top_k: int, domain: Optional[str]) -> List[Dict[str, Any]]:
+    def _retrieve_auto(self, query: str, top_k: int, domain: str | None) -> list[dict[str, Any]]:
         """
         Automatic hybrid retrieval.
 
@@ -145,15 +143,12 @@ class HybridRetriever:
         gsw_results = self._retrieve_gsw(query, top_k, domain)
 
         # Check if GSW has good results
-        has_good_gsw = (
-            gsw_results and
-            gsw_results[0]['score'] >= self.gsw_score_threshold
-        )
+        has_good_gsw = gsw_results and gsw_results[0]["score"] >= self.gsw_score_threshold
 
         if has_good_gsw and not self.blend_results:
             # Use GSW results
             for result in gsw_results:
-                result['source'] = 'gsw'
+                result["source"] = "gsw"
             return gsw_results
 
         # Get BM25 results
@@ -166,7 +161,7 @@ class HybridRetriever:
         if not bm25_results:
             # No BM25 results, use GSW
             for result in gsw_results:
-                result['source'] = 'gsw'
+                result["source"] = "gsw"
             return gsw_results
 
         # Blend results
@@ -176,17 +171,14 @@ class HybridRetriever:
         # Default: prefer BM25 if GSW score is low
         if has_good_gsw:
             for result in gsw_results:
-                result['source'] = 'gsw'
+                result["source"] = "gsw"
             return gsw_results
         else:
             return bm25_results
 
     def _blend_results(
-        self,
-        gsw_results: List[Dict],
-        bm25_results: List[Dict],
-        top_k: int
-    ) -> List[Dict[str, Any]]:
+        self, gsw_results: list[dict], bm25_results: list[dict], top_k: int
+    ) -> list[dict[str, Any]]:
         """
         Blend GSW and BM25 results.
 
@@ -197,44 +189,39 @@ class HybridRetriever:
         """
         # Normalize GSW scores
         if gsw_results:
-            max_gsw = max(r['score'] for r in gsw_results)
+            max_gsw = max(r["score"] for r in gsw_results)
             if max_gsw > 0:
                 for r in gsw_results:
-                    r['normalized_score'] = r['score'] / max_gsw
-                    r['source'] = 'gsw'
+                    r["normalized_score"] = r["score"] / max_gsw
+                    r["source"] = "gsw"
 
         # Normalize BM25 scores
         if bm25_results:
-            max_bm25 = max(r['score'] for r in bm25_results if r['score'] > 0)
+            max_bm25 = max(r["score"] for r in bm25_results if r["score"] > 0)
             if max_bm25 > 0:
                 for r in bm25_results:
-                    r['normalized_score'] = r['score'] / max_bm25
-                    r['source'] = 'bm25'
+                    r["normalized_score"] = r["score"] / max_bm25
+                    r["source"] = "bm25"
 
         # Combine and weight
         all_results = []
 
         # Add GSW results with weight
         for r in gsw_results:
-            r['final_score'] = r.get('normalized_score', 0) * 0.6
+            r["final_score"] = r.get("normalized_score", 0) * 0.6
             all_results.append(r)
 
         # Add BM25 results with weight
         for r in bm25_results:
-            r['final_score'] = r.get('normalized_score', 0) * 0.4
+            r["final_score"] = r.get("normalized_score", 0) * 0.4
             all_results.append(r)
 
         # Sort by final score
-        all_results.sort(key=lambda x: x.get('final_score', 0), reverse=True)
+        all_results.sort(key=lambda x: x.get("final_score", 0), reverse=True)
 
         return all_results[:top_k]
 
-    def retrieve_with_context(
-        self,
-        query: str,
-        top_k: int = 3,
-        depth: int = 2
-    ) -> Dict[str, Any]:
+    def retrieve_with_context(self, query: str, top_k: int = 3, depth: int = 2) -> dict[str, Any]:
         """
         Retrieve with graph context expansion (GSW only).
 
@@ -248,37 +235,30 @@ class HybridRetriever:
         """
         return self.gsw_retriever.retrieve_with_context(query, top_k, depth)
 
-    def search_by_role(
-        self,
-        role: str,
-        domain: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+    def search_by_role(self, role: str, domain: str | None = None) -> list[dict[str, Any]]:
         """Search for actors by role (GSW only)."""
         return self.gsw_retriever.search_by_role(role, domain)
 
     def search_by_state(
-        self,
-        state_name: str,
-        state_value: Optional[str] = None,
-        domain: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
+        self, state_name: str, state_value: str | None = None, domain: str | None = None
+    ) -> list[dict[str, Any]]:
         """Search for actors by state (GSW only)."""
         return self.gsw_retriever.search_by_state(state_name, state_value, domain)
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get retriever statistics."""
         gsw_stats = self.gsw_retriever.get_statistics()
 
         return {
-            'gsw': gsw_stats,
-            'bm25': {
-                'indexed_documents': self.bm25_retriever.bm25.corpus_size,
-                'citation_index_size': len(self.bm25_retriever.citation_index)
+            "gsw": gsw_stats,
+            "bm25": {
+                "indexed_documents": self.bm25_retriever.bm25.corpus_size,
+                "citation_index_size": len(self.bm25_retriever.citation_index),
             },
-            'config': {
-                'gsw_score_threshold': self.gsw_score_threshold,
-                'blend_results': self.blend_results
-            }
+            "config": {
+                "gsw_score_threshold": self.gsw_score_threshold,
+                "blend_results": self.blend_results,
+            },
         }
 
 
@@ -291,14 +271,11 @@ if __name__ == "__main__":
     print("=" * 80)
 
     # Initialize
-    retriever = HybridRetriever(
-        workspace_dir=Path("data/workspaces"),
-        data_dir=Path("data")
-    )
+    retriever = HybridRetriever(workspace_dir=Path("data/workspaces"), data_dir=Path("data"))
 
     # Print statistics
     stats = retriever.get_statistics()
-    print(f"\nRetriever Statistics:")
+    print("\nRetriever Statistics:")
     print(f"  GSW Workspaces: {stats['gsw']['total_workspaces']}")
     print(f"  GSW Actors: {stats['gsw']['total_actors']}")
     print(f"  BM25 Documents: {stats['bm25']['indexed_documents']}")
@@ -327,7 +304,7 @@ if __name__ == "__main__":
                 print(f"   Score: {result['score']:.2f}")
                 print(f"   Source: {result.get('source', 'unknown')}")
 
-                if result['type'] == 'actor' and 'roles' in result:
+                if result["type"] == "actor" and "roles" in result:
                     print(f"   Roles: {', '.join(result['roles']) if result['roles'] else 'None'}")
         else:
             print("  No results found")
@@ -344,14 +321,14 @@ if __name__ == "__main__":
     print(f"Temporal Links: {len(context['temporal_links'])}")
     print(f"Spatial Links: {len(context['spatial_links'])}")
 
-    if context['primary_matches']:
+    if context["primary_matches"]:
         print("\nTop Match:")
-        top = context['primary_matches'][0]
+        top = context["primary_matches"][0]
         print(f"  {top.get('name', 'N/A')} (score: {top['score']:.2f})")
 
-    if context['related_actors']:
+    if context["related_actors"]:
         print("\nRelated Actors:")
-        for actor in context['related_actors'][:3]:
+        for actor in context["related_actors"][:3]:
             print(f"  - {actor['name']} (relation: {actor.get('relation', 'N/A')})")
 
     print("\n" + "=" * 80)

@@ -3,13 +3,11 @@ Corpus Label Splitter - Split corpus by existing labels (type, jurisdiction, sou
 Uses the built-in metadata from the Open Australian Legal Corpus
 """
 
-import json
 import argparse
-from pathlib import Path
-from datetime import datetime
+import json
 from collections import defaultdict
-from typing import Dict, Set
-from contextlib import contextmanager
+from datetime import datetime
+from pathlib import Path
 
 
 class LabelFileManager:
@@ -18,7 +16,7 @@ class LabelFileManager:
     def __init__(self, output_dir: Path, split_by: str = "type"):
         self.output_dir = output_dir
         self.split_by = split_by
-        self.files: Dict[str, object] = {}
+        self.files: dict[str, object] = {}
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def __enter__(self):
@@ -33,17 +31,18 @@ class LabelFileManager:
         if label not in self.files:
             safe_name = label.replace("/", "_").replace(" ", "_").lower()
             filepath = self.output_dir / f"{safe_name}.jsonl"
-            self.files[label] = open(filepath, 'w', encoding='utf-8')
+            self.files[label] = open(filepath, "w", encoding="utf-8")
         return self.files[label]
 
     def write(self, label: str, doc: dict):
         """Write document to appropriate file."""
         f = self._get_file(label)
-        f.write(json.dumps(doc, ensure_ascii=False) + '\n')
+        f.write(json.dumps(doc, ensure_ascii=False) + "\n")
 
 
-def split_corpus(input_path: Path, output_dir: Path, split_by: str = "type",
-                 progress_interval: int = 10000):
+def split_corpus(
+    input_path: Path, output_dir: Path, split_by: str = "type", progress_interval: int = 10000
+):
     """
     Split corpus by existing labels.
 
@@ -63,7 +62,7 @@ def split_corpus(input_path: Path, output_dir: Path, split_by: str = "type",
     print(f"[Splitter] Split by: {split_by}")
     print("-" * 60)
 
-    with open(input_path, 'r', encoding='utf-8') as f_in:
+    with open(input_path, encoding="utf-8") as f_in:
         with LabelFileManager(output_dir, split_by) as manager:
             for line in f_in:
                 if not line.strip():
@@ -113,11 +112,11 @@ def split_corpus(input_path: Path, output_dir: Path, split_by: str = "type",
         "split_by": split_by,
         "started_at": start_time.isoformat(),
         "completed_at": datetime.now().isoformat(),
-        "label_counts": dict(counts)
+        "label_counts": dict(counts),
     }
 
     stats_path = output_dir / "split_statistics.json"
-    with open(stats_path, 'w', encoding='utf-8') as f:
+    with open(stats_path, "w", encoding="utf-8") as f:
         json.dump(stats, f, indent=2)
 
     print(f"[Stats] Saved to {stats_path}")
@@ -137,9 +136,12 @@ def main():
     parser = argparse.ArgumentParser(description="Split corpus by existing labels")
     parser.add_argument("--input", required=True, help="Path to corpus.jsonl")
     parser.add_argument("--output", required=True, help="Output directory")
-    parser.add_argument("--split-by", default="type",
-                        choices=["type", "jurisdiction", "source", "type_jurisdiction"],
-                        help="Field to split by")
+    parser.add_argument(
+        "--split-by",
+        default="type",
+        choices=["type", "jurisdiction", "source", "type_jurisdiction"],
+        help="Field to split by",
+    )
     parser.add_argument("--progress", type=int, default=10000, help="Progress interval")
 
     args = parser.parse_args()

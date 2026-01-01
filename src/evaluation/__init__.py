@@ -39,9 +39,9 @@ asyncio.run(evaluate_response())
 """
 
 from .multi_judge import (
-    JudgeModel,
-    JudgeEvaluation,
     AggregatedEvaluation,
+    JudgeEvaluation,
+    JudgeModel,
     MultiJudgeEvaluator,
 )
 

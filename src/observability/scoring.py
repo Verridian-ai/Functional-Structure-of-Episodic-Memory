@@ -21,19 +21,17 @@ This file re-exports everything for backwards compatibility.
 """
 
 # Re-export all public APIs from refactored modules
-from .score_types import (
-    ScoreCategory,
-    AccuracyMetrics,
-    ScoringWeights,
+from .evaluation import (
+    batch_evaluate,
+    create_evaluation_dataset,
 )
-
 from .retrieval_scorer import (
     RetrievalScorer,
 )
-
-from .evaluation import (
-    create_evaluation_dataset,
-    batch_evaluate,
+from .score_types import (
+    AccuracyMetrics,
+    ScoreCategory,
+    ScoringWeights,
 )
 
 __all__ = [

@@ -5,7 +5,7 @@ Observability Utilities
 Helper functions for GSW observability.
 """
 
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .session_memory import EpisodicSessionTracker
@@ -20,6 +20,7 @@ def get_session_tracker(session_id: str) -> "EpisodicSessionTracker":
         tracker.update_context(new_entities=[...])
     """
     from .tracer_core import GSWTracer
+
     tracer = GSWTracer()
     return tracer.get_session_tracker(session_id)
 
@@ -33,10 +34,16 @@ def safe_serialize(obj: Any, max_length: int = 5000) -> Any:
         return obj
 
     if isinstance(obj, (list, tuple)):
-        return [safe_serialize(item, max_length // len(obj) if obj else max_length) for item in obj[:100]]
+        return [
+            safe_serialize(item, max_length // len(obj) if obj else max_length)
+            for item in obj[:100]
+        ]
 
     if isinstance(obj, dict):
-        return {k: safe_serialize(v, max_length // len(obj) if obj else max_length) for k, v in list(obj.items())[:50]}
+        return {
+            k: safe_serialize(v, max_length // len(obj) if obj else max_length)
+            for k, v in list(obj.items())[:50]
+        }
 
     if hasattr(obj, "__dict__"):
         return safe_serialize(obj.__dict__, max_length)

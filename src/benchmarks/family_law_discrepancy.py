@@ -14,39 +14,41 @@ This benchmark evaluates:
 Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
-import re
 import random
-from enum import Enum
+import re
 from dataclasses import dataclass, field
-from typing import List, Tuple, Dict, Any, Optional
-from datetime import datetime, timedelta
-
+from enum import Enum
+from typing import Any
 
 # ============================================================================
 # ENUMS - Discrepancy Classifications
 # ============================================================================
 
+
 class LegalDiscrepancyType(str, Enum):
     """Types of legal-domain discrepancies in family law documents."""
-    PROPERTY_POOL = "property_pool"                    # Property division without asset pool
-    PARENTING_ORDER = "parenting_order"                # Parenting orders without children
-    SPOUSAL_MAINTENANCE = "spousal_maintenance"        # Maintenance without legal basis
-    CHILD_SUPPORT = "child_support"                    # Child support without children
-    CONSENT_ORDER = "consent_order"                    # Consent order without consent
+
+    PROPERTY_POOL = "property_pool"  # Property division without asset pool
+    PARENTING_ORDER = "parenting_order"  # Parenting orders without children
+    SPOUSAL_MAINTENANCE = "spousal_maintenance"  # Maintenance without legal basis
+    CHILD_SUPPORT = "child_support"  # Child support without children
+    CONSENT_ORDER = "consent_order"  # Consent order without consent
 
 
 class InTextDiscrepancyType(str, Enum):
     """Types of in-text inconsistencies that can be detected."""
-    DATE_INCONSISTENCY = "date_inconsistency"          # Conflicting dates
-    PARTY_MISMATCH = "party_mismatch"                  # Party name changes
-    ASSET_REFERENCE = "asset_reference"                # Asset value/description conflicts
-    NUMERICAL = "numerical"                            # Number mismatches
-    ORDER_REFERENCE = "order_reference"                # Order ID/type conflicts
+
+    DATE_INCONSISTENCY = "date_inconsistency"  # Conflicting dates
+    PARTY_MISMATCH = "party_mismatch"  # Party name changes
+    ASSET_REFERENCE = "asset_reference"  # Asset value/description conflicts
+    NUMERICAL = "numerical"  # Number mismatches
+    ORDER_REFERENCE = "order_reference"  # Order ID/type conflicts
 
 
 # ============================================================================
 # DATA STRUCTURES
 # ============================================================================
+
 
 @dataclass
 class DiscrepancyInstance:
@@ -62,6 +64,7 @@ class DiscrepancyInstance:
         explanation: Human-readable explanation of the discrepancy
         severity: Severity rating (1-5, with 5 being most severe)
     """
+
     original_text: str
     perturbed_text: str
     discrepancy_type: str  # LegalDiscrepancyType or InTextDiscrepancyType value
@@ -69,12 +72,13 @@ class DiscrepancyInstance:
     span_end: int
     explanation: str
     severity: int = 3
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 
 # ============================================================================
 # FAMILY LAW BENCHMARK
 # ============================================================================
+
 
 class FamilyLawBenchmark:
     """
@@ -93,7 +97,7 @@ class FamilyLawBenchmark:
         >>> metrics = benchmark.evaluate_detection(predictions, perturbations)
     """
 
-    def __init__(self, seed: Optional[int] = None):
+    def __init__(self, seed: int | None = None):
         """
         Initialize the benchmark generator.
 
@@ -105,26 +109,44 @@ class FamilyLawBenchmark:
 
         # Common family law terms and patterns
         self.party_names = [
-            "Mr Smith", "Mrs Smith", "Mr Jones", "Mrs Jones",
-            "Mr Brown", "Ms Brown", "Mr Wilson", "Ms Wilson"
+            "Mr Smith",
+            "Mrs Smith",
+            "Mr Jones",
+            "Mrs Jones",
+            "Mr Brown",
+            "Ms Brown",
+            "Mr Wilson",
+            "Ms Wilson",
         ]
 
         self.asset_types = [
-            "matrimonial home", "investment property", "superannuation",
-            "motor vehicle", "bank account", "shares", "business interest"
+            "matrimonial home",
+            "investment property",
+            "superannuation",
+            "motor vehicle",
+            "bank account",
+            "shares",
+            "business interest",
         ]
 
         self.months = [
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
         ]
 
     def generate_perturbations(
-        self,
-        document: str,
-        category: str,
-        num_perturbations: int = 5
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, category: str, num_perturbations: int = 5
+    ) -> list[DiscrepancyInstance]:
         """
         Generate perturbations for a given document.
 
@@ -157,10 +179,8 @@ class FamilyLawBenchmark:
         return perturbations[:num_perturbations]
 
     def evaluate_detection(
-        self,
-        predictions: List[Tuple[int, int, str]],
-        ground_truth: List[DiscrepancyInstance]
-    ) -> Dict[str, Any]:
+        self, predictions: list[tuple[int, int, str]], ground_truth: list[DiscrepancyInstance]
+    ) -> dict[str, Any]:
         """
         Evaluate detection performance against ground truth.
 
@@ -187,7 +207,7 @@ class FamilyLawBenchmark:
                 "false_positives": len(predictions),
                 "false_negatives": 0,
                 "span_accuracy": 0.0,
-                "details": []
+                "details": [],
             }
 
         # Match predictions to ground truth
@@ -218,7 +238,9 @@ class FamilyLawBenchmark:
         # Calculate metrics
         precision = true_positives / len(predictions) if predictions else 0.0
         recall = true_positives / len(ground_truth) if ground_truth else 0.0
-        f1_score = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+        f1_score = (
+            2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0.0
+        )
         span_accuracy = exact_span_matches / len(predictions) if predictions else 0.0
 
         return {
@@ -234,8 +256,8 @@ class FamilyLawBenchmark:
             "details": {
                 "matched_predictions": list(matched_predictions),
                 "matched_ground_truth": list(matched_ground_truth),
-                "exact_span_matches": exact_span_matches
-            }
+                "exact_span_matches": exact_span_matches,
+            },
         }
 
     # ========================================================================
@@ -243,15 +265,13 @@ class FamilyLawBenchmark:
     # ========================================================================
 
     def _generate_date_perturbations(
-        self,
-        document: str,
-        max_count: int = 3
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, max_count: int = 3
+    ) -> list[DiscrepancyInstance]:
         """Generate date inconsistency perturbations."""
         perturbations = []
 
         # Find date patterns
-        date_pattern = r'\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b'
+        date_pattern = r"\b(\d{1,2})\s+(January|February|March|April|May|June|July|August|September|October|November|December)\s+(\d{4})\b"
         matches = list(re.finditer(date_pattern, document))
 
         if not matches or len(matches) < 2:
@@ -267,29 +287,29 @@ class FamilyLawBenchmark:
             new_day = str(random.randint(1, 28))
             perturbed_date = f"{new_day} {month} {year}"
 
-            perturbations.append(DiscrepancyInstance(
-                original_text=original_date,
-                perturbed_text=perturbed_date,
-                discrepancy_type=InTextDiscrepancyType.DATE_INCONSISTENCY.value,
-                span_start=match.start(),
-                span_end=match.end(),
-                explanation=f"Date changed from '{original_date}' to '{perturbed_date}'",
-                severity=3,
-                metadata={"original_day": day, "new_day": new_day}
-            ))
+            perturbations.append(
+                DiscrepancyInstance(
+                    original_text=original_date,
+                    perturbed_text=perturbed_date,
+                    discrepancy_type=InTextDiscrepancyType.DATE_INCONSISTENCY.value,
+                    span_start=match.start(),
+                    span_end=match.end(),
+                    explanation=f"Date changed from '{original_date}' to '{perturbed_date}'",
+                    severity=3,
+                    metadata={"original_day": day, "new_day": new_day},
+                )
+            )
 
         return perturbations
 
     def _generate_party_perturbations(
-        self,
-        document: str,
-        max_count: int = 2
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, max_count: int = 2
+    ) -> list[DiscrepancyInstance]:
         """Generate party name mismatch perturbations."""
         perturbations = []
 
         # Find party references (Mr/Mrs/Ms + Name)
-        party_pattern = r'\b(Mr|Mrs|Ms|Dr)\s+([A-Z][a-z]+)\b'
+        party_pattern = r"\b(Mr|Mrs|Ms|Dr)\s+([A-Z][a-z]+)\b"
         matches = list(re.finditer(party_pattern, document))
 
         if not matches:
@@ -303,33 +323,34 @@ class FamilyLawBenchmark:
             surname = match.group(2)
 
             # Pick a different surname
-            new_surname = random.choice([n.split()[-1] for n in self.party_names
-                                        if n.split()[-1] != surname])
+            new_surname = random.choice(
+                [n.split()[-1] for n in self.party_names if n.split()[-1] != surname]
+            )
             perturbed_name = f"{title} {new_surname}"
 
-            perturbations.append(DiscrepancyInstance(
-                original_text=original_name,
-                perturbed_text=perturbed_name,
-                discrepancy_type=InTextDiscrepancyType.PARTY_MISMATCH.value,
-                span_start=match.start(),
-                span_end=match.end(),
-                explanation=f"Party name changed from '{original_name}' to '{perturbed_name}'",
-                severity=4,
-                metadata={"original_surname": surname, "new_surname": new_surname}
-            ))
+            perturbations.append(
+                DiscrepancyInstance(
+                    original_text=original_name,
+                    perturbed_text=perturbed_name,
+                    discrepancy_type=InTextDiscrepancyType.PARTY_MISMATCH.value,
+                    span_start=match.start(),
+                    span_end=match.end(),
+                    explanation=f"Party name changed from '{original_name}' to '{perturbed_name}'",
+                    severity=4,
+                    metadata={"original_surname": surname, "new_surname": new_surname},
+                )
+            )
 
         return perturbations
 
     def _generate_asset_perturbations(
-        self,
-        document: str,
-        max_count: int = 2
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, max_count: int = 2
+    ) -> list[DiscrepancyInstance]:
         """Generate asset reference perturbations."""
         perturbations = []
 
         # Find asset value patterns (e.g., "$500,000")
-        value_pattern = r'\$([0-9,]+)'
+        value_pattern = r"\$([0-9,]+)"
         matches = list(re.finditer(value_pattern, document))
 
         if not matches:
@@ -339,7 +360,7 @@ class FamilyLawBenchmark:
         for _ in range(min(max_count, len(matches))):
             match = random.choice(matches)
             original_value = match.group(0)
-            numeric_value = match.group(1).replace(',', '')
+            numeric_value = match.group(1).replace(",", "")
 
             try:
                 value = int(numeric_value)
@@ -348,31 +369,31 @@ class FamilyLawBenchmark:
                 new_value = int(value * perturbation_factor)
                 perturbed_value = f"${new_value:,}"
 
-                perturbations.append(DiscrepancyInstance(
-                    original_text=original_value,
-                    perturbed_text=perturbed_value,
-                    discrepancy_type=InTextDiscrepancyType.ASSET_REFERENCE.value,
-                    span_start=match.start(),
-                    span_end=match.end(),
-                    explanation=f"Asset value changed from '{original_value}' to '{perturbed_value}'",
-                    severity=4,
-                    metadata={"original_value": value, "new_value": new_value}
-                ))
+                perturbations.append(
+                    DiscrepancyInstance(
+                        original_text=original_value,
+                        perturbed_text=perturbed_value,
+                        discrepancy_type=InTextDiscrepancyType.ASSET_REFERENCE.value,
+                        span_start=match.start(),
+                        span_end=match.end(),
+                        explanation=f"Asset value changed from '{original_value}' to '{perturbed_value}'",
+                        severity=4,
+                        metadata={"original_value": value, "new_value": new_value},
+                    )
+                )
             except (ValueError, OverflowError):
                 continue
 
         return perturbations
 
     def _generate_numerical_perturbations(
-        self,
-        document: str,
-        max_count: int = 2
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, max_count: int = 2
+    ) -> list[DiscrepancyInstance]:
         """Generate numerical inconsistency perturbations."""
         perturbations = []
 
         # Find percentage patterns
-        percentage_pattern = r'\b(\d+)%\b'
+        percentage_pattern = r"\b(\d+)%\b"
         matches = list(re.finditer(percentage_pattern, document))
 
         if not matches:
@@ -389,29 +410,29 @@ class FamilyLawBenchmark:
             new_value = max(0, min(100, value + delta))
             perturbed_pct = f"{new_value}%"
 
-            perturbations.append(DiscrepancyInstance(
-                original_text=original_pct,
-                perturbed_text=perturbed_pct,
-                discrepancy_type=InTextDiscrepancyType.NUMERICAL.value,
-                span_start=match.start(),
-                span_end=match.end(),
-                explanation=f"Percentage changed from '{original_pct}' to '{perturbed_pct}'",
-                severity=3,
-                metadata={"original_value": value, "new_value": new_value}
-            ))
+            perturbations.append(
+                DiscrepancyInstance(
+                    original_text=original_pct,
+                    perturbed_text=perturbed_pct,
+                    discrepancy_type=InTextDiscrepancyType.NUMERICAL.value,
+                    span_start=match.start(),
+                    span_end=match.end(),
+                    explanation=f"Percentage changed from '{original_pct}' to '{perturbed_pct}'",
+                    severity=3,
+                    metadata={"original_value": value, "new_value": new_value},
+                )
+            )
 
         return perturbations
 
     def _generate_order_perturbations(
-        self,
-        document: str,
-        max_count: int = 1
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, max_count: int = 1
+    ) -> list[DiscrepancyInstance]:
         """Generate order reference perturbations."""
         perturbations = []
 
         # Find order references (e.g., "Order 1", "paragraph 5")
-        order_pattern = r'\b(Order|Paragraph|Section)\s+(\d+)\b'
+        order_pattern = r"\b(Order|Paragraph|Section)\s+(\d+)\b"
         matches = list(re.finditer(order_pattern, document, re.IGNORECASE))
 
         if not matches:
@@ -428,26 +449,22 @@ class FamilyLawBenchmark:
             new_number = number + random.randint(1, 5)
             perturbed_ref = f"{prefix} {new_number}"
 
-            perturbations.append(DiscrepancyInstance(
-                original_text=original_ref,
-                perturbed_text=perturbed_ref,
-                discrepancy_type=InTextDiscrepancyType.ORDER_REFERENCE.value,
-                span_start=match.start(),
-                span_end=match.end(),
-                explanation=f"Order reference changed from '{original_ref}' to '{perturbed_ref}'",
-                severity=3,
-                metadata={"original_number": number, "new_number": new_number}
-            ))
+            perturbations.append(
+                DiscrepancyInstance(
+                    original_text=original_ref,
+                    perturbed_text=perturbed_ref,
+                    discrepancy_type=InTextDiscrepancyType.ORDER_REFERENCE.value,
+                    span_start=match.start(),
+                    span_end=match.end(),
+                    explanation=f"Order reference changed from '{original_ref}' to '{perturbed_ref}'",
+                    severity=3,
+                    metadata={"original_number": number, "new_number": new_number},
+                )
+            )
 
         return perturbations
 
-    def _spans_overlap(
-        self,
-        start1: int,
-        end1: int,
-        start2: int,
-        end2: int
-    ) -> bool:
+    def _spans_overlap(self, start1: int, end1: int, start2: int, end2: int) -> bool:
         """Check if two character spans overlap."""
         return not (end1 <= start2 or end2 <= start1)
 
@@ -456,10 +473,8 @@ class FamilyLawBenchmark:
     # ========================================================================
 
     def generate_legal_discrepancies(
-        self,
-        document: str,
-        case_type: str
-    ) -> List[DiscrepancyInstance]:
+        self, document: str, case_type: str
+    ) -> list[DiscrepancyInstance]:
         """
         Generate legal-domain discrepancies (structural inconsistencies).
 
@@ -475,39 +490,44 @@ class FamilyLawBenchmark:
         if case_type == "property":
             # Check for property division without asset pool mention
             if "property" in document.lower() and "divided" in document.lower():
-                if "asset pool" not in document.lower() and "matrimonial property" not in document.lower():
-                    discrepancies.append(DiscrepancyInstance(
-                        original_text="property division discussed",
-                        perturbed_text="property division without asset pool definition",
-                        discrepancy_type=LegalDiscrepancyType.PROPERTY_POOL.value,
-                        span_start=0,
-                        span_end=len(document),
-                        explanation="Property division ordered without defining the asset pool",
-                        severity=5
-                    ))
+                if (
+                    "asset pool" not in document.lower()
+                    and "matrimonial property" not in document.lower()
+                ):
+                    discrepancies.append(
+                        DiscrepancyInstance(
+                            original_text="property division discussed",
+                            perturbed_text="property division without asset pool definition",
+                            discrepancy_type=LegalDiscrepancyType.PROPERTY_POOL.value,
+                            span_start=0,
+                            span_end=len(document),
+                            explanation="Property division ordered without defining the asset pool",
+                            severity=5,
+                        )
+                    )
 
         elif case_type == "parenting":
             # Check for parenting orders without children
             if "parenting" in document.lower() and "order" in document.lower():
-                if not any(child_ref in document.lower()
-                          for child_ref in ["child", "children", "son", "daughter"]):
-                    discrepancies.append(DiscrepancyInstance(
-                        original_text="parenting orders discussed",
-                        perturbed_text="parenting orders without children mentioned",
-                        discrepancy_type=LegalDiscrepancyType.PARENTING_ORDER.value,
-                        span_start=0,
-                        span_end=len(document),
-                        explanation="Parenting orders made without reference to children",
-                        severity=5
-                    ))
+                if not any(
+                    child_ref in document.lower()
+                    for child_ref in ["child", "children", "son", "daughter"]
+                ):
+                    discrepancies.append(
+                        DiscrepancyInstance(
+                            original_text="parenting orders discussed",
+                            perturbed_text="parenting orders without children mentioned",
+                            discrepancy_type=LegalDiscrepancyType.PARENTING_ORDER.value,
+                            span_start=0,
+                            span_end=len(document),
+                            explanation="Parenting orders made without reference to children",
+                            severity=5,
+                        )
+                    )
 
         return discrepancies
 
-    def apply_perturbations(
-        self,
-        document: str,
-        perturbations: List[DiscrepancyInstance]
-    ) -> str:
+    def apply_perturbations(self, document: str, perturbations: list[DiscrepancyInstance]) -> str:
         """
         Apply perturbations to a document.
 
@@ -525,9 +545,9 @@ class FamilyLawBenchmark:
         for perturb in sorted_perturbations:
             # Replace the span
             modified_doc = (
-                modified_doc[:perturb.span_start] +
-                perturb.perturbed_text +
-                modified_doc[perturb.span_end:]
+                modified_doc[: perturb.span_start]
+                + perturb.perturbed_text
+                + modified_doc[perturb.span_end :]
             )
 
         return modified_doc
@@ -536,6 +556,7 @@ class FamilyLawBenchmark:
 # ============================================================================
 # UTILITY FUNCTIONS
 # ============================================================================
+
 
 def create_sample_document(category: str = "parenting") -> str:
     """

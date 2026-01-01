@@ -20,18 +20,20 @@ Usage:
     )
 """
 
-from enum import Enum
 from datetime import date, datetime, timedelta
-from typing import Optional, List, Dict, Any
-from pydantic import BaseModel, Field
+from enum import Enum
+from typing import Any
 
+from pydantic import BaseModel, Field
 
 # ============================================================================
 # ENUMERATIONS
 # ============================================================================
 
+
 class LegislationType(str, Enum):
     """Type of legislative document"""
+
     BILL = "bill"
     ACT = "act"
     REGULATION = "regulation"
@@ -43,6 +45,7 @@ class LegislationType(str, Enum):
 
 class Jurisdiction(str, Enum):
     """Australian jurisdiction"""
+
     COMMONWEALTH = "commonwealth"
     NSW = "nsw"
     VICTORIA = "vic"
@@ -59,6 +62,7 @@ class LegislativeState(str, Enum):
     Complete state machine for Australian legislation.
     See docs/AUSTRALIAN_LEGISLATIVE_LIFECYCLE.md for state diagram.
     """
+
     # Bills (pre-assent)
     DRAFTED = "drafted"
     INTRODUCED = "introduced"
@@ -102,6 +106,7 @@ class LegislativeState(str, Enum):
 
 class CommencementMethod(str, Enum):
     """How an Act commences (Section 2 patterns)"""
+
     ON_ASSENT = "on_assent"
     AUTOMATIC_28_DAYS = "28_days"
     PROCLAMATION = "proclamation"
@@ -113,6 +118,7 @@ class CommencementMethod(str, Enum):
 
 class AmendmentType(str, Enum):
     """Types of amendments to legislation"""
+
     OMIT = "omit"
     SUBSTITUTE = "substitute"
     INSERT = "insert"
@@ -123,6 +129,7 @@ class AmendmentType(str, Enum):
 
 class RepealType(str, Enum):
     """How legislation was repealed"""
+
     EXPRESS = "express"
     IMPLIED = "implied"
     SUNSET = "sunset"
@@ -131,6 +138,7 @@ class RepealType(str, Enum):
 
 class BillType(str, Enum):
     """Type of bill"""
+
     GOVERNMENT = "government"
     PRIVATE_MEMBER = "private_member"
     PRIVATE_SENATOR = "private_senator"
@@ -138,35 +146,45 @@ class BillType(str, Enum):
 
 class HouseOfOrigin(str, Enum):
     """Which house bill originated in"""
+
     HOUSE_OF_REPRESENTATIVES = "house_of_representatives"
     SENATE = "senate"
     LEGISLATIVE_ASSEMBLY = "legislative_assembly"  # State lower house
-    LEGISLATIVE_COUNCIL = "legislative_council"     # State upper house
+    LEGISLATIVE_COUNCIL = "legislative_council"  # State upper house
 
 
 # ============================================================================
 # MODELS
 # ============================================================================
 
+
 class TemporalAnchor(BaseModel):
     """
     Key date in legislative lifecycle.
     Represents a significant temporal event (e.g., assent, commencement, repeal).
     """
+
     date: date
-    event_type: str = Field(..., description="Type of event (e.g., 'royal_assent', 'commencement', 'repeal')")
+    event_type: str = Field(
+        ..., description="Type of event (e.g., 'royal_assent', 'commencement', 'repeal')"
+    )
     description: str = Field(..., description="Human-readable description of event")
-    source_document: Optional[str] = Field(None, description="Reference to source (e.g., Gazette notice)")
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    source_document: str | None = Field(
+        None, description="Reference to source (e.g., Gazette notice)"
+    )
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class StateTransition(BaseModel):
     """Record of state transition"""
+
     from_state: LegislativeState
     to_state: LegislativeState
     transition_date: date
     reason: str
-    triggered_by: Optional[str] = Field(None, description="What triggered transition (e.g., Act ID, event)")
+    triggered_by: str | None = Field(
+        None, description="What triggered transition (e.g., Act ID, event)"
+    )
 
 
 class SectionCommencement(BaseModel):
@@ -174,13 +192,16 @@ class SectionCommencement(BaseModel):
     Commencement details for specific sections/schedules.
     Used when Act has partial commencement (different sections commence differently).
     """
+
     section_range: str = Field(..., description="e.g., '1-3', 'Schedule 1', 'Part 2'")
     commencement_method: CommencementMethod
-    commencement_date: Optional[date] = None
-    proclamation_reference: Optional[str] = Field(None, description="Gazette reference if by proclamation")
-    trigger_event: Optional[str] = Field(None, description="Event description if event-triggered")
+    commencement_date: date | None = None
+    proclamation_reference: str | None = Field(
+        None, description="Gazette reference if by proclamation"
+    )
+    trigger_event: str | None = Field(None, description="Event description if event-triggered")
     status: LegislativeState
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class Amendment(BaseModel):
@@ -188,16 +209,17 @@ class Amendment(BaseModel):
     Amendment made by an Amending Act to a Principal Act.
     Tracks individual items in amendment schedules.
     """
+
     amendment_id: str = Field(..., description="Unique ID for this amendment")
     amending_act_id: str = Field(..., description="ID of the Act making this amendment")
     item_number: int = Field(..., description="Item number in amendment schedule")
     target_section: str = Field(..., description="Section/provision being amended")
     amendment_type: AmendmentType
-    old_text: Optional[str] = Field(None, description="Text being replaced (for OMIT/SUBSTITUTE)")
-    new_text: Optional[str] = Field(None, description="Replacement text (for SUBSTITUTE/INSERT)")
-    effective_date: Optional[date] = Field(None, description="When amendment takes effect")
+    old_text: str | None = Field(None, description="Text being replaced (for OMIT/SUBSTITUTE)")
+    new_text: str | None = Field(None, description="Replacement text (for SUBSTITUTE/INSERT)")
+    effective_date: date | None = Field(None, description="When amendment takes effect")
     status: LegislativeState
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class Compilation(BaseModel):
@@ -205,12 +227,15 @@ class Compilation(BaseModel):
     Compiled version of Act showing all amendments up to a date.
     Published on Federal Register of Legislation.
     """
+
     compilation_number: int
     as_at_date: date = Field(..., description="Date compilation reflects amendments up to")
     registered_date: date = Field(..., description="Date compilation was registered")
-    incorporates_amendments: List[str] = Field(default_factory=list, description="List of amending Act IDs included")
-    compilation_url: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    incorporates_amendments: list[str] = Field(
+        default_factory=list, description="List of amending Act IDs included"
+    )
+    compilation_url: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class SavingsTransitionalProvisions(BaseModel):
@@ -218,13 +243,18 @@ class SavingsTransitionalProvisions(BaseModel):
     Savings and transitional provisions when legislation changes.
     Manages rights/obligations during transition.
     """
+
     has_savings: bool = False
     has_transitional: bool = False
-    transition_end_date: Optional[date] = None
-    provisions_text: Optional[str] = Field(None, description="Full text of provisions")
-    location: Optional[str] = Field(None, description="Where provisions are located (e.g., 'Schedule 2')")
-    affected_rights: List[str] = Field(default_factory=list, description="Rights/obligations affected")
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    transition_end_date: date | None = None
+    provisions_text: str | None = Field(None, description="Full text of provisions")
+    location: str | None = Field(
+        None, description="Where provisions are located (e.g., 'Schedule 2')"
+    )
+    affected_rights: list[str] = Field(
+        default_factory=list, description="Rights/obligations affected"
+    )
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
 
 class LegislativeDocument(BaseModel):
@@ -240,116 +270,115 @@ class LegislativeDocument(BaseModel):
     jurisdiction: Jurisdiction
     document_type: LegislationType
     title: str
-    short_title: Optional[str] = None
+    short_title: str | None = None
     year: int
-    number: Optional[int] = Field(None, description="Act/Bill number (e.g., 45 for 'No. 45 of 2024')")
+    number: int | None = Field(None, description="Act/Bill number (e.g., 45 for 'No. 45 of 2024')")
 
     # ========== CURRENT STATE ==========
     current_state: LegislativeState
-    state_history: List[StateTransition] = Field(default_factory=list)
+    state_history: list[StateTransition] = Field(default_factory=list)
 
     # ========== BILL STAGE (if applicable) ==========
-    bill_type: Optional[BillType] = None
-    house_of_origin: Optional[HouseOfOrigin] = None
-    introduced_date: Optional[date] = None
-    introduced_by: Optional[str] = Field(None, description="Minister or Member who introduced")
+    bill_type: BillType | None = None
+    house_of_origin: HouseOfOrigin | None = None
+    introduced_date: date | None = None
+    introduced_by: str | None = Field(None, description="Minister or Member who introduced")
 
     # Reading dates
-    first_reading_date: Optional[date] = None
-    second_reading_date: Optional[date] = None
-    third_reading_date: Optional[date] = None
+    first_reading_date: date | None = None
+    second_reading_date: date | None = None
+    third_reading_date: date | None = None
 
     # Committee stage
-    committee_referral_date: Optional[date] = None
-    committee_name: Optional[str] = None
-    committee_report_date: Optional[date] = None
+    committee_referral_date: date | None = None
+    committee_name: str | None = None
+    committee_report_date: date | None = None
 
     # Passage through houses
-    passed_house_date: Optional[date] = None
-    passed_senate_date: Optional[date] = None
+    passed_house_date: date | None = None
+    passed_senate_date: date | None = None
 
     # Constitutional restrictions
     is_money_bill: bool = False
     is_appropriation_bill: bool = False
 
     # ========== ACT CREATION (if applicable) ==========
-    assent_date: Optional[date] = None
-    assent_by: Optional[str] = Field(None, description="Governor-General or State Governor")
+    assent_date: date | None = None
+    assent_by: str | None = Field(None, description="Governor-General or State Governor")
 
     # Commencement
-    commencement_method: Optional[CommencementMethod] = None
-    commencement_date: Optional[date] = None
-    section_commencements: List[SectionCommencement] = Field(default_factory=list)
+    commencement_method: CommencementMethod | None = None
+    commencement_date: date | None = None
+    section_commencements: list[SectionCommencement] = Field(default_factory=list)
 
     # Proclamation (if applicable)
-    proclamation_date: Optional[date] = None
-    proclamation_reference: Optional[str] = Field(None, description="Gazette reference")
-    proclaimed_commencement_date: Optional[date] = None
+    proclamation_date: date | None = None
+    proclamation_reference: str | None = Field(None, description="Gazette reference")
+    proclaimed_commencement_date: date | None = None
 
     # Event-triggered (if applicable)
-    trigger_event: Optional[str] = None
-    trigger_date: Optional[date] = None
+    trigger_event: str | None = None
+    trigger_date: date | None = None
 
     # ========== AMENDMENTS (if this is Amending Act) ==========
     is_amending_act: bool = False
-    amends_act_id: Optional[str] = Field(None, description="ID of Principal Act being amended")
-    amendments: List[Amendment] = Field(default_factory=list)
+    amends_act_id: str | None = Field(None, description="ID of Principal Act being amended")
+    amendments: list[Amendment] = Field(default_factory=list)
 
     # ========== AMENDMENTS (if this is Principal Act) ==========
     is_principal_act: bool = False
-    amended_by: List[str] = Field(default_factory=list, description="List of amending Act IDs")
-    compilations: List[Compilation] = Field(default_factory=list)
-    current_compilation: Optional[Compilation] = None
+    amended_by: list[str] = Field(default_factory=list, description="List of amending Act IDs")
+    compilations: list[Compilation] = Field(default_factory=list)
+    current_compilation: Compilation | None = None
 
     # ========== TERMINATION ==========
     is_repealed: bool = False
-    repeal_date: Optional[date] = None
-    repealed_by_act_id: Optional[str] = None
-    repeal_type: Optional[RepealType] = None
+    repeal_date: date | None = None
+    repealed_by_act_id: str | None = None
+    repeal_type: RepealType | None = None
 
     is_spent: bool = False
-    spent_reason: Optional[str] = None
-    spent_determination_date: Optional[date] = None
+    spent_reason: str | None = None
+    spent_determination_date: date | None = None
 
     # Savings and transitional
-    savings_transitional: Optional[SavingsTransitionalProvisions] = None
+    savings_transitional: SavingsTransitionalProvisions | None = None
 
     # ========== SUBORDINATE LEGISLATION (if applicable) ==========
-    enabling_act_id: Optional[str] = Field(None, description="ID of Act authorizing this regulation")
-    enabling_section: Optional[str] = Field(None, description="Section of enabling Act")
-    rule_maker: Optional[str] = Field(None, description="e.g., 'Governor-General', 'Minister for X'")
+    enabling_act_id: str | None = Field(None, description="ID of Act authorizing this regulation")
+    enabling_section: str | None = Field(None, description="Section of enabling Act")
+    rule_maker: str | None = Field(None, description="e.g., 'Governor-General', 'Minister for X'")
 
     # Registration and sunsetting
-    registration_date: Optional[date] = None
-    federal_register_id: Optional[str] = None
-    sunset_date: Optional[date] = None
+    registration_date: date | None = None
+    federal_register_id: str | None = None
+    sunset_date: date | None = None
     sunset_exempt: bool = False
-    sunset_exemption_reason: Optional[str] = None
+    sunset_exemption_reason: str | None = None
 
     # Disallowance
-    tabled_date_house: Optional[date] = None
-    tabled_date_senate: Optional[date] = None
-    disallowance_period_ends: Optional[date] = None
+    tabled_date_house: date | None = None
+    tabled_date_senate: date | None = None
+    disallowance_period_ends: date | None = None
     disallowance_exempt: bool = False
-    disallowed_date: Optional[date] = None
+    disallowed_date: date | None = None
 
     # ========== TEMPORAL ANCHORS ==========
-    temporal_anchors: List[TemporalAnchor] = Field(default_factory=list)
+    temporal_anchors: list[TemporalAnchor] = Field(default_factory=list)
 
     # ========== METADATA ==========
-    source_url: Optional[str] = Field(None, description="URL on Federal Register or Parliament website")
-    explanatory_memorandum_url: Optional[str] = None
+    source_url: str | None = Field(
+        None, description="URL on Federal Register or Parliament website"
+    )
+    explanatory_memorandum_url: str | None = None
     last_updated: datetime = Field(default_factory=datetime.now)
-    notes: Optional[str] = None
-    metadata: Dict[str, Any] = Field(default_factory=dict)
+    notes: str | None = None
+    metadata: dict[str, Any] = Field(default_factory=dict)
 
     # ========== METHODS ==========
 
     def add_state_change(
-        self,
-        new_state: LegislativeState,
-        reason: str,
-        triggered_by: Optional[str] = None
+        self, new_state: LegislativeState, reason: str, triggered_by: str | None = None
     ) -> None:
         """Record state transition"""
         transition = StateTransition(
@@ -357,13 +386,13 @@ class LegislativeDocument(BaseModel):
             to_state=new_state,
             transition_date=date.today(),
             reason=reason,
-            triggered_by=triggered_by
+            triggered_by=triggered_by,
         )
         self.state_history.append(transition)
         self.current_state = new_state
         self.last_updated = datetime.now()
 
-    def calculate_28_day_commencement(self) -> Optional[date]:
+    def calculate_28_day_commencement(self) -> date | None:
         """
         Calculate automatic commencement date (Acts Interpretation Act 1901 s 3A).
         Returns assent_date + 28 days.
@@ -372,7 +401,7 @@ class LegislativeDocument(BaseModel):
             return self.assent_date + timedelta(days=28)
         return None
 
-    def calculate_sunset_date(self) -> Optional[date]:
+    def calculate_sunset_date(self) -> date | None:
         """
         Calculate sunset date for subordinate legislation (Legislation Act 2003 s 50).
         Returns 10 years from registration, nearest 1 April or 1 October.
@@ -383,7 +412,7 @@ class LegislativeDocument(BaseModel):
         if self.document_type not in [
             LegislationType.REGULATION,
             LegislationType.RULE,
-            LegislationType.DETERMINATION
+            LegislationType.DETERMINATION,
         ]:
             return None
 
@@ -425,7 +454,7 @@ class LegislativeDocument(BaseModel):
 
         return True
 
-    def get_state_on_date(self, check_date: date) -> Optional[LegislativeState]:
+    def get_state_on_date(self, check_date: date) -> LegislativeState | None:
         """
         Get the state of the document on a specific historical date.
 
@@ -449,7 +478,7 @@ class LegislativeDocument(BaseModel):
 
         return current_state
 
-    def get_compilation_on_date(self, check_date: date) -> Optional[Compilation]:
+    def get_compilation_on_date(self, check_date: date) -> Compilation | None:
         """
         Get the compiled version that was current on a specific date.
 
@@ -460,10 +489,7 @@ class LegislativeDocument(BaseModel):
             Compilation current on that date, or None
         """
         # Find latest compilation on or before check_date
-        valid_compilations = [
-            c for c in self.compilations
-            if c.as_at_date <= check_date
-        ]
+        valid_compilations = [c for c in self.compilations if c.as_at_date <= check_date]
 
         if not valid_compilations:
             return None
@@ -475,14 +501,14 @@ class LegislativeDocument(BaseModel):
         event_date: date,
         event_type: str,
         description: str,
-        source_document: Optional[str] = None
+        source_document: str | None = None,
     ) -> None:
         """Add a temporal anchor (key event)"""
         anchor = TemporalAnchor(
             date=event_date,
             event_type=event_type,
             description=description,
-            source_document=source_document
+            source_document=source_document,
         )
         self.temporal_anchors.append(anchor)
 
@@ -494,6 +520,7 @@ class LegislativeDocument(BaseModel):
 # TEMPORAL TRACKER
 # ============================================================================
 
+
 class TemporalTracker:
     """
     Manages legislative documents and their temporal state transitions.
@@ -502,21 +529,18 @@ class TemporalTracker:
     """
 
     def __init__(self):
-        self.documents: Dict[str, LegislativeDocument] = {}
+        self.documents: dict[str, LegislativeDocument] = {}
 
     def add_document(self, doc: LegislativeDocument) -> None:
         """Add document to tracker"""
         self.documents[doc.document_id] = doc
 
-    def get_document(self, document_id: str) -> Optional[LegislativeDocument]:
+    def get_document(self, document_id: str) -> LegislativeDocument | None:
         """Retrieve document by ID"""
         return self.documents.get(document_id)
 
     def transition_bill_to_assented(
-        self,
-        bill_id: str,
-        assent_date: date,
-        assent_by: str = "Governor-General"
+        self, bill_id: str, assent_date: date, assent_by: str = "Governor-General"
     ) -> LegislativeDocument:
         """
         Transition bill to Act upon Royal Assent.
@@ -544,16 +568,14 @@ class TemporalTracker:
         doc.assent_by = assent_by
         doc.document_type = LegislationType.ACT
         doc.add_state_change(
-            LegislativeState.ASSENTED,
-            "Royal Assent received",
-            triggered_by=assent_by
+            LegislativeState.ASSENTED, "Royal Assent received", triggered_by=assent_by
         )
 
         # Add temporal anchor
         doc.add_temporal_anchor(
             event_date=assent_date,
             event_type="royal_assent",
-            description=f"Royal Assent by {assent_by}"
+            description=f"Royal Assent by {assent_by}",
         )
 
         return doc
@@ -579,40 +601,34 @@ class TemporalTracker:
         # Determine based on commencement method
         if doc.commencement_method == CommencementMethod.ON_ASSENT:
             doc.commencement_date = doc.assent_date
-            doc.add_state_change(
-                LegislativeState.IN_FORCE,
-                "Commenced on assent (Section 2)"
-            )
+            doc.add_state_change(LegislativeState.IN_FORCE, "Commenced on assent (Section 2)")
 
         elif doc.commencement_method == CommencementMethod.AUTOMATIC_28_DAYS:
             doc.commencement_date = doc.calculate_28_day_commencement()
             doc.add_state_change(
                 LegislativeState.PENDING_28_DAY,
-                f"Awaiting automatic commencement on {doc.commencement_date}"
+                f"Awaiting automatic commencement on {doc.commencement_date}",
             )
 
         elif doc.commencement_method == CommencementMethod.PROCLAMATION:
             doc.add_state_change(
-                LegislativeState.AWAITING_PROCLAMATION,
-                "Awaiting proclamation (Section 2)"
+                LegislativeState.AWAITING_PROCLAMATION, "Awaiting proclamation (Section 2)"
             )
 
         elif doc.commencement_method == CommencementMethod.FIXED_DATE:
             doc.add_state_change(
-                LegislativeState.SCHEDULED,
-                f"Scheduled to commence on {doc.commencement_date}"
+                LegislativeState.SCHEDULED, f"Scheduled to commence on {doc.commencement_date}"
             )
 
         elif doc.commencement_method == CommencementMethod.EVENT_TRIGGERED:
             doc.add_state_change(
-                LegislativeState.AWAITING_TRIGGER,
-                f"Awaiting trigger event: {doc.trigger_event}"
+                LegislativeState.AWAITING_TRIGGER, f"Awaiting trigger event: {doc.trigger_event}"
             )
 
         elif doc.commencement_method == CommencementMethod.PARTIAL:
             doc.add_state_change(
                 LegislativeState.PARTIALLY_IN_FORCE,
-                "Partial commencement (see section_commencements)"
+                "Partial commencement (see section_commencements)",
             )
 
         return doc
@@ -622,7 +638,7 @@ class TemporalTracker:
         act_id: str,
         proclamation_date: date,
         proclaimed_commencement_date: date,
-        gazette_reference: str
+        gazette_reference: str,
     ) -> LegislativeDocument:
         """
         Record proclamation of commencement.
@@ -639,9 +655,7 @@ class TemporalTracker:
         doc = self.documents[act_id]
 
         if doc.current_state != LegislativeState.AWAITING_PROCLAMATION:
-            raise ValueError(
-                f"Act must be awaiting proclamation, currently: {doc.current_state}"
-            )
+            raise ValueError(f"Act must be awaiting proclamation, currently: {doc.current_state}")
 
         doc.proclamation_date = proclamation_date
         doc.proclaimed_commencement_date = proclaimed_commencement_date
@@ -649,30 +663,24 @@ class TemporalTracker:
         doc.commencement_date = proclaimed_commencement_date
 
         doc.add_state_change(
-            LegislativeState.PROCLAIMED,
-            f"Proclaimed to commence {proclaimed_commencement_date}"
+            LegislativeState.PROCLAIMED, f"Proclaimed to commence {proclaimed_commencement_date}"
         )
 
         doc.add_temporal_anchor(
             event_date=proclamation_date,
             event_type="proclamation",
             description=f"Proclamation issued: {gazette_reference}",
-            source_document=gazette_reference
+            source_document=gazette_reference,
         )
 
         # If commencement is immediate or in past, transition to IN_FORCE
         if proclaimed_commencement_date <= date.today():
-            doc.add_state_change(
-                LegislativeState.IN_FORCE,
-                "Commenced by proclamation"
-            )
+            doc.add_state_change(LegislativeState.IN_FORCE, "Commenced by proclamation")
 
         return doc
 
     def record_amendment(
-        self,
-        principal_act_id: str,
-        amending_act: LegislativeDocument
+        self, principal_act_id: str, amending_act: LegislativeDocument
     ) -> LegislativeDocument:
         """
         Record amendment to principal Act.
@@ -695,7 +703,7 @@ class TemporalTracker:
             compilation_number=len(principal.compilations) + 1,
             as_at_date=amending_act.commencement_date or date.today(),
             registered_date=date.today(),
-            incorporates_amendments=principal.amended_by.copy()
+            incorporates_amendments=principal.amended_by.copy(),
         )
         principal.compilations.append(compilation)
         principal.current_compilation = compilation
@@ -704,11 +712,7 @@ class TemporalTracker:
         return principal
 
     def record_repeal(
-        self,
-        act_id: str,
-        repeal_date: date,
-        repealing_act_id: str,
-        repeal_type: RepealType
+        self, act_id: str, repeal_date: date, repealing_act_id: str, repeal_type: RepealType
     ) -> LegislativeDocument:
         """
         Record repeal of Act.
@@ -732,21 +736,19 @@ class TemporalTracker:
         doc.add_state_change(
             LegislativeState.REPEALED,
             f"Repealed by {repealing_act_id} ({repeal_type.value})",
-            triggered_by=repealing_act_id
+            triggered_by=repealing_act_id,
         )
 
         doc.add_temporal_anchor(
             event_date=repeal_date,
             event_type="repeal",
-            description=f"Repealed ({repeal_type.value})"
+            description=f"Repealed ({repeal_type.value})",
         )
 
         return doc
 
     def check_sunset(
-        self,
-        regulation_id: str,
-        current_date: Optional[date] = None
+        self, regulation_id: str, current_date: date | None = None
     ) -> LegislativeDocument:
         """
         Check if regulation should sunset.
@@ -767,7 +769,7 @@ class TemporalTracker:
         if doc.document_type not in [
             LegislationType.REGULATION,
             LegislationType.RULE,
-            LegislationType.DETERMINATION
+            LegislationType.DETERMINATION,
         ]:
             return doc
 
@@ -787,15 +789,13 @@ class TemporalTracker:
         if sunset_warning <= current_date < doc.sunset_date:
             if doc.current_state != LegislativeState.SUNSET_PENDING:
                 doc.add_state_change(
-                    LegislativeState.SUNSET_PENDING,
-                    f"Approaching sunset on {doc.sunset_date}"
+                    LegislativeState.SUNSET_PENDING, f"Approaching sunset on {doc.sunset_date}"
                 )
 
         # Check if sunset date reached
         if current_date >= doc.sunset_date:
             doc.add_state_change(
-                LegislativeState.SUNSETTED,
-                "Automatically sunsetted (Legislation Act 2003 s 50)"
+                LegislativeState.SUNSETTED, "Automatically sunsetted (Legislation Act 2003 s 50)"
             )
             doc.is_repealed = True
             doc.repeal_date = doc.sunset_date
@@ -808,6 +808,7 @@ class TemporalTracker:
 # QUERY FUNCTIONS
 # ============================================================================
 
+
 class LegislationQuery:
     """Query legislative documents by temporal criteria"""
 
@@ -817,9 +818,9 @@ class LegislationQuery:
     def get_in_force_on_date(
         self,
         check_date: date,
-        jurisdiction: Optional[Jurisdiction] = None,
-        document_type: Optional[LegislationType] = None
-    ) -> List[LegislativeDocument]:
+        jurisdiction: Jurisdiction | None = None,
+        document_type: LegislationType | None = None,
+    ) -> list[LegislativeDocument]:
         """Get all Acts/regulations in force on a specific date"""
         results = []
         for doc in self.tracker.documents.values():
@@ -831,10 +832,7 @@ class LegislationQuery:
                 results.append(doc)
         return results
 
-    def get_amendments_to_act(
-        self,
-        principal_act_id: str
-    ) -> List[LegislativeDocument]:
+    def get_amendments_to_act(self, principal_act_id: str) -> list[LegislativeDocument]:
         """Get all amendments to a principal Act"""
         principal = self.tracker.documents.get(principal_act_id)
         if not principal:
@@ -846,10 +844,7 @@ class LegislationQuery:
             if aid in self.tracker.documents
         ]
 
-    def get_acts_repealed_by(
-        self,
-        repealing_act_id: str
-    ) -> List[LegislativeDocument]:
+    def get_acts_repealed_by(self, repealing_act_id: str) -> list[LegislativeDocument]:
         """Get all Acts repealed by a specific Act"""
         results = []
         for doc in self.tracker.documents.values():
@@ -857,10 +852,7 @@ class LegislationQuery:
                 results.append(doc)
         return results
 
-    def get_bills_in_parliament(
-        self,
-        jurisdiction: Jurisdiction
-    ) -> List[LegislativeDocument]:
+    def get_bills_in_parliament(self, jurisdiction: Jurisdiction) -> list[LegislativeDocument]:
         """Get all bills currently in Parliament"""
         active_bill_states = [
             LegislativeState.INTRODUCED,
@@ -872,43 +864,39 @@ class LegislationQuery:
             LegislativeState.SENATE_AMENDED,
             LegislativeState.RETURNED_TO_HOUSE,
             LegislativeState.PASSED_SENATE,
-            LegislativeState.PASSED_BOTH_HOUSES
+            LegislativeState.PASSED_BOTH_HOUSES,
         ]
 
         results = []
         for doc in self.tracker.documents.values():
-            if (doc.jurisdiction == jurisdiction and
-                doc.document_type == LegislationType.BILL and
-                doc.current_state in active_bill_states):
+            if (
+                doc.jurisdiction == jurisdiction
+                and doc.document_type == LegislationType.BILL
+                and doc.current_state in active_bill_states
+            ):
                 results.append(doc)
         return results
 
-    def get_regulations_pending_sunset(
-        self,
-        months_ahead: int = 18
-    ) -> List[LegislativeDocument]:
+    def get_regulations_pending_sunset(self, months_ahead: int = 18) -> list[LegislativeDocument]:
         """Get regulations approaching sunset"""
         cutoff = date.today() + timedelta(days=months_ahead * 30)
 
         results = []
         for doc in self.tracker.documents.values():
-            if (doc.document_type in [
-                    LegislationType.REGULATION,
-                    LegislationType.RULE,
-                    LegislationType.DETERMINATION
-                ] and
-                doc.sunset_date and
-                doc.sunset_date <= cutoff and
-                not doc.sunset_exempt and
-                not doc.is_repealed):
+            if (
+                doc.document_type
+                in [LegislationType.REGULATION, LegislationType.RULE, LegislationType.DETERMINATION]
+                and doc.sunset_date
+                and doc.sunset_date <= cutoff
+                and not doc.sunset_exempt
+                and not doc.is_repealed
+            ):
                 results.append(doc)
         return results
 
     def get_documents_by_state(
-        self,
-        state: LegislativeState,
-        jurisdiction: Optional[Jurisdiction] = None
-    ) -> List[LegislativeDocument]:
+        self, state: LegislativeState, jurisdiction: Jurisdiction | None = None
+    ) -> list[LegislativeDocument]:
         """Get all documents in a specific state"""
         results = []
         for doc in self.tracker.documents.values():

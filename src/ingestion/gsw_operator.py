@@ -1,10 +1,10 @@
+import json
 import logging
 import os
-import json
-import asyncio
-from typing import Optional, Union, Dict, Any
+
 from openai import AsyncOpenAI
 from pydantic import ValidationError
+
 from src.logic.schema import LegalCase
 
 logger = logging.getLogger(__name__)
@@ -14,30 +14,32 @@ logger = logging.getLogger(__name__)
 PRODUCTION_MODEL = "google/gemini-2.5-flash"
 EXPERIMENTAL_MODEL = "google/gemini-2.5-pro"
 
+
 class TheOperator:
     """
     The Extraction Layer.
     Acts as the 'Episodic Legal Observer'.
     Uses OpenRouter to access Google Gemini models.
     """
-    def __init__(self, api_key: Optional[str] = None, use_experiment: bool = False):
+
+    def __init__(self, api_key: str | None = None, use_experiment: bool = False):
         # Prerequisite: Verify OPENROUTER_API_KEY is in the environment
         # (or reuse GOOGLE_API_KEY if that's where the user stored the OpenRouter key)
         self.api_key = api_key or os.getenv("OPENROUTER_API_KEY") or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("OPENROUTER_API_KEY (or GOOGLE_API_KEY) is not set.")
-        
+
         # NEW Client Initialization
         self.client = AsyncOpenAI(
             base_url="https://openrouter.ai/api/v1",
             api_key=self.api_key,
         )
-        
+
         # Select Model
         self.model_name = EXPERIMENTAL_MODEL if use_experiment else PRODUCTION_MODEL
         self.is_experimental = use_experiment
 
-    async def extract_timeline(self, text: str, ontology_context: str = "") -> Optional[LegalCase]:
+    async def extract_timeline(self, text: str, ontology_context: str = "") -> LegalCase | None:
         """
         Extracts a LegalCase structure from raw text using Gemini via OpenRouter.
         Implements Smart Fallback (Experiment -> Production).
@@ -93,12 +95,12 @@ class TheOperator:
         - Infer dates where possible (YYYY-MM-DD).
         - If a State changes (e.g. value of house), capture the specific date in the State object.
         """
-        
+
         response_text = None
-        
+
         # Thinking Config: For EXPERIMENTAL_MODEL, pass the reasoning parameters via extra_body.
         extra_params = {}
-        
+
         logger.debug(f"Operator using model {self.model_name} with params: {extra_params}")
 
         # ATTEMPT 1: Selected Model (Experiment or Production)
@@ -106,13 +108,16 @@ class TheOperator:
             response = await self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[
-                    {"role": "system", "content": "You are a helpful AI assistant that outputs strict JSON."},
-                    {"role": "user", "content": f"{prompt}\n\nTEXT:\n{text}"}
+                    {
+                        "role": "system",
+                        "content": "You are a helpful AI assistant that outputs strict JSON.",
+                    },
+                    {"role": "user", "content": f"{prompt}\n\nTEXT:\n{text}"},
                 ],
-                extra_body=extra_params
+                extra_body=extra_params,
             )
             response_text = response.choices[0].message.content
-            
+
         except Exception as e:
             # Fallback Logic
             if self.is_experimental:
@@ -121,9 +126,12 @@ class TheOperator:
                     response = await self.client.chat.completions.create(
                         model=PRODUCTION_MODEL,
                         messages=[
-                            {"role": "system", "content": "You are a helpful AI assistant that outputs strict JSON."},
-                            {"role": "user", "content": f"{prompt}\n\nTEXT:\n{text}"}
-                        ]
+                            {
+                                "role": "system",
+                                "content": "You are a helpful AI assistant that outputs strict JSON.",
+                            },
+                            {"role": "user", "content": f"{prompt}\n\nTEXT:\n{text}"},
+                        ],
                     )
                     response_text = response.choices[0].message.content
                 except Exception as e2:
@@ -144,13 +152,13 @@ class TheOperator:
                 cleaned_text = cleaned_text.split("```json")[1].split("```")[0].strip()
             elif "```" in cleaned_text:
                 cleaned_text = cleaned_text.split("```")[1].split("```")[0].strip()
-            
+
             data = json.loads(cleaned_text)
-            
+
             # Robust List Handling
             if isinstance(data, list) and len(data) > 0:
                 data = data[0]
-            
+
             # Validate with Pydantic
             case = LegalCase.model_validate(data)
             return case
@@ -184,18 +192,24 @@ class TheOperator:
         
         Output the CORRECTED JSON (full structure).
         """
-        
+
         try:
             response = await self.client.chat.completions.create(
                 model=self.model_name,
                 messages=[
-                    {"role": "system", "content": "You are a helpful AI assistant that outputs strict JSON."},
-                    {"role": "user", "content": f"{prompt}\n\nORIGINAL TEXT (Excerpt):\n{text[:5000]}"}
-                ]
+                    {
+                        "role": "system",
+                        "content": "You are a helpful AI assistant that outputs strict JSON.",
+                    },
+                    {
+                        "role": "user",
+                        "content": f"{prompt}\n\nORIGINAL TEXT (Excerpt):\n{text[:5000]}",
+                    },
+                ],
             )
-            
+
             response_text = response.choices[0].message.content
-             # Clean markdown code blocks if present
+            # Clean markdown code blocks if present
             cleaned_text = response_text
             if "```json" in cleaned_text:
                 cleaned_text = cleaned_text.split("```json")[1].split("```")[0].strip()
@@ -203,13 +217,13 @@ class TheOperator:
                 cleaned_text = cleaned_text.split("```")[1].split("```")[0].strip()
 
             data = json.loads(cleaned_text)
-            
+
             # FIX: Robust List Handling
             if isinstance(data, list) and len(data) > 0:
                 data = data[0]
 
             return LegalCase.model_validate(data)
-            
+
         except Exception as e:
             print(f"Reflexion Failed: {e}. Keeping original.")
             return case

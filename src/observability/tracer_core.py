@@ -7,16 +7,17 @@ Main tracer class for GSW observability with LangFuse integration.
 
 import os
 import time
-from typing import Any, Dict, List, Optional, Literal, TYPE_CHECKING
-from contextlib import contextmanager, asynccontextmanager
+from contextlib import asynccontextmanager, contextmanager
+from typing import TYPE_CHECKING, Any, Literal, Optional
 
-from .models import OperationType, GraphActivation, TraversalResult, LatencyBreakdown
-from .span_wrapper import SpanWrapper, DummySpan
+from .models import GraphActivation, LatencyBreakdown, OperationType, TraversalResult
+from .span_wrapper import DummySpan, SpanWrapper
 
 # LangFuse imports - handle gracefully when not installed
 try:
     from langfuse import Langfuse
     from langfuse.client import StatefulSpanClient, StatefulTraceClient
+
     LANGFUSE_AVAILABLE = True
 except ImportError:
     LANGFUSE_AVAILABLE = False
@@ -51,9 +52,9 @@ class GSWTracer:
 
     def __init__(
         self,
-        public_key: Optional[str] = None,
-        secret_key: Optional[str] = None,
-        host: Optional[str] = None,
+        public_key: str | None = None,
+        secret_key: str | None = None,
+        host: str | None = None,
         enabled: bool = True,
         debug: bool = False,
     ):
@@ -83,12 +84,12 @@ class GSWTracer:
             self.langfuse = None
 
         # Session tracking
-        self._sessions: Dict[str, "EpisodicSessionTracker"] = {}
-        self._current_trace: Optional[StatefulTraceClient] = None
-        self._span_stack: List[StatefulSpanClient] = []
+        self._sessions: dict[str, EpisodicSessionTracker] = {}
+        self._current_trace: StatefulTraceClient | None = None
+        self._span_stack: list[StatefulSpanClient] = []
 
         # Latency tracking
-        self._latency_timers: Dict[str, float] = {}
+        self._latency_timers: dict[str, float] = {}
 
         self._initialized = True
 
@@ -102,11 +103,11 @@ class GSWTracer:
     def start_trace(
         self,
         name: str,
-        session_id: Optional[str] = None,
-        user_id: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None,
-        tags: Optional[List[str]] = None,
-    ) -> Optional[StatefulTraceClient]:
+        session_id: str | None = None,
+        user_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
+        tags: list[str] | None = None,
+    ) -> StatefulTraceClient | None:
         """
         Start a new trace for a GSW operation.
 
@@ -144,7 +145,7 @@ class GSWTracer:
 
     def end_trace(
         self,
-        output: Optional[Any] = None,
+        output: Any | None = None,
         level: Literal["DEBUG", "DEFAULT", "WARNING", "ERROR"] = "DEFAULT",
     ):
         """End the current trace."""
@@ -157,9 +158,9 @@ class GSWTracer:
     def trace_span(
         self,
         name: str,
-        operation_type: Optional[OperationType] = None,
-        input_data: Optional[Any] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        operation_type: OperationType | None = None,
+        input_data: Any | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Context manager for tracing a span within a trace.
@@ -207,9 +208,9 @@ class GSWTracer:
     async def async_trace_span(
         self,
         name: str,
-        operation_type: Optional[OperationType] = None,
-        input_data: Optional[Any] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        operation_type: OperationType | None = None,
+        input_data: Any | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """Async version of trace_span."""
         if not self.enabled or not self._current_trace:
@@ -250,7 +251,7 @@ class GSWTracer:
     def trace_graph_activation(
         self,
         activation: GraphActivation,
-        span: Optional[SpanWrapper] = None,
+        span: SpanWrapper | None = None,
     ):
         """
         Record a single graph node activation.
@@ -281,7 +282,7 @@ class GSWTracer:
     def trace_full_traversal(
         self,
         result: TraversalResult,
-        span: Optional[SpanWrapper] = None,
+        span: SpanWrapper | None = None,
     ):
         """
         Record a complete graph traversal result.
@@ -319,8 +320,10 @@ class GSWTracer:
                     "relevance_scores": result.relevance_scores,
                 },
                 metadata={
-                    "traversal_efficiency": result.nodes_activated / max(result.total_nodes_scanned, 1),
-                    "avg_activation_score": sum(a.activation_score for a in result.activated_nodes) / max(len(result.activated_nodes), 1),
+                    "traversal_efficiency": result.nodes_activated
+                    / max(result.total_nodes_scanned, 1),
+                    "avg_activation_score": sum(a.activation_score for a in result.activated_nodes)
+                    / max(len(result.activated_nodes), 1),
                 },
             )
 
@@ -332,10 +335,10 @@ class GSWTracer:
         self,
         name: str,
         score: float,
-        comment: Optional[str] = None,
-        trace_id: Optional[str] = None,
-        observation_id: Optional[str] = None,
-        config_id: Optional[str] = None,
+        comment: str | None = None,
+        trace_id: str | None = None,
+        observation_id: str | None = None,
+        config_id: str | None = None,
     ):
         """
         Score a retrieval operation (0.0 to 1.0).
@@ -356,7 +359,7 @@ class GSWTracer:
 
         if not target_trace_id:
             if self.debug:
-                print(f"[GSW Tracer] Cannot score - no active trace")
+                print("[GSW Tracer] Cannot score - no active trace")
             return
 
         self.langfuse.score(
@@ -374,9 +377,9 @@ class GSWTracer:
 
     def score_with_breakdown(
         self,
-        scores: Dict[str, float],
-        weights: Optional[Dict[str, float]] = None,
-        trace_id: Optional[str] = None,
+        scores: dict[str, float],
+        weights: dict[str, float] | None = None,
+        trace_id: str | None = None,
     ) -> float:
         """
         Score multiple aspects and compute weighted average.
@@ -393,13 +396,13 @@ class GSWTracer:
             return 0.0
 
         if weights is None:
-            weights = {k: 1.0 for k in scores.keys()}
+            weights = dict.fromkeys(scores.keys(), 1.0)
 
         for name, score in scores.items():
             self.score_retrieval(name, score, trace_id=trace_id)
 
-        total_weight = sum(weights.get(k, 1.0) for k in scores.keys())
-        weighted_sum = sum(scores[k] * weights.get(k, 1.0) for k in scores.keys())
+        total_weight = sum(weights.get(k, 1.0) for k in scores)
+        weighted_sum = sum(scores[k] * weights.get(k, 1.0) for k in scores)
         avg_score = weighted_sum / total_weight if total_weight > 0 else 0.0
 
         self.score_retrieval(
@@ -436,7 +439,7 @@ class GSWTracer:
     def record_latency_breakdown(
         self,
         breakdown: LatencyBreakdown,
-        span: Optional[SpanWrapper] = None,
+        span: SpanWrapper | None = None,
     ):
         """
         Record detailed latency breakdown for an operation.
@@ -482,6 +485,7 @@ class GSWTracer:
         """
         if session_id not in self._sessions:
             from .session_memory import EpisodicSessionTracker
+
             self._sessions[session_id] = EpisodicSessionTracker(
                 session_id=session_id,
                 tracer=self,
@@ -500,11 +504,11 @@ class GSWTracer:
     def trace_llm_call(
         self,
         model: str,
-        input_messages: List[Dict[str, str]],
+        input_messages: list[dict[str, str]],
         output: str,
-        usage: Optional[Dict[str, int]] = None,
-        latency_ms: Optional[float] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        usage: dict[str, int] | None = None,
+        latency_ms: float | None = None,
+        metadata: dict[str, Any] | None = None,
     ):
         """
         Trace an LLM generation call.

@@ -6,10 +6,9 @@ Validates legal extractions against statutory corpus using RAG (Retrieval-Augmen
 Ensures compliance with statutory requirements and identifies potential conflicts.
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Any
 import re
-from pathlib import Path
+from dataclasses import dataclass, field
+from typing import Any
 
 from .corpus_loader import CorpusLoader
 
@@ -26,9 +25,10 @@ class StatutoryReference:
         content: Text content of the provision
         url: URL to the legislation
     """
+
     act_name: str
     section: str
-    subsection: Optional[str] = None
+    subsection: str | None = None
     content: str = ""
     url: str = ""
 
@@ -52,11 +52,12 @@ class ValidationResult:
         conflicts: List of identified conflicts with statutory requirements
         recommendations: List of recommendations to improve compliance
     """
+
     is_valid: bool
     compliance_score: float
-    supporting_citations: List[StatutoryReference] = field(default_factory=list)
-    conflicts: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    supporting_citations: list[StatutoryReference] = field(default_factory=list)
+    conflicts: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
 
     def __str__(self) -> str:
         """String representation of validation results."""
@@ -87,13 +88,13 @@ class StatutoryRAGValidator:
             corpus_path: Path to the directory containing statutory JSON files
         """
         self.corpus_path = corpus_path
-        self.corpus_loader: Optional[CorpusLoader] = None
-        self.embeddings: Optional[Any] = None
+        self.corpus_loader: CorpusLoader | None = None
+        self.embeddings: Any | None = None
 
         self._load_corpus(corpus_path)
         self._build_embeddings()
 
-    def _load_corpus(self, path: str) -> Dict:
+    def _load_corpus(self, path: str) -> dict:
         """
         Load the statutory corpus from the specified path.
 
@@ -152,7 +153,7 @@ class StatutoryRAGValidator:
         Returns:
             ValidationResult with compliance score, citations, conflicts, and recommendations
         """
-        print(f"[StatutoryRAGValidator] Validating extraction")
+        print("[StatutoryRAGValidator] Validating extraction")
 
         if not self.corpus_loader or not self.corpus_loader.acts:
             print("[StatutoryRAGValidator] Warning: No corpus loaded, returning invalid result")
@@ -160,7 +161,7 @@ class StatutoryRAGValidator:
                 is_valid=False,
                 compliance_score=0.0,
                 conflicts=["No statutory corpus loaded for validation"],
-                recommendations=["Load statutory corpus before validation"]
+                recommendations=["Load statutory corpus before validation"],
             )
 
         # Extract claims from the extraction
@@ -172,7 +173,7 @@ class StatutoryRAGValidator:
                 is_valid=False,
                 compliance_score=0.0,
                 conflicts=["No extractable claims found"],
-                recommendations=["Ensure extraction contains analyzable legal claims"]
+                recommendations=["Ensure extraction contains analyzable legal claims"],
             )
 
         # Retrieve relevant statutes
@@ -191,11 +192,11 @@ class StatutoryRAGValidator:
         supporting_citations = []
         for statute in statutes:
             ref = StatutoryReference(
-                act_name=statute.get('act_name', 'Unknown Act'),
-                section=statute.get('section', 'Unknown'),
-                subsection=statute.get('subsection'),
-                content=statute.get('summary', statute.get('title', '')),
-                url=statute.get('act_url', '')
+                act_name=statute.get("act_name", "Unknown Act"),
+                section=statute.get("section", "Unknown"),
+                subsection=statute.get("subsection"),
+                content=statute.get("summary", statute.get("title", "")),
+                url=statute.get("act_url", ""),
             )
             supporting_citations.append(ref)
 
@@ -207,13 +208,13 @@ class StatutoryRAGValidator:
             compliance_score=compliance_score,
             supporting_citations=supporting_citations,
             conflicts=conflicts,
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
         print(f"[StatutoryRAGValidator] Validation complete: {result.compliance_score:.2f}")
         return result
 
-    def _extract_claims(self, extraction: dict) -> List[str]:
+    def _extract_claims(self, extraction: dict) -> list[str]:
         """
         Extract verifiable claims from the extraction.
 
@@ -228,36 +229,36 @@ class StatutoryRAGValidator:
         # Extract from common fields
         if isinstance(extraction, dict):
             # Check for text-based fields
-            for field in ['text', 'content', 'summary', 'conclusion', 'finding']:
+            for field in ["text", "content", "summary", "conclusion", "finding"]:
                 if field in extraction and extraction[field]:
                     claims.append(str(extraction[field]))
 
             # Check for structured legal tests
-            if 'legal_test' in extraction:
-                claims.append(extraction['legal_test'])
+            if "legal_test" in extraction:
+                claims.append(extraction["legal_test"])
 
             # Check for requirements
-            if 'requirements' in extraction:
-                if isinstance(extraction['requirements'], list):
-                    claims.extend([str(req) for req in extraction['requirements']])
+            if "requirements" in extraction:
+                if isinstance(extraction["requirements"], list):
+                    claims.extend([str(req) for req in extraction["requirements"]])
                 else:
-                    claims.append(str(extraction['requirements']))
+                    claims.append(str(extraction["requirements"]))
 
             # Check for elements
-            if 'elements' in extraction:
-                if isinstance(extraction['elements'], list):
-                    claims.extend([str(elem) for elem in extraction['elements']])
-                elif isinstance(extraction['elements'], dict):
-                    claims.extend([str(v) for v in extraction['elements'].values()])
+            if "elements" in extraction:
+                if isinstance(extraction["elements"], list):
+                    claims.extend([str(elem) for elem in extraction["elements"]])
+                elif isinstance(extraction["elements"], dict):
+                    claims.extend([str(v) for v in extraction["elements"].values()])
 
             # Check for findings
-            if 'findings' in extraction:
-                if isinstance(extraction['findings'], list):
-                    claims.extend([str(f) for f in extraction['findings']])
+            if "findings" in extraction:
+                if isinstance(extraction["findings"], list):
+                    claims.extend([str(f) for f in extraction["findings"]])
 
             # Extract nested claims recursively
             for key, value in extraction.items():
-                if isinstance(value, dict) and key not in ['metadata', 'source']:
+                if isinstance(value, dict) and key not in ["metadata", "source"]:
                     claims.extend(self._extract_claims(value))
 
         elif isinstance(extraction, list):
@@ -274,7 +275,7 @@ class StatutoryRAGValidator:
         print(f"[StatutoryRAGValidator] Extracted {len(claims)} claims")
         return claims
 
-    def _retrieve_statutes(self, claims: List[str]) -> List[Dict]:
+    def _retrieve_statutes(self, claims: list[str]) -> list[dict]:
         """
         Retrieve relevant statutes for the given claims.
 
@@ -295,7 +296,7 @@ class StatutoryRAGValidator:
             text_results = self.corpus_loader.search_by_text(claim, top_k=3)
 
             for result in text_results:
-                section_key = (result.get('act_name'), result.get('section'))
+                section_key = (result.get("act_name"), result.get("section"))
                 if section_key not in seen_sections:
                     all_statutes.append(result)
                     seen_sections.add(section_key)
@@ -306,7 +307,7 @@ class StatutoryRAGValidator:
                 keyword_results = self.corpus_loader.search_by_keyword(keyword, top_k=2)
 
                 for result in keyword_results:
-                    section_key = (result.get('act_name'), result.get('section'))
+                    section_key = (result.get("act_name"), result.get("section"))
                     if section_key not in seen_sections:
                         all_statutes.append(result)
                         seen_sections.add(section_key)
@@ -314,7 +315,7 @@ class StatutoryRAGValidator:
         print(f"[StatutoryRAGValidator] Retrieved {len(all_statutes)} relevant statutes")
         return all_statutes[:10]  # Limit total results
 
-    def _extract_keywords(self, text: str) -> List[str]:
+    def _extract_keywords(self, text: str) -> list[str]:
         """
         Extract keywords from text for searching.
 
@@ -325,19 +326,39 @@ class StatutoryRAGValidator:
             List of keywords
         """
         # Simple keyword extraction based on word frequency and length
-        words = re.findall(r'\b[a-zA-Z]{4,}\b', text.lower())
+        words = re.findall(r"\b[a-zA-Z]{4,}\b", text.lower())
 
         # Remove common legal stop words
-        stop_words = {'that', 'this', 'with', 'from', 'have', 'been', 'were',
-                     'their', 'which', 'when', 'where', 'there', 'would', 'could',
-                     'should', 'shall', 'will', 'must', 'such', 'each', 'upon'}
+        stop_words = {
+            "that",
+            "this",
+            "with",
+            "from",
+            "have",
+            "been",
+            "were",
+            "their",
+            "which",
+            "when",
+            "where",
+            "there",
+            "would",
+            "could",
+            "should",
+            "shall",
+            "will",
+            "must",
+            "such",
+            "each",
+            "upon",
+        }
 
         keywords = [w for w in words if w not in stop_words]
 
         # Return unique keywords
         return list(dict.fromkeys(keywords))[:10]
 
-    def _check_compliance(self, claims: List[str], statutes: List[Dict]) -> float:
+    def _check_compliance(self, claims: list[str], statutes: list[dict]) -> float:
         """
         Check compliance of claims against statutes.
 
@@ -357,20 +378,22 @@ class StatutoryRAGValidator:
 
         for claim in claims:
             claim_lower = claim.lower()
-            claim_terms = set(re.findall(r'\w+', claim_lower))
+            claim_terms = set(re.findall(r"\w+", claim_lower))
 
             best_match_score = 0.0
 
             for statute in statutes:
                 # Build statute text
-                statute_text = ' '.join([
-                    statute.get('title', ''),
-                    statute.get('summary', ''),
-                    statute.get('legal_test', ''),
-                    ' '.join(statute.get('keywords', []))
-                ]).lower()
+                statute_text = " ".join(
+                    [
+                        statute.get("title", ""),
+                        statute.get("summary", ""),
+                        statute.get("legal_test", ""),
+                        " ".join(statute.get("keywords", [])),
+                    ]
+                ).lower()
 
-                statute_terms = set(re.findall(r'\w+', statute_text))
+                statute_terms = set(re.findall(r"\w+", statute_text))
 
                 # Calculate term overlap
                 if claim_terms and statute_terms:
@@ -378,12 +401,12 @@ class StatutoryRAGValidator:
                     match_score = overlap / len(claim_terms)
 
                     # Check for required elements if present
-                    if 'required_elements' in statute:
-                        elements = statute['required_elements']
+                    if "required_elements" in statute:
+                        elements = statute["required_elements"]
                         element_matches = 0
 
                         for element in elements:
-                            element_keywords = element.get('keywords', [])
+                            element_keywords = element.get("keywords", [])
                             for keyword in element_keywords:
                                 if keyword.lower() in claim_lower:
                                     element_matches += 1
@@ -406,7 +429,7 @@ class StatutoryRAGValidator:
 
         return compliance_score
 
-    def _detect_conflicts(self, claims: List[str], statutes: List[Dict]) -> List[str]:
+    def _detect_conflicts(self, claims: list[str], statutes: list[dict]) -> list[str]:
         """
         Detect conflicts between claims and statutory requirements.
 
@@ -421,19 +444,19 @@ class StatutoryRAGValidator:
 
         # Check for missing required elements
         for statute in statutes:
-            if 'required_elements' in statute:
-                elements = statute['required_elements']
-                minimum_elements = statute.get('minimum_elements', len(elements))
-                threshold = statute.get('threshold', 0.5)
+            if "required_elements" in statute:
+                elements = statute["required_elements"]
+                minimum_elements = statute.get("minimum_elements", len(elements))
+                threshold = statute.get("threshold", 0.5)
 
                 # Combine all claims for checking
-                all_claims_text = ' '.join(claims).lower()
+                all_claims_text = " ".join(claims).lower()
 
                 found_elements = 0
                 missing_elements = []
 
                 for element in elements:
-                    element_keywords = element.get('keywords', [])
+                    element_keywords = element.get("keywords", [])
                     element_found = False
 
                     for keyword in element_keywords:
@@ -444,10 +467,12 @@ class StatutoryRAGValidator:
                     if element_found:
                         found_elements += 1
                     else:
-                        missing_elements.append(element.get('element', 'Unknown element'))
+                        missing_elements.append(element.get("element", "Unknown element"))
 
                 if found_elements < minimum_elements:
-                    section_ref = f"{statute.get('act_name', 'Unknown')} s{statute.get('section', '?')}"
+                    section_ref = (
+                        f"{statute.get('act_name', 'Unknown')} s{statute.get('section', '?')}"
+                    )
                     conflict = (
                         f"Insufficient elements for {section_ref} "
                         f"({statute.get('legal_test', 'test')}): "
@@ -458,11 +483,11 @@ class StatutoryRAGValidator:
                     conflicts.append(conflict)
 
         # Check for contradictory statements
-        negative_indicators = ['not', 'no', 'never', 'cannot', 'unable', 'fails', 'lacks']
-        positive_indicators = ['must', 'shall', 'required', 'necessary', 'essential', 'needs']
+        negative_indicators = ["not", "no", "never", "cannot", "unable", "fails", "lacks"]
+        positive_indicators = ["must", "shall", "required", "necessary", "essential", "needs"]
 
         for statute in statutes:
-            statute_summary = statute.get('summary', '').lower()
+            statute_summary = statute.get("summary", "").lower()
 
             for claim in claims:
                 claim_lower = claim.lower()
@@ -473,12 +498,14 @@ class StatutoryRAGValidator:
 
                 if has_negative and statute_has_positive:
                     # Potential conflict - check for keyword overlap
-                    claim_terms = set(re.findall(r'\w+', claim_lower))
-                    statute_terms = set(re.findall(r'\w+', statute_summary))
+                    claim_terms = set(re.findall(r"\w+", claim_lower))
+                    statute_terms = set(re.findall(r"\w+", statute_summary))
                     overlap = len(claim_terms.intersection(statute_terms))
 
                     if overlap > 3:  # Significant overlap
-                        section_ref = f"{statute.get('act_name', 'Unknown')} s{statute.get('section', '?')}"
+                        section_ref = (
+                            f"{statute.get('act_name', 'Unknown')} s{statute.get('section', '?')}"
+                        )
                         conflict = (
                             f"Potential conflict with {section_ref}: "
                             f"claim appears to negate statutory requirement"
@@ -488,7 +515,7 @@ class StatutoryRAGValidator:
         print(f"[StatutoryRAGValidator] Detected {len(conflicts)} conflicts")
         return conflicts
 
-    def _generate_recommendations(self, conflicts: List[str]) -> List[str]:
+    def _generate_recommendations(self, conflicts: list[str]) -> list[str]:
         """
         Generate recommendations based on detected conflicts.
 
@@ -506,30 +533,26 @@ class StatutoryRAGValidator:
 
         for conflict in conflicts:
             # Parse conflict to generate specific recommendation
-            if 'Insufficient elements' in conflict:
+            if "Insufficient elements" in conflict:
                 # Extract missing elements
-                if 'Missing:' in conflict:
-                    missing = conflict.split('Missing:')[1].strip()
-                    recommendation = (
-                        f"Consider addressing the following elements: {missing}"
-                    )
+                if "Missing:" in conflict:
+                    missing = conflict.split("Missing:")[1].strip()
+                    recommendation = f"Consider addressing the following elements: {missing}"
                     recommendations.append(recommendation)
                 else:
                     recommendations.append("Ensure all required statutory elements are addressed")
 
-            elif 'Potential conflict' in conflict:
+            elif "Potential conflict" in conflict:
                 recommendations.append(
                     "Review extraction for potential contradictions with statutory requirements"
                 )
 
-            elif 'section' in conflict.lower():
+            elif "section" in conflict.lower():
                 # Extract section reference
-                section_match = re.search(r's(\w+)', conflict)
+                section_match = re.search(r"s(\w+)", conflict)
                 if section_match:
                     section = section_match.group(1)
-                    recommendation = (
-                        f"Review compliance with section {section} requirements"
-                    )
+                    recommendation = f"Review compliance with section {section} requirements"
                     recommendations.append(recommendation)
 
         # Add general recommendations
@@ -538,7 +561,9 @@ class StatutoryRAGValidator:
                 "Multiple compliance issues detected - recommend comprehensive review against statutory framework"
             )
 
-        recommendations.append("Verify all statutory references and ensure complete coverage of legal tests")
+        recommendations.append(
+            "Verify all statutory references and ensure complete coverage of legal tests"
+        )
 
         print(f"[StatutoryRAGValidator] Generated {len(recommendations)} recommendations")
         return recommendations

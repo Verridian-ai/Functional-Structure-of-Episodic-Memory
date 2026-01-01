@@ -263,12 +263,14 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
         {/* Sidebar Footer */}
         <div className="flex-shrink-0 py-3 border-t border-white/10 safe-area-pb px-4">
             {/* Dashboard Button */}
-            <button
-                className="w-full flex items-center gap-3 px-3 py-2.5 mb-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-white hover:bg-white/[0.05] transition-all"
+            <Link
+                href="/dashboard"
+                className="w-full flex items-center gap-3 px-3 py-2.5 mb-2 rounded-lg text-sm font-medium text-zinc-300 hover:text-amber-400 hover:bg-amber-500/10 border border-transparent hover:border-amber-500/30 transition-all group"
             >
-                <Home className="w-4 h-4" />
+                <Home className="w-4 h-4 text-amber-500 group-hover:text-amber-400" />
                 <span>Dashboard</span>
-            </button>
+                <Sparkles className="w-3 h-3 ml-auto text-amber-500/60 group-hover:text-amber-400" />
+            </Link>
 
             {/* Knowledge Graph Button */}
             <Link
@@ -334,6 +336,16 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
 
           {/* Right Section - Action Buttons */}
           <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 flex-shrink-0">
+            {/* Dashboard Quick Access */}
+            <Link
+              href="/dashboard"
+              className="flex items-center justify-center gap-1.5 sm:gap-2 p-2.5 sm:px-3 sm:py-2 bg-amber-500/10 hover:bg-amber-500/20 rounded-full border border-amber-500/30 hover:border-amber-500/50 transition-all group touch-target"
+              title="Open Dashboard"
+            >
+              <Home className="w-4 h-4 text-amber-400 group-hover:text-amber-300" />
+              <span className="text-xs text-amber-300 hidden md:inline">Dashboard</span>
+            </Link>
+
             {/* Knowledge Graph Quick Access - Icon only on very small screens */}
             <Link
               href="/visualize"

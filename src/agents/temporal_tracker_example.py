@@ -11,20 +11,21 @@ See also:
 """
 
 from datetime import date, timedelta
+
 from src.agents.legislative_temporal_schema import (
-    LegislativeDocument,
-    TemporalTracker,
+    Amendment,
+    AmendmentType,
+    BillType,
+    CommencementMethod,
+    HouseOfOrigin,
+    Jurisdiction,
     LegislationQuery,
     LegislationType,
-    Jurisdiction,
+    LegislativeDocument,
     LegislativeState,
-    CommencementMethod,
-    BillType,
-    HouseOfOrigin,
-    AmendmentType,
     RepealType,
     SectionCommencement,
-    Amendment,
+    TemporalTracker,
 )
 
 
@@ -55,14 +56,14 @@ def example_1_complete_bill_to_act_lifecycle():
         bill_type=BillType.GOVERNMENT,
         house_of_origin=HouseOfOrigin.HOUSE_OF_REPRESENTATIVES,
         introduced_date=date(2024, 4, 10),
-        introduced_by="Attorney-General"
+        introduced_by="Attorney-General",
     )
     tracker.add_document(bill)
 
     bill.add_temporal_anchor(
         event_date=date(2024, 4, 10),
         event_type="introduction",
-        description="First Reading - House of Representatives"
+        description="First Reading - House of Representatives",
     )
 
     print(f"  Document ID: {bill.document_id}")
@@ -72,45 +73,31 @@ def example_1_complete_bill_to_act_lifecycle():
     # === STAGE 2: Debate and Committee ===
     print("\n[2] Bill debated...")
     bill.second_reading_date = date(2024, 4, 15)
-    bill.add_state_change(
-        LegislativeState.DEBATED,
-        "Second Reading debate commenced"
-    )
+    bill.add_state_change(LegislativeState.DEBATED, "Second Reading debate commenced")
     print(f"  Current State: {bill.current_state}")
 
     print("\n[3] Referred to committee...")
     bill.committee_referral_date = date(2024, 4, 22)
     bill.committee_name = "Legal and Constitutional Affairs Committee"
-    bill.add_state_change(
-        LegislativeState.IN_COMMITTEE,
-        "Referred to committee"
-    )
+    bill.add_state_change(LegislativeState.IN_COMMITTEE, "Referred to committee")
     print(f"  Current State: {bill.current_state}")
 
     # === STAGE 3: Passage ===
     print("\n[4] Bill passed House of Representatives...")
     bill.third_reading_date = date(2024, 5, 27)
     bill.passed_house_date = date(2024, 5, 27)
-    bill.add_state_change(
-        LegislativeState.PASSED_HOUSE,
-        "Third Reading passed (78-52)"
-    )
+    bill.add_state_change(LegislativeState.PASSED_HOUSE, "Third Reading passed (78-52)")
     print(f"  Current State: {bill.current_state}")
 
     print("\n[5] Bill passed Senate...")
     bill.passed_senate_date = date(2024, 6, 12)
-    bill.add_state_change(
-        LegislativeState.PASSED_BOTH_HOUSES,
-        "Passed both houses"
-    )
+    bill.add_state_change(LegislativeState.PASSED_BOTH_HOUSES, "Passed both houses")
     print(f"  Current State: {bill.current_state}")
 
     # === STAGE 4: Royal Assent ===
     print("\n[6] Royal Assent granted...")
     tracker.transition_bill_to_assented(
-        bill_id="FLA_BILL_2024_045",
-        assent_date=date(2024, 6, 20),
-        assent_by="Governor-General"
+        bill_id="FLA_BILL_2024_045", assent_date=date(2024, 6, 20), assent_by="Governor-General"
     )
     print(f"  Current State: {bill.current_state}")
     print(f"  Assent Date: {bill.assent_date}")
@@ -126,42 +113,41 @@ def example_1_complete_bill_to_act_lifecycle():
             section_range="1-3",
             commencement_method=CommencementMethod.ON_ASSENT,
             commencement_date=date(2024, 6, 20),
-            status=LegislativeState.IN_FORCE
+            status=LegislativeState.IN_FORCE,
         ),
         SectionCommencement(
             section_range="Schedule 1",
             commencement_method=CommencementMethod.FIXED_DATE,
             commencement_date=date(2024, 7, 1),
-            status=LegislativeState.SCHEDULED
+            status=LegislativeState.SCHEDULED,
         ),
         SectionCommencement(
             section_range="Schedule 2",
             commencement_method=CommencementMethod.PROCLAMATION,
             commencement_date=None,
-            status=LegislativeState.AWAITING_PROCLAMATION
+            status=LegislativeState.AWAITING_PROCLAMATION,
         ),
     ]
 
     tracker.determine_commencement_state("FLA_BILL_2024_045")
     print(f"  Current State: {bill.current_state}")
-    print(f"  Sections 1-3: IN_FORCE (on assent)")
-    print(f"  Schedule 1: SCHEDULED (1 July 2024)")
-    print(f"  Schedule 2: AWAITING_PROCLAMATION")
+    print("  Sections 1-3: IN_FORCE (on assent)")
+    print("  Schedule 1: SCHEDULED (1 July 2024)")
+    print("  Schedule 2: AWAITING_PROCLAMATION")
 
     # === STAGE 6: Proclamation ===
     print("\n[8] Proclamation issued for Schedule 2...")
 
     # First update state to awaiting proclamation
     bill.add_state_change(
-        LegislativeState.AWAITING_PROCLAMATION,
-        "Schedule 2 awaiting proclamation"
+        LegislativeState.AWAITING_PROCLAMATION, "Schedule 2 awaiting proclamation"
     )
 
     tracker.record_proclamation(
         act_id="FLA_BILL_2024_045",
         proclamation_date=date(2024, 8, 15),
         proclaimed_commencement_date=date(2024, 9, 1),
-        gazette_reference="C2024G00156"
+        gazette_reference="C2024G00156",
     )
 
     # Update section commencements
@@ -173,10 +159,7 @@ def example_1_complete_bill_to_act_lifecycle():
     print(f"  Schedule 2 commences: {bill.proclaimed_commencement_date}")
 
     # Update to fully in force on Sept 1
-    bill.add_state_change(
-        LegislativeState.IN_FORCE,
-        "All provisions now in force"
-    )
+    bill.add_state_change(LegislativeState.IN_FORCE, "All provisions now in force")
 
     print(f"\n[9] Final State: {bill.current_state}")
     print(f"  Total Temporal Anchors: {len(bill.temporal_anchors)}")
@@ -247,7 +230,7 @@ def example_2_amendment_tracking():
         old_text="the financial resources of each of the parties",
         new_text="the financial resources available to each party, including earning capacity",
         effective_date=date(2024, 7, 1),
-        status=LegislativeState.IN_FORCE
+        status=LegislativeState.IN_FORCE,
     )
 
     amendment_2 = Amendment(
@@ -258,7 +241,7 @@ def example_2_amendment_tracking():
         amendment_type=AmendmentType.INSERT,
         new_text="60CCA Considerations for parenting orders - family violence\n(1) In making a parenting order...",
         effective_date=date(2024, 7, 1),
-        status=LegislativeState.IN_FORCE
+        status=LegislativeState.IN_FORCE,
     )
 
     amending_act.amendments = [amendment_1, amendment_2]
@@ -269,10 +252,7 @@ def example_2_amendment_tracking():
     # === Record Amendment Relationship ===
     print("\n[4] Creating compilation...")
 
-    tracker.record_amendment(
-        principal_act_id="FLA_1975",
-        amending_act=amending_act
-    )
+    tracker.record_amendment(principal_act_id="FLA_1975", amending_act=amending_act)
 
     print(f"  Principal Act amended by: {principal.amended_by}")
     print(f"  Current compilation: No. {principal.current_compilation.compilation_number}")
@@ -462,7 +442,7 @@ def example_4_repeal_and_savings():
            until final determination.
         """,
         location="Schedule 2 of Repeal Act",
-        affected_rights=["pending_applications", "existing_orders", "current_proceedings"]
+        affected_rights=["pending_applications", "existing_orders", "current_proceedings"],
     )
 
     print(f"  Has savings provisions: {old_act.savings_transitional.has_savings}")
@@ -476,7 +456,7 @@ def example_4_repeal_and_savings():
         act_id="OLD_ACT_2010",
         repeal_date=date(2024, 7, 1),
         repealing_act_id="REPEAL_ACT_2024",
-        repeal_type=RepealType.EXPRESS
+        repeal_type=RepealType.EXPRESS,
     )
 
     print(f"  Current State: {old_act.current_state}")
@@ -489,15 +469,17 @@ def example_4_repeal_and_savings():
     dates_to_check = [
         date(2015, 1, 1),  # Before repeal
         date(2024, 6, 30),  # Day before repeal
-        date(2024, 7, 1),   # Day of repeal
-        date(2025, 1, 1),   # After repeal
+        date(2024, 7, 1),  # Day of repeal
+        date(2025, 1, 1),  # After repeal
     ]
 
     for check_date in dates_to_check:
         in_force = old_act.is_in_force_on(check_date)
         print(f"  {check_date}: {'IN FORCE' if in_force else 'NOT IN FORCE'}")
 
-    print(f"\n  Note: Despite repeal, transitional provisions apply until {old_act.savings_transitional.transition_end_date}")
+    print(
+        f"\n  Note: Despite repeal, transitional provisions apply until {old_act.savings_transitional.transition_end_date}"
+    )
 
     return tracker
 
@@ -525,8 +507,10 @@ def example_5_temporal_queries():
     ]
 
     for doc_id, title, commence, state, repeal in docs_data:
-        doc_type = LegislationType.REGULATION if "REG" in doc_id else (
-            LegislationType.BILL if "BILL" in doc_id else LegislationType.ACT
+        doc_type = (
+            LegislationType.REGULATION
+            if "REG" in doc_id
+            else (LegislationType.BILL if "BILL" in doc_id else LegislationType.ACT)
         )
 
         doc = LegislativeDocument(
@@ -547,8 +531,7 @@ def example_5_temporal_queries():
     # === Query 1: In force on specific date ===
     print("\n[1] Acts in force on 2022-06-01:")
     results = query.get_in_force_on_date(
-        check_date=date(2022, 6, 1),
-        document_type=LegislationType.ACT
+        check_date=date(2022, 6, 1), document_type=LegislationType.ACT
     )
     for doc in results:
         print(f"  - {doc.title}")
@@ -561,10 +544,7 @@ def example_5_temporal_queries():
 
     # === Query 3: Documents by state ===
     print("\n[3] All documents currently IN_FORCE:")
-    results = query.get_documents_by_state(
-        LegislativeState.IN_FORCE,
-        Jurisdiction.COMMONWEALTH
-    )
+    results = query.get_documents_by_state(LegislativeState.IN_FORCE, Jurisdiction.COMMONWEALTH)
     for doc in results:
         print(f"  - {doc.title} ({doc.document_type})")
 

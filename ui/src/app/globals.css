@@ -1839,3 +1839,406 @@ aside button[aria-label="Close sidebar"]:active {
     font-size: 11px;
   }
 }
+
+/* ===========================================
+   iPHONE SPECIFIC BREAKPOINTS
+   =========================================== */
+
+/* iPhone SE (375px) */
+@media (min-width: 375px) and (max-width: 389px) {
+  .iphone-spacing {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .iphone-text {
+    font-size: 14px;
+  }
+}
+
+/* iPhone 12/13/14/15 Standard (390px) */
+@media (min-width: 390px) and (max-width: 392px) {
+  .iphone-spacing {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+/* iPhone 12/13/14/15 Pro (393px) */
+@media (min-width: 393px) and (max-width: 429px) {
+  .iphone-spacing {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+/* iPhone 14/15/16 Pro Max (430px) - Priority Target */
+@media (min-width: 430px) and (max-width: 479px) {
+  /* Optimized spacing for Pro Max */
+  .container-responsive {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  /* Larger touch targets */
+  .touch-target {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Better sidebar width */
+  aside {
+    width: 300px !important;
+  }
+
+  /* Improved header spacing */
+  header {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  /* Chat input optimization */
+  .chat-input-container {
+    padding: 16px 20px !important;
+  }
+
+  /* Better card sizing */
+  .suggestion-card {
+    padding: 16px !important;
+  }
+
+  /* Graph overlay controls */
+  .graph-controls {
+    max-width: 280px;
+    font-size: 13px;
+  }
+}
+
+/* ===========================================
+   iPAD SPECIFIC BREAKPOINTS
+   =========================================== */
+
+/* iPad Mini (768px) */
+@media (min-width: 768px) and (max-width: 819px) {
+  .container-responsive {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  aside {
+    width: 280px !important;
+  }
+
+  .canvas-panel-container {
+    width: 320px !important;
+  }
+}
+
+/* iPad (820px) */
+@media (min-width: 820px) and (max-width: 833px) {
+  .container-responsive {
+    padding-left: 28px;
+    padding-right: 28px;
+  }
+
+  aside {
+    width: 300px !important;
+  }
+
+  .canvas-panel-container {
+    width: 340px !important;
+  }
+}
+
+/* iPad Air (834px) */
+@media (min-width: 834px) and (max-width: 1023px) {
+  .container-responsive {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  aside {
+    width: 320px !important;
+  }
+
+  .canvas-panel-container {
+    width: 360px !important;
+  }
+}
+
+/* iPad Pro 11" (1024px) */
+@media (min-width: 1024px) and (max-width: 1179px) {
+  .container-responsive {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  aside {
+    width: 320px !important;
+  }
+
+  .canvas-panel-container {
+    width: 400px !important;
+  }
+}
+
+/* iPad Pro 12.9" (1180px+) */
+@media (min-width: 1180px) and (max-width: 1365px) {
+  .container-responsive {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  aside {
+    width: 340px !important;
+  }
+
+  .canvas-panel-container {
+    width: 480px !important;
+  }
+}
+
+/* ===========================================
+   KNOWLEDGE GRAPH MOBILE OPTIMIZATION
+   =========================================== */
+
+/* Mobile graph controls */
+@media (max-width: 767px) {
+  .graph-overlay-panel {
+    position: fixed !important;
+    left: 8px !important;
+    right: 8px !important;
+    top: auto !important;
+    bottom: env(safe-area-inset-bottom, 20px) !important;
+    max-width: none !important;
+    border-radius: 16px !important;
+    padding: 12px !important;
+    max-height: 40vh !important;
+    overflow-y: auto !important;
+  }
+
+  .graph-overlay-panel.expanded {
+    max-height: 70vh !important;
+    top: 20vh !important;
+    bottom: 20px !important;
+  }
+
+  .graph-back-button {
+    position: fixed !important;
+    top: env(safe-area-inset-top, 16px) !important;
+    right: 16px !important;
+    left: auto !important;
+    z-index: 30 !important;
+  }
+
+  .graph-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .graph-legend {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  .graph-legend-item {
+    flex: 0 0 auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* iPad graph optimization */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .graph-overlay-panel {
+    max-width: 320px !important;
+    max-height: 60vh !important;
+  }
+
+  .graph-stats-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+/* ===========================================
+   FEATURES DASHBOARD STYLES
+   =========================================== */
+
+.feature-card {
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid rgba(63, 63, 70, 0.4);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  background: rgba(39, 39, 42, 0.6);
+  border-color: rgba(6, 182, 212, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.feature-card-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fafafa;
+  margin-bottom: 8px;
+}
+
+.feature-card-description {
+  font-size: 13px;
+  color: #a1a1aa;
+  line-height: 1.5;
+}
+
+/* Light mode feature cards */
+[data-theme="light"] .feature-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(120, 100, 80, 0.12);
+}
+
+[data-theme="light"] .feature-card:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(251, 191, 36, 0.3);
+}
+
+[data-theme="light"] .feature-card-title {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .feature-card-description {
+  color: var(--text-secondary);
+}
+
+/* Feature dashboard grid */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 16px;
+}
+
+@media (min-width: 480px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .features-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ===========================================
+   KNOWLEDGE GRAPH LIGHT MODE
+   =========================================== */
+
+[data-theme="light"] .graph-overlay-panel {
+  background: linear-gradient(180deg, #fdfcfa 0%, #faf8f5 100%) !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="light"] .graph-overlay-panel h2,
+[data-theme="light"] .graph-overlay-panel .text-white {
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .graph-overlay-panel .text-zinc-400,
+[data-theme="light"] .graph-overlay-panel .text-zinc-500 {
+  color: var(--text-secondary) !important;
+}
+
+[data-theme="light"] .graph-overlay-panel select {
+  background: #ffffff !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="light"] .graph-overlay-panel .bg-zinc-800,
+[data-theme="light"] .graph-overlay-panel .bg-zinc-800\/50 {
+  background: rgba(245, 242, 237, 0.8) !important;
+}
+
+[data-theme="light"] .graph-back-button {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(120, 100, 80, 0.15) !important;
+}
+
+[data-theme="light"] .graph-back-button:hover {
+  background: #ffffff !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+/* ===========================================
+   DASHBOARD PAGE STYLES
+   =========================================== */
+
+.dashboard-section {
+  margin-bottom: 32px;
+}
+
+.dashboard-section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #fafafa;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+[data-theme="light"] .dashboard-section-title {
+  color: var(--text-primary);
+}
+
+.stat-card {
+  background: rgba(24, 24, 27, 0.6);
+  border: 1px solid rgba(63, 63, 70, 0.4);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.stat-card-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: #22d3ee;
+  font-feature-settings: "tnum";
+}
+
+.stat-card-label {
+  font-size: 12px;
+  color: #a1a1aa;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+[data-theme="light"] .stat-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: rgba(120, 100, 80, 0.12);
+}
+
+[data-theme="light"] .stat-card-value {
+  color: #d97706;
+}
+
+[data-theme="light"] .stat-card-label {
+  color: var(--text-secondary);
+}

@@ -1,13 +1,15 @@
-import os
-import json
 import asyncio
-from typing import Optional
+import json
+import os
+
 from google import genai
 from pydantic import ValidationError
+
 from src.logic.schema import LegalCase
 
 # Using stable Flash model, but explicitly 2.0 Flash as requested
-MODEL_NAME = "gemini-2.0-flash" 
+MODEL_NAME = "gemini-2.0-flash"
+
 
 class TheOperator:
     """
@@ -15,14 +17,15 @@ class TheOperator:
     Acts as the 'Episodic Legal Observer'.
     Uses the new Google GenAI SDK (google-genai).
     """
-    def __init__(self, api_key: Optional[str] = None):
+
+    def __init__(self, api_key: str | None = None):
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
         if not self.api_key:
             raise ValueError("GOOGLE_API_KEY is not set.")
-        
+
         self.client = genai.Client(api_key=self.api_key)
 
-    async def extract_timeline(self, text: str) -> Optional[LegalCase]:
+    async def extract_timeline(self, text: str) -> LegalCase | None:
         """
         Extracts a LegalCase structure from raw text using Gemini.
         """
@@ -53,20 +56,18 @@ class TheOperator:
         - Infer dates where possible (YYYY-MM-DD). If uncertain, use strings like "approx 2020" or "before 1995".
         - If a State changes (e.g. value of house), capture the specific date in the State object.
         """
-        
+
         try:
             response = await asyncio.to_thread(
                 self.client.models.generate_content,
                 model=MODEL_NAME,
                 contents=f"{prompt}\n\nTEXT:\n{text}",
-                config={
-                    "response_mime_type": "application/json"
-                }
+                config={"response_mime_type": "application/json"},
             )
-            
+
             raw_json = response.text
             data = json.loads(raw_json)
-            
+
             # Validate with Pydantic (Robust Mode)
             case = LegalCase.model_validate(data)
             return case

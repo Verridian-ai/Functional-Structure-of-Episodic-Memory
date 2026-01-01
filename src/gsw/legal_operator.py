@@ -22,27 +22,31 @@ This file contains the main LegalOperator class and re-exports for compatibility
 """
 
 import json
+import os
 import re
 import sys
-from pathlib import Path
-from typing import Dict, List, Optional, Any, Union
-from uuid import uuid4
-import os
 import time
+from pathlib import Path
+from typing import Any
+from uuid import uuid4
 
 # Add parent paths for imports
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.logic.gsw_schema import (
-    Actor, ActorType, State, VerbPhrase, PredictiveQuestion,
-    SpatioTemporalLink, ChunkExtraction, QuestionType, LinkType,
-    OntologyContext
+    Actor,
+    ChunkExtraction,
+    OntologyContext,
+    PredictiveQuestion,
+    SpatioTemporalLink,
+    VerbPhrase,
 )
 from src.validation.statutory_rag import StatutoryRAGValidator, ValidationResult
-from .operator_prompts import LEGAL_OPERATOR_SYSTEM_PROMPT, LEGAL_OPERATOR_USER_PROMPT
-from .extraction_parser import ExtractionParser
-from .text_chunker import chunk_legal_text
+
 from .cost_tracker import get_cost_tracker
+from .extraction_parser import ExtractionParser
+from .operator_prompts import LEGAL_OPERATOR_SYSTEM_PROMPT, LEGAL_OPERATOR_USER_PROMPT
+from .text_chunker import chunk_legal_text
 
 
 class LegalOperator:
@@ -60,12 +64,12 @@ class LegalOperator:
 
     def __init__(
         self,
-        model: Union[str, List[str]] = "google/gemini-2.5-flash",
-        api_key: Optional[str] = None,
+        model: str | list[str] = "google/gemini-2.5-flash",
+        api_key: str | None = None,
         use_openrouter: bool = True,
         enable_validation: bool = False,
-        corpus_path: Optional[str] = None,
-        use_toon: bool = True  # Enable TOON format for ~40% token reduction
+        corpus_path: str | None = None,
+        use_toon: bool = True,  # Enable TOON format for ~40% token reduction
     ):
         """
         Initialize the Legal Operator.
@@ -111,16 +115,18 @@ class LegalOperator:
         """Setup the LLM client."""
         if self.use_openrouter:
             import httpx
+
             self.client = httpx.Client(
                 base_url="https://openrouter.ai/api/v1",
                 headers={
                     "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                timeout=120.0
+                timeout=120.0,
             )
         else:
             import google.generativeai as genai
+
             genai.configure(api_key=self.api_key)
             self.client = genai.GenerativeModel(self.model)
 
@@ -129,9 +135,9 @@ class LegalOperator:
         text: str,
         situation: str = "",
         background_context: str = "",
-        ontology_context: Optional[OntologyContext] = None,
-        chunk_id: Optional[str] = None,
-        document_id: str = ""
+        ontology_context: OntologyContext | None = None,
+        chunk_id: str | None = None,
+        document_id: str = "",
     ) -> ChunkExtraction:
         """
         Extract structured information from legal text.
@@ -155,7 +161,7 @@ class LegalOperator:
         if ontology_context:
             if self.use_toon:
                 # Use compact TOON format
-                ontology_str = f"\n<known_vocabulary format=\"toon\">\n{ontology_context.to_toon()}\n</known_vocabulary>\n"
+                ontology_str = f'\n<known_vocabulary format="toon">\n{ontology_context.to_toon()}\n</known_vocabulary>\n'
             else:
                 # Use verbose format
                 ontology_str = f"\n<known_vocabulary>\n{ontology_context.to_prompt_context()}\n</known_vocabulary>\n"
@@ -164,7 +170,7 @@ class LegalOperator:
             situation=situation or "Legal proceedings",
             background_context=background_context or "Australian legal document",
             ontology_context=ontology_str,
-            input_text=text[:30000]  # Limit text length
+            input_text=text[:30000],  # Limit text length
         )
 
         # Call LLM
@@ -188,15 +194,13 @@ class LegalOperator:
             print(f"[Operator Error] {e}")
             # Return empty extraction on error
             return ChunkExtraction(
-                chunk_id=chunk_id,
-                source_document_id=document_id,
-                situation=situation
+                chunk_id=chunk_id, source_document_id=document_id, situation=situation
             )
 
     def _call_llm(self, user_prompt: str) -> str:
         """Call the LLM and get response, rotating models on error."""
         errors = []
-        
+
         # Try each model in the list
         for model_name in self.models:
             try:
@@ -207,21 +211,23 @@ class LegalOperator:
                             "model": model_name,
                             "messages": [
                                 {"role": "system", "content": LEGAL_OPERATOR_SYSTEM_PROMPT},
-                                {"role": "user", "content": user_prompt}
+                                {"role": "user", "content": user_prompt},
                             ],
                             "temperature": 0.1,
                             "max_tokens": 8000,
                             # Add headers to prevent caching if needed, though usually not an issue
-                            "provider": {"order": ["Google", "DeepSeek", "Meta", "Mistral"]} 
-                        }
+                            "provider": {"order": ["Google", "DeepSeek", "Meta", "Mistral"]},
+                        },
                     )
-                    
+
                     # specific handling for 429 or 503 to trigger rotation
                     if response.status_code in [429, 502, 503, 504]:
-                        print(f"[Operator] Model {model_name} busy/rate-limited (Status {response.status_code}). Switching...")
+                        print(
+                            f"[Operator] Model {model_name} busy/rate-limited (Status {response.status_code}). Switching..."
+                        )
                         errors.append(f"{model_name}: {response.status_code}")
                         continue
-                        
+
                     response.raise_for_status()
                     result = response.json()
 
@@ -232,9 +238,9 @@ class LegalOperator:
                         tracker.add_usage(
                             "operator",
                             usage.get("prompt_tokens", 0),
-                            usage.get("completion_tokens", 0)
+                            usage.get("completion_tokens", 0),
                         )
-                    
+
                     # Update current effective model for logging
                     self.model = model_name
                     return result["choices"][0]["message"]["content"]
@@ -244,11 +250,11 @@ class LegalOperator:
                         f"{LEGAL_OPERATOR_SYSTEM_PROMPT}\n\n{user_prompt}"
                     )
                     return response.text
-                    
+
             except Exception as e:
                 print(f"[Operator] Model {model_name} failed: {str(e)[:100]}...")
                 errors.append(f"{model_name}: {e}")
-                time.sleep(1) # Brief pause before next model
+                time.sleep(1)  # Brief pause before next model
                 continue
 
         # If all models fail
@@ -257,41 +263,38 @@ class LegalOperator:
     def _repair_json(self, text: str) -> str:
         """Attempt to repair common JSON issues from LLM output."""
         # Remove trailing commas before ] or }
-        text = re.sub(r',(\s*[}\]])', r'\1', text)
+        text = re.sub(r",(\s*[}\]])", r"\1", text)
         # Fix unescaped newlines in strings
-        text = re.sub(r'(?<!\\)\n(?=.*")', '\\n', text)
+        text = re.sub(r'(?<!\\)\n(?=.*")', "\\n", text)
         # Fix missing commas between objects/arrays
-        text = re.sub(r'}\s*{', '},{', text)
-        text = re.sub(r']\s*\[', '],[', text)
+        text = re.sub(r"}\s*{", "},{", text)
+        text = re.sub(r"]\s*\[", "],[", text)
         # Truncated response - try to close it properly
-        open_braces = text.count('{') - text.count('}')
-        open_brackets = text.count('[') - text.count(']')
+        open_braces = text.count("{") - text.count("}")
+        open_brackets = text.count("[") - text.count("]")
         if open_braces > 0 or open_brackets > 0:
             # Remove last partial element
-            last_comma = max(text.rfind(',{'), text.rfind(',['), text.rfind(',"'))
+            last_comma = max(text.rfind(",{"), text.rfind(",["), text.rfind(',"'))
             if last_comma > len(text) // 2:
                 text = text[:last_comma]
-            text += ']' * open_brackets + '}' * open_braces
+            text += "]" * open_brackets + "}" * open_braces
         return text
 
     def _parse_response(
-        self,
-        raw_response: str,
-        chunk_id: str,
-        document_id: str
+        self, raw_response: str, chunk_id: str, document_id: str
     ) -> ChunkExtraction:
         """Parse LLM response into ChunkExtraction."""
         # Clean markdown code blocks
         cleaned = raw_response.strip()
         if cleaned.startswith("```"):
-            cleaned = re.sub(r'^```(?:json)?\n?', '', cleaned)
-            cleaned = re.sub(r'\n?```$', '', cleaned)
+            cleaned = re.sub(r"^```(?:json)?\n?", "", cleaned)
+            cleaned = re.sub(r"\n?```$", "", cleaned)
 
         try:
             data = json.loads(cleaned)
         except json.JSONDecodeError:
             # Try to extract JSON from response
-            match = re.search(r'\{[\s\S]*\}', cleaned)
+            match = re.search(r"\{[\s\S]*\}", cleaned)
             if match:
                 json_str = match.group()
                 try:
@@ -312,7 +315,7 @@ class LegalOperator:
             chunk_id=chunk_id,
             source_document_id=document_id,
             situation=data.get("situation_summary", ""),
-            model_used=self.model
+            model_used=self.model,
         )
 
         # Parse actors
@@ -338,23 +341,14 @@ class LegalOperator:
         return extraction
 
     def validate_extraction(
-        self,
-        extraction: ChunkExtraction,
-        original_text: str
-    ) -> Optional[ValidationResult]:
+        self, extraction: ChunkExtraction, original_text: str
+    ) -> ValidationResult | None:
         """Validate extraction against statutory sources."""
         if not self.validator:
             return None
-        return self.validator.validate_extraction(
-            extraction.model_dump(),
-            original_text
-        )
+        return self.validator.validate_extraction(extraction.model_dump(), original_text)
 
-    def review_extraction(
-        self,
-        extraction: ChunkExtraction,
-        original_text: str
-    ) -> ChunkExtraction:
+    def review_extraction(self, extraction: ChunkExtraction, original_text: str) -> ChunkExtraction:
         """
         Reflexion step: Review and improve extraction.
 
@@ -401,19 +395,19 @@ If improvements needed, respond with corrections in the same JSON format as orig
             return extraction
 
     # Legacy method aliases for backwards compatibility
-    def _parse_actor(self, data: Dict[str, Any], chunk_id: str) -> Actor:
+    def _parse_actor(self, data: dict[str, Any], chunk_id: str) -> Actor:
         """Legacy method - delegates to ExtractionParser."""
         return self.parser.parse_actor(data, chunk_id)
 
-    def _parse_verb_phrase(self, data: Dict[str, Any], chunk_id: str) -> VerbPhrase:
+    def _parse_verb_phrase(self, data: dict[str, Any], chunk_id: str) -> VerbPhrase:
         """Legacy method - delegates to ExtractionParser."""
         return self.parser.parse_verb_phrase(data, chunk_id)
 
-    def _parse_question(self, data: Dict[str, Any], chunk_id: str) -> PredictiveQuestion:
+    def _parse_question(self, data: dict[str, Any], chunk_id: str) -> PredictiveQuestion:
         """Legacy method - delegates to ExtractionParser."""
         return self.parser.parse_question(data, chunk_id)
 
-    def _parse_link(self, data: Dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
+    def _parse_link(self, data: dict[str, Any], chunk_id: str) -> SpatioTemporalLink:
         """Legacy method - delegates to ExtractionParser."""
         return self.parser.parse_link(data, chunk_id)
 

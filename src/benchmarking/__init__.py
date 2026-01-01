@@ -26,8 +26,8 @@ Usage:
     history = tracker.get_metric_history("composite_score", days=30)
 """
 
-from .continuous_monitor import ContinuousMonitor
 from .accuracy_tracker import AccuracyTracker
+from .continuous_monitor import ContinuousMonitor
 
 __all__ = [
     "ContinuousMonitor",

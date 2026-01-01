@@ -8,19 +8,13 @@ Based on: GSW_prompt_summary.pdf
 Adapted for: Australian Legal Domain
 """
 
-import json
-import re
 import os
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.logic.gsw_schema import (
-    Actor, GlobalWorkspace, State, VerbPhrase, SpatioTemporalLink
-)
-
+from src.logic.gsw_schema import Actor, GlobalWorkspace, State
 
 # ============================================================================
 # SUMMARY PROMPT
@@ -74,6 +68,7 @@ Return ONLY the summary paragraph, no markdown or formatting.
 # SUMMARY GENERATOR
 # ============================================================================
 
+
 class LegalSummary:
     """
     Generates entity-centric narrative summaries.
@@ -87,8 +82,8 @@ class LegalSummary:
     def __init__(
         self,
         model: str = "google/gemini-2.5-flash",
-        api_key: Optional[str] = None,
-        use_openrouter: bool = True
+        api_key: str | None = None,
+        use_openrouter: bool = True,
     ):
         self.model = model
         self.use_openrouter = use_openrouter
@@ -106,22 +101,19 @@ class LegalSummary:
         """Setup LLM client."""
         if self.use_openrouter and self.api_key:
             import httpx
+
             self.client = httpx.Client(
                 base_url="https://openrouter.ai/api/v1",
                 headers={
                     "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                timeout=60.0
+                timeout=60.0,
             )
         else:
             self.client = None
 
-    def generate_summary(
-        self,
-        actor: Actor,
-        workspace: GlobalWorkspace
-    ) -> str:
+    def generate_summary(self, actor: Actor, workspace: GlobalWorkspace) -> str:
         """
         Generate a narrative summary for an actor.
 
@@ -153,10 +145,8 @@ class LegalSummary:
         )
 
     def generate_all_summaries(
-        self,
-        workspace: GlobalWorkspace,
-        actor_types: Optional[List[str]] = None
-    ) -> Dict[str, str]:
+        self, workspace: GlobalWorkspace, actor_types: list[str] | None = None
+    ) -> dict[str, str]:
         """
         Generate summaries for all actors in workspace.
 
@@ -183,7 +173,7 @@ class LegalSummary:
 
         return summaries
 
-    def _format_states(self, states: List[State]) -> str:
+    def _format_states(self, states: list[State]) -> str:
         """Format states for prompt."""
         if not states:
             return "No states recorded."
@@ -238,11 +228,7 @@ class LegalSummary:
 
         return "\n".join(links) if links else "No spatio-temporal context."
 
-    def _find_related_entities(
-        self,
-        actor_id: str,
-        workspace: GlobalWorkspace
-    ) -> str:
+    def _find_related_entities(self, actor_id: str, workspace: GlobalWorkspace) -> str:
         """Find entities related to this actor via actions or links."""
         related = set()
 
@@ -276,7 +262,7 @@ class LegalSummary:
         states_info: str,
         actions_info: str,
         spacetime_info: str,
-        related_entities: str
+        related_entities: str,
     ) -> str:
         """Generate summary using LLM."""
         prompt = SUMMARY_USER_PROMPT.format(
@@ -286,7 +272,7 @@ class LegalSummary:
             states_info=states_info,
             actions_info=actions_info,
             spacetime_info=spacetime_info,
-            related_entities=related_entities
+            related_entities=related_entities,
         )
 
         response = self.client.post(
@@ -295,11 +281,11 @@ class LegalSummary:
                 "model": f"google/{self.model}",
                 "messages": [
                     {"role": "system", "content": SUMMARY_SYSTEM_PROMPT},
-                    {"role": "user", "content": prompt}
+                    {"role": "user", "content": prompt},
                 ],
                 "temperature": 0.3,
-                "max_tokens": 500
-            }
+                "max_tokens": 500,
+            },
         )
         response.raise_for_status()
 
@@ -311,7 +297,7 @@ class LegalSummary:
         states_info: str,
         actions_info: str,
         spacetime_info: str,
-        related_entities: str
+        related_entities: str,
     ) -> str:
         """Generate summary using templates (fallback)."""
         parts = []
@@ -334,9 +320,9 @@ class LegalSummary:
                 parts.append(f"Currently, their {state.name} is {state.value}.")
 
         # Temporal context
-        temporal_lines = [l for l in spacetime_info.split('\n') if 'Temporal' in l]
+        temporal_lines = [l for l in spacetime_info.split("\n") if "Temporal" in l]
         if temporal_lines:
-            date = temporal_lines[0].split(': ')[-1]
+            date = temporal_lines[0].split(": ")[-1]
             parts.append(f"Key events occurred on {date}.")
 
         # Related entities
@@ -369,15 +355,15 @@ if __name__ == "__main__":
                 entity_id="actor_001",
                 name="RelationshipStatus",
                 value="Separated",
-                start_date="2020-03-01"
+                start_date="2020-03-01",
             ),
             State(
                 id="state_002",
                 entity_id="actor_001",
                 name="Employment",
-                value="Accountant earning $120,000"
-            )
-        ]
+                value="Accountant earning $120,000",
+            ),
+        ],
     )
     workspace.add_actor(actor)
 

@@ -8,32 +8,31 @@ including overlap analysis and GSW processing priorities.
 import json
 import logging
 import sys
-from pathlib import Path
-from collections import Counter
-from typing import Dict, List, Any, Optional
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.analysis.domain_report_generator import DomainReportGenerator, DomainAnalysis
-
+from src.analysis.domain_report_generator import DomainAnalysis, DomainReportGenerator
 
 # ============================================================================
 # MASTER REPORT GENERATOR
 # ============================================================================
+
 
 class MasterDomainReport:
     """Generates cross-domain analysis and master reports."""
 
     # GSW processing priority factors
     PRIORITY_WEIGHTS = {
-        "existing_ontology": 3,      # Domain has existing ontology work
-        "legal_importance": 2,       # High legal/social importance
-        "volume_moderate": 2,        # Not too large, not too small
-        "court_hierarchy": 1,        # High court decisions
-        "temporal_coverage": 1,      # Good date range
+        "existing_ontology": 3,  # Domain has existing ontology work
+        "legal_importance": 2,  # High legal/social importance
+        "volume_moderate": 2,  # Not too large, not too small
+        "court_hierarchy": 1,  # High court decisions
+        "temporal_coverage": 1,  # Good date range
     }
 
     # Domains with existing ontology work
@@ -46,10 +45,7 @@ class MasterDomainReport:
 
         self.domain_generator = DomainReportGenerator(domains_dir, output_dir)
 
-    def generate_master_report(
-        self,
-        analyses: Optional[Dict[str, DomainAnalysis]] = None
-    ) -> str:
+    def generate_master_report(self, analyses: dict[str, DomainAnalysis] | None = None) -> str:
         """
         Generate the master cross-domain report.
 
@@ -71,13 +67,13 @@ class MasterDomainReport:
 
         # Save report
         report_path = self.output_dir / "MASTER_DOMAIN_REPORT.md"
-        with open(report_path, 'w', encoding='utf-8') as f:
+        with open(report_path, "w", encoding="utf-8") as f:
             f.write(report)
 
         # Save JSON data
         json_path = self.output_dir / "master_data.json"
         json_data = self._generate_json_data(analyses)
-        with open(json_path, 'w', encoding='utf-8') as f:
+        with open(json_path, "w", encoding="utf-8") as f:
             json.dump(json_data, f, indent=2)
 
         print(f"[Master Report] Saved to {report_path}")
@@ -109,9 +105,7 @@ identifying patterns, overlaps, and recommendations for GSW processing.
 """
 
     def _generate_domain_distribution(
-        self,
-        analyses: Dict[str, DomainAnalysis],
-        total_docs: int
+        self, analyses: dict[str, DomainAnalysis], total_docs: int
     ) -> str:
         """Generate domain distribution section."""
         report = """## 1. Domain Distribution
@@ -120,11 +114,7 @@ identifying patterns, overlaps, and recommendations for GSW processing.
 |--------|-----------|-------------|--------------|------------|
 """
         # Sort by document count
-        sorted_domains = sorted(
-            analyses.items(),
-            key=lambda x: x[1].total_documents,
-            reverse=True
-        )
+        sorted_domains = sorted(analyses.items(), key=lambda x: x[1].total_documents, reverse=True)
 
         for domain_name, analysis in sorted_domains:
             pct = (analysis.total_documents / total_docs) * 100 if total_docs > 0 else 0
@@ -132,10 +122,7 @@ identifying patterns, overlaps, and recommendations for GSW processing.
             # Find primary document type
             primary_type = "N/A"
             if analysis.type_distribution:
-                primary_type = max(
-                    analysis.type_distribution.items(),
-                    key=lambda x: x[1]
-                )[0]
+                primary_type = max(analysis.type_distribution.items(), key=lambda x: x[1])[0]
 
             date_range = f"{analysis.date_min or 'N/A'} - {analysis.date_max or 'N/A'}"
 
@@ -170,7 +157,7 @@ identifying patterns, overlaps, and recommendations for GSW processing.
 
 """
         if stats_path.exists():
-            with open(stats_path, 'r', encoding='utf-8') as f:
+            with open(stats_path, encoding="utf-8") as f:
                 stats = json.load(f)
 
             overlap = stats.get("overlap_stats", {})
@@ -215,10 +202,7 @@ or represent genuinely cross-cutting legal matters.
 """
         return report
 
-    def _generate_priority_ranking(
-        self,
-        analyses: Dict[str, DomainAnalysis]
-    ) -> str:
+    def _generate_priority_ranking(self, analyses: dict[str, DomainAnalysis]) -> str:
         """Generate GSW processing priority ranking."""
         report = """## 3. GSW Processing Priority Ranking
 
@@ -253,10 +237,8 @@ Based on: existing infrastructure, legal importance, volume, and data quality.
                 rationale.append("Small volume - quick to process")
 
             # Factor 4: Court hierarchy (High Court, Full Court)
-            high_courts = ['HCA', 'FCAFC', 'FamCAFC', 'NSWCA', 'NSWCCA']
-            high_court_count = sum(
-                analysis.court_codes.get(c, 0) for c in high_courts
-            )
+            high_courts = ["HCA", "FCAFC", "FamCAFC", "NSWCA", "NSWCCA"]
+            high_court_count = sum(analysis.court_codes.get(c, 0) for c in high_courts)
             if high_court_count > 100:
                 score += self.PRIORITY_WEIGHTS["court_hierarchy"] * 2
                 rationale.append("High court decisions")
@@ -272,12 +254,14 @@ Based on: existing infrastructure, legal importance, volume, and data quality.
                 except (ValueError, TypeError) as e:
                     logger.debug(f"Failed to parse temporal coverage dates: {e}")
 
-            priorities.append({
-                "domain": domain_name,
-                "score": score,
-                "rationale": ", ".join(rationale) or "Standard processing",
-                "docs": analysis.total_documents
-            })
+            priorities.append(
+                {
+                    "domain": domain_name,
+                    "score": score,
+                    "rationale": ", ".join(rationale) or "Standard processing",
+                    "docs": analysis.total_documents,
+                }
+            )
 
         # Sort by score
         priorities.sort(key=lambda x: x["score"], reverse=True)
@@ -291,10 +275,7 @@ Based on: existing infrastructure, legal importance, volume, and data quality.
 """
         return report
 
-    def _generate_recommendations(
-        self,
-        analyses: Dict[str, DomainAnalysis]
-    ) -> str:
+    def _generate_recommendations(self, analyses: dict[str, DomainAnalysis]) -> str:
         """Generate processing recommendations."""
         report = """## 4. Processing Recommendations
 
@@ -341,9 +322,7 @@ Focus on domains with existing infrastructure and high legal value:
         # Calculate total volume
         total_docs = sum(a.total_documents for a in analyses.values())
         large_domains = [
-            (name, a.total_documents)
-            for name, a in analyses.items()
-            if a.total_documents > 30000
+            (name, a.total_documents) for name, a in analyses.items() if a.total_documents > 30000
         ]
 
         if large_domains:
@@ -360,7 +339,7 @@ Focus on domains with existing infrastructure and high legal value:
 **API Cost Estimation**:
 """
         # Rough cost estimate (assuming ~$0.001 per 1K tokens, ~2K tokens per doc)
-        estimated_cost = (total_docs * 2000 * 0.000001)
+        estimated_cost = total_docs * 2000 * 0.000001
         report += f"- Estimated total tokens: ~{total_docs * 2000:,}\n"
         report += f"- Estimated API cost: ~${estimated_cost:,.2f} (at $1/1M tokens)\n"
 
@@ -382,10 +361,7 @@ Focus on domains with existing infrastructure and high legal value:
 """
         return report
 
-    def _generate_json_data(
-        self,
-        analyses: Dict[str, DomainAnalysis]
-    ) -> Dict[str, Any]:
+    def _generate_json_data(self, analyses: dict[str, DomainAnalysis]) -> dict[str, Any]:
         """Generate JSON data for programmatic use."""
         return {
             "generated_at": datetime.now().isoformat(),
@@ -397,10 +373,10 @@ Focus on domains with existing infrastructure and high legal value:
                     "type_distribution": a.type_distribution,
                     "jurisdiction_distribution": a.jurisdiction_distribution,
                     "date_range": {"min": a.date_min, "max": a.date_max},
-                    "court_codes": a.court_codes
+                    "court_codes": a.court_codes,
                 }
                 for name, a in analyses.items()
-            }
+            },
         }
 
 
@@ -408,21 +384,24 @@ Focus on domains with existing infrastructure and high legal value:
 # CLI
 # ============================================================================
 
+
 def main():
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate master domain report")
     parser.add_argument(
-        "--domains-dir", "-d",
+        "--domains-dir",
+        "-d",
         type=Path,
         default=Path("data/processed/domains"),
-        help="Directory containing domain JSONL files"
+        help="Directory containing domain JSONL files",
     )
     parser.add_argument(
-        "--output-dir", "-o",
+        "--output-dir",
+        "-o",
         type=Path,
         default=Path("reports/domain_analysis"),
-        help="Output directory for reports"
+        help="Output directory for reports",
     )
 
     args = parser.parse_args()
