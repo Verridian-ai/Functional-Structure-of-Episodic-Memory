@@ -208,6 +208,18 @@ export default function LegalGraph3D() {
   }>({ states: [], domains: [], courtLevels: [] });
   const [viewMode, setViewMode] = useState<ViewMode>('standard');
   const [showViewMenu, setShowViewMenu] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Fetch data with filters
   const fetchGraph = async (currentFilters: FilterState) => {
@@ -307,22 +319,39 @@ export default function LegalGraph3D() {
 
   return (
     <div className="w-full h-full relative bg-zinc-950">
-      {/* Top Navigation Bar */}
-      <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
+      {/* Top Navigation Bar - Responsive */}
+      <div className="graph-back-button absolute top-4 right-4 z-20 flex items-center gap-2 safe-area-pt">
         <a
           href="/"
-          className="flex items-center gap-2 px-4 py-2 bg-zinc-900/90 backdrop-blur-md border border-zinc-700 hover:border-cyan-500/50 rounded-lg text-white hover:text-cyan-400 transition-all group"
+          className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-zinc-900/90 backdrop-blur-md border border-zinc-700 hover:border-cyan-500/50 rounded-lg text-white hover:text-cyan-400 transition-all group touch-target"
         >
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
           </svg>
-          <span className="text-sm font-medium">Back to Chat</span>
+          <span className="text-xs sm:text-sm font-medium hidden xs:inline">Back to Chat</span>
         </a>
       </div>
 
-      {/* Overlay UI (U4.4) */}
-      <div className="absolute top-4 left-4 z-10 pointer-events-none">
-        <div className="bg-zinc-900/90 backdrop-blur-md border border-zinc-700 p-4 rounded-lg pointer-events-auto max-w-sm">
+      {/* Overlay UI - Mobile Responsive */}
+      <div className={`graph-overlay-panel absolute z-10 pointer-events-none ${
+        isMobile
+          ? `fixed left-2 right-2 bottom-4 top-auto ${isExpanded ? 'expanded' : ''}`
+          : 'top-4 left-4'
+      }`}>
+        <div className={`bg-zinc-900/90 backdrop-blur-md border border-zinc-700 p-3 sm:p-4 rounded-xl pointer-events-auto ${
+          isMobile ? 'max-h-[40vh] overflow-y-auto' : 'max-w-sm'
+        } ${isExpanded && isMobile ? 'max-h-[70vh]' : ''}`}>
+          {/* Mobile expand/collapse button */}
+          {isMobile && (
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="w-full flex items-center justify-center py-1 mb-2 text-zinc-400 hover:text-white"
+            >
+              <svg className={`w-5 h-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
+              </svg>
+            </button>
+          )}
           <h2 className="text-white font-bold text-lg mb-2">Legal Citation Network</h2>
 
           {/* Filter Controls */}
@@ -449,76 +478,80 @@ export default function LegalGraph3D() {
             </div>
           </div>
 
-          {/* Stats */}
+          {/* Stats - Responsive Grid */}
           <div className="text-zinc-400 text-sm space-y-1">
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="graph-stats-grid grid grid-cols-2 gap-2 text-xs">
               <div className="bg-zinc-800/50 p-2 rounded">
-                <div className="text-zinc-500">Loaded Nodes</div>
-                <div className="text-white font-mono text-lg">{data.nodes.length.toLocaleString()}</div>
+                <div className="text-zinc-500 text-[10px] sm:text-xs">Loaded Nodes</div>
+                <div className="text-white font-mono text-base sm:text-lg">{data.nodes.length.toLocaleString()}</div>
               </div>
               <div className="bg-zinc-800/50 p-2 rounded">
-                <div className="text-zinc-500">Loaded Edges</div>
-                <div className="text-white font-mono text-lg">{data.edges.length.toLocaleString()}</div>
+                <div className="text-zinc-500 text-[10px] sm:text-xs">Loaded Edges</div>
+                <div className="text-white font-mono text-base sm:text-lg">{data.edges.length.toLocaleString()}</div>
               </div>
             </div>
             {data.stats && (
-              <div className="mt-2 text-xs text-zinc-500">
-                Total in database: {data.stats.totalNodes.toLocaleString()} cases, {data.stats.totalEdges.toLocaleString()} citations
+              <div className="mt-2 text-[10px] sm:text-xs text-zinc-500">
+                Total: {data.stats.totalNodes.toLocaleString()} cases, {data.stats.totalEdges.toLocaleString()} citations
               </div>
             )}
           </div>
 
-          {/* Color Legend - Expanded Categories */}
-          <div className="mt-3 pt-3 border-t border-zinc-700">
-            <div className="text-xs text-zinc-500 mb-2">Court Hierarchy</div>
-            <div className="space-y-2 text-xs">
-              {/* Apex */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#fbbf24] shadow-sm shadow-yellow-500/50" />
-                <span className="text-zinc-300 font-medium">High Court (HCA)</span>
-              </div>
-              {/* Federal */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#3b82f6] shadow-sm shadow-blue-500/50" />
-                <span className="text-zinc-400">Federal Court</span>
-              </div>
-              {/* Supreme Courts */}
-              <div className="pl-2 border-l border-zinc-700 space-y-1">
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-[#22c55e]" />
-                  <span className="text-zinc-500">NSW Supreme</span>
+          {/* Color Legend - Responsive */}
+          {(!isMobile || isExpanded) && (
+            <div className="mt-3 pt-3 border-t border-zinc-700">
+              <div className="text-[10px] sm:text-xs text-zinc-500 mb-2">Court Hierarchy</div>
+              <div className="graph-legend space-y-1.5 sm:space-y-2 text-[10px] sm:text-xs">
+                {/* Key courts - Always visible */}
+                <div className="flex flex-wrap gap-x-3 gap-y-1.5">
+                  <div className="graph-legend-item flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-[#fbbf24] shadow-sm shadow-yellow-500/50" />
+                    <span className="text-zinc-300 font-medium">High Court</span>
+                  </div>
+                  <div className="graph-legend-item flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-[#3b82f6] shadow-sm shadow-blue-500/50" />
+                    <span className="text-zinc-400">Federal</span>
+                  </div>
+                  <div className="graph-legend-item flex items-center gap-1.5">
+                    <div className="w-2 h-2 rounded-full bg-[#a855f7] shadow-sm shadow-purple-500/50" />
+                    <span className="text-zinc-400">Appeals</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-[#10b981]" />
-                  <span className="text-zinc-500">VIC Supreme</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="w-2 h-2 rounded-full bg-[#14b8a6]" />
-                  <span className="text-zinc-500">QLD Supreme</span>
-                </div>
-              </div>
-              {/* Appeals */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full bg-[#a855f7] shadow-sm shadow-purple-500/50" />
-                <span className="text-zinc-400">Courts of Appeal</span>
-              </div>
-              {/* Specialized */}
-              <div className="flex flex-wrap gap-2 mt-1">
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-[#ec4899]" />
-                  <span className="text-zinc-500">Family</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
-                  <span className="text-zinc-500">Criminal</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-[#f97316]" />
-                  <span className="text-zinc-500">Tribunal</span>
+                {/* Supreme Courts - Collapsed on mobile unless expanded */}
+                {(!isMobile || isExpanded) && (
+                  <div className="flex flex-wrap gap-x-2 gap-y-1 pl-2 border-l border-zinc-700">
+                    <div className="flex items-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#22c55e]" />
+                      <span className="text-zinc-500">NSW</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
+                      <span className="text-zinc-500">VIC</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#14b8a6]" />
+                      <span className="text-zinc-500">QLD</span>
+                    </div>
+                  </div>
+                )}
+                {/* Specialized courts */}
+                <div className="flex flex-wrap gap-x-2 gap-y-1">
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-[#ec4899]" />
+                    <span className="text-zinc-500">Family</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-[#ef4444]" />
+                    <span className="text-zinc-500">Criminal</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-2 h-2 rounded-full bg-[#f97316]" />
+                    <span className="text-zinc-500">Tribunal</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
 
           {selectedNode && (
             <div className="mt-4 pt-4 border-t border-zinc-700 animate-in fade-in slide-in-from-top-2">
