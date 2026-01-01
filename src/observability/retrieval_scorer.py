@@ -5,9 +5,12 @@ Retrieval Scorer
 Main scorer class for evaluating GSW retrieval operations.
 """
 
+import logging
 from typing import Any, Callable, Dict, List, Optional, Set
 from datetime import datetime
 import re
+
+logger = logging.getLogger(__name__)
 
 from .score_types import AccuracyMetrics, ScoringWeights
 
@@ -558,8 +561,8 @@ class RetrievalScorer:
                         continue
             elif isinstance(date_val, datetime):
                 return datetime(1900, 1, 1) <= date_val <= datetime.now()
-        except Exception:
-            pass
+        except Exception as e:
+            logger.debug(f"Date validation failed: {e}")
 
         return False
 

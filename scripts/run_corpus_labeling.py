@@ -8,11 +8,14 @@ Usage:
     python scripts/run_corpus_labeling.py --resume # Resume from checkpoint
 """
 import json
+import logging
 import sys
 import time
 import argparse
 from pathlib import Path
 from datetime import datetime, timedelta
+
+logger = logging.getLogger(__name__)
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
@@ -40,8 +43,8 @@ def load_checkpoint():
         try:
             with open(STATE_FILE, 'r') as f:
                 return json.load(f)
-        except:
-            pass
+        except (json.JSONDecodeError, IOError) as e:
+            logger.warning(f"Failed to load checkpoint: {e}")
     return None
 
 def save_checkpoint(line_num, doc_count, bytes_read, elapsed, domain_counts):

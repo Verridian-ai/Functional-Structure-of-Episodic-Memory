@@ -9,9 +9,12 @@ using rule-based logic (Phase 1B, Task T1.8).
 This component provides immediate value while the neural Macro-TEM model trains.
 """
 
+import logging
 import re
 from typing import Union, Dict, List, Optional
 from collections import Counter
+
+logger = logging.getLogger(__name__)
 
 from src.logic.gsw_schema import GlobalWorkspace, ChunkExtraction, Actor, State, ActorType
 from src.tem.structures import CaseArchetype, CaseStructure, ARCHETYPE_DESCRIPTIONS
@@ -97,9 +100,10 @@ class HeuristicTEMFactorizer:
                         end_year = int(re.search(r'\d{4}', state.end_date).group())
                         duration = end_year - start_year
                         features["relationship_duration_years"] = float(duration)
-                    except (AttributeError, ValueError):
-                        pass
-                        
+                    except (AttributeError, ValueError) as e:
+                        # Date parsing fallback - non-critical, continue processing
+                        logger.debug(f"Could not parse relationship duration: {e}")
+
             # Financial Disparity
             if "income" in name_lower or "earning" in name_lower:
                 # If we see explicit states about disparity

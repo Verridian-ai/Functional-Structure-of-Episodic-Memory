@@ -1,0 +1,102 @@
+# Verridian AI - Pre-commit Configuration
+# ========================================
+# Run: pre-commit install
+# Manual: pre-commit run --all-files
+
+repos:
+  # General hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(data/|ui/node_modules/)
+      - id: end-of-file-fixer
+        exclude: ^(data/|ui/node_modules/)
+      - id: check-yaml
+        args: [--unsafe]
+      - id: check-json
+        exclude: ^(data/|ui/node_modules/)
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+        exclude: ^(data/|assets/)
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: detect-private-key
+      - id: debug-statements
+        exclude: ^(scripts/verify_openrouter\.py)
+      - id: check-docstring-first
+      - id: check-ast
+
+  # Python code formatting with Black
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black
+        language_version: python3.11
+        args: [--config, pyproject.toml]
+        exclude: ^(ui/|data/|law docs research/)
+
+  # Fast Python linting with Ruff
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.1.9
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        exclude: ^(ui/|data/|law docs research/)
+      - id: ruff-format
+        exclude: ^(ui/|data/|law docs research/)
+
+  # Type checking with MyPy
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        args: [--config-file, pyproject.toml]
+        additional_dependencies:
+          - types-requests>=2.31.0
+          - types-PyYAML>=6.0.0
+          - pydantic>=2.0.0
+        exclude: ^(ui/|data/|tests/|scripts/|law docs research/)
+
+  # Security scanning
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.6
+    hooks:
+      - id: bandit
+        args: [-c, pyproject.toml, -r]
+        additional_dependencies: ["bandit[toml]"]
+        exclude: ^(tests/|scripts/|ui/)
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.38.0
+    hooks:
+      - id: markdownlint
+        args: [--fix, --disable, MD013, MD033, MD041, --]
+        exclude: ^(ui/|data/|law docs research/)
+
+  # YAML formatting
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.12.0
+    hooks:
+      - id: pretty-format-yaml
+        args: [--autofix, --indent, '2']
+        exclude: ^(ui/|data/)
+
+  # Commit message linting
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.13.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+
+# Configuration for specific hooks
+ci:
+  autofix_prs: true
+  autofix_commit_msg: 'style: auto-fix by pre-commit hooks'
+  autoupdate_branch: 'main'
+  autoupdate_schedule: weekly
+  skip: [mypy]  # Skip mypy in CI (run separately)
+
+default_language_version:
+  python: python3.11
