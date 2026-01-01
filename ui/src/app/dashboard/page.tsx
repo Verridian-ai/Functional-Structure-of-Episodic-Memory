@@ -274,51 +274,51 @@ export default function DashboardPage() {
       </header>
 
       {/* Main Content */}
-      <main className="relative z-10 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 max-w-7xl mx-auto">
+      <main className="relative z-10 px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-7xl mx-auto">
         {/* Hero Section */}
-        <div className="mb-8 sm:mb-12">
-          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 sm:mb-3">
+        <div className="mb-5 sm:mb-8 lg:mb-12">
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-1.5 sm:mb-2 lg:mb-3">
             LAW OS Dashboard
           </h1>
-          <p className="text-sm sm:text-base text-zinc-400 max-w-2xl">
-            Brain-inspired legal intelligence platform with episodic memory, active inference, and vector symbolic architecture.
+          <p className="text-xs sm:text-sm md:text-base text-zinc-400 max-w-2xl leading-relaxed">
+            Brain-inspired legal intelligence with episodic memory and vector symbolic architecture.
           </p>
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3 lg:gap-4 mb-5 sm:mb-6 lg:mb-8">
           <div className="stat-card">
             <div className="stat-card-value">{activeCount}</div>
-            <div className="stat-card-label">Active Features</div>
+            <div className="stat-card-label">Active</div>
           </div>
           <div className="stat-card">
             <div className="stat-card-value">{betaCount}</div>
-            <div className="stat-card-label">Beta Features</div>
+            <div className="stat-card-label">Beta</div>
           </div>
           <div className="stat-card">
             <div className="stat-card-value flex items-center gap-1">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-emerald-400">Online</span>
+              <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-emerald-400 text-base sm:text-lg lg:text-2xl">Online</span>
             </div>
             <div className="stat-card-label">GSW Status</div>
           </div>
           <div className="stat-card">
             <div className="stat-card-value flex items-center gap-1">
-              <Sparkles className="w-5 h-5 text-amber-400" />
-              <span className="text-amber-400">Gemini 3</span>
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+              <span className="text-amber-400 text-base sm:text-lg lg:text-2xl">Gemini</span>
             </div>
             <div className="stat-card-label">AI Model</div>
           </div>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto pb-2 scrollbar-hide">
+        {/* Category Filter - Horizontal scroll on mobile */}
+        <div className="category-filter-scroll mb-6">
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap touch-target ${
+            className={`category-filter-btn ${
               selectedCategory === 'all'
                 ? 'bg-white/10 text-white border border-white/20'
-                : 'bg-white/5 text-zinc-400 border border-transparent hover:bg-white/10'
+                : 'bg-white/5 text-zinc-400 border border-transparent active:bg-white/10'
             }`}
           >
             All Features
@@ -327,10 +327,10 @@ export default function DashboardPage() {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap touch-target ${
+              className={`category-filter-btn ${
                 selectedCategory === cat
                   ? `bg-${CATEGORY_INFO[cat].color}-500/20 text-${CATEGORY_INFO[cat].color}-400 border border-${CATEGORY_INFO[cat].color}-500/30`
-                  : 'bg-white/5 text-zinc-400 border border-transparent hover:bg-white/10'
+                  : 'bg-white/5 text-zinc-400 border border-transparent active:bg-white/10'
               }`}
             >
               {CATEGORY_INFO[cat].label}
@@ -346,52 +346,43 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="mt-8 sm:mt-12 dashboard-section">
+        <div className="mt-6 sm:mt-8 lg:mt-12 dashboard-section">
           <h2 className="dashboard-section-title">
-            <Play className="w-5 h-5 text-cyan-400" />
+            <Play className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Link
-              href="/"
-              className="flex items-center gap-4 p-4 bg-gradient-to-r from-cyan-500/10 to-transparent border border-cyan-500/20 rounded-xl hover:border-cyan-500/40 transition-all group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center">
-                <Brain className="w-6 h-6 text-cyan-400" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            <Link href="/" className="quick-action-card group" style={{ background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, transparent 100%)' }}>
+              <div className="quick-action-icon bg-cyan-500/20">
+                <Brain className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-white font-medium">Start New Query</div>
-                <div className="text-xs text-zinc-400">Begin legal research with AI assistance</div>
+                <div className="text-white font-medium text-sm sm:text-base">Start New Query</div>
+                <div className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Begin legal research with AI</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-cyan-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-500 group-hover:text-cyan-400 transition-colors flex-shrink-0" />
             </Link>
 
-            <Link
-              href="/visualize"
-              className="flex items-center gap-4 p-4 bg-gradient-to-r from-purple-500/10 to-transparent border border-purple-500/20 rounded-xl hover:border-purple-500/40 transition-all group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
-                <Network className="w-6 h-6 text-purple-400" />
+            <Link href="/visualize" className="quick-action-card group" style={{ background: 'linear-gradient(135deg, rgba(168, 85, 247, 0.1) 0%, transparent 100%)', borderColor: 'rgba(168, 85, 247, 0.2)' }}>
+              <div className="quick-action-icon bg-purple-500/20">
+                <Network className="w-5 h-5 sm:w-6 sm:h-6 text-purple-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-white font-medium">Explore Graph</div>
-                <div className="text-xs text-zinc-400">Navigate the citation network</div>
+                <div className="text-white font-medium text-sm sm:text-base">Explore Graph</div>
+                <div className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Navigate citation network</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-purple-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-500 group-hover:text-purple-400 transition-colors flex-shrink-0" />
             </Link>
 
-            <Link
-              href="/upload"
-              className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-xl hover:border-emerald-500/40 transition-all group"
-            >
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
-                <Upload className="w-6 h-6 text-emerald-400" />
+            <Link href="/upload" className="quick-action-card group" style={{ background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%)', borderColor: 'rgba(16, 185, 129, 0.2)' }}>
+              <div className="quick-action-icon bg-emerald-500/20">
+                <Upload className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="text-white font-medium">Upload Document</div>
-                <div className="text-xs text-zinc-400">Process through GSW pipeline</div>
+                <div className="text-white font-medium text-sm sm:text-base">Upload Document</div>
+                <div className="text-[11px] sm:text-xs text-zinc-400 mt-0.5">Process through GSW pipeline</div>
               </div>
-              <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 text-zinc-500 group-hover:text-emerald-400 transition-colors flex-shrink-0" />
             </Link>
           </div>
         </div>
@@ -420,24 +411,24 @@ function FeatureCard({ feature }: { feature: Feature }) {
       <div
         className={`feature-card-icon bg-${categoryInfo.color}-500/20`}
       >
-        <span className={`text-${categoryInfo.color}-400`}>
+        <span className={`text-${categoryInfo.color}-400 [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5`}>
           {feature.icon}
         </span>
       </div>
-      <h3 className="feature-card-title flex items-center gap-2">
-        {feature.title}
+      <h3 className="feature-card-title flex items-center gap-1.5 flex-wrap">
+        <span className="truncate">{feature.title}</span>
         {feature.status === 'beta' && (
-          <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 text-[10px] rounded">BETA</span>
+          <span className="px-1 py-0.5 bg-amber-500/20 text-amber-400 text-[9px] sm:text-[10px] rounded flex-shrink-0">BETA</span>
         )}
         {feature.status === 'coming-soon' && (
-          <span className="px-1.5 py-0.5 bg-zinc-700 text-zinc-400 text-[10px] rounded">SOON</span>
+          <span className="px-1 py-0.5 bg-zinc-700 text-zinc-400 text-[9px] sm:text-[10px] rounded flex-shrink-0">SOON</span>
         )}
       </h3>
       <p className="feature-card-description">{feature.description}</p>
       {feature.href && feature.status === 'active' && (
-        <div className="mt-3 flex items-center text-xs text-cyan-400 group-hover:text-cyan-300">
+        <div className="mt-auto pt-2 flex items-center text-[11px] sm:text-xs text-cyan-400 group-hover:text-cyan-300 group-active:text-cyan-300">
           <span>Open</span>
-          <ChevronRight className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" />
+          <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 ml-0.5 transition-transform group-hover:translate-x-1" />
         </div>
       )}
     </div>
