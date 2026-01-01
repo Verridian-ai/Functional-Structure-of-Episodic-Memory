@@ -77,7 +77,8 @@ const FEATURES: Feature[] = [
     description: 'Tolman-Eichenbaum Machine for structural legal precedent matching.',
     icon: <Layers className="w-5 h-5" />,
     category: 'core',
-    status: 'beta',
+    status: 'active',
+    href: '/tem',
   },
   {
     id: 'vsa',
@@ -86,6 +87,7 @@ const FEATURES: Feature[] = [
     icon: <Shield className="w-5 h-5" />,
     category: 'core',
     status: 'active',
+    href: '/validation',
   },
   // Analysis Features
   {
@@ -94,7 +96,8 @@ const FEATURES: Feature[] = [
     description: 'Explore actors, roles, and relationships extracted from legal documents.',
     icon: <Users className="w-5 h-5" />,
     category: 'analysis',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/entities',
   },
   {
     id: 'timeline',
@@ -102,7 +105,8 @@ const FEATURES: Feature[] = [
     description: 'Chronological reconstruction of events with temporal relationship mapping.',
     icon: <Calendar className="w-5 h-5" />,
     category: 'analysis',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/timeline',
   },
   {
     id: 'discrepancy',
@@ -110,7 +114,8 @@ const FEATURES: Feature[] = [
     description: 'Span-level conflict detection for dates, amounts, and entity references.',
     icon: <AlertTriangle className="w-5 h-5" />,
     category: 'analysis',
-    status: 'beta',
+    status: 'active',
+    href: '/discrepancy',
   },
   {
     id: 'authority',
@@ -119,6 +124,7 @@ const FEATURES: Feature[] = [
     icon: <Scale className="w-5 h-5" />,
     category: 'analysis',
     status: 'active',
+    href: '/authority',
   },
   // Pipeline Features
   {
@@ -127,7 +133,8 @@ const FEATURES: Feature[] = [
     description: 'Upload and process legal documents through the GSW extraction pipeline.',
     icon: <Upload className="w-5 h-5" />,
     category: 'pipeline',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/upload',
   },
   {
     id: 'pipeline',
@@ -135,7 +142,8 @@ const FEATURES: Feature[] = [
     description: 'Real-time pipeline execution with stage-by-stage progress tracking.',
     icon: <Workflow className="w-5 h-5" />,
     category: 'pipeline',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/pipeline',
   },
   {
     id: 'workspace',
@@ -143,7 +151,8 @@ const FEATURES: Feature[] = [
     description: 'Save, load, and merge GSW workspaces with TOON compression.',
     icon: <Database className="w-5 h-5" />,
     category: 'pipeline',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/workspace',
   },
   // Validation Features
   {
@@ -153,6 +162,7 @@ const FEATURES: Feature[] = [
     icon: <CheckCircle className="w-5 h-5" />,
     category: 'validation',
     status: 'active',
+    href: '/statutory',
   },
   {
     id: 'evaluation',
@@ -160,7 +170,8 @@ const FEATURES: Feature[] = [
     description: '6-metric evaluation system with precision, recall, and legal accuracy.',
     icon: <BarChart3 className="w-5 h-5" />,
     category: 'validation',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/evaluation',
   },
   {
     id: 'benchmark',
@@ -168,7 +179,8 @@ const FEATURES: Feature[] = [
     description: 'Continuous accuracy tracking with historical metrics and trends.',
     icon: <Clock className="w-5 h-5" />,
     category: 'validation',
-    status: 'coming-soon',
+    status: 'active',
+    href: '/benchmark',
   },
 ];
 
@@ -368,18 +380,19 @@ export default function DashboardPage() {
               <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-purple-400 transition-colors" />
             </Link>
 
-            <div
-              className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-xl opacity-60 cursor-not-allowed"
+            <Link
+              href="/upload"
+              className="flex items-center gap-4 p-4 bg-gradient-to-r from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-xl hover:border-emerald-500/40 transition-all group"
             >
               <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
                 <Upload className="w-6 h-6 text-emerald-400" />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="text-white font-medium">Upload Document</div>
-                <div className="text-xs text-zinc-400">Coming soon</div>
+                <div className="text-xs text-zinc-400">Process through GSW pipeline</div>
               </div>
-              <span className="px-2 py-0.5 bg-zinc-800 rounded text-[10px] text-zinc-400">Soon</span>
-            </div>
+              <ChevronRight className="w-5 h-5 text-zinc-500 group-hover:text-emerald-400 transition-colors" />
+            </Link>
           </div>
         </div>
       </main>

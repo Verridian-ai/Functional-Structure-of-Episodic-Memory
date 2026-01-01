@@ -2242,3 +2242,206 @@ aside button[aria-label="Close sidebar"]:active {
 [data-theme="light"] .stat-card-label {
   color: var(--text-secondary);
 }
+
+/* ===========================================
+   ACCESSIBILITY - REDUCED MOTION SUPPORT
+   =========================================== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce,
+  .animate-ping,
+  .animate-fade-in,
+  .animate-fade-in-up,
+  .animate-wave {
+    animation: none !important;
+  }
+
+  /* Keep essential state indicators visible */
+  .status-online {
+    box-shadow: 0 0 4px rgba(16, 185, 129, 0.5);
+  }
+}
+
+/* Motion-safe animations only */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe\:animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .motion-safe\:transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+}
+
+/* ===========================================
+   FOCUS VISIBLE STYLES
+   =========================================== */
+
+/* Custom focus ring for better accessibility */
+:focus-visible {
+  outline: 2px solid var(--accent-400);
+  outline-offset: 2px;
+}
+
+/* Skip link styling */
+.skip-links a:focus {
+  position: fixed !important;
+  top: 1rem;
+  left: 1rem;
+  z-index: 9999;
+  padding: 1rem 1.5rem;
+  background: var(--accent-500);
+  color: white;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: more) {
+  :root {
+    --border-color: rgba(255, 255, 255, 0.3);
+    --border-color-hover: rgba(255, 255, 255, 0.5);
+  }
+
+  .text-zinc-400,
+  .text-zinc-500 {
+    color: #d4d4d8 !important;
+  }
+
+  button, a {
+    text-decoration-thickness: 2px;
+  }
+}
+
+/* ===========================================
+   PRO-LEVEL UTILITY CLASSES
+   =========================================== */
+
+/* Glass morphism variants */
+.glass-ultra {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient text utility */
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--accent-400), var(--accent-500));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Smooth scrollbar styling */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Loading skeleton animation */
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+/* Micro-interaction: Button press effect */
+.press-effect {
+  transition: transform 150ms ease-out;
+}
+
+.press-effect:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .press-effect:active {
+    transform: none;
+  }
+}
+
+/* Focus trap indicator for modals */
+[data-focus-lock] {
+  box-shadow: 0 0 0 2px var(--accent-500);
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  aside,
+  header,
+  .skip-links {
+    display: none !important;
+  }
+
+  main {
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  * {
+    color: #000 !important;
+    background: #fff !important;
+  }
+}

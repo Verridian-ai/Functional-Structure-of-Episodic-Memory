@@ -36,11 +36,15 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
   }, []);
 
   return (
-    <div className={`group py-2 sm:py-3 md:py-5 transition-colors ${
-      isUser
-        ? 'bg-transparent'
-        : 'rounded-xl sm:rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-2.5 sm:px-3 md:px-4'
-    }`}>
+    <article
+      role="article"
+      aria-label={`Message from ${isUser ? 'you' : 'Legal AI'}`}
+      className={`group py-2 sm:py-3 md:py-5 transition-colors motion-reduce:transition-none ${
+        isUser
+          ? 'bg-transparent'
+          : 'rounded-xl sm:rounded-2xl bg-zinc-950/90 backdrop-blur-xl border border-white/10 shadow-lg px-2.5 sm:px-3 md:px-4'
+      }`}
+    >
       <div className="flex gap-2 sm:gap-3 md:gap-4">
         {/* Avatar */}
         <div className="flex-shrink-0">
@@ -235,7 +239,7 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
           )}
         </div>
       </div>
-    </div>
+    </article>
   );
 });
 
