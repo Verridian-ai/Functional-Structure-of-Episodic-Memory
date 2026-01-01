@@ -4,7 +4,8 @@ import React, { useState, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { User, Code, FileText, Loader2, CheckCircle2, AlertCircle, Clock, ExternalLink, Copy, BrainCircuit, Check } from 'lucide-react';
-import type { Message, Artifact, ToolCall } from '@/types';
+import type { Message, Artifact, ToolCall, AssistantMessage } from '@/types';
+import { isAssistantMessage } from '@/types';
 import { useStore } from '@/lib/store';
 import { SynapseLoader } from '../ui/SynapseLoader';
 
@@ -74,7 +75,7 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
           </div>
 
           {/* Tool Calls */}
-          {message.toolCalls && message.toolCalls.length > 0 && (
+          {isAssistantMessage(message) && message.toolCalls && message.toolCalls.length > 0 && (
             <div className="space-y-2">
               {message.toolCalls.map((tc) => (
                 <ToolCallDisplay key={tc.id} toolCall={tc} />
@@ -84,7 +85,7 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
 
           {/* Message Content */}
           <div className="prose prose-invert prose-sm max-w-none text-[13px] sm:text-sm md:text-base break-words">
-            {message.isStreaming && !message.content ? (
+            {isAssistantMessage(message) && message.isStreaming && !message.content ? (
               <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 text-zinc-400 py-1 sm:py-1.5 md:py-2">
                 <SynapseLoader size="sm" />
                 <span className="text-[11px] sm:text-xs md:text-sm animate-pulse">Processing...</span>
@@ -207,7 +208,7 @@ export const ChatMessage = React.memo(function ChatMessage({ message }: ChatMess
           </div>
 
           {/* Artifacts */}
-          {message.artifacts && message.artifacts.length > 0 && (
+          {isAssistantMessage(message) && message.artifacts && message.artifacts.length > 0 && (
             <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1 sm:pt-1.5 md:pt-2">
               {message.artifacts.map((artifact) => (
                 <button

@@ -26,4 +26,4 @@ export { useTheme } from './useTheme';
 export type { Theme, ResolvedTheme } from './useTheme';
 
 // Sound effects
-export { useSound, preloadSounds } from './useSound';
+export { useSound } from './useSound';
