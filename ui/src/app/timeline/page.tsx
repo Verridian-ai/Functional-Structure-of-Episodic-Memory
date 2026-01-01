@@ -120,8 +120,8 @@ export default function TimelinePage() {
                       ? `bg-${config.color}-500/20 border-${config.color}-500/50`
                       : 'bg-zinc-800 border-zinc-600'
                   }`}>
-                    <span className={isPast ? `text-${config.color}-400` : 'text-zinc-500'}>
-                      {React.cloneElement(config.icon as React.ReactElement, { className: 'w-2.5 h-2.5 sm:w-3 sm:h-3' })}
+                    <span className={`[&>svg]:w-2.5 [&>svg]:h-2.5 sm:[&>svg]:w-3 sm:[&>svg]:h-3 ${isPast ? `text-${config.color}-400` : 'text-zinc-500'}`}>
+                      {config.icon}
                     </span>
                   </div>
 
