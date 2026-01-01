@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { useStore } from '@/lib/store';
+import { SkipLinks } from '@/components/ui/SkipLinks';
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -96,11 +97,20 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
   );
 
   return (
-    <div 
+    <div
       className="flex min-h-[100dvh] md:h-screen bg-zinc-950 text-white overflow-hidden relative"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
+      {/* Skip Links for keyboard accessibility */}
+      <SkipLinks
+        links={[
+          { id: 'main-content', label: 'Skip to main content' },
+          { id: 'chat-input-container', label: 'Skip to chat input' },
+          { id: 'new-project-button', label: 'Skip to new chat' },
+        ]}
+      />
+
       {/* Subtle gradient background for LAW OS */}
       <div className="fixed inset-0 bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950 pointer-events-none z-[0]" />
       <div className="fixed inset-0 gradient-mesh pointer-events-none z-[1]" />
@@ -119,13 +129,17 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
 
       {/* Sidebar */}
       <aside
+        id="sidebar"
+        role="navigation"
+        aria-label="Main navigation"
+        aria-hidden={!sidebarOpen}
         className={`
           fixed lg:relative h-full
           w-[280px] sm:w-[300px] md:w-[320px] lg:w-80
           flex flex-col bg-zinc-950/98 lg:bg-zinc-950/95 backdrop-blur-3xl
           border-r border-white/5
           transition-transform duration-300 ease-in-out
-          shadow-2xl lg:shadow-xl
+          shadow-2xl lg:shadow-xl motion-reduce:transition-none
           ${sidebarOpen ? 'translate-x-0 z-50' : '-translate-x-full z-50'}
           lg:translate-x-0 lg:z-30
           ${!sidebarOpen ? 'lg:w-0 lg:min-w-0 lg:border-r-0' : ''}
@@ -245,13 +259,13 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
                   <div className="flex-shrink-0 opacity-100 sm:opacity-0 group-hover:opacity-100 transition-opacity flex items-center">
                     <button
                         onClick={(e) => {
-                        e.stopPropagation();
-                        deleteConversation(conv.id);
+                          e.stopPropagation();
+                          deleteConversation(conv.id);
                         }}
                         className="p-2 sm:p-2 text-zinc-500 hover:text-red-400 active:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors touch-target"
-                        title="Delete"
+                        aria-label={`Delete conversation: ${conv.title}`}
                     >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="w-4 h-4" aria-hidden="true" />
                     </button>
                   </div>
                 </div>
@@ -301,7 +315,7 @@ export function MainLayout({ children, onNewChat }: MainLayoutProps) {
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0 relative z-[2]">
+      <main id="main-content" className="flex-1 flex flex-col min-w-0 relative z-[2]" role="main" aria-label="Main content">
         {/* Top Bar - Fully Responsive Header */}
         <header className="flex-shrink-0 flex items-center justify-between px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 bg-zinc-950/60 backdrop-blur-xl border-b border-white/5 safe-area-pt min-h-[56px] sm:min-h-[64px]">
           {/* Left Section - Menu Button and Mobile Logo */}

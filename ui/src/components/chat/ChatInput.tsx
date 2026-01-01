@@ -309,6 +309,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
           {/* Textarea - Mobile optimized with 16px to prevent zoom on iOS */}
           <textarea
             ref={textareaRef}
+            id="chat-input"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
@@ -317,6 +318,8 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
             placeholder="Message the assistant..."
             disabled={disabled}
             rows={1}
+            aria-label="Type your message"
+            aria-describedby="chat-disclaimer"
             className="flex-1 py-2 sm:py-2.5 md:py-3 px-1 sm:px-2 bg-transparent resize-none outline-none text-white placeholder:text-zinc-500 min-h-[36px] sm:min-h-[40px] md:min-h-[44px] max-h-[120px] sm:max-h-[150px] md:max-h-[200px] text-[16px] leading-relaxed"
           />
 
@@ -375,7 +378,7 @@ export function ChatInput({ onSend, onStop, disabled }: ChatInputProps) {
         </div>
         
         {/* Disclaimer Text */}
-        <p className="text-[10px] sm:text-xs text-zinc-500 text-center mt-2 sm:mt-3 px-2">
+        <p id="chat-disclaimer" className="text-[10px] sm:text-xs text-zinc-500 text-center mt-2 sm:mt-3 px-2">
           The assistant can make mistakes. Review important information.
         </p>
       </div>

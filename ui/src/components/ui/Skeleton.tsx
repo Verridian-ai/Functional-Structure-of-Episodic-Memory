@@ -52,10 +52,13 @@ export function Skeleton({
 
   return (
     <div
-      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} ${className}`}
+      className={`${baseClasses} ${variantClasses[variant]} ${animationClasses[animation]} motion-reduce:animate-none ${className}`}
       style={style}
-      aria-hidden="true"
-    />
+      role="status"
+      aria-label="Loading..."
+    >
+      <span className="sr-only">Loading...</span>
+    </div>
   );
 }
 
