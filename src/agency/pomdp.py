@@ -21,42 +21,48 @@ Policies (Pi):
 
 from enum import Enum, auto
 
+
 class HiddenState(Enum):
     """Hidden States (S) of the generative model."""
+
     # Knowledge States
     KNOWLEDGE_LOW = auto()
     KNOWLEDGE_MEDIUM = auto()
     KNOWLEDGE_HIGH = auto()
-    
+
     # Goal States
     GOAL_UNMET = auto()
     GOAL_MET = auto()
 
+
 class Observation(Enum):
     """Observations (O) received from the environment."""
+
     # Search Outcomes
     FINDING_RELEVANT = auto()
     FINDING_IRRELEVANT = auto()
     FINDING_NOVEL = auto()
-    
+
     # Goal Signals
     GOAL_SIGNAL_OFF = auto()
-    GOAL_SIGNAL_ON = auto() # "Success"
+    GOAL_SIGNAL_ON = auto()  # "Success"
+
 
 class Action(Enum):
     """Active Inference Policies / Actions."""
+
     # Epistemic Actions (Exploration)
     SEARCH_BROAD = auto()
     SEARCH_SPECIFIC = auto()
     READ_DOCUMENT = auto()
-    
+
     # Pragmatic Actions (Exploitation)
     DRAFT_ANSWER = auto()
     CITE_AUTHORITY = auto()
     STOP = auto()
 
+
 # Dimensions
-NUM_STATES = [len(HiddenState)] # Simple factorized state space for now
+NUM_STATES = [len(HiddenState)]  # Simple factorized state space for now
 NUM_OBS = [len(Observation)]
 NUM_ACTIONS = len(Action)
-

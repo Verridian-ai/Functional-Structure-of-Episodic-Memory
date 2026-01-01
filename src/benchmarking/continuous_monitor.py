@@ -19,10 +19,9 @@ Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
 import json
-from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Optional, Any
-from collections import defaultdict
+from pathlib import Path
+from typing import Any
 
 from src.observability.retrieval_scorer import RetrievalScorer
 from src.observability.score_types import AccuracyMetrics, ScoringWeights
@@ -46,10 +45,7 @@ class ContinuousMonitor:
     """
 
     def __init__(
-        self,
-        output_dir: Path,
-        weights: Optional[ScoringWeights] = None,
-        target_score: float = 0.85
+        self, output_dir: Path, weights: ScoringWeights | None = None, target_score: float = 0.85
     ):
         """
         Initialize the continuous monitor.
@@ -71,19 +67,19 @@ class ContinuousMonitor:
 
         # Statistics tracking
         self.session_stats = {
-            'total_queries': 0,
-            'queries_meeting_target': 0,
-            'total_score_sum': 0.0,
-            'session_start': datetime.now().isoformat()
+            "total_queries": 0,
+            "queries_meeting_target": 0,
+            "total_score_sum": 0.0,
+            "session_start": datetime.now().isoformat(),
         }
 
     def monitor_query(
         self,
         query: str,
-        response: Dict[str, Any],
-        ground_truth: Optional[Dict[str, Any]] = None,
-        workspace_state: Optional[Any] = None
-    ) -> Dict[str, Any]:
+        response: dict[str, Any],
+        ground_truth: dict[str, Any] | None = None,
+        workspace_state: Any | None = None,
+    ) -> dict[str, Any]:
         """
         Monitor a single query-response pair.
 
@@ -102,8 +98,8 @@ class ContinuousMonitor:
         timestamp = datetime.now().isoformat()
 
         # Extract components from response
-        retrieved_entities = response.get('retrieved_entities', response.get('entities', []))
-        response_text = response.get('response_text', response.get('text', ''))
+        retrieved_entities = response.get("retrieved_entities", response.get("entities", []))
+        response_text = response.get("response_text", response.get("text", ""))
 
         # Calculate scores
         if ground_truth:
@@ -113,7 +109,7 @@ class ContinuousMonitor:
                 retrieved_entities=retrieved_entities,
                 response_text=response_text,
                 ground_truth=ground_truth,
-                workspace_state=workspace_state
+                workspace_state=workspace_state,
             )
         else:
             # Unsupervised quality metrics
@@ -121,23 +117,23 @@ class ContinuousMonitor:
                 query=query,
                 retrieved_entities=retrieved_entities,
                 response_text=response_text,
-                workspace_state=workspace_state
+                workspace_state=workspace_state,
             )
 
         # Add VSA validation metrics if available
-        if 'validation' in response:
-            scores['vsa_confidence'] = response['validation'].get('overall_confidence', 0.0)
-            scores['hallucination_risk'] = 1.0 - scores['vsa_confidence']
-            scores['validation_checks_passed'] = response['validation'].get('checks_passed', 0)
-            scores['validation_checks_total'] = response['validation'].get('checks_total', 0)
+        if "validation" in response:
+            scores["vsa_confidence"] = response["validation"].get("overall_confidence", 0.0)
+            scores["hallucination_risk"] = 1.0 - scores["vsa_confidence"]
+            scores["validation_checks_passed"] = response["validation"].get("checks_passed", 0)
+            scores["validation_checks_total"] = response["validation"].get("checks_total", 0)
 
         # Add metadata
-        scores['query'] = query
-        scores['timestamp'] = timestamp
-        scores['has_ground_truth'] = ground_truth is not None
-        scores['response_length'] = len(response_text)
-        scores['entities_retrieved'] = len(retrieved_entities)
-        scores['meets_target'] = scores['composite_score'] >= self.target_score
+        scores["query"] = query
+        scores["timestamp"] = timestamp
+        scores["has_ground_truth"] = ground_truth is not None
+        scores["response_length"] = len(response_text)
+        scores["entities_retrieved"] = len(retrieved_entities)
+        scores["meets_target"] = scores["composite_score"] >= self.target_score
 
         # Update session stats
         self._update_session_stats(scores)
@@ -149,10 +145,10 @@ class ContinuousMonitor:
 
     def monitor_batch(
         self,
-        queries: List[str],
-        responses: List[Dict[str, Any]],
-        ground_truths: Optional[List[Dict[str, Any]]] = None
-    ) -> Dict[str, Any]:
+        queries: list[str],
+        responses: list[dict[str, Any]],
+        ground_truths: list[dict[str, Any]] | None = None,
+    ) -> dict[str, Any]:
         """
         Monitor a batch of query-response pairs.
 
@@ -177,11 +173,11 @@ class ContinuousMonitor:
     def _supervised_metrics(
         self,
         query: str,
-        retrieved_entities: List[Dict[str, Any]],
+        retrieved_entities: list[dict[str, Any]],
         response_text: str,
-        ground_truth: Dict[str, Any],
-        workspace_state: Optional[Any] = None
-    ) -> Dict[str, Any]:
+        ground_truth: dict[str, Any],
+        workspace_state: Any | None = None,
+    ) -> dict[str, Any]:
         """
         Calculate comprehensive metrics using ground truth.
 
@@ -196,8 +192,8 @@ class ContinuousMonitor:
             Dictionary of all calculated metrics
         """
         # Get expected data from ground truth
-        expected_entities = ground_truth.get('entities', [])
-        expected_response = ground_truth.get('response', None)
+        expected_entities = ground_truth.get("entities", [])
+        expected_response = ground_truth.get("response")
 
         # Use retrieval scorer for comprehensive evaluation
         metrics: AccuracyMetrics = self.scorer.score_retrieval(
@@ -206,7 +202,7 @@ class ContinuousMonitor:
             expected_entities=expected_entities,
             response_text=response_text,
             ground_truth_response=expected_response,
-            workspace_state=workspace_state
+            workspace_state=workspace_state,
         )
 
         return metrics.to_dict()
@@ -214,10 +210,10 @@ class ContinuousMonitor:
     def _unsupervised_metrics(
         self,
         query: str,
-        retrieved_entities: List[Dict[str, Any]],
+        retrieved_entities: list[dict[str, Any]],
         response_text: str,
-        workspace_state: Optional[Any] = None
-    ) -> Dict[str, Any]:
+        workspace_state: Any | None = None,
+    ) -> dict[str, Any]:
         """
         Calculate quality metrics without ground truth (unsupervised).
 
@@ -243,75 +239,72 @@ class ContinuousMonitor:
             retrieved_entities=retrieved_entities,
             expected_entities=None,  # No ground truth
             response_text=response_text,
-            workspace_state=workspace_state
+            workspace_state=workspace_state,
         )
 
         return metrics.to_dict()
 
-    def _update_session_stats(self, scores: Dict[str, Any]) -> None:
+    def _update_session_stats(self, scores: dict[str, Any]) -> None:
         """Update session-level statistics."""
-        self.session_stats['total_queries'] += 1
-        self.session_stats['total_score_sum'] += scores['composite_score']
+        self.session_stats["total_queries"] += 1
+        self.session_stats["total_score_sum"] += scores["composite_score"]
 
-        if scores.get('meets_target', False):
-            self.session_stats['queries_meeting_target'] += 1
+        if scores.get("meets_target", False):
+            self.session_stats["queries_meeting_target"] += 1
 
-    def _log_metrics(self, scores: Dict[str, Any]) -> None:
+    def _log_metrics(self, scores: dict[str, Any]) -> None:
         """
         Log metrics to JSONL file.
 
         Each line contains a complete JSON object with all metrics and metadata.
         """
-        with open(self.metrics_log, 'a') as f:
-            f.write(json.dumps(scores) + '\n')
+        with open(self.metrics_log, "a") as f:
+            f.write(json.dumps(scores) + "\n")
 
-    def _calculate_batch_stats(self, batch_scores: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def _calculate_batch_stats(self, batch_scores: list[dict[str, Any]]) -> dict[str, Any]:
         """Calculate aggregate statistics for a batch."""
         if not batch_scores:
             return {}
 
         # Calculate averages
         metrics_to_avg = [
-            'entity_relevance', 'structural_accuracy', 'temporal_coherence',
-            'legal_precision', 'answer_completeness', 'composite_score'
+            "entity_relevance",
+            "structural_accuracy",
+            "temporal_coherence",
+            "legal_precision",
+            "answer_completeness",
+            "composite_score",
         ]
 
-        stats = {
-            'batch_size': len(batch_scores),
-            'timestamp': datetime.now().isoformat()
-        }
+        stats = {"batch_size": len(batch_scores), "timestamp": datetime.now().isoformat()}
 
         for metric in metrics_to_avg:
             values = [s.get(metric, 0.0) for s in batch_scores]
-            stats[f'avg_{metric}'] = sum(values) / len(values) if values else 0.0
-            stats[f'min_{metric}'] = min(values) if values else 0.0
-            stats[f'max_{metric}'] = max(values) if values else 0.0
+            stats[f"avg_{metric}"] = sum(values) / len(values) if values else 0.0
+            stats[f"min_{metric}"] = min(values) if values else 0.0
+            stats[f"max_{metric}"] = max(values) if values else 0.0
 
         # Count targets met
-        stats['queries_meeting_target'] = sum(
-            1 for s in batch_scores if s.get('meets_target', False)
+        stats["queries_meeting_target"] = sum(
+            1 for s in batch_scores if s.get("meets_target", False)
         )
-        stats['target_met_percentage'] = (
-            stats['queries_meeting_target'] / stats['batch_size'] * 100
-        )
+        stats["target_met_percentage"] = stats["queries_meeting_target"] / stats["batch_size"] * 100
 
         return stats
 
-    def get_session_stats(self) -> Dict[str, Any]:
+    def get_session_stats(self) -> dict[str, Any]:
         """
         Get current session statistics.
 
         Returns:
             Dictionary with session-level metrics
         """
-        if self.session_stats['total_queries'] > 0:
-            avg_score = (
-                self.session_stats['total_score_sum'] /
-                self.session_stats['total_queries']
-            )
+        if self.session_stats["total_queries"] > 0:
+            avg_score = self.session_stats["total_score_sum"] / self.session_stats["total_queries"]
             target_percentage = (
-                self.session_stats['queries_meeting_target'] /
-                self.session_stats['total_queries'] * 100
+                self.session_stats["queries_meeting_target"]
+                / self.session_stats["total_queries"]
+                * 100
             )
         else:
             avg_score = 0.0
@@ -319,19 +312,16 @@ class ContinuousMonitor:
 
         return {
             **self.session_stats,
-            'average_composite_score': avg_score,
-            'target_met_percentage': target_percentage,
-            'session_duration': (
-                datetime.now() -
-                datetime.fromisoformat(self.session_stats['session_start'])
-            ).total_seconds()
+            "average_composite_score": avg_score,
+            "target_met_percentage": target_percentage,
+            "session_duration": (
+                datetime.now() - datetime.fromisoformat(self.session_stats["session_start"])
+            ).total_seconds(),
         }
 
     def load_metrics_history(
-        self,
-        limit: Optional[int] = None,
-        since: Optional[datetime] = None
-    ) -> List[Dict[str, Any]]:
+        self, limit: int | None = None, since: datetime | None = None
+    ) -> list[dict[str, Any]]:
         """
         Load historical metrics from log file.
 
@@ -346,14 +336,14 @@ class ContinuousMonitor:
             return []
 
         metrics = []
-        with open(self.metrics_log, 'r') as f:
+        with open(self.metrics_log) as f:
             for line in f:
                 if line.strip():
                     entry = json.loads(line)
 
                     # Filter by timestamp if requested
                     if since:
-                        entry_time = datetime.fromisoformat(entry['timestamp'])
+                        entry_time = datetime.fromisoformat(entry["timestamp"])
                         if entry_time < since:
                             continue
 
@@ -366,11 +356,8 @@ class ContinuousMonitor:
         return metrics
 
     def calculate_trend(
-        self,
-        metric_name: str,
-        days: int = 7,
-        window_size: int = 10
-    ) -> Dict[str, Any]:
+        self, metric_name: str, days: int = 7, window_size: int = 10
+    ) -> dict[str, Any]:
         """
         Calculate trend for a specific metric over time.
 
@@ -386,44 +373,48 @@ class ContinuousMonitor:
         history = self.load_metrics_history(since=since)
 
         if not history:
-            return {'trend': 'insufficient_data'}
+            return {"trend": "insufficient_data"}
 
         # Extract metric values
         values = [h.get(metric_name, 0.0) for h in history]
 
         if len(values) < 2:
-            return {'trend': 'insufficient_data'}
+            return {"trend": "insufficient_data"}
 
         # Calculate moving average
         moving_avg = []
         for i in range(len(values) - window_size + 1):
-            window = values[i:i + window_size]
+            window = values[i : i + window_size]
             moving_avg.append(sum(window) / len(window))
 
         # Determine trend direction
         if len(moving_avg) >= 2:
-            recent_avg = sum(moving_avg[-5:]) / len(moving_avg[-5:]) if len(moving_avg) >= 5 else moving_avg[-1]
+            recent_avg = (
+                sum(moving_avg[-5:]) / len(moving_avg[-5:])
+                if len(moving_avg) >= 5
+                else moving_avg[-1]
+            )
             early_avg = sum(moving_avg[:5]) / 5 if len(moving_avg) >= 5 else moving_avg[0]
             change = recent_avg - early_avg
 
             if abs(change) < 0.01:
-                direction = 'stable'
+                direction = "stable"
             elif change > 0:
-                direction = 'improving'
+                direction = "improving"
             else:
-                direction = 'declining'
+                direction = "declining"
         else:
-            direction = 'stable'
+            direction = "stable"
 
         return {
-            'metric': metric_name,
-            'trend': direction,
-            'current_value': values[-1] if values else 0.0,
-            'average_value': sum(values) / len(values),
-            'min_value': min(values),
-            'max_value': max(values),
-            'data_points': len(values),
-            'days_analyzed': days
+            "metric": metric_name,
+            "trend": direction,
+            "current_value": values[-1] if values else 0.0,
+            "average_value": sum(values) / len(values),
+            "min_value": min(values),
+            "max_value": max(values),
+            "data_points": len(values),
+            "days_analyzed": days,
         }
 
 

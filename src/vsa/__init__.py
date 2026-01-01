@@ -17,13 +17,12 @@ Key Components:
 """
 
 from .legal_vsa import LegalVSA, get_vsa_service
-from .span_detector import SpanIssue, SpanAlignedVSA
+from .span_detector import SpanAlignedVSA, SpanIssue
 
 __all__ = [
     # Main VSA classes
     "LegalVSA",
     "get_vsa_service",
-
     # Span detection classes
     "SpanIssue",
     "SpanAlignedVSA",

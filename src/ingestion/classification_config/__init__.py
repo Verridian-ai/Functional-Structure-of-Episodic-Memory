@@ -31,19 +31,19 @@ Usage:
 """
 
 from .hierarchy import HIERARCHY_MAP
-from .legislation import LEGISLATION_STATUS_MAP
 from .keywords import (
     CLASSIFICATION_MAP,
-    get_keywords_for_domain,
     get_all_domains,
     get_keyword_count,
+    get_keywords_for_domain,
 )
+from .legislation import LEGISLATION_STATUS_MAP
 
 __all__ = [
-    'HIERARCHY_MAP',
-    'LEGISLATION_STATUS_MAP',
-    'CLASSIFICATION_MAP',
-    'get_keywords_for_domain',
-    'get_all_domains',
-    'get_keyword_count',
+    "HIERARCHY_MAP",
+    "LEGISLATION_STATUS_MAP",
+    "CLASSIFICATION_MAP",
+    "get_keywords_for_domain",
+    "get_all_domains",
+    "get_keyword_count",
 ]

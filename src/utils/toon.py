@@ -16,8 +16,8 @@ Example:
     a1,John,person
 """
 
-from typing import List, Any, Dict, Optional, Union
 import re
+from typing import Any
 
 
 class ToonEncoder:
@@ -39,9 +39,9 @@ class ToonEncoder:
 
         # Replace newlines with spaces to maintain single-line row format
         # This is critical for TOON decoder which counts lines
-        has_newline = '\n' in s or '\r' in s
+        has_newline = "\n" in s or "\r" in s
         if has_newline:
-            s = s.replace('\r\n', ' ').replace('\n', ' ').replace('\r', ' ')
+            s = s.replace("\r\n", " ").replace("\n", " ").replace("\r", " ")
 
         # Quote if contains comma or leading/trailing whitespace
         if "," in s or s != s.strip():
@@ -50,7 +50,7 @@ class ToonEncoder:
         return s
 
     @staticmethod
-    def encode(name: str, headers: List[str], data: List[List[Any]]) -> str:
+    def encode(name: str, headers: list[str], data: list[list[Any]]) -> str:
         """
         Encodes a list of lists into a TOON string block.
 
@@ -76,7 +76,7 @@ class ToonEncoder:
         return f"{header_str}\n" + "\n".join(rows)
 
     @staticmethod
-    def encode_list(name: str, items: List[str]) -> str:
+    def encode_list(name: str, items: list[str]) -> str:
         """Encode a simple 1D list as a TOON table."""
         data = [[item] for item in items]
         return ToonEncoder.encode(name, ["value"], data)
@@ -86,7 +86,7 @@ class ToonEncoder:
     # =========================================================================
 
     @staticmethod
-    def encode_actors(actors: List[Dict]) -> str:
+    def encode_actors(actors: list[dict]) -> str:
         """
         Encode GSW actors to TOON format.
 
@@ -112,18 +112,12 @@ class ToonEncoder:
             if hasattr(actor_type, "value"):
                 actor_type = actor_type.value
 
-            data.append([
-                a.get("id", ""),
-                a.get("name", ""),
-                actor_type,
-                roles,
-                state_str
-            ])
+            data.append([a.get("id", ""), a.get("name", ""), actor_type, roles, state_str])
 
         return ToonEncoder.encode("Actors", headers, data)
 
     @staticmethod
-    def encode_verb_phrases(verbs: List[Dict]) -> str:
+    def encode_verb_phrases(verbs: list[dict]) -> str:
         """
         Encode GSW verb phrases to TOON format.
 
@@ -138,20 +132,22 @@ class ToonEncoder:
             patients = v.get("patient_ids", [])
             patient_str = "|".join(patients) if patients else ""
 
-            data.append([
-                v.get("id", ""),
-                v.get("verb", ""),
-                v.get("agent_id", "") or "",
-                patient_str,
-                v.get("temporal_id", "") or "",
-                v.get("spatial_id", "") or "",
-                "1" if v.get("is_implicit") else "0"
-            ])
+            data.append(
+                [
+                    v.get("id", ""),
+                    v.get("verb", ""),
+                    v.get("agent_id", "") or "",
+                    patient_str,
+                    v.get("temporal_id", "") or "",
+                    v.get("spatial_id", "") or "",
+                    "1" if v.get("is_implicit") else "0",
+                ]
+            )
 
         return ToonEncoder.encode("VerbPhrases", headers, data)
 
     @staticmethod
-    def encode_questions(questions: List[Dict]) -> str:
+    def encode_questions(questions: list[dict]) -> str:
         """
         Encode GSW questions to TOON format.
 
@@ -168,19 +164,21 @@ class ToonEncoder:
             if hasattr(q_type, "value"):
                 q_type = q_type.value
 
-            data.append([
-                q.get("id", ""),
-                q.get("target_entity_id", "") or "",
-                q.get("question_text", ""),
-                q_type,
-                "1" if q.get("answerable") else "0",
-                q.get("answer_text", "") or ""
-            ])
+            data.append(
+                [
+                    q.get("id", ""),
+                    q.get("target_entity_id", "") or "",
+                    q.get("question_text", ""),
+                    q_type,
+                    "1" if q.get("answerable") else "0",
+                    q.get("answer_text", "") or "",
+                ]
+            )
 
         return ToonEncoder.encode("Questions", headers, data)
 
     @staticmethod
-    def encode_links(links: List[Dict]) -> str:
+    def encode_links(links: list[dict]) -> str:
         """
         Encode GSW spatio-temporal links to TOON format.
 
@@ -200,17 +198,12 @@ class ToonEncoder:
             if hasattr(tag_type, "value"):
                 tag_type = tag_type.value
 
-            data.append([
-                link.get("id", ""),
-                entity_str,
-                tag_type,
-                link.get("tag_value", "") or ""
-            ])
+            data.append([link.get("id", ""), entity_str, tag_type, link.get("tag_value", "") or ""])
 
         return ToonEncoder.encode("Links", headers, data)
 
     @staticmethod
-    def encode_workspace(workspace_dict: Dict) -> str:
+    def encode_workspace(workspace_dict: dict) -> str:
         """
         Encode entire GSW workspace to TOON format.
 
@@ -256,7 +249,7 @@ class ToonEncoder:
         return "\n".join(blocks)
 
     @staticmethod
-    def encode_context_summary(workspace_dict: Dict, max_actors: int = 50) -> str:
+    def encode_context_summary(workspace_dict: dict, max_actors: int = 50) -> str:
         """
         Encode a condensed workspace summary for LLM context.
 
@@ -289,9 +282,7 @@ class ToonEncoder:
 
         # Sort actors by connections
         actors_sorted = sorted(
-            actors,
-            key=lambda a: connection_count.get(a.get("id", ""), 0),
-            reverse=True
+            actors, key=lambda a: connection_count.get(a.get("id", ""), 0), reverse=True
         )[:max_actors]
 
         if actors_sorted:
@@ -312,10 +303,10 @@ class ToonDecoder:
     TOON Decoder - Parse TOON format back to structured data.
     """
 
-    HEADER_PATTERN = re.compile(r'^(\w+)\[(\d+)\]\{([^}]*)\}$')
+    HEADER_PATTERN = re.compile(r"^(\w+)\[(\d+)\]\{([^}]*)\}$")
 
     @staticmethod
-    def decode(toon_str: str) -> Dict[str, List[Dict]]:
+    def decode(toon_str: str) -> dict[str, list[dict]]:
         """
         Decode TOON string to dictionary of tables.
 
@@ -358,7 +349,7 @@ class ToonDecoder:
         return result
 
     @staticmethod
-    def _parse_row(line: str, expected_cols: int) -> List[str]:
+    def _parse_row(line: str, expected_cols: int) -> list[str]:
         """Parse a TOON row handling quoted values."""
         values = []
         current = ""
@@ -369,7 +360,7 @@ class ToonDecoder:
                 in_quotes = True
             elif char == '"' and in_quotes:
                 in_quotes = False
-            elif char == ',' and not in_quotes:
+            elif char == "," and not in_quotes:
                 values.append(current)
                 current = ""
             else:
@@ -384,7 +375,7 @@ class ToonDecoder:
         return values
 
     @staticmethod
-    def decode_workspace(toon_str: str) -> Dict:
+    def decode_workspace(toon_str: str) -> dict:
         """
         Decode TOON workspace back to dict matching GlobalWorkspace schema.
 
@@ -413,13 +404,13 @@ class ToonDecoder:
                 "last_updated": "",
                 "chunk_count": 0,
                 "document_count": 0,
-                "domain": domain
+                "domain": domain,
             },
             "actors": {},
             "verb_phrases": {},
             "questions": {},
             "spatio_temporal_links": {},
-            "entity_summaries": {}
+            "entity_summaries": {},
         }
 
         # Decode Actors
@@ -437,15 +428,17 @@ class ToonDecoder:
                 for state_pair in states_str.split("|"):
                     if "=" in state_pair:
                         name, value = state_pair.split("=", 1)
-                        states.append({
-                            "id": f"state_{len(states)}",
-                            "entity_id": actor_id,
-                            "name": name.strip(),
-                            "value": value.strip(),
-                            "start_date": None,
-                            "end_date": None,
-                            "source_chunk_id": ""
-                        })
+                        states.append(
+                            {
+                                "id": f"state_{len(states)}",
+                                "entity_id": actor_id,
+                                "name": name.strip(),
+                                "value": value.strip(),
+                                "start_date": None,
+                                "end_date": None,
+                                "source_chunk_id": "",
+                            }
+                        )
 
             workspace["actors"][actor_id] = {
                 "id": actor_id,
@@ -456,7 +449,7 @@ class ToonDecoder:
                 "states": states,
                 "spatio_temporal_link_ids": [],
                 "involved_cases": [],
-                "source_chunk_ids": []
+                "source_chunk_ids": [],
             }
 
         # Decode VerbPhrases
@@ -475,7 +468,7 @@ class ToonDecoder:
                 "temporal_id": verb_row.get("temporal", "") or None,
                 "spatial_id": verb_row.get("spatial", "") or None,
                 "is_implicit": verb_row.get("implicit", "0") == "1",
-                "source_chunk_id": ""
+                "source_chunk_id": "",
             }
 
         # Decode Questions
@@ -491,7 +484,7 @@ class ToonDecoder:
                 "answer_text": q_row.get("answer", "") or None,
                 "answer_entity_id": None,
                 "source_chunk_id": "",
-                "answered_in_chunk_id": None
+                "answered_in_chunk_id": None,
             }
 
         # Decode Links
@@ -507,13 +500,13 @@ class ToonDecoder:
                 "linked_entity_ids": entity_ids,
                 "tag_type": link_row.get("type", "temporal"),
                 "tag_value": link_row.get("value", "") or None,
-                "source_chunk_id": ""
+                "source_chunk_id": "",
             }
 
         return workspace
 
 
-def measure_compression(json_str: str, toon_str: str) -> Dict[str, Any]:
+def measure_compression(json_str: str, toon_str: str) -> dict[str, Any]:
     """
     Measure token compression between JSON and TOON.
 
@@ -532,5 +525,5 @@ def measure_compression(json_str: str, toon_str: str) -> Dict[str, Any]:
         "char_reduction": f"{(1 - toon_chars/json_chars)*100:.1f}%",
         "json_tokens_est": int(json_tokens),
         "toon_tokens_est": int(toon_tokens),
-        "token_reduction": f"{(1 - toon_tokens/json_tokens)*100:.1f}%"
+        "token_reduction": f"{(1 - toon_tokens/json_tokens)*100:.1f}%",
     }

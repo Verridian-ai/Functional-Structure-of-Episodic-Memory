@@ -9,21 +9,20 @@ Copy these patterns into your existing code to enable full tracing.
 """
 
 import asyncio
-import time
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 # Import observability
 from src.observability import (
-    GSWTracer,
-    trace_gsw_operation,
-    trace_graph_traversal,
-    trace_llm_generation,
-    get_session_tracker,
     GraphActivation,
-    TraversalResult,
+    GSWTracer,
     LatencyBreakdown,
     OperationType,
     RetrievalScorer,
+    TraversalResult,
+    get_session_tracker,
+    trace_graph_traversal,
+    trace_gsw_operation,
+    trace_llm_generation,
 )
 
 # Import your existing GSW modules
@@ -38,8 +37,9 @@ from src.observability import (
 # EXAMPLE 1: Wrapping the Legal Operator with Tracing
 # =============================================================================
 
+
 @trace_llm_generation(model="gemini-2.0-flash", name="legal_extraction")
-async def traced_extract_entities(operator, text: str) -> Dict[str, Any]:
+async def traced_extract_entities(operator, text: str) -> dict[str, Any]:
     """
     Wrapped extraction with automatic LLM tracing.
 
@@ -56,11 +56,12 @@ async def traced_extract_entities(operator, text: str) -> Dict[str, Any]:
 # EXAMPLE 2: Full Pipeline with Latency Breakdown
 # =============================================================================
 
+
 async def traced_gsw_pipeline(
     query: str,
     session_id: str,
-    user_id: Optional[str] = None,
-) -> Tuple[Dict[str, Any], float]:
+    user_id: str | None = None,
+) -> tuple[dict[str, Any], float]:
     """
     Full GSW pipeline with comprehensive tracing.
 
@@ -219,15 +220,15 @@ async def traced_gsw_pipeline(
 
         # Calculate total latency
         latency.total_ms = (
-            latency.graph_traversal_ms +
-            latency.vector_search_ms +
-            latency.llm_generation_ms
+            latency.graph_traversal_ms + latency.vector_search_ms + latency.llm_generation_ms
         )
-        latency.other_ms = latency.total_ms - sum([
-            latency.graph_traversal_ms,
-            latency.vector_search_ms,
-            latency.llm_generation_ms,
-        ])
+        latency.other_ms = latency.total_ms - sum(
+            [
+                latency.graph_traversal_ms,
+                latency.vector_search_ms,
+                latency.llm_generation_ms,
+            ]
+        )
 
         # Record latency breakdown
         tracer.record_latency_breakdown(latency)
@@ -270,6 +271,7 @@ async def traced_gsw_pipeline(
 # EXAMPLE 3: Decorator-Based Integration
 # =============================================================================
 
+
 class TracedWorkspaceManager:
     """
     Example of wrapping WorkspaceManager with tracing.
@@ -284,19 +286,19 @@ class TracedWorkspaceManager:
         self.tracer = GSWTracer()
 
     @trace_graph_traversal(name="query_actors_by_role")
-    def query_actors_by_role(self, role: str) -> List[Dict]:
+    def query_actors_by_role(self, role: str) -> list[dict]:
         """Query actors with tracing."""
         # return self.workspace.query_actors_by_role(role)
         return []
 
     @trace_gsw_operation(OperationType.GRAPH_TRAVERSAL, name="get_timeline")
-    def get_timeline(self) -> List[Dict]:
+    def get_timeline(self) -> list[dict]:
         """Get timeline with tracing."""
         # return self.workspace.get_timeline()
         return []
 
     @trace_gsw_operation(OperationType.GRAPH_TRAVERSAL, name="semantic_search")
-    def semantic_search(self, query: str, top_k: int = 10) -> List[Dict]:
+    def semantic_search(self, query: str, top_k: int = 10) -> list[dict]:
         """Semantic search with full tracing."""
         tracer = GSWTracer()
 
@@ -319,6 +321,7 @@ class TracedWorkspaceManager:
 # =============================================================================
 # EXAMPLE 4: Session Memory Tracking
 # =============================================================================
+
 
 async def multi_turn_conversation_example():
     """
@@ -415,6 +418,7 @@ async def multi_turn_conversation_example():
 # EXAMPLE 5: Manual Scoring Trigger
 # =============================================================================
 
+
 def manual_scoring_example():
     """
     Example of manually triggering accuracy scoring.
@@ -428,7 +432,13 @@ def manual_scoring_example():
         {"id": "actor_1", "type": "Actor", "name": "Applicant", "roles": ["applicant"]},
         {"id": "actor_2", "type": "Actor", "name": "Respondent", "roles": ["respondent"]},
         {"id": "state_1", "type": "State", "name": "Property Pool", "value": "$1,500,000"},
-        {"id": "verb_1", "type": "VerbPhrase", "action": "seeks", "subject": "actor_1", "object": "property division"},
+        {
+            "id": "verb_1",
+            "type": "VerbPhrase",
+            "action": "seeks",
+            "subject": "actor_1",
+            "object": "property division",
+        },
     ]
 
     expected_entities = [
@@ -468,7 +478,7 @@ def manual_scoring_example():
     print(f"  Legal Precision: {metrics.legal_precision:.3f}")
     print(f"  Answer Completeness: {metrics.answer_completeness:.3f}")
     print(f"  Citation Accuracy: {metrics.citation_accuracy:.3f}")
-    print(f"  ---")
+    print("  ---")
     print(f"  Composite Score: {metrics.composite_score:.3f}")
     print(f"  Meets Target (0.95): {metrics.meets_target()}")
     print(f"  Precision: {metrics.precision:.3f}")
@@ -494,6 +504,7 @@ def manual_scoring_example():
 # =============================================================================
 # EXAMPLE 6: Environment Setup
 # =============================================================================
+
 
 def setup_langfuse():
     """

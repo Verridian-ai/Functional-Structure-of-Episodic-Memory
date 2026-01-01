@@ -2,27 +2,29 @@
 # LangFuse integration for Brain-Inspired Legal AI
 
 # Core tracer and models
-from .tracer_core import GSWTracer
-from .models import (
-    OperationType,
-    GraphActivation,
-    TraversalResult,
-    LatencyBreakdown,
-)
-
 # Decorators
 from .decorators import (
-    trace_gsw_operation,
-    trace_graph_traversal,
-    trace_llm_generation,
     score_retrieval_accuracy,
+    trace_graph_traversal,
+    trace_gsw_operation,
+    trace_llm_generation,
+)
+from .models import (
+    GraphActivation,
+    LatencyBreakdown,
+    OperationType,
+    TraversalResult,
 )
 
-# Span wrappers
-from .span_wrapper import SpanWrapper, DummySpan
-
-# Utilities
-from .utils import get_session_tracker, safe_serialize
+# Scoring
+from .scoring import (
+    AccuracyMetrics,
+    RetrievalScorer,
+    ScoreCategory,
+    ScoringWeights,
+    batch_evaluate,
+    create_evaluation_dataset,
+)
 
 # Session memory
 from .session_memory import (
@@ -30,15 +32,12 @@ from .session_memory import (
     SessionState,
 )
 
-# Scoring
-from .scoring import (
-    RetrievalScorer,
-    AccuracyMetrics,
-    ScoreCategory,
-    ScoringWeights,
-    create_evaluation_dataset,
-    batch_evaluate,
-)
+# Span wrappers
+from .span_wrapper import DummySpan, SpanWrapper
+from .tracer_core import GSWTracer
+
+# Utilities
+from .utils import get_session_tracker, safe_serialize
 
 __all__ = [
     # Core tracer

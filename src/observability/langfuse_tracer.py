@@ -35,15 +35,14 @@ This file re-exports everything for backwards compatibility.
 
 # Re-export all public APIs from the refactored modules
 from .models import (
-    OperationType,
     GraphActivation,
-    TraversalResult,
     LatencyBreakdown,
+    OperationType,
+    TraversalResult,
 )
-
 from .tracer_core import (
-    GSWTracer,
     LANGFUSE_AVAILABLE,
+    GSWTracer,
 )
 
 # Re-export Langfuse for test patching compatibility
@@ -53,29 +52,27 @@ except ImportError:
     Langfuse = None
 
 from .decorators import (
-    trace_gsw_operation,
-    trace_graph_traversal,
-    trace_llm_generation,
     score_retrieval_accuracy,
-)
-
-from .span_wrapper import (
-    SpanWrapper,
-    DummySpan,
-    # Legacy aliases
-    _SpanWrapper,
-    _DummySpan,
-)
-
-from .utils import (
-    get_session_tracker,
-    safe_serialize,
-    # Legacy alias
-    _safe_serialize,
+    trace_graph_traversal,
+    trace_gsw_operation,
+    trace_llm_generation,
 )
 
 # Import session tracker for type checking and legacy imports
 from .session_memory import EpisodicSessionTracker
+from .span_wrapper import (
+    DummySpan,
+    SpanWrapper,
+    _DummySpan,
+    # Legacy aliases
+    _SpanWrapper,
+)
+from .utils import (
+    # Legacy alias
+    _safe_serialize,
+    get_session_tracker,
+    safe_serialize,
+)
 
 __all__ = [
     # Core tracer
@@ -95,7 +92,7 @@ __all__ = [
     "SpanWrapper",
     "DummySpan",
     "_SpanWrapper",  # Legacy
-    "_DummySpan",    # Legacy
+    "_DummySpan",  # Legacy
     # Utilities
     "get_session_tracker",
     "safe_serialize",

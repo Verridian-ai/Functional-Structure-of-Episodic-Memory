@@ -15,25 +15,24 @@ Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
 import json
-import time
-from pathlib import Path
-from datetime import datetime
-from typing import List, Dict, Any, Optional, Callable, Tuple
-from collections import defaultdict
 import statistics
+import time
+from collections import defaultdict
+from collections.abc import Callable
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 from src.benchmarks.family_law_discrepancy import (
-    FamilyLawBenchmark,
     DiscrepancyInstance,
-    LegalDiscrepancyType,
-    InTextDiscrepancyType,
-    create_sample_document
+    FamilyLawBenchmark,
+    create_sample_document,
 )
-
 
 # ============================================================================
 # BENCHMARK RUNNER
 # ============================================================================
+
 
 class BenchmarkRunner:
     """
@@ -53,11 +52,7 @@ class BenchmarkRunner:
         >>> runner.generate_report("results/benchmark_report.json")
     """
 
-    def __init__(
-        self,
-        benchmark: Optional[FamilyLawBenchmark] = None,
-        output_dir: Optional[Path] = None
-    ):
+    def __init__(self, benchmark: FamilyLawBenchmark | None = None, output_dir: Path | None = None):
         """
         Initialize the benchmark runner.
 
@@ -70,20 +65,20 @@ class BenchmarkRunner:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
         # Storage for benchmark runs
-        self.documents: List[Dict[str, Any]] = []
-        self.results: List[Dict[str, Any]] = []
-        self.aggregate_metrics: Dict[str, Any] = {}
+        self.documents: list[dict[str, Any]] = []
+        self.results: list[dict[str, Any]] = []
+        self.aggregate_metrics: dict[str, Any] = {}
 
         # Timing information
-        self.run_start_time: Optional[datetime] = None
-        self.run_end_time: Optional[datetime] = None
+        self.run_start_time: datetime | None = None
+        self.run_end_time: datetime | None = None
 
     def add_document(
         self,
         document_text: str,
         category: str,
-        doc_id: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        doc_id: str | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """
         Add a document to the benchmark set.
@@ -97,18 +92,17 @@ class BenchmarkRunner:
         if doc_id is None:
             doc_id = f"doc_{len(self.documents):04d}"
 
-        self.documents.append({
-            "doc_id": doc_id,
-            "text": document_text,
-            "category": category,
-            "metadata": metadata or {},
-            "added_at": datetime.now().isoformat()
-        })
+        self.documents.append(
+            {
+                "doc_id": doc_id,
+                "text": document_text,
+                "category": category,
+                "metadata": metadata or {},
+                "added_at": datetime.now().isoformat(),
+            }
+        )
 
-    def add_documents_from_list(
-        self,
-        documents: List[Dict[str, Any]]
-    ) -> None:
+    def add_documents_from_list(self, documents: list[dict[str, Any]]) -> None:
         """
         Add multiple documents from a list.
 
@@ -124,15 +118,15 @@ class BenchmarkRunner:
                 document_text=doc["text"],
                 category=doc["category"],
                 doc_id=doc.get("doc_id"),
-                metadata=doc.get("metadata")
+                metadata=doc.get("metadata"),
             )
 
     def run_benchmark(
         self,
-        detection_function: Callable[[str, List[DiscrepancyInstance]], List[Tuple[int, int, str]]],
+        detection_function: Callable[[str, list[DiscrepancyInstance]], list[tuple[int, int, str]]],
         num_perturbations_per_doc: int = 5,
-        verbose: bool = True
-    ) -> Dict[str, Any]:
+        verbose: bool = True,
+    ) -> dict[str, Any]:
         """
         Run the benchmark across all documents.
 
@@ -162,7 +156,7 @@ class BenchmarkRunner:
             perturbations = self.benchmark.generate_perturbations(
                 document=doc["text"],
                 category=doc["category"],
-                num_perturbations=num_perturbations_per_doc
+                num_perturbations=num_perturbations_per_doc,
             )
 
             # Apply perturbations to create test document
@@ -198,18 +192,20 @@ class BenchmarkRunner:
                         "type": p.discrepancy_type,
                         "span": [p.span_start, p.span_end],
                         "severity": p.severity,
-                        "explanation": p.explanation
+                        "explanation": p.explanation,
                     }
                     for p in perturbations
                 ],
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
             self.results.append(result)
 
             if verbose:
                 print(f"  Predictions: {len(predictions)}")
-                print(f"  Metrics: P={metrics['precision']:.3f}, R={metrics['recall']:.3f}, F1={metrics['f1_score']:.3f}")
+                print(
+                    f"  Metrics: P={metrics['precision']:.3f}, R={metrics['recall']:.3f}, F1={metrics['f1_score']:.3f}"
+                )
                 print(f"  Time: {detection_time:.3f}s")
 
         self.run_end_time = datetime.now()
@@ -225,7 +221,7 @@ class BenchmarkRunner:
 
         return self.aggregate_metrics
 
-    def calculate_metrics(self) -> Dict[str, Any]:
+    def calculate_metrics(self) -> dict[str, Any]:
         """
         Calculate aggregate metrics across all benchmark runs.
 
@@ -286,7 +282,7 @@ class BenchmarkRunner:
 
         return aggregate
 
-    def _calculate_category_metrics(self) -> Dict[str, Dict[str, float]]:
+    def _calculate_category_metrics(self) -> dict[str, dict[str, float]]:
         """Calculate metrics broken down by document category."""
         category_results = defaultdict(list)
 
@@ -309,7 +305,7 @@ class BenchmarkRunner:
 
         return category_metrics
 
-    def _calculate_type_metrics(self) -> Dict[str, Dict[str, int]]:
+    def _calculate_type_metrics(self) -> dict[str, dict[str, int]]:
         """Calculate metrics broken down by discrepancy type."""
         type_counts = defaultdict(lambda: {"total": 0, "severity_sum": 0})
 
@@ -324,15 +320,15 @@ class BenchmarkRunner:
         for disc_type, counts in type_counts.items():
             type_metrics[disc_type] = {
                 "count": counts["total"],
-                "avg_severity": counts["severity_sum"] / counts["total"] if counts["total"] > 0 else 0.0
+                "avg_severity": (
+                    counts["severity_sum"] / counts["total"] if counts["total"] > 0 else 0.0
+                ),
             }
 
         return type_metrics
 
     def generate_report(
-        self,
-        output_path: Optional[Path] = None,
-        include_details: bool = True
+        self, output_path: Path | None = None, include_details: bool = True
     ) -> Path:
         """
         Generate a comprehensive JSON report of benchmark results.
@@ -358,7 +354,7 @@ class BenchmarkRunner:
                     else None
                 ),
                 "total_documents": len(self.documents),
-                "total_results": len(self.results)
+                "total_results": len(self.results),
             },
             "aggregate_metrics": self.aggregate_metrics,
         }
@@ -370,7 +366,7 @@ class BenchmarkRunner:
                     "doc_id": doc["doc_id"],
                     "category": doc["category"],
                     "text_length": len(doc["text"]),
-                    "metadata": doc.get("metadata", {})
+                    "metadata": doc.get("metadata", {}),
                 }
                 for doc in self.documents
             ]
@@ -410,10 +406,12 @@ class BenchmarkRunner:
             print(f"    F1 Score:  {metrics['mean_f1']:.3f}")
         print("\nPer-Discrepancy-Type Counts:")
         for disc_type, metrics in self.aggregate_metrics.get("per_discrepancy_type", {}).items():
-            print(f"  {disc_type}: {metrics['count']} (avg severity: {metrics['avg_severity']:.1f})")
+            print(
+                f"  {disc_type}: {metrics['count']} (avg severity: {metrics['avg_severity']:.1f})"
+            )
         print("=" * 70)
 
-    def _round_metrics(self, metrics: Dict[str, Any], decimals: int = 3) -> Dict[str, Any]:
+    def _round_metrics(self, metrics: dict[str, Any], decimals: int = 3) -> dict[str, Any]:
         """Recursively round float values in metrics dictionary."""
         rounded = {}
         for key, value in metrics.items():
@@ -435,11 +433,13 @@ class BenchmarkRunner:
         ground_truth_data = []
 
         for doc, result in zip(self.documents, self.results):
-            ground_truth_data.append({
-                "doc_id": doc["doc_id"],
-                "category": doc["category"],
-                "perturbations": result["perturbations"]
-            })
+            ground_truth_data.append(
+                {
+                    "doc_id": doc["doc_id"],
+                    "category": doc["category"],
+                    "perturbations": result["perturbations"],
+                }
+            )
 
         with open(output_path, "w") as f:
             json.dump(ground_truth_data, f, indent=2)
@@ -458,7 +458,10 @@ class BenchmarkRunner:
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def create_default_detection_function() -> Callable[[str, List[DiscrepancyInstance]], List[Tuple[int, int, str]]]:
+
+def create_default_detection_function() -> (
+    Callable[[str, list[DiscrepancyInstance]], list[tuple[int, int, str]]]
+):
     """
     Create a simple baseline detection function for testing.
 
@@ -471,9 +474,8 @@ def create_default_detection_function() -> Callable[[str, List[DiscrepancyInstan
     import random
 
     def baseline_detector(
-        document: str,
-        ground_truth: List[DiscrepancyInstance]
-    ) -> List[Tuple[int, int, str]]:
+        document: str, ground_truth: list[DiscrepancyInstance]
+    ) -> list[tuple[int, int, str]]:
         """Baseline detector that finds ~50% of perturbations randomly."""
         predictions = []
 
@@ -506,15 +508,13 @@ def run_sample_benchmark() -> None:
             document_text=doc_text,
             category=category,
             doc_id=f"sample_{category}_{i}",
-            metadata={"source": "synthetic", "sample": True}
+            metadata={"source": "synthetic", "sample": True},
         )
 
     # Run benchmark with baseline detector
     detection_func = create_default_detection_function()
     results = runner.run_benchmark(
-        detection_function=detection_func,
-        num_perturbations_per_doc=5,
-        verbose=True
+        detection_function=detection_func, num_perturbations_per_doc=5, verbose=True
     )
 
     # Generate report
@@ -526,35 +526,29 @@ def run_sample_benchmark() -> None:
 # CLI INTERFACE
 # ============================================================================
 
+
 def main():
     """Command-line interface for benchmark runner."""
     import argparse
 
-    parser = argparse.ArgumentParser(
-        description="Run Family Law Discrepancy Detection Benchmark"
-    )
+    parser = argparse.ArgumentParser(description="Run Family Law Discrepancy Detection Benchmark")
     parser.add_argument(
         "--mode",
         choices=["sample", "custom"],
         default="sample",
-        help="Run mode: 'sample' for demo, 'custom' for custom documents"
+        help="Run mode: 'sample' for demo, 'custom' for custom documents",
     )
     parser.add_argument(
-        "--input",
-        type=Path,
-        help="Path to JSON file with documents (for custom mode)"
+        "--input", type=Path, help="Path to JSON file with documents (for custom mode)"
     )
     parser.add_argument(
         "--output-dir",
         type=Path,
         default=Path("data/benchmark_results"),
-        help="Output directory for results"
+        help="Output directory for results",
     )
     parser.add_argument(
-        "--perturbations",
-        type=int,
-        default=5,
-        help="Number of perturbations per document"
+        "--perturbations", type=int, default=5, help="Number of perturbations per document"
     )
 
     args = parser.parse_args()
@@ -567,7 +561,7 @@ def main():
             return
 
         # Load custom documents
-        with open(args.input, "r") as f:
+        with open(args.input) as f:
             documents = json.load(f)
 
         # Create runner
@@ -579,7 +573,7 @@ def main():
         runner.run_benchmark(
             detection_function=detection_func,
             num_perturbations_per_doc=args.perturbations,
-            verbose=True
+            verbose=True,
         )
 
         # Generate report

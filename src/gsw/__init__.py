@@ -56,10 +56,14 @@ manager.save()
 """
 
 from src.gsw.legal_operator import LegalOperator, chunk_legal_text
-from src.gsw.legal_spacetime import LegalSpacetime, extract_dates_from_text, extract_locations_from_text
 from src.gsw.legal_reconciler import LegalReconciler
-from src.gsw.workspace import WorkspaceManager, merge_workspaces
+from src.gsw.legal_spacetime import (
+    LegalSpacetime,
+    extract_dates_from_text,
+    extract_locations_from_text,
+)
 from src.gsw.legal_summary import LegalSummary
+from src.gsw.workspace import WorkspaceManager, merge_workspaces
 
 __all__ = [
     # Core components
@@ -68,7 +72,6 @@ __all__ = [
     "LegalReconciler",
     "WorkspaceManager",
     "LegalSummary",
-
     # Utilities
     "chunk_legal_text",
     "extract_dates_from_text",

@@ -10,44 +10,82 @@ Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 import json
 import re
 import sys
-from pathlib import Path
-from datetime import datetime
-from typing import Dict, List, Optional, Any, Tuple
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.logic.gsw_schema import (
-    GlobalWorkspace, Actor, State, VerbPhrase, PredictiveQuestion,
-    SpatioTemporalLink, ActorType, QuestionType, LinkType
-)
 from src.gsw.workspace import WorkspaceManager
-from src.utils.toon import ToonEncoder, ToonDecoder
-
+from src.logic.gsw_schema import (
+    Actor,
+    ActorType,
+    GlobalWorkspace,
+    LinkType,
+    PredictiveQuestion,
+    QuestionType,
+    SpatioTemporalLink,
+)
 
 # ============================================================================
 # FAMILY LAW DOMAIN VOCABULARY
 # ============================================================================
 
 FAMILY_LAW_ROLES = [
-    "Applicant", "Respondent", "Independent Children's Lawyer", "Child",
-    "Mother", "Father", "Husband", "Wife", "Partner", "De Facto Partner",
-    "Judge", "Magistrate", "Registrar", "Family Consultant",
-    "Expert Witness", "Valuer", "Accountant", "Psychologist"
+    "Applicant",
+    "Respondent",
+    "Independent Children's Lawyer",
+    "Child",
+    "Mother",
+    "Father",
+    "Husband",
+    "Wife",
+    "Partner",
+    "De Facto Partner",
+    "Judge",
+    "Magistrate",
+    "Registrar",
+    "Family Consultant",
+    "Expert Witness",
+    "Valuer",
+    "Accountant",
+    "Psychologist",
 ]
 
 FAMILY_LAW_STATES = [
-    "RelationshipStatus", "CustodyArrangement", "ResidenceArrangement",
-    "EmploymentStatus", "FinancialPosition", "PropertyValue",
-    "SuperannuationBalance", "ChildSupportObligation", "SpousalMaintenance",
-    "ParentingTime", "SchoolArrangement", "HealthStatus"
+    "RelationshipStatus",
+    "CustodyArrangement",
+    "ResidenceArrangement",
+    "EmploymentStatus",
+    "FinancialPosition",
+    "PropertyValue",
+    "SuperannuationBalance",
+    "ChildSupportObligation",
+    "SpousalMaintenance",
+    "ParentingTime",
+    "SchoolArrangement",
+    "HealthStatus",
 ]
 
 FAMILY_LAW_VERBS = [
-    "filed", "ordered", "consented", "separated", "married", "divorced",
-    "appealed", "granted", "dismissed", "varied", "contravened",
-    "relocated", "valued", "distributed", "contributed", "disclosed"
+    "filed",
+    "ordered",
+    "consented",
+    "separated",
+    "married",
+    "divorced",
+    "appealed",
+    "granted",
+    "dismissed",
+    "varied",
+    "contravened",
+    "relocated",
+    "valued",
+    "distributed",
+    "contributed",
+    "disclosed",
 ]
 
 FAMILY_LAW_QUESTIONS = {
@@ -58,7 +96,7 @@ FAMILY_LAW_QUESTIONS = {
         "Where do the children live?",
         "What school do the children attend?",
         "Is there a family violence history?",
-        "What are the children's wishes?"
+        "What are the children's wishes?",
     ],
     "property": [
         "What is the total asset pool value?",
@@ -67,15 +105,15 @@ FAMILY_LAW_QUESTIONS = {
         "What property is held by each party?",
         "What superannuation does each party hold?",
         "What debts exist in the asset pool?",
-        "How should the property be divided?"
+        "How should the property be divided?",
     ],
     "procedural": [
         "When did the parties separate?",
         "When was the application filed?",
         "What orders are being sought?",
         "What is the current court stage?",
-        "Are there any interim orders in place?"
-    ]
+        "Are there any interim orders in place?",
+    ],
 }
 
 
@@ -83,21 +121,23 @@ FAMILY_LAW_QUESTIONS = {
 # DOCUMENT PROCESSOR
 # ============================================================================
 
+
 @dataclass
 class FamilyLawDocument:
     """Parsed family law document."""
+
     doc_id: str
     citation: str
-    date: Optional[str]
+    date: str | None
     court: str
     jurisdiction: str
     text: str
     case_type: str = ""  # parenting, property, divorce, etc.
 
     # Extracted metadata
-    parties: List[str] = field(default_factory=list)
-    judge: Optional[str] = None
-    catchwords: List[str] = field(default_factory=list)
+    parties: list[str] = field(default_factory=list)
+    judge: str | None = None
+    catchwords: list[str] = field(default_factory=list)
 
 
 class FamilyLawExtractor:
@@ -110,35 +150,50 @@ class FamilyLawExtractor:
 
     # Common patterns in family law cases
     PARTY_PATTERNS = [
-        r'([A-Z][a-z]+)\s+(?:and|&)\s+([A-Z][a-z]+)',  # "Smith and Jones"
-        r'(?:Applicant|Mother|Father|Wife|Husband):\s*([A-Z][^,\n]+)',
-        r'(?:Respondent):\s*([A-Z][^,\n]+)',
-        r'\[([A-Z]+)\]\s+(?:and|&)\s+\[([A-Z]+)\]',  # [ABC] and [XYZ] anonymized
+        r"([A-Z][a-z]+)\s+(?:and|&)\s+([A-Z][a-z]+)",  # "Smith and Jones"
+        r"(?:Applicant|Mother|Father|Wife|Husband):\s*([A-Z][^,\n]+)",
+        r"(?:Respondent):\s*([A-Z][^,\n]+)",
+        r"\[([A-Z]+)\]\s+(?:and|&)\s+\[([A-Z]+)\]",  # [ABC] and [XYZ] anonymized
     ]
 
     JUDGE_PATTERNS = [
-        r'(?:Before|Judge|Justice|Magistrate):\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)',
-        r'(?:JUDGMENT OF|Decision of)\s+(?:Judge|Justice)\s+([A-Z][a-z]+)',
+        r"(?:Before|Judge|Justice|Magistrate):\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)",
+        r"(?:JUDGMENT OF|Decision of)\s+(?:Judge|Justice)\s+([A-Z][a-z]+)",
     ]
 
     DATE_PATTERNS = [
-        r'(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})',
-        r'(\d{4}-\d{2}-\d{2})',
-        r'(\d{1,2}/\d{1,2}/\d{4})',
+        r"(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})",
+        r"(\d{4}-\d{2}-\d{2})",
+        r"(\d{1,2}/\d{1,2}/\d{4})",
     ]
 
     CASE_TYPE_KEYWORDS = {
-        "parenting": ["parenting order", "children", "custody", "live with", "spend time",
-                      "relocation", "school", "best interests of the child"],
-        "property": ["property settlement", "asset pool", "contributions", "superannuation",
-                     "section 79", "property adjustment", "financial"],
+        "parenting": [
+            "parenting order",
+            "children",
+            "custody",
+            "live with",
+            "spend time",
+            "relocation",
+            "school",
+            "best interests of the child",
+        ],
+        "property": [
+            "property settlement",
+            "asset pool",
+            "contributions",
+            "superannuation",
+            "section 79",
+            "property adjustment",
+            "financial",
+        ],
         "divorce": ["divorce", "dissolution", "marriage certificate"],
         "child_support": ["child support", "assessment", "departure"],
         "spousal_maintenance": ["spousal maintenance", "section 72", "maintenance order"],
-        "contravention": ["contravention", "breach", "compliance"]
+        "contravention": ["contravention", "breach", "compliance"],
     }
 
-    def extract_document(self, raw_doc: Dict) -> FamilyLawDocument:
+    def extract_document(self, raw_doc: dict) -> FamilyLawDocument:
         """Extract structured data from raw corpus document."""
         text = raw_doc.get("text", "")[:50000]  # Limit text size
         citation = raw_doc.get("citation", "")
@@ -150,7 +205,7 @@ class FamilyLawExtractor:
             date=raw_doc.get("date"),
             court=self._extract_court(citation),
             jurisdiction=raw_doc.get("jurisdiction", ""),
-            text=text
+            text=text,
         )
 
         # Extract parties
@@ -181,23 +236,25 @@ class FamilyLawExtractor:
                 return name
         return "Unknown"
 
-    def _extract_parties(self, text: str, citation: str) -> List[str]:
+    def _extract_parties(self, text: str, citation: str) -> list[str]:
         """Extract party names from text."""
         parties = []
 
         # Try citation first (e.g., "Smith & Smith")
-        citation_match = re.search(r'^([A-Z][a-z]+(?:\s+\([A-Z]+\))?)\s*(?:&|and|v)\s*([A-Z][a-z]+)', citation)
+        citation_match = re.search(
+            r"^([A-Z][a-z]+(?:\s+\([A-Z]+\))?)\s*(?:&|and|v)\s*([A-Z][a-z]+)", citation
+        )
         if citation_match:
             parties.extend([citation_match.group(1), citation_match.group(2)])
 
         # Check for anonymized parties
-        anon_matches = re.findall(r'\[([A-Z]{2,4})\]', citation)
+        anon_matches = re.findall(r"\[([A-Z]{2,4})\]", citation)
         if anon_matches:
             parties.extend([f"[{m}]" for m in anon_matches])
 
         return list(set(parties))
 
-    def _extract_judge(self, text: str) -> Optional[str]:
+    def _extract_judge(self, text: str) -> str | None:
         """Extract judge name."""
         for pattern in self.JUDGE_PATTERNS:
             match = re.search(pattern, text[:2000], re.IGNORECASE)
@@ -219,19 +276,23 @@ class FamilyLawExtractor:
             return max(scores, key=scores.get)
         return "general"
 
-    def _extract_catchwords(self, text: str) -> List[str]:
+    def _extract_catchwords(self, text: str) -> list[str]:
         """Extract catchwords section if present."""
-        match = re.search(r'(?:CATCHWORDS?|Catchwords?):\s*([^\n]+(?:\n[^\n]+)*?)(?=\n\n|LEGISLATION)', text[:5000])
+        match = re.search(
+            r"(?:CATCHWORDS?|Catchwords?):\s*([^\n]+(?:\n[^\n]+)*?)(?=\n\n|LEGISLATION)",
+            text[:5000],
+        )
         if match:
             catchwords_text = match.group(1)
             # Split on common delimiters
-            return [cw.strip() for cw in re.split(r'[;\-–]', catchwords_text) if cw.strip()]
+            return [cw.strip() for cw in re.split(r"[;\-–]", catchwords_text) if cw.strip()]
         return []
 
 
 # ============================================================================
 # GSW BUILDER
 # ============================================================================
+
 
 class FamilyLawGSWBuilder:
     """
@@ -240,7 +301,7 @@ class FamilyLawGSWBuilder:
     This creates the knowledge structure for agent integration.
     """
 
-    def __init__(self, workspace: Optional[GlobalWorkspace] = None):
+    def __init__(self, workspace: GlobalWorkspace | None = None):
         self.workspace = workspace or GlobalWorkspace(domain="family_law")
         self.extractor = FamilyLawExtractor()
 
@@ -249,10 +310,10 @@ class FamilyLawGSWBuilder:
             "documents_processed": 0,
             "actors_extracted": 0,
             "questions_generated": 0,
-            "case_types": defaultdict(int)
+            "case_types": defaultdict(int),
         }
 
-    def process_document(self, raw_doc: Dict) -> None:
+    def process_document(self, raw_doc: dict) -> None:
         """Process a single document into the workspace."""
         doc = self.extractor.extract_document(raw_doc)
 
@@ -268,7 +329,7 @@ class FamilyLawGSWBuilder:
                 name=doc.judge,
                 actor_type=ActorType.PERSON,
                 roles=["Judge"],
-                source_chunk_ids=[doc.doc_id]
+                source_chunk_ids=[doc.doc_id],
             )
             self.workspace.add_actor(judge_actor)
 
@@ -277,29 +338,29 @@ class FamilyLawGSWBuilder:
             name=doc.court,
             actor_type=ActorType.ORGANIZATION,
             roles=["Court"],
-            source_chunk_ids=[doc.doc_id]
+            source_chunk_ids=[doc.doc_id],
         )
         self.workspace.add_actor(court_actor)
 
         # Create temporal link for case date
         if doc.date:
             temporal_actor = Actor(
-                name=doc.date,
-                actor_type=ActorType.TEMPORAL,
-                roles=["Decision Date"]
+                name=doc.date, actor_type=ActorType.TEMPORAL, roles=["Decision Date"]
             )
             self.workspace.add_actor(temporal_actor)
 
             # Link parties to this date
-            party_ids = [self.workspace.find_actor_by_name(p).id
-                        for p in doc.parties
-                        if self.workspace.find_actor_by_name(p)]
+            party_ids = [
+                self.workspace.find_actor_by_name(p).id
+                for p in doc.parties
+                if self.workspace.find_actor_by_name(p)
+            ]
             if party_ids:
                 link = SpatioTemporalLink(
                     linked_entity_ids=party_ids + [temporal_actor.id],
                     tag_type=LinkType.TEMPORAL,
                     tag_value=doc.date,
-                    source_chunk_id=doc.doc_id
+                    source_chunk_id=doc.doc_id,
                 )
                 self.workspace.add_spatio_temporal_link(link)
 
@@ -339,10 +400,10 @@ class FamilyLawGSWBuilder:
             actor_type=ActorType.PERSON,
             roles=roles,
             involved_cases=[doc.citation],
-            source_chunk_ids=[doc.doc_id]
+            source_chunk_ids=[doc.doc_id],
         )
 
-    def _generate_questions(self, doc: FamilyLawDocument) -> List[PredictiveQuestion]:
+    def _generate_questions(self, doc: FamilyLawDocument) -> list[PredictiveQuestion]:
         """Generate predictive questions for a document."""
         questions = []
 
@@ -355,7 +416,7 @@ class FamilyLawGSWBuilder:
                 question_text=q_text,
                 question_type=self._classify_question(q_text),
                 answerable=False,  # Will be answered during agent interaction
-                source_chunk_id=doc.doc_id
+                source_chunk_id=doc.doc_id,
             )
             questions.append(q)
 
@@ -379,13 +440,14 @@ class FamilyLawGSWBuilder:
         else:
             return QuestionType.HOW
 
-    def build_from_jsonl(self, jsonl_path: Path, max_docs: Optional[int] = None,
-                         progress_interval: int = 100) -> GlobalWorkspace:
+    def build_from_jsonl(
+        self, jsonl_path: Path, max_docs: int | None = None, progress_interval: int = 100
+    ) -> GlobalWorkspace:
         """Build workspace from JSONL file."""
         print(f"[GSW Builder] Processing: {jsonl_path}")
         start_time = datetime.now()
 
-        with open(jsonl_path, 'r', encoding='utf-8') as f:
+        with open(jsonl_path, encoding="utf-8") as f:
             for i, line in enumerate(f):
                 if max_docs and i >= max_docs:
                     break
@@ -402,29 +464,31 @@ class FamilyLawGSWBuilder:
                 if (i + 1) % progress_interval == 0:
                     elapsed = (datetime.now() - start_time).total_seconds()
                     rate = (i + 1) / elapsed if elapsed > 0 else 0
-                    print(f"[Progress] {i+1} docs | {rate:.0f}/sec | "
-                          f"Actors: {len(self.workspace.actors)} | "
-                          f"Questions: {len(self.workspace.questions)}")
+                    print(
+                        f"[Progress] {i+1} docs | {rate:.0f}/sec | "
+                        f"Actors: {len(self.workspace.actors)} | "
+                        f"Questions: {len(self.workspace.questions)}"
+                    )
 
         elapsed = datetime.now() - start_time
         print(f"\n[Complete] Processed {self.stats['documents_processed']} documents in {elapsed}")
-        print(f"[Stats] Actors: {len(self.workspace.actors)}, "
-              f"Questions: {len(self.workspace.questions)}, "
-              f"Links: {len(self.workspace.spatio_temporal_links)}")
+        print(
+            f"[Stats] Actors: {len(self.workspace.actors)}, "
+            f"Questions: {len(self.workspace.questions)}, "
+            f"Links: {len(self.workspace.spatio_temporal_links)}"
+        )
 
         return self.workspace
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get builder statistics."""
-        return {
-            **self.stats,
-            "workspace_stats": self.workspace.get_statistics()
-        }
+        return {**self.stats, "workspace_stats": self.workspace.get_statistics()}
 
 
 # ============================================================================
 # AGENT INTERFACE
 # ============================================================================
+
 
 class FamilyLawAgent:
     """
@@ -434,7 +498,7 @@ class FamilyLawAgent:
     Designed for integration with LangGraph/LangChain agents.
     """
 
-    def __init__(self, workspace_path: Optional[Path] = None):
+    def __init__(self, workspace_path: Path | None = None):
         if workspace_path and workspace_path.exists():
             self.manager = WorkspaceManager.load(workspace_path)
         else:
@@ -443,7 +507,7 @@ class FamilyLawAgent:
         self.workspace = self.manager.workspace
 
     @property
-    def stats(self) -> Dict[str, Any]:
+    def stats(self) -> dict[str, Any]:
         """Get workspace statistics."""
         return self.manager.get_statistics()
 
@@ -451,7 +515,7 @@ class FamilyLawAgent:
     # QUERY METHODS (for agent tool integration)
     # =========================================================================
 
-    def find_parties(self, query: str = "") -> List[Dict[str, Any]]:
+    def find_parties(self, query: str = "") -> list[dict[str, Any]]:
         """
         Find parties in the workspace.
 
@@ -463,20 +527,24 @@ class FamilyLawAgent:
         """
         results = []
         for actor in self.workspace.actors.values():
-            if actor.actor_type == ActorType.PERSON and "Party" in actor.roles or any(
-                r in actor.roles for r in ["Applicant", "Respondent", "Mother", "Father"]
+            if (
+                actor.actor_type == ActorType.PERSON
+                and "Party" in actor.roles
+                or any(r in actor.roles for r in ["Applicant", "Respondent", "Mother", "Father"])
             ):
                 if not query or query.lower() in actor.name.lower():
-                    results.append({
-                        "id": actor.id,
-                        "name": actor.name,
-                        "roles": actor.roles,
-                        "cases": actor.involved_cases[:5],
-                        "states": [{"name": s.name, "value": s.value} for s in actor.states]
-                    })
+                    results.append(
+                        {
+                            "id": actor.id,
+                            "name": actor.name,
+                            "roles": actor.roles,
+                            "cases": actor.involved_cases[:5],
+                            "states": [{"name": s.name, "value": s.value} for s in actor.states],
+                        }
+                    )
         return results[:50]  # Limit results
 
-    def find_cases_by_type(self, case_type: str) -> List[Dict[str, Any]]:
+    def find_cases_by_type(self, case_type: str) -> list[dict[str, Any]]:
         """Find cases by type (parenting, property, etc.)."""
         # This would require storing case_type in metadata
         # For now, search questions
@@ -485,26 +553,24 @@ class FamilyLawAgent:
 
         for q in self.workspace.questions.values():
             q_text_lower = q.question_text.lower()
-            if case_type_lower in ["parenting", "children", "custody"] and \
-               any(kw in q_text_lower for kw in ["children", "parenting", "custody", "care"]):
-                results.append({
-                    "question_id": q.id,
-                    "question": q.question_text,
-                    "answered": q.answerable,
-                    "answer": q.answer_text
-                })
-            elif case_type_lower in ["property", "financial", "asset"] and \
-                 any(kw in q_text_lower for kw in ["property", "asset", "value", "contribution"]):
-                results.append({
-                    "question_id": q.id,
-                    "question": q.question_text,
-                    "answered": q.answerable,
-                    "answer": q.answer_text
-                })
+            if (
+                case_type_lower in ["parenting", "children", "custody"]
+                and any(kw in q_text_lower for kw in ["children", "parenting", "custody", "care"])
+                or case_type_lower in ["property", "financial", "asset"]
+                and any(kw in q_text_lower for kw in ["property", "asset", "value", "contribution"])
+            ):
+                results.append(
+                    {
+                        "question_id": q.id,
+                        "question": q.question_text,
+                        "answered": q.answerable,
+                        "answer": q.answer_text,
+                    }
+                )
 
         return results[:20]
 
-    def get_unanswered_questions(self, limit: int = 20) -> List[Dict[str, Any]]:
+    def get_unanswered_questions(self, limit: int = 20) -> list[dict[str, Any]]:
         """Get unanswered predictive questions."""
         unanswered = self.workspace.get_unanswered_questions()
         return [
@@ -512,7 +578,7 @@ class FamilyLawAgent:
                 "id": q.id,
                 "question": q.question_text,
                 "type": q.question_type.value,
-                "target_entity": q.target_entity_id
+                "target_entity": q.target_entity_id,
             }
             for q in unanswered[:limit]
         ]
@@ -527,20 +593,15 @@ class FamilyLawAgent:
             return True
         return False
 
-    def get_timeline(self, party_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    def get_timeline(self, party_name: str | None = None) -> list[dict[str, Any]]:
         """Get chronological timeline of events."""
         return self.manager.get_timeline()
 
-    def get_actors_by_role(self, role: str) -> List[Dict[str, Any]]:
+    def get_actors_by_role(self, role: str) -> list[dict[str, Any]]:
         """Find actors by their role."""
         actors = self.manager.query_actors_by_role(role)
         return [
-            {
-                "id": a.id,
-                "name": a.name,
-                "roles": a.roles,
-                "type": a.actor_type.value
-            }
+            {"id": a.id, "name": a.name, "roles": a.roles, "type": a.actor_type.value}
             for a in actors
         ]
 
@@ -556,7 +617,7 @@ class FamilyLawAgent:
         """
         return self.workspace.to_toon_summary(max_actors)
 
-    def get_context_json(self, max_actors: int = 50) -> Dict[str, Any]:
+    def get_context_json(self, max_actors: int = 50) -> dict[str, Any]:
         """Get workspace context as JSON for API integration."""
         ws_dict = self.manager._serialize_workspace(self.workspace)
 
@@ -594,6 +655,7 @@ class FamilyLawAgent:
 # CLI INTERFACE
 # ============================================================================
 
+
 def main():
     """Build Family Law GSW from corpus."""
     import argparse
@@ -616,9 +678,7 @@ def main():
     # Build workspace
     builder = FamilyLawGSWBuilder()
     workspace = builder.build_from_jsonl(
-        input_path,
-        max_docs=args.max_docs,
-        progress_interval=args.progress
+        input_path, max_docs=args.max_docs, progress_interval=args.progress
     )
 
     # Save workspace

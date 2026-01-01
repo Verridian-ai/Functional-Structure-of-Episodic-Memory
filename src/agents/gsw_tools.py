@@ -16,65 +16,73 @@ The GSW provides episodic memory capabilities:
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Any, Annotated
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 # For LangChain compatibility
 try:
-    from langchain_core.tools import tool, BaseTool
     from langchain_core.callbacks import CallbackManagerForToolRun
+    from langchain_core.tools import BaseTool, tool
+
     LANGCHAIN_AVAILABLE = True
 except ImportError:
     LANGCHAIN_AVAILABLE = False
+
     # Provide fallback decorator
     def tool(func):
         func._is_tool = True
         return func
 
-from src.agents.family_law_knowledge import FamilyLawAgent
-from src.validation.statutory_rag import StatutoryRAGValidator, ValidationResult
-from src.evaluation.multi_judge import MultiJudgeEvaluator, JudgeModel
-from src.vsa.span_detector import SpanAlignedVSA, SpanIssue
 
+from src.agents.family_law_knowledge import FamilyLawAgent
+from src.validation.statutory_rag import StatutoryRAGValidator
+from src.vsa.span_detector import SpanAlignedVSA
 
 # ============================================================================
 # PYDANTIC MODELS FOR STRUCTURED OUTPUTS
 # ============================================================================
 
+
 class PartyInfo(BaseModel):
     """Information about a party in a case."""
+
     id: str = Field(description="Unique identifier for the party")
     name: str = Field(description="Name of the party")
-    roles: List[str] = Field(description="Roles held by this party (e.g., Applicant, Mother)")
-    cases: List[str] = Field(description="Cases this party is involved in")
+    roles: list[str] = Field(description="Roles held by this party (e.g., Applicant, Mother)")
+    cases: list[str] = Field(description="Cases this party is involved in")
 
 
 class QuestionInfo(BaseModel):
     """A predictive question from the GSW."""
+
     id: str = Field(description="Question identifier")
     question: str = Field(description="The question text")
     type: str = Field(description="Question type (who, what, when, where, why, how)")
     answered: bool = Field(description="Whether the question has been answered")
-    answer: Optional[str] = Field(description="The answer if available")
+    answer: str | None = Field(description="The answer if available")
 
 
 class KnowledgeContext(BaseModel):
     """Compressed knowledge context for LLM prompts."""
+
     format: str = Field(description="Format of the context (toon or json)")
     content: str = Field(description="The knowledge context content")
-    stats: Dict[str, Any] = Field(description="Workspace statistics")
+    stats: dict[str, Any] = Field(description="Workspace statistics")
 
 
 class QueryResult(BaseModel):
     """Generic query result."""
+
     success: bool = Field(description="Whether the query succeeded")
-    results: List[Dict[str, Any]] = Field(description="Query results")
+    results: list[dict[str, Any]] = Field(description="Query results")
     count: int = Field(description="Number of results")
 
 
 # ============================================================================
 # GSW TOOL REGISTRY
 # ============================================================================
+
 
 class GSWToolRegistry:
     """
@@ -84,7 +92,7 @@ class GSWToolRegistry:
     tool methods that can be exposed to LLM agents.
     """
 
-    def __init__(self, workspace_path: Optional[Path] = None):
+    def __init__(self, workspace_path: Path | None = None):
         """
         Initialize the tool registry.
 
@@ -92,7 +100,7 @@ class GSWToolRegistry:
             workspace_path: Path to the GSW workspace JSON file
         """
         self.workspace_path = workspace_path
-        self._agent: Optional[FamilyLawAgent] = None
+        self._agent: FamilyLawAgent | None = None
 
     @property
     def agent(self) -> FamilyLawAgent:
@@ -104,7 +112,7 @@ class GSWToolRegistry:
                 self._agent = FamilyLawAgent()
         return self._agent
 
-    def reload(self, path: Optional[Path] = None) -> None:
+    def reload(self, path: Path | None = None) -> None:
         """Reload the workspace from disk."""
         if path:
             self.workspace_path = path
@@ -112,7 +120,7 @@ class GSWToolRegistry:
 
 
 # Global registry instance
-_registry: Optional[GSWToolRegistry] = None
+_registry: GSWToolRegistry | None = None
 
 
 def get_registry() -> GSWToolRegistry:
@@ -135,6 +143,7 @@ def set_workspace_path(path: Path) -> None:
 # TOOLS - Compatible with LangChain @tool decorator
 # ============================================================================
 
+
 @tool
 def find_parties(query: str = "") -> str:
     """
@@ -151,11 +160,7 @@ def find_parties(query: str = "") -> str:
     """
     registry = get_registry()
     results = registry.agent.find_parties(query)
-    return json.dumps({
-        "success": True,
-        "count": len(results),
-        "parties": results
-    }, indent=2)
+    return json.dumps({"success": True, "count": len(results), "parties": results}, indent=2)
 
 
 @tool
@@ -174,12 +179,10 @@ def get_case_questions(case_type: str = "parenting") -> str:
     """
     registry = get_registry()
     results = registry.agent.find_cases_by_type(case_type)
-    return json.dumps({
-        "success": True,
-        "case_type": case_type,
-        "count": len(results),
-        "questions": results
-    }, indent=2)
+    return json.dumps(
+        {"success": True, "case_type": case_type, "count": len(results), "questions": results},
+        indent=2,
+    )
 
 
 @tool
@@ -198,11 +201,7 @@ def get_unanswered_questions(limit: int = 10) -> str:
     """
     registry = get_registry()
     results = registry.agent.get_unanswered_questions(limit)
-    return json.dumps({
-        "success": True,
-        "count": len(results),
-        "questions": results
-    }, indent=2)
+    return json.dumps({"success": True, "count": len(results), "questions": results}, indent=2)
 
 
 @tool
@@ -221,11 +220,14 @@ def answer_question(question_id: str, answer: str) -> str:
     """
     registry = get_registry()
     success = registry.agent.answer_question(question_id, answer)
-    return json.dumps({
-        "success": success,
-        "question_id": question_id,
-        "message": "Question answered" if success else "Question not found"
-    }, indent=2)
+    return json.dumps(
+        {
+            "success": success,
+            "question_id": question_id,
+            "message": "Question answered" if success else "Question not found",
+        },
+        indent=2,
+    )
 
 
 @tool
@@ -243,12 +245,9 @@ def find_actors_by_role(role: str) -> str:
     """
     registry = get_registry()
     results = registry.agent.get_actors_by_role(role)
-    return json.dumps({
-        "success": True,
-        "role": role,
-        "count": len(results),
-        "actors": results
-    }, indent=2)
+    return json.dumps(
+        {"success": True, "role": role, "count": len(results), "actors": results}, indent=2
+    )
 
 
 @tool
@@ -275,16 +274,19 @@ def get_knowledge_context(format: str = "toon", max_actors: int = 30) -> str:
 
     stats = registry.agent.stats
 
-    return json.dumps({
-        "format": format,
-        "stats": {
-            "total_actors": stats.get("total_actors", 0),
-            "total_questions": stats.get("total_questions", 0),
-            "answered_questions": stats.get("answered_questions", 0),
-            "domain": stats.get("domain", "unknown")
+    return json.dumps(
+        {
+            "format": format,
+            "stats": {
+                "total_actors": stats.get("total_actors", 0),
+                "total_questions": stats.get("total_questions", 0),
+                "answered_questions": stats.get("answered_questions", 0),
+                "domain": stats.get("domain", "unknown"),
+            },
+            "context": context[:5000],  # Limit size for tool output
         },
-        "context": context[:5000]  # Limit size for tool output
-    }, indent=2)
+        indent=2,
+    )
 
 
 @tool
@@ -299,10 +301,7 @@ def get_workspace_stats() -> str:
     """
     registry = get_registry()
     stats = registry.agent.stats
-    return json.dumps({
-        "success": True,
-        "statistics": stats
-    }, indent=2)
+    return json.dumps({"success": True, "statistics": stats}, indent=2)
 
 
 @tool
@@ -318,10 +317,7 @@ def get_ontology_vocabulary() -> str:
     """
     registry = get_registry()
     context = registry.agent.get_ontology_context()
-    return json.dumps({
-        "success": True,
-        "vocabulary": context
-    }, indent=2)
+    return json.dumps({"success": True, "vocabulary": context}, indent=2)
 
 
 @tool
@@ -344,16 +340,18 @@ def validate_against_statutes(extraction_json: str, context: str = "") -> str:
         extraction = json.loads(extraction_json)
         result = validator.validate(extraction, context)
 
-        return json.dumps({
-            "success": True,
-            "compliance_score": result.compliance_score if hasattr(result, 'compliance_score') else 0.0,
-            "validation": result.to_dict() if hasattr(result, 'to_dict') else str(result)
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": True,
+                "compliance_score": (
+                    result.compliance_score if hasattr(result, "compliance_score") else 0.0
+                ),
+                "validation": result.to_dict() if hasattr(result, "to_dict") else str(result),
+            },
+            indent=2,
+        )
     except Exception as e:
-        return json.dumps({
-            "success": False,
-            "error": str(e)
-        }, indent=2)
+        return json.dumps({"success": False, "error": str(e)}, indent=2)
 
 
 @tool
@@ -376,16 +374,23 @@ def detect_discrepancies(text: str, extraction_json: str = "") -> str:
         extraction = json.loads(extraction_json) if extraction_json else None
         issues = detector.detect(text, extraction)
 
-        return json.dumps({
-            "success": True,
-            "issue_count": len(issues) if isinstance(issues, list) else 0,
-            "issues": [issue.to_dict() if hasattr(issue, 'to_dict') else str(issue) for issue in issues] if isinstance(issues, list) else []
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": True,
+                "issue_count": len(issues) if isinstance(issues, list) else 0,
+                "issues": (
+                    [
+                        issue.to_dict() if hasattr(issue, "to_dict") else str(issue)
+                        for issue in issues
+                    ]
+                    if isinstance(issues, list)
+                    else []
+                ),
+            },
+            indent=2,
+        )
     except Exception as e:
-        return json.dumps({
-            "success": False,
-            "error": str(e)
-        }, indent=2)
+        return json.dumps({"success": False, "error": str(e)}, indent=2)
 
 
 @tool
@@ -404,26 +409,27 @@ def get_statutory_reference(section: str, act: str = "Family Law Act 1975") -> s
         validator = StatutoryRAGValidator()
         reference = validator.lookup_section(section, act)
 
-        return json.dumps({
-            "success": True,
-            "section": section,
-            "act": act,
-            "content": reference if isinstance(reference, dict) else {"text": str(reference)}
-        }, indent=2)
+        return json.dumps(
+            {
+                "success": True,
+                "section": section,
+                "act": act,
+                "content": reference if isinstance(reference, dict) else {"text": str(reference)},
+            },
+            indent=2,
+        )
     except Exception as e:
-        return json.dumps({
-            "success": False,
-            "error": str(e),
-            "section": section,
-            "act": act
-        }, indent=2)
+        return json.dumps(
+            {"success": False, "error": str(e), "section": section, "act": act}, indent=2
+        )
 
 
 # ============================================================================
 # LANGCHAIN TOOL LIST
 # ============================================================================
 
-def get_gsw_tools() -> List:
+
+def get_gsw_tools() -> list:
     """
     Get all GSW tools as a list for LangChain/LangGraph integration.
 
@@ -453,13 +459,14 @@ def get_gsw_tools() -> List:
         get_ontology_vocabulary,
         validate_against_statutes,
         detect_discrepancies,
-        get_statutory_reference
+        get_statutory_reference,
     ]
 
 
 # ============================================================================
 # DIRECT API (for non-LangChain usage)
 # ============================================================================
+
 
 class GSWDirectAPI:
     """
@@ -472,13 +479,13 @@ class GSWDirectAPI:
         set_workspace_path(workspace_path)
         self.registry = get_registry()
 
-    def find_parties(self, query: str = "") -> List[Dict]:
+    def find_parties(self, query: str = "") -> list[dict]:
         return self.registry.agent.find_parties(query)
 
-    def get_questions(self, case_type: str = "") -> List[Dict]:
+    def get_questions(self, case_type: str = "") -> list[dict]:
         return self.registry.agent.find_cases_by_type(case_type)
 
-    def get_unanswered(self, limit: int = 20) -> List[Dict]:
+    def get_unanswered(self, limit: int = 20) -> list[dict]:
         return self.registry.agent.get_unanswered_questions(limit)
 
     def answer(self, question_id: str, answer: str) -> bool:
@@ -489,7 +496,7 @@ class GSWDirectAPI:
             return self.registry.agent.get_context_toon(max_actors)
         return json.dumps(self.registry.agent.get_context_json(max_actors))
 
-    def get_stats(self) -> Dict:
+    def get_stats(self) -> dict:
         return self.registry.agent.stats
 
 
@@ -539,4 +546,6 @@ if __name__ == "__main__":
 
     else:
         print(f"Workspace not found at {workspace}")
-        print("Run: python -m src.agents.family_law_knowledge --input <family.jsonl> --output <output.json>")
+        print(
+            "Run: python -m src.agents.family_law_knowledge --input <family.jsonl> --output <output.json>"
+        )

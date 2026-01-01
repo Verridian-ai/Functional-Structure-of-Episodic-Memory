@@ -6,20 +6,17 @@ Handles interaction with the Cognee framework for graph RAG and knowledge manage
 """
 
 import os
-import asyncio
-from typing import Dict, Any, List, Optional
+from typing import Any
+
 import cognee
-from cognee.infrastructure.databases.relational import create_db_engine
+
 
 class CogneeClient:
     """Client for interacting with Cognee."""
-    
-    def __init__(self, api_key: Optional[str] = None):
+
+    def __init__(self, api_key: str | None = None):
         self.api_key = api_key or os.getenv("COGNEE_API_KEY")
-        self.config = {
-            "llm_provider": "openai", # or openrouter
-            "graph_db": "neo4j"
-        }
+        self.config = {"llm_provider": "openai", "graph_db": "neo4j"}  # or openrouter
         self._setup()
 
     def _setup(self):
@@ -28,7 +25,7 @@ class CogneeClient:
         # In reality, you'd set env vars or config objects
         pass
 
-    async def add_data(self, data: Dict[str, Any], dataset_name: str = "gsw_corpus"):
+    async def add_data(self, data: dict[str, Any], dataset_name: str = "gsw_corpus"):
         """Add structured data to Cognee."""
         try:
             await cognee.add(data, dataset_name)
@@ -60,12 +57,13 @@ class CogneeClient:
         await cognee.prune.prune_data()
         await cognee.prune.prune_system(metadata=True)
 
+
 # Global instance
 _client = None
+
 
 def get_cognee_client() -> CogneeClient:
     global _client
     if _client is None:
         _client = CogneeClient()
     return _client
-

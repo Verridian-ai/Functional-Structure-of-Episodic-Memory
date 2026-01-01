@@ -13,21 +13,17 @@ Adapted for: Australian Legal Domain
 """
 
 import json
-import re
 import os
+import re
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional, Any
 from uuid import uuid4
-from datetime import datetime
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from src.logic.gsw_schema import (
-    Actor, SpatioTemporalLink, LinkType, ChunkExtraction
-)
-from .cost_tracker import get_cost_tracker
+from src.logic.gsw_schema import ChunkExtraction, LinkType, SpatioTemporalLink
 
+from .cost_tracker import get_cost_tracker
 
 # ============================================================================
 # SPACETIME PROMPT
@@ -102,6 +98,7 @@ IMPORTANT:
 # SPACETIME LINKER CLASS
 # ============================================================================
 
+
 class LegalSpacetime:
     """
     Links entities by shared spatio-temporal context.
@@ -114,8 +111,8 @@ class LegalSpacetime:
     def __init__(
         self,
         model: str = "google/gemini-2.5-flash",
-        api_key: Optional[str] = None,
-        use_openrouter: bool = True
+        api_key: str | None = None,
+        use_openrouter: bool = True,
     ):
         self.model = model
         self.use_openrouter = use_openrouter
@@ -133,20 +130,22 @@ class LegalSpacetime:
         """Setup the LLM client."""
         if self.use_openrouter:
             import httpx
+
             self.client = httpx.Client(
                 base_url="https://openrouter.ai/api/v1",
                 headers={
                     "Authorization": f"Bearer {self.api_key}",
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
                 },
-                timeout=60.0
+                timeout=60.0,
             )
         else:
             # Setup Google Generative AI client
             try:
                 import google.generativeai as genai
+
                 genai.configure(api_key=self.api_key)
-                self.genai_model = genai.GenerativeModel('gemini-1.5-flash')
+                self.genai_model = genai.GenerativeModel("gemini-1.5-flash")
             except ImportError:
                 raise ImportError(
                     "google-generativeai package required for direct Google API. "
@@ -154,10 +153,8 @@ class LegalSpacetime:
                 )
 
     def link_entities(
-        self,
-        extraction: ChunkExtraction,
-        original_text: str
-    ) -> List[SpatioTemporalLink]:
+        self, extraction: ChunkExtraction, original_text: str
+    ) -> list[SpatioTemporalLink]:
         """
         Analyze extracted entities and create spatio-temporal links.
 
@@ -174,20 +171,21 @@ class LegalSpacetime:
         # Build entities JSON for prompt
         entities_data = []
         for actor in extraction.actors:
-            entities_data.append({
-                "id": actor.id,
-                "name": actor.name,
-                "type": actor.actor_type.value,
-                "roles": actor.roles,
-                "states": [{"name": s.name, "value": s.value} for s in actor.states]
-            })
+            entities_data.append(
+                {
+                    "id": actor.id,
+                    "name": actor.name,
+                    "type": actor.actor_type.value,
+                    "roles": actor.roles,
+                    "states": [{"name": s.name, "value": s.value} for s in actor.states],
+                }
+            )
 
         entities_json = json.dumps(entities_data, indent=2)
 
         # Call LLM
         user_prompt = SPACETIME_USER_PROMPT.format(
-            entities_json=entities_json,
-            input_text=original_text[:10000]
+            entities_json=entities_json, input_text=original_text[:10000]
         )
 
         try:
@@ -208,11 +206,11 @@ class LegalSpacetime:
                     "model": self.model,
                     "messages": [
                         {"role": "system", "content": SPACETIME_SYSTEM_PROMPT},
-                        {"role": "user", "content": user_prompt}
+                        {"role": "user", "content": user_prompt},
                     ],
                     "temperature": 0.1,
-                    "max_tokens": 4000
-                }
+                    "max_tokens": 4000,
+                },
             )
             response.raise_for_status()
             result = response.json()
@@ -222,9 +220,7 @@ class LegalSpacetime:
             if usage:
                 tracker = get_cost_tracker(self.model)
                 tracker.add_usage(
-                    "spacetime",
-                    usage.get("prompt_tokens", 0),
-                    usage.get("completion_tokens", 0)
+                    "spacetime", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0)
                 )
 
             return result["choices"][0]["message"]["content"]
@@ -242,51 +238,46 @@ class LegalSpacetime:
             )
 
             response = self.genai_model.generate_content(
-                full_prompt,
-                generation_config=generation_config
+                full_prompt, generation_config=generation_config
             )
 
             # Track token usage if available
-            if hasattr(response, 'usage_metadata'):
+            if hasattr(response, "usage_metadata"):
                 tracker = get_cost_tracker(self.model)
                 tracker.add_usage(
                     "spacetime",
-                    getattr(response.usage_metadata, 'prompt_token_count', 0),
-                    getattr(response.usage_metadata, 'candidates_token_count', 0)
+                    getattr(response.usage_metadata, "prompt_token_count", 0),
+                    getattr(response.usage_metadata, "candidates_token_count", 0),
                 )
 
             return response.text
 
     def _repair_json(self, text: str) -> str:
         """Attempt to repair common JSON issues."""
-        text = re.sub(r',(\s*[}\]])', r'\1', text)
-        text = re.sub(r'}\s*{', '},{', text)
-        text = re.sub(r']\s*\[', '],[', text)
-        open_braces = text.count('{') - text.count('}')
-        open_brackets = text.count('[') - text.count(']')
+        text = re.sub(r",(\s*[}\]])", r"\1", text)
+        text = re.sub(r"}\s*{", "},{", text)
+        text = re.sub(r"]\s*\[", "],[", text)
+        open_braces = text.count("{") - text.count("}")
+        open_brackets = text.count("[") - text.count("]")
         if open_braces > 0 or open_brackets > 0:
-            last_comma = max(text.rfind(',{'), text.rfind(',['), text.rfind(',"'))
+            last_comma = max(text.rfind(",{"), text.rfind(",["), text.rfind(',"'))
             if last_comma > len(text) // 2:
                 text = text[:last_comma]
-            text += ']' * open_brackets + '}' * open_braces
+            text += "]" * open_brackets + "}" * open_braces
         return text
 
-    def _parse_response(
-        self,
-        response: str,
-        chunk_id: str
-    ) -> List[SpatioTemporalLink]:
+    def _parse_response(self, response: str, chunk_id: str) -> list[SpatioTemporalLink]:
         """Parse LLM response into links."""
         # Clean markdown
         cleaned = response.strip()
         if cleaned.startswith("```"):
-            cleaned = re.sub(r'^```(?:json)?\n?', '', cleaned)
-            cleaned = re.sub(r'\n?```$', '', cleaned)
+            cleaned = re.sub(r"^```(?:json)?\n?", "", cleaned)
+            cleaned = re.sub(r"\n?```$", "", cleaned)
 
         try:
             data = json.loads(cleaned)
         except json.JSONDecodeError:
-            match = re.search(r'\{[\s\S]*\}', cleaned)
+            match = re.search(r"\{[\s\S]*\}", cleaned)
             if match:
                 json_str = match.group()
                 try:
@@ -314,18 +305,13 @@ class LegalSpacetime:
                 tag_type=tag_type,
                 tag_value=link_data.get("tag_value"),
                 source_chunk_id=chunk_id,
-                metadata={
-                    "context_description": link_data.get("context_description", "")
-                }
+                metadata={"context_description": link_data.get("context_description", "")},
             )
             links.append(link)
 
         return links
 
-    def _rule_based_linking(
-        self,
-        extraction: ChunkExtraction
-    ) -> List[SpatioTemporalLink]:
+    def _rule_based_linking(self, extraction: ChunkExtraction) -> list[SpatioTemporalLink]:
         """
         Fallback rule-based linking when LLM is unavailable.
 
@@ -334,22 +320,13 @@ class LegalSpacetime:
         links = []
 
         # Find temporal entities
-        temporal_actors = [
-            a for a in extraction.actors
-            if a.actor_type.value == "temporal"
-        ]
+        temporal_actors = [a for a in extraction.actors if a.actor_type.value == "temporal"]
 
         # Find location entities
-        location_actors = [
-            a for a in extraction.actors
-            if a.actor_type.value == "location"
-        ]
+        location_actors = [a for a in extraction.actors if a.actor_type.value == "location"]
 
         # Link all person actors to temporal entities
-        person_ids = [
-            a.id for a in extraction.actors
-            if a.actor_type.value == "person"
-        ]
+        person_ids = [a.id for a in extraction.actors if a.actor_type.value == "person"]
 
         for temporal in temporal_actors:
             if person_ids:
@@ -359,7 +336,7 @@ class LegalSpacetime:
                     tag_type=LinkType.TEMPORAL,
                     tag_value=temporal.name,
                     source_chunk_id=extraction.chunk_id,
-                    metadata={"method": "rule_based"}
+                    metadata={"method": "rule_based"},
                 )
                 links.append(link)
 
@@ -371,7 +348,7 @@ class LegalSpacetime:
                     tag_type=LinkType.SPATIAL,
                     tag_value=location.name,
                     source_chunk_id=extraction.chunk_id,
-                    metadata={"method": "rule_based"}
+                    metadata={"method": "rule_based"},
                 )
                 links.append(link)
 
@@ -382,7 +359,8 @@ class LegalSpacetime:
 # UTILITY FUNCTIONS
 # ============================================================================
 
-def extract_dates_from_text(text: str) -> List[Dict[str, str]]:
+
+def extract_dates_from_text(text: str) -> list[dict[str, str]]:
     """
     Extract dates from legal text using regex patterns.
 
@@ -390,12 +368,12 @@ def extract_dates_from_text(text: str) -> List[Dict[str, str]]:
     """
     patterns = [
         # Full dates: 15 March 2020, March 15, 2020
-        r'(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})',
-        r'((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})',
+        r"(\d{1,2}\s+(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})",
+        r"((?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2},?\s+\d{4})",
         # ISO format: 2020-03-15
-        r'(\d{4}-\d{2}-\d{2})',
+        r"(\d{4}-\d{2}-\d{2})",
         # Short format: 15/03/2020
-        r'(\d{1,2}/\d{1,2}/\d{4})',
+        r"(\d{1,2}/\d{1,2}/\d{4})",
     ]
 
     dates = []
@@ -407,15 +385,12 @@ def extract_dates_from_text(text: str) -> List[Dict[str, str]]:
             end = min(len(text), match.end() + 50)
             context = text[start:end].strip()
 
-            dates.append({
-                "date": match.group(1),
-                "context": context
-            })
+            dates.append({"date": match.group(1), "context": context})
 
     return dates
 
 
-def extract_locations_from_text(text: str) -> List[Dict[str, str]]:
+def extract_locations_from_text(text: str) -> list[dict[str, str]]:
     """
     Extract locations from legal text.
 
@@ -423,11 +398,11 @@ def extract_locations_from_text(text: str) -> List[Dict[str, str]]:
     """
     patterns = [
         # Street addresses
-        r'(\d+\s+[A-Z][a-z]+\s+(?:Street|St|Road|Rd|Avenue|Ave|Drive|Dr|Lane|Ln|Court|Ct|Place|Pl)[,\s]+[A-Z][a-z]+)',
+        r"(\d+\s+[A-Z][a-z]+\s+(?:Street|St|Road|Rd|Avenue|Ave|Drive|Dr|Lane|Ln|Court|Ct|Place|Pl)[,\s]+[A-Z][a-z]+)",
         # Court names
-        r'((?:Family|Federal|Supreme|District|Local)\s+Court\s+(?:of\s+)?(?:Australia|NSW|Victoria|Queensland)?)',
+        r"((?:Family|Federal|Supreme|District|Local)\s+Court\s+(?:of\s+)?(?:Australia|NSW|Victoria|Queensland)?)",
         # Suburbs/Cities
-        r'(?:in|at)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)',
+        r"(?:in|at)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)",
     ]
 
     locations = []
@@ -438,10 +413,7 @@ def extract_locations_from_text(text: str) -> List[Dict[str, str]]:
             end = min(len(text), match.end() + 30)
             context = text[start:end].strip()
 
-            locations.append({
-                "location": match.group(1),
-                "context": context
-            })
+            locations.append({"location": match.group(1), "context": context})
 
     return locations
 

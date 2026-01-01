@@ -41,21 +41,15 @@ Example Usage:
     ```
 """
 
-from .statutory_rag import (
-    StatutoryRAGValidator,
-    StatutoryReference,
-    ValidationResult
-)
-
 from .corpus_loader import CorpusLoader
-
+from .statutory_rag import StatutoryRAGValidator, StatutoryReference, ValidationResult
 
 __all__ = [
-    'StatutoryRAGValidator',
-    'StatutoryReference',
-    'ValidationResult',
-    'CorpusLoader',
+    "StatutoryRAGValidator",
+    "StatutoryReference",
+    "ValidationResult",
+    "CorpusLoader",
 ]
 
-__version__ = '1.0.0'
-__author__ = 'Verridian AI Project'
+__version__ = "1.0.0"
+__author__ = "Verridian AI Project"

@@ -15,19 +15,18 @@ Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
 import re
-import json
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Set, Tuple
-from collections import defaultdict, Counter
-from datetime import datetime
-
 import sys
+from pathlib import Path
+from typing import Any
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.gsw.workspace import WorkspaceManager
 from src.logic.gsw_schema import (
-    GlobalWorkspace, Actor, VerbPhrase, State,
-    SpatioTemporalLink, ActorType, LinkType
+    Actor,
+    GlobalWorkspace,
+    LinkType,
+    VerbPhrase,
 )
 
 
@@ -50,7 +49,7 @@ class GSWRetriever:
         context = retriever.retrieve_with_context("property settlement", depth=2)
     """
 
-    def __init__(self, workspace_dir: Path = None, domains: List[str] = None):
+    def __init__(self, workspace_dir: Path = None, domains: list[str] = None):
         """
         Initialize GSW retriever.
 
@@ -59,7 +58,7 @@ class GSWRetriever:
             domains: Specific domains to load (None = all)
         """
         self.workspace_dir = workspace_dir or Path("data/workspaces")
-        self.workspaces: Dict[str, WorkspaceManager] = {}
+        self.workspaces: dict[str, WorkspaceManager] = {}
 
         # Legal term patterns for enhanced matching
         self.legal_patterns = self._compile_legal_patterns()
@@ -67,7 +66,7 @@ class GSWRetriever:
         # Load workspaces
         self._load_workspaces(domains)
 
-    def _load_workspaces(self, domains: Optional[List[str]] = None):
+    def _load_workspaces(self, domains: list[str] | None = None):
         """Load all workspace files from directory."""
         if not self.workspace_dir.exists():
             print(f"[GSWRetriever] Warning: Workspace directory {self.workspace_dir} not found")
@@ -83,7 +82,7 @@ class GSWRetriever:
         loaded_count = 0
         for workspace_file in workspace_files:
             # Extract domain from filename (e.g., "family_workspace.json" -> "family")
-            domain = workspace_file.stem.replace('_workspace', '')
+            domain = workspace_file.stem.replace("_workspace", "")
 
             # Filter by domains if specified
             if domains and domain not in domains:
@@ -95,24 +94,36 @@ class GSWRetriever:
                 loaded_count += 1
 
                 stats = manager.get_statistics()
-                print(f"[GSWRetriever] Loaded {domain}: {stats['total_actors']} actors, "
-                      f"{stats['total_verb_phrases']} verbs, {stats['total_questions']} questions")
+                print(
+                    f"[GSWRetriever] Loaded {domain}: {stats['total_actors']} actors, "
+                    f"{stats['total_verb_phrases']} verbs, {stats['total_questions']} questions"
+                )
             except Exception as e:
                 print(f"[GSWRetriever] Error loading {workspace_file}: {e}")
 
         print(f"[GSWRetriever] Loaded {loaded_count} workspace(s)")
 
-    def _compile_legal_patterns(self) -> Dict[str, re.Pattern]:
+    def _compile_legal_patterns(self) -> dict[str, re.Pattern]:
         """Compile regex patterns for legal term detection."""
         return {
-            'person_names': re.compile(r'\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b'),
-            'dates': re.compile(r'\b(\d{4}|\d{1,2}/\d{1,2}/\d{4}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b'),
-            'legal_actions': re.compile(r'\b(filed|ordered|granted|dismissed|appealed|settled|divorced|separated|contested|awarded|allocated)\b', re.I),
-            'legal_entities': re.compile(r'\b(applicant|respondent|child|children|court|judge|property|asset|custody|parenting)\b', re.I),
-            'amounts': re.compile(r'\$[\d,]+(?:\.\d{2})?'),
+            "person_names": re.compile(r"\b([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)\b"),
+            "dates": re.compile(
+                r"\b(\d{4}|\d{1,2}/\d{1,2}/\d{4}|(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{4})\b"
+            ),
+            "legal_actions": re.compile(
+                r"\b(filed|ordered|granted|dismissed|appealed|settled|divorced|separated|contested|awarded|allocated)\b",
+                re.I,
+            ),
+            "legal_entities": re.compile(
+                r"\b(applicant|respondent|child|children|court|judge|property|asset|custody|parenting)\b",
+                re.I,
+            ),
+            "amounts": re.compile(r"\$[\d,]+(?:\.\d{2})?"),
         }
 
-    def retrieve(self, query: str, top_k: int = 5, domain: Optional[str] = None) -> List[Dict[str, Any]]:
+    def retrieve(
+        self, query: str, top_k: int = 5, domain: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         Retrieve relevant actors/entities from GSW.
 
@@ -142,17 +153,21 @@ class GSWRetriever:
             for actor_id, actor in workspace.actors.items():
                 score = self._score_actor(actor, query_concepts)
                 if score > 0:
-                    results.append({
-                        'id': actor_id,
-                        'type': 'actor',
-                        'name': actor.name,
-                        'actor_type': actor.actor_type.value,
-                        'roles': actor.roles,
-                        'states': [{'name': s.name, 'value': s.value} for s in actor.states[:3]],  # Top 3 states
-                        'actor': actor,
-                        'score': score,
-                        'domain': domain_name
-                    })
+                    results.append(
+                        {
+                            "id": actor_id,
+                            "type": "actor",
+                            "name": actor.name,
+                            "actor_type": actor.actor_type.value,
+                            "roles": actor.roles,
+                            "states": [
+                                {"name": s.name, "value": s.value} for s in actor.states[:3]
+                            ],  # Top 3 states
+                            "actor": actor,
+                            "score": score,
+                            "domain": domain_name,
+                        }
+                    )
 
             # Search verb phrases
             for verb_id, verb in workspace.verb_phrases.items():
@@ -169,38 +184,42 @@ class GSWRetriever:
                         if patient_id in workspace.actors:
                             patient_names.append(workspace.actors[patient_id].name)
 
-                    results.append({
-                        'id': verb_id,
-                        'type': 'verb_phrase',
-                        'verb': verb.verb,
-                        'agent': agent_name,
-                        'patients': patient_names,
-                        'verb_phrase': verb,
-                        'score': score,
-                        'domain': domain_name
-                    })
+                    results.append(
+                        {
+                            "id": verb_id,
+                            "type": "verb_phrase",
+                            "verb": verb.verb,
+                            "agent": agent_name,
+                            "patients": patient_names,
+                            "verb_phrase": verb,
+                            "score": score,
+                            "domain": domain_name,
+                        }
+                    )
 
             # Search questions (for question-answering)
             for question_id, question in workspace.questions.items():
                 score = self._score_question(question, query_concepts)
                 if score > 0:
-                    results.append({
-                        'id': question_id,
-                        'type': 'question',
-                        'question_text': question.question_text,
-                        'answerable': question.answerable,
-                        'answer_text': question.answer_text,
-                        'question': question,
-                        'score': score,
-                        'domain': domain_name
-                    })
+                    results.append(
+                        {
+                            "id": question_id,
+                            "type": "question",
+                            "question_text": question.question_text,
+                            "answerable": question.answerable,
+                            "answer_text": question.answer_text,
+                            "question": question,
+                            "score": score,
+                            "domain": domain_name,
+                        }
+                    )
 
         # Sort by score (descending)
-        results.sort(key=lambda x: x['score'], reverse=True)
+        results.sort(key=lambda x: x["score"], reverse=True)
 
         return results[:top_k]
 
-    def _extract_concepts(self, query: str) -> Dict[str, float]:
+    def _extract_concepts(self, query: str) -> dict[str, float]:
         """
         Extract weighted concepts from query.
 
@@ -213,47 +232,70 @@ class GSWRetriever:
         Returns:
             Dict mapping concept to weight
         """
-        concepts: Dict[str, float] = {}
+        concepts: dict[str, float] = {}
 
         # 1. Extract named entities (capitalized phrases)
-        person_matches = self.legal_patterns['person_names'].findall(query)
+        person_matches = self.legal_patterns["person_names"].findall(query)
         for person in person_matches:
             concepts[person.lower()] = 2.0
 
         # 2. Extract legal entities and roles
-        legal_entity_matches = self.legal_patterns['legal_entities'].findall(query)
+        legal_entity_matches = self.legal_patterns["legal_entities"].findall(query)
         for entity in legal_entity_matches:
             concepts[entity.lower()] = 1.5
 
         # 3. Extract legal actions
-        action_matches = self.legal_patterns['legal_actions'].findall(query)
+        action_matches = self.legal_patterns["legal_actions"].findall(query)
         for action in action_matches:
             concepts[action.lower()] = 1.5
 
         # 4. Extract dates
-        date_matches = self.legal_patterns['dates'].findall(query)
+        date_matches = self.legal_patterns["dates"].findall(query)
         for date in date_matches:
             concepts[date.lower()] = 1.5
 
         # 5. Extract amounts
-        amount_matches = self.legal_patterns['amounts'].findall(query)
+        amount_matches = self.legal_patterns["amounts"].findall(query)
         for amount in amount_matches:
             concepts[amount.lower()] = 1.5
 
         # 6. General terms (not already captured)
         words = query.lower().split()
-        stopwords = {'the', 'a', 'an', 'is', 'are', 'was', 'were', 'my', 'our',
-                    'what', 'how', 'when', 'why', 'who', 'where', 'for', 'in',
-                    'on', 'at', 'to', 'of', 'and', 'or', 'but'}
+        stopwords = {
+            "the",
+            "a",
+            "an",
+            "is",
+            "are",
+            "was",
+            "were",
+            "my",
+            "our",
+            "what",
+            "how",
+            "when",
+            "why",
+            "who",
+            "where",
+            "for",
+            "in",
+            "on",
+            "at",
+            "to",
+            "of",
+            "and",
+            "or",
+            "but",
+        }
 
         for word in words:
-            word_clean = re.sub(r'[^\w]', '', word)
+            word_clean = re.sub(r"[^\w]", "", word)
             if word_clean and word_clean not in stopwords and word_clean not in concepts:
                 concepts[word_clean] = 1.0
 
         return concepts
 
-    def _score_actor(self, actor: Actor, query_concepts: Dict[str, float]) -> float:
+    def _score_actor(self, actor: Actor, query_concepts: dict[str, float]) -> float:
         """
         Score actor relevance to query.
 
@@ -304,8 +346,9 @@ class GSWRetriever:
 
         return score
 
-    def _score_verb(self, verb: VerbPhrase, query_concepts: Dict[str, float],
-                   workspace: GlobalWorkspace) -> float:
+    def _score_verb(
+        self, verb: VerbPhrase, query_concepts: dict[str, float], workspace: GlobalWorkspace
+    ) -> float:
         """
         Score verb phrase relevance to query.
 
@@ -340,7 +383,7 @@ class GSWRetriever:
 
         return score
 
-    def _score_question(self, question, query_concepts: Dict[str, float]) -> float:
+    def _score_question(self, question, query_concepts: dict[str, float]) -> float:
         """
         Score question relevance to query.
 
@@ -364,7 +407,7 @@ class GSWRetriever:
 
         return score
 
-    def retrieve_with_context(self, query: str, top_k: int = 3, depth: int = 2) -> Dict[str, Any]:
+    def retrieve_with_context(self, query: str, top_k: int = 3, depth: int = 2) -> dict[str, Any]:
         """
         Retrieve with relationship context expansion.
 
@@ -385,71 +428,74 @@ class GSWRetriever:
         primary = self.retrieve(query, top_k=top_k)
 
         context = {
-            'primary_matches': primary,
-            'related_actors': [],
-            'related_verbs': [],
-            'temporal_links': [],
-            'spatial_links': []
+            "primary_matches": primary,
+            "related_actors": [],
+            "related_verbs": [],
+            "temporal_links": [],
+            "spatial_links": [],
         }
 
         # Track which entities we've already added
-        seen_actor_ids: Set[str] = set()
-        seen_verb_ids: Set[str] = set()
+        seen_actor_ids: set[str] = set()
+        seen_verb_ids: set[str] = set()
 
         for match in primary:
-            domain = match['domain']
+            domain = match["domain"]
             workspace = self.workspaces[domain].workspace
 
-            if match['type'] == 'actor':
-                actor_id = match['id']
+            if match["type"] == "actor":
+                actor_id = match["id"]
                 seen_actor_ids.add(actor_id)
 
                 # Find related actors via verb phrases
-                related = self._find_related_actors(
-                    actor_id, workspace, depth, seen_actor_ids
-                )
-                context['related_actors'].extend(related)
+                related = self._find_related_actors(actor_id, workspace, depth, seen_actor_ids)
+                context["related_actors"].extend(related)
 
                 # Find temporal/spatial context
                 temporal, spatial = self._find_context_links(actor_id, workspace)
-                context['temporal_links'].extend(temporal)
-                context['spatial_links'].extend(spatial)
+                context["temporal_links"].extend(temporal)
+                context["spatial_links"].extend(spatial)
 
-            elif match['type'] == 'verb_phrase':
-                verb_id = match['id']
+            elif match["type"] == "verb_phrase":
+                verb_id = match["id"]
                 seen_verb_ids.add(verb_id)
-                verb = match['verb_phrase']
+                verb = match["verb_phrase"]
 
                 # Add agent and patients as related actors
                 if verb.agent_id and verb.agent_id not in seen_actor_ids:
                     actor = workspace.actors.get(verb.agent_id)
                     if actor:
-                        context['related_actors'].append({
-                            'id': verb.agent_id,
-                            'name': actor.name,
-                            'roles': actor.roles,
-                            'relation': 'agent_of_verb',
-                            'domain': domain
-                        })
+                        context["related_actors"].append(
+                            {
+                                "id": verb.agent_id,
+                                "name": actor.name,
+                                "roles": actor.roles,
+                                "relation": "agent_of_verb",
+                                "domain": domain,
+                            }
+                        )
                         seen_actor_ids.add(verb.agent_id)
 
                 for patient_id in verb.patient_ids:
                     if patient_id not in seen_actor_ids:
                         actor = workspace.actors.get(patient_id)
                         if actor:
-                            context['related_actors'].append({
-                                'id': patient_id,
-                                'name': actor.name,
-                                'roles': actor.roles,
-                                'relation': 'patient_of_verb',
-                                'domain': domain
-                            })
+                            context["related_actors"].append(
+                                {
+                                    "id": patient_id,
+                                    "name": actor.name,
+                                    "roles": actor.roles,
+                                    "relation": "patient_of_verb",
+                                    "domain": domain,
+                                }
+                            )
                             seen_actor_ids.add(patient_id)
 
         return context
 
-    def _find_related_actors(self, actor_id: str, workspace: GlobalWorkspace,
-                            depth: int, seen: Set[str]) -> List[Dict[str, Any]]:
+    def _find_related_actors(
+        self, actor_id: str, workspace: GlobalWorkspace, depth: int, seen: set[str]
+    ) -> list[dict[str, Any]]:
         """
         Find actors connected via verb phrases (BFS).
 
@@ -486,27 +532,29 @@ class GSWRetriever:
             for connected_id in connected_ids:
                 if connected_id not in seen and connected_id in workspace.actors:
                     actor = workspace.actors[connected_id]
-                    related.append({
-                        'id': connected_id,
-                        'name': actor.name,
-                        'roles': actor.roles,
-                        'relation': f'via_{verb.verb}',
-                        'depth': 1
-                    })
+                    related.append(
+                        {
+                            "id": connected_id,
+                            "name": actor.name,
+                            "roles": actor.roles,
+                            "relation": f"via_{verb.verb}",
+                            "depth": 1,
+                        }
+                    )
                     seen.add(connected_id)
 
                     # Recursive expansion if depth > 1
                     if depth > 1:
-                        deeper = self._find_related_actors(
-                            connected_id, workspace, depth - 1, seen
-                        )
+                        deeper = self._find_related_actors(connected_id, workspace, depth - 1, seen)
                         for d in deeper:
-                            d['depth'] = 2
+                            d["depth"] = 2
                         related.extend(deeper)
 
         return related
 
-    def _find_context_links(self, actor_id: str, workspace: GlobalWorkspace) -> Tuple[List[Dict], List[Dict]]:
+    def _find_context_links(
+        self, actor_id: str, workspace: GlobalWorkspace
+    ) -> tuple[list[dict], list[dict]]:
         """
         Find temporal and spatial links for an actor.
 
@@ -519,9 +567,9 @@ class GSWRetriever:
         for link_id, link in workspace.spatio_temporal_links.items():
             if actor_id in link.linked_entity_ids:
                 link_dict = {
-                    'id': link_id,
-                    'tag_value': link.tag_value,
-                    'linked_entities': len(link.linked_entity_ids)
+                    "id": link_id,
+                    "tag_value": link.tag_value,
+                    "linked_entities": len(link.linked_entity_ids),
                 }
 
                 if link.tag_type == LinkType.TEMPORAL:
@@ -531,7 +579,7 @@ class GSWRetriever:
 
         return temporal_links, spatial_links
 
-    def search_by_role(self, role: str, domain: Optional[str] = None) -> List[Dict[str, Any]]:
+    def search_by_role(self, role: str, domain: str | None = None) -> list[dict[str, Any]]:
         """
         Search for all actors with a specific role.
 
@@ -546,25 +594,29 @@ class GSWRetriever:
         results = []
 
         workspaces_to_search = (
-            {domain: self.workspaces[domain]} if domain and domain in self.workspaces
+            {domain: self.workspaces[domain]}
+            if domain and domain in self.workspaces
             else self.workspaces
         )
 
         for domain_name, manager in workspaces_to_search.items():
             matches = manager.query_actors_by_role(role)
             for actor in matches:
-                results.append({
-                    'id': actor.id,
-                    'name': actor.name,
-                    'roles': actor.roles,
-                    'actor_type': actor.actor_type.value,
-                    'domain': domain_name
-                })
+                results.append(
+                    {
+                        "id": actor.id,
+                        "name": actor.name,
+                        "roles": actor.roles,
+                        "actor_type": actor.actor_type.value,
+                        "domain": domain_name,
+                    }
+                )
 
         return results
 
-    def search_by_state(self, state_name: str, state_value: Optional[str] = None,
-                       domain: Optional[str] = None) -> List[Dict[str, Any]]:
+    def search_by_state(
+        self, state_name: str, state_value: str | None = None, domain: str | None = None
+    ) -> list[dict[str, Any]]:
         """
         Search for actors with a specific state.
 
@@ -579,7 +631,8 @@ class GSWRetriever:
         results = []
 
         workspaces_to_search = (
-            {domain: self.workspaces[domain]} if domain and domain in self.workspaces
+            {domain: self.workspaces[domain]}
+            if domain and domain in self.workspaces
             else self.workspaces
         )
 
@@ -587,38 +640,43 @@ class GSWRetriever:
             matches = manager.query_actors_by_state(state_name, state_value)
             for actor in matches:
                 matching_states = [
-                    s for s in actor.states
-                    if s.name.lower() == state_name.lower() and
-                       (state_value is None or s.value.lower() == state_value.lower())
+                    s
+                    for s in actor.states
+                    if s.name.lower() == state_name.lower()
+                    and (state_value is None or s.value.lower() == state_value.lower())
                 ]
 
-                results.append({
-                    'id': actor.id,
-                    'name': actor.name,
-                    'roles': actor.roles,
-                    'matching_states': [{'name': s.name, 'value': s.value} for s in matching_states],
-                    'domain': domain_name
-                })
+                results.append(
+                    {
+                        "id": actor.id,
+                        "name": actor.name,
+                        "roles": actor.roles,
+                        "matching_states": [
+                            {"name": s.name, "value": s.value} for s in matching_states
+                        ],
+                        "domain": domain_name,
+                    }
+                )
 
         return results
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get retriever statistics."""
         stats = {
-            'total_workspaces': len(self.workspaces),
-            'domains': list(self.workspaces.keys()),
-            'total_actors': 0,
-            'total_verbs': 0,
-            'total_questions': 0,
-            'by_domain': {}
+            "total_workspaces": len(self.workspaces),
+            "domains": list(self.workspaces.keys()),
+            "total_actors": 0,
+            "total_verbs": 0,
+            "total_questions": 0,
+            "by_domain": {},
         }
 
         for domain, manager in self.workspaces.items():
             workspace_stats = manager.get_statistics()
-            stats['total_actors'] += workspace_stats['total_actors']
-            stats['total_verbs'] += workspace_stats['total_verb_phrases']
-            stats['total_questions'] += workspace_stats['total_questions']
-            stats['by_domain'][domain] = workspace_stats
+            stats["total_actors"] += workspace_stats["total_actors"]
+            stats["total_verbs"] += workspace_stats["total_verb_phrases"]
+            stats["total_questions"] += workspace_stats["total_questions"]
+            stats["by_domain"][domain] = workspace_stats
 
         return stats
 
@@ -633,13 +691,12 @@ if __name__ == "__main__":
 
     # Initialize retriever
     retriever = GSWRetriever(
-        workspace_dir=Path("data/workspaces"),
-        domains=["family"]  # Focus on family law for testing
+        workspace_dir=Path("data/workspaces"), domains=["family"]  # Focus on family law for testing
     )
 
     # Print statistics
     stats = retriever.get_statistics()
-    print(f"\nRetriever Statistics:")
+    print("\nRetriever Statistics:")
     print(f"  Workspaces: {stats['total_workspaces']}")
     print(f"  Total Actors: {stats['total_actors']}")
     print(f"  Total Verbs: {stats['total_verbs']}")
@@ -650,7 +707,7 @@ if __name__ == "__main__":
         "custody arrangement",
         "property settlement",
         "intervention order",
-        "child parenting"
+        "child parenting",
     ]
 
     print("\n" + "=" * 60)
@@ -669,12 +726,14 @@ if __name__ == "__main__":
                 print(f"   Score: {result['score']:.2f}")
                 print(f"   Domain: {result['domain']}")
 
-                if result['type'] == 'actor':
+                if result["type"] == "actor":
                     print(f"   Roles: {', '.join(result['roles']) if result['roles'] else 'None'}")
-                    if result['states']:
-                        states_str = ', '.join([f"{s['name']}={s['value']}" for s in result['states'][:2]])
+                    if result["states"]:
+                        states_str = ", ".join(
+                            [f"{s['name']}={s['value']}" for s in result["states"][:2]]
+                        )
                         print(f"   States: {states_str}")
-                elif result['type'] == 'verb_phrase':
+                elif result["type"] == "verb_phrase":
                     print(f"   Action: {result['verb']} (Agent: {result['agent']})")
         else:
             print("  No results found")

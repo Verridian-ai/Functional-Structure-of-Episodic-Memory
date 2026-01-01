@@ -12,15 +12,17 @@ Configuration includes:
 - Processing limits and checkpointing
 """
 
-import yaml
-from pathlib import Path
-from dataclasses import dataclass, field, asdict
-from typing import Optional, List, Dict, Any
+from dataclasses import asdict, dataclass, field
 from enum import Enum
+from pathlib import Path
+from typing import Any
+
+import yaml
 
 
 class PipelineStage(str, Enum):
     """Available pipeline stages."""
+
     CLASSIFY = "classify"
     GSW = "gsw"
     GRAPH = "graph"
@@ -57,11 +59,13 @@ class PipelineConfig:
     gsw_authority_threshold: int = 60  # Only process high-authority cases
     gsw_batch_size: int = 10
     gsw_model: str = "google/gemini-2.5-flash"
-    gsw_fallback_models: List[str] = field(default_factory=lambda: [
-        "google/gemini-2.5-flash",
-        "deepseek/deepseek-chat",
-        "meta-llama/llama-3.3-70b-instruct"
-    ])
+    gsw_fallback_models: list[str] = field(
+        default_factory=lambda: [
+            "google/gemini-2.5-flash",
+            "deepseek/deepseek-chat",
+            "meta-llama/llama-3.3-70b-instruct",
+        ]
+    )
     gsw_delay: float = 0.5  # API rate limiting delay in seconds
     gsw_max_retries: int = 3
     gsw_use_toon: bool = True  # Use TOON format for context (~40% token reduction)
@@ -86,7 +90,7 @@ class PipelineConfig:
     # PROCESSING LIMITS
     # ========================================================================
 
-    document_limit: Optional[int] = None  # None = process all documents
+    document_limit: int | None = None  # None = process all documents
     max_text_length: int = 30000  # Maximum text length for GSW extraction
     skip_existing: bool = True  # Skip already processed documents
 
@@ -103,7 +107,7 @@ class PipelineConfig:
     # ========================================================================
 
     log_level: str = "INFO"
-    log_file: Optional[Path] = None
+    log_file: Path | None = None
     verbose: bool = False
 
     # ========================================================================
@@ -126,7 +130,7 @@ class PipelineConfig:
     @classmethod
     def from_yaml(cls, yaml_path: Path) -> "PipelineConfig":
         """Load configuration from YAML file."""
-        with open(yaml_path, 'r', encoding='utf-8') as f:
+        with open(yaml_path, encoding="utf-8") as f:
             data = yaml.safe_load(f)
 
         # Convert nested dicts to proper types
@@ -149,10 +153,10 @@ class PipelineConfig:
             elif isinstance(value, list) and value and isinstance(value[0], Path):
                 data[key] = [str(p) for p in value]
 
-        with open(yaml_path, 'w', encoding='utf-8') as f:
+        with open(yaml_path, "w", encoding="utf-8") as f:
             yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary."""
         data = asdict(self)
         # Convert Path objects to strings
@@ -161,7 +165,7 @@ class PipelineConfig:
                 data[key] = str(value)
         return data
 
-    def validate(self) -> List[str]:
+    def validate(self) -> list[str]:
         """Validate configuration and return list of errors."""
         errors = []
 
@@ -231,6 +235,7 @@ class PipelineConfig:
 # DEFAULT CONFIGURATIONS
 # ============================================================================
 
+
 def get_default_config() -> PipelineConfig:
     """Get default pipeline configuration."""
     return PipelineConfig()
@@ -263,6 +268,7 @@ def get_production_config() -> PipelineConfig:
 # ============================================================================
 # CLI HELPER
 # ============================================================================
+
 
 def create_example_config(output_path: Path) -> None:
     """Create an example configuration file."""

@@ -30,13 +30,12 @@ Key Features:
 - Commencement date calculation
 """
 
-from pathlib import Path
-from typing import Optional, Dict, List, Any, Tuple
-from datetime import datetime, timedelta
-from dataclasses import dataclass
 import json
 import re
-
+from dataclasses import dataclass
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any
 
 # ============================================================================
 # CONSTANTS
@@ -51,7 +50,7 @@ JURISDICTIONS = [
     "South Australia",
     "Tasmania",
     "Australian Capital Territory",
-    "Northern Territory"
+    "Northern Territory",
 ]
 
 JURISDICTION_ABBREV = {
@@ -63,13 +62,13 @@ JURISDICTION_ABBREV = {
     "South Australia": "SA",
     "Tasmania": "Tas",
     "Australian Capital Territory": "ACT",
-    "Northern Territory": "NT"
+    "Northern Territory": "NT",
 }
 
 MODAL_VERBS = {
     "MANDATORY": ["must", "shall", "is required to", "is to", "required to"],
     "PERMISSIVE": ["may", "is empowered to", "has power to", "is permitted to", "can"],
-    "PROHIBITED": ["must not", "shall not", "is prohibited from", "prohibited from"]
+    "PROHIBITED": ["must not", "shall not", "is prohibited from", "prohibited from"],
 }
 
 
@@ -80,11 +79,11 @@ MODAL_VERBS = {
 # National public holidays (apply to all jurisdictions)
 NATIONAL_HOLIDAYS = [
     # Fixed date holidays (month, day)
-    (1, 1),   # New Year's Day
+    (1, 1),  # New Year's Day
     (1, 26),  # Australia Day
     (4, 25),  # ANZAC Day
-    (12, 25), # Christmas Day
-    (12, 26), # Boxing Day
+    (12, 25),  # Christmas Day
+    (12, 26),  # Boxing Day
 ]
 
 # State-specific public holidays (month, day)
@@ -97,35 +96,35 @@ STATE_SPECIFIC_HOLIDAYS = {
         (11, 1),  # Melbourne Cup (first Tuesday of November - approximate)
     ],
     "Queensland": [
-        (5, 1),   # Labour Day (first Monday of May - approximate)
+        (5, 1),  # Labour Day (first Monday of May - approximate)
         (8, 14),  # Royal Queensland Show (Brisbane only - approximate)
     ],
     "Western Australia": [
-        (3, 4),   # Labour Day (first Monday of March - approximate)
-        (6, 3),   # Western Australia Day (first Monday of June - approximate)
+        (3, 4),  # Labour Day (first Monday of March - approximate)
+        (6, 3),  # Western Australia Day (first Monday of June - approximate)
     ],
     "South Australia": [
         (3, 11),  # Adelaide Cup (second Monday of March - approximate)
         (10, 7),  # Labour Day (first Monday of October - approximate)
-        (12, 24), # Christmas Eve (7pm onwards, treated as partial holiday)
-        (12, 31), # New Year's Eve (7pm onwards, treated as partial holiday)
+        (12, 24),  # Christmas Eve (7pm onwards, treated as partial holiday)
+        (12, 31),  # New Year's Eve (7pm onwards, treated as partial holiday)
     ],
     "Tasmania": [
         (3, 11),  # Eight Hours Day (second Monday of March - approximate)
     ],
     "Australian Capital Territory": [
         (3, 11),  # Canberra Day (second Monday of March - approximate)
-        (6, 2),   # Reconciliation Day (27 May or closest Monday - approximate)
+        (6, 2),  # Reconciliation Day (27 May or closest Monday - approximate)
     ],
     "Northern Territory": [
-        (5, 1),   # May Day (first Monday of May - approximate)
-        (8, 1),   # Picnic Day (first Monday of August - approximate)
+        (5, 1),  # May Day (first Monday of May - approximate)
+        (8, 1),  # Picnic Day (first Monday of August - approximate)
     ],
     "Commonwealth": [],  # Uses national holidays only
 }
 
 
-def calculate_easter(year: int) -> Tuple[int, int]:
+def calculate_easter(year: int) -> tuple[int, int]:
     """
     Calculate Easter Sunday for a given year using the Anonymous Gregorian algorithm.
 
@@ -149,7 +148,7 @@ def calculate_easter(year: int) -> Tuple[int, int]:
     return (month, day)
 
 
-def get_easter_holidays(year: int) -> List[Tuple[int, int]]:
+def get_easter_holidays(year: int) -> list[tuple[int, int]]:
     """
     Get Easter-related public holidays for a year.
 
@@ -209,18 +208,20 @@ def is_public_holiday(date: datetime, jurisdiction: str = "Commonwealth") -> boo
 # DATA STRUCTURES
 # ============================================================================
 
+
 @dataclass
 class Definition:
     """Represents a statutory definition from an Interpretation Act."""
+
     term: str
     jurisdiction: str
     section: str
     definition: str
     legal_significance: str
-    examples: Optional[List[str]] = None
-    modern_application: Optional[List[str]] = None
+    examples: list[str] | None = None
+    modern_application: list[str] | None = None
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         return {
             "term": self.term,
             "jurisdiction": self.jurisdiction,
@@ -228,35 +229,38 @@ class Definition:
             "definition": self.definition,
             "legal_significance": self.legal_significance,
             "examples": self.examples,
-            "modern_application": self.modern_application
+            "modern_application": self.modern_application,
         }
 
 
 @dataclass
 class ModalClassification:
     """Classification of a modal verb in statutory context."""
+
     modal: str
     modal_type: str  # MANDATORY, PERMISSIVE, PROHIBITED
     creates: str  # duty, power, prohibition
     jurisdiction: str
     section: str
-    contextual_note: Optional[str] = None
+    contextual_note: str | None = None
 
 
 @dataclass
 class InterpretationAct:
     """Metadata about a jurisdiction's Interpretation Act."""
+
     jurisdiction: str
     act_name: str
     citation: str
     url: str
     definitions_section: str
-    key_provisions: Dict[str, Any]
+    key_provisions: dict[str, Any]
 
 
 # ============================================================================
 # MAIN DATABASE CLASS
 # ============================================================================
+
 
 class InterpretationActsDB:
     """
@@ -266,7 +270,7 @@ class InterpretationActsDB:
     Australian Acts Interpretation Acts.
     """
 
-    def __init__(self, data_path: Optional[Path] = None):
+    def __init__(self, data_path: Path | None = None):
         """
         Initialize the Interpretation Acts database.
 
@@ -282,47 +286,47 @@ class InterpretationActsDB:
         self.data = self._load_data()
         self._build_indexes()
 
-    def _load_data(self) -> Dict[str, Any]:
+    def _load_data(self) -> dict[str, Any]:
         """Load the research JSON data."""
         if not self.data_path.exists():
             raise FileNotFoundError(f"Interpretation Acts data not found: {self.data_path}")
 
-        with open(self.data_path, 'r', encoding='utf-8') as f:
+        with open(self.data_path, encoding="utf-8") as f:
             return json.load(f)
 
     def _build_indexes(self) -> None:
         """Build lookup indexes for fast access."""
         # Build definition index: (term, jurisdiction) -> Definition
-        self.definitions: Dict[Tuple[str, str], Definition] = {}
+        self.definitions: dict[tuple[str, str], Definition] = {}
 
-        for act_data in self.data['interpretation_acts']:
-            jurisdiction = act_data['jurisdiction']
+        for act_data in self.data["interpretation_acts"]:
+            jurisdiction = act_data["jurisdiction"]
 
             # Extract definitions
-            if 'critical_definitions' in act_data.get('key_provisions', {}):
-                for term, def_data in act_data['key_provisions']['critical_definitions'].items():
+            if "critical_definitions" in act_data.get("key_provisions", {}):
+                for term, def_data in act_data["key_provisions"]["critical_definitions"].items():
                     definition = Definition(
                         term=term,
                         jurisdiction=jurisdiction,
-                        section=def_data.get('section', ''),
-                        definition=def_data.get('definition', ''),
-                        legal_significance=def_data.get('legal_significance', ''),
-                        examples=def_data.get('examples'),
-                        modern_application=def_data.get('modern_application')
+                        section=def_data.get("section", ""),
+                        definition=def_data.get("definition", ""),
+                        legal_significance=def_data.get("legal_significance", ""),
+                        examples=def_data.get("examples"),
+                        modern_application=def_data.get("modern_application"),
                     )
                     self.definitions[(term.lower(), jurisdiction)] = definition
 
         # Build acts index: jurisdiction -> InterpretationAct
-        self.acts: Dict[str, InterpretationAct] = {}
-        for act_data in self.data['interpretation_acts']:
-            jurisdiction = act_data['jurisdiction']
+        self.acts: dict[str, InterpretationAct] = {}
+        for act_data in self.data["interpretation_acts"]:
+            jurisdiction = act_data["jurisdiction"]
             self.acts[jurisdiction] = InterpretationAct(
                 jurisdiction=jurisdiction,
-                act_name=act_data['act_name'],
-                citation=act_data['citation'],
-                url=act_data['url'],
-                definitions_section=act_data['key_provisions'].get('definitions_section', ''),
-                key_provisions=act_data['key_provisions']
+                act_name=act_data["act_name"],
+                citation=act_data["citation"],
+                url=act_data["url"],
+                definitions_section=act_data["key_provisions"].get("definitions_section", ""),
+                key_provisions=act_data["key_provisions"],
             )
 
     # ========================================================================
@@ -330,11 +334,8 @@ class InterpretationActsDB:
     # ========================================================================
 
     def get_definition(
-        self,
-        term: str,
-        jurisdiction: str = "Commonwealth",
-        fallback: bool = True
-    ) -> Optional[Definition]:
+        self, term: str, jurisdiction: str = "Commonwealth", fallback: bool = True
+    ) -> Definition | None:
         """
         Get the default definition of a term from an Interpretation Act.
 
@@ -367,7 +368,7 @@ class InterpretationActsDB:
 
         return None
 
-    def get_all_definitions_for_term(self, term: str) -> List[Definition]:
+    def get_all_definitions_for_term(self, term: str) -> list[Definition]:
         """
         Get all jurisdictional definitions for a term.
 
@@ -387,7 +388,7 @@ class InterpretationActsDB:
 
         return results
 
-    def search_definitions(self, search_term: str) -> List[Definition]:
+    def search_definitions(self, search_term: str) -> list[Definition]:
         """
         Search for definitions containing the search term.
 
@@ -401,9 +402,11 @@ class InterpretationActsDB:
         results = []
 
         for (term, jurisdiction), definition in self.definitions.items():
-            if (search_lower in term.lower() or
-                search_lower in definition.definition.lower() or
-                search_lower in definition.legal_significance.lower()):
+            if (
+                search_lower in term.lower()
+                or search_lower in definition.definition.lower()
+                or search_lower in definition.legal_significance.lower()
+            ):
                 results.append(definition)
 
         return results
@@ -413,10 +416,7 @@ class InterpretationActsDB:
     # ========================================================================
 
     def classify_modal(
-        self,
-        modal: str,
-        jurisdiction: str = "Commonwealth",
-        context: Optional[str] = None
+        self, modal: str, jurisdiction: str = "Commonwealth", context: str | None = None
     ) -> ModalClassification:
         """
         Classify a modal verb as mandatory, permissive, or prohibited.
@@ -462,7 +462,7 @@ class InterpretationActsDB:
         contextual_note = None
         if context and modal_type == "PERMISSIVE":
             # Check for "may only" construction
-            if re.search(r'\bmay\s+only\b', context.lower()):
+            if re.search(r"\bmay\s+only\b", context.lower()):
                 contextual_note = "'may only' construction indicates prohibition of other actions"
 
         return ModalClassification(
@@ -471,10 +471,12 @@ class InterpretationActsDB:
             creates=creates,
             jurisdiction=jurisdiction,
             section=section,
-            contextual_note=contextual_note
+            contextual_note=contextual_note,
         )
 
-    def extract_obligations(self, text: str, jurisdiction: str = "Commonwealth") -> Dict[str, List[str]]:
+    def extract_obligations(
+        self, text: str, jurisdiction: str = "Commonwealth"
+    ) -> dict[str, list[str]]:
         """
         Extract obligations, powers, and prohibitions from statutory text.
 
@@ -492,14 +494,10 @@ class InterpretationActsDB:
             >>> print(obligations['duties'])
             ["The Minister must approve applications."]
         """
-        results = {
-            "duties": [],
-            "powers": [],
-            "prohibitions": []
-        }
+        results = {"duties": [], "powers": [], "prohibitions": []}
 
         # Split into sentences
-        sentences = re.split(r'[.!?]\s+', text)
+        sentences = re.split(r"[.!?]\s+", text)
 
         for sentence in sentences:
             sentence = sentence.strip()
@@ -507,16 +505,16 @@ class InterpretationActsDB:
                 continue
 
             # Check for mandatory modals
-            if re.search(r'\b(must|shall|is required to|is to)\b', sentence, re.IGNORECASE):
-                results['duties'].append(sentence)
+            if re.search(r"\b(must|shall|is required to|is to)\b", sentence, re.IGNORECASE):
+                results["duties"].append(sentence)
 
             # Check for permissive modals
-            elif re.search(r'\b(may|is empowered to|has power to)\b', sentence, re.IGNORECASE):
-                results['powers'].append(sentence)
+            elif re.search(r"\b(may|is empowered to|has power to)\b", sentence, re.IGNORECASE):
+                results["powers"].append(sentence)
 
             # Check for prohibitions
-            elif re.search(r'\b(must not|shall not|is prohibited from)\b', sentence, re.IGNORECASE):
-                results['prohibitions'].append(sentence)
+            elif re.search(r"\b(must not|shall not|is prohibited from)\b", sentence, re.IGNORECASE):
+                results["prohibitions"].append(sentence)
 
         return results
 
@@ -525,10 +523,7 @@ class InterpretationActsDB:
     # ========================================================================
 
     def calculate_month(
-        self,
-        start_date: str,
-        jurisdiction: str = "Commonwealth",
-        months: int = 1
+        self, start_date: str, jurisdiction: str = "Commonwealth", months: int = 1
     ) -> str:
         """
         Calculate date that is N months from start date using calendar month rule.
@@ -579,11 +574,7 @@ class InterpretationActsDB:
 
         return end.strftime("%Y-%m-%d")
 
-    def calculate_commencement(
-        self,
-        assent_date: str,
-        jurisdiction: str = "Commonwealth"
-    ) -> str:
+    def calculate_commencement(self, assent_date: str, jurisdiction: str = "Commonwealth") -> str:
         """
         Calculate default commencement date for an Act with no commencement clause.
 
@@ -610,8 +601,14 @@ class InterpretationActsDB:
             # 28 days after assent
             commencement = assent + timedelta(days=28)
 
-        elif jurisdiction in ["New South Wales", "Victoria", "Queensland",
-                              "South Australia", "Tasmania", "Northern Territory"]:
+        elif jurisdiction in [
+            "New South Wales",
+            "Victoria",
+            "Queensland",
+            "South Australia",
+            "Tasmania",
+            "Northern Territory",
+        ]:
             # Immediate on assent
             commencement = assent
 
@@ -678,7 +675,7 @@ class InterpretationActsDB:
             return False
 
         # Check if definition mentions corporations
-        corp_keywords = ['corporation', 'corporate', 'body corporate', 'body politic']
+        corp_keywords = ["corporation", "corporate", "body corporate", "body politic"]
         definition_lower = definition.definition.lower()
 
         return any(keyword in definition_lower for keyword in corp_keywords)
@@ -703,7 +700,7 @@ class InterpretationActsDB:
         # All Australian jurisdictions have gender-neutral provisions
         return True
 
-    def get_gender_neutral_section(self, jurisdiction: str = "Commonwealth") -> Optional[str]:
+    def get_gender_neutral_section(self, jurisdiction: str = "Commonwealth") -> str | None:
         """
         Get the section number for gender-neutral interpretation provision.
 
@@ -717,8 +714,8 @@ class InterpretationActsDB:
         if not act:
             return None
 
-        gender_provisions = act.key_provisions.get('gender_neutral_provisions', {})
-        return gender_provisions.get('section')
+        gender_provisions = act.key_provisions.get("gender_neutral_provisions", {})
+        return gender_provisions.get("section")
 
     # ========================================================================
     # HEADINGS AND STRUCTURE
@@ -738,14 +735,14 @@ class InterpretationActsDB:
         if not act:
             return False
 
-        headings_data = act.key_provisions.get('headings', {})
+        headings_data = act.key_provisions.get("headings", {})
         if not headings_data:
             # Check alternative keys
-            headings_data = act.key_provisions.get('headings_and_marginal_notes', {})
+            headings_data = act.key_provisions.get("headings_and_marginal_notes", {})
 
         # If we have heading data, check the rule
-        if headings_data and 'rule' in headings_data:
-            return 'part of' in headings_data['rule'].lower()
+        if headings_data and "rule" in headings_data:
+            return "part of" in headings_data["rule"].lower()
 
         # Default: most jurisdictions include headings as part of Act
         return True
@@ -754,33 +751,33 @@ class InterpretationActsDB:
     # UTILITY METHODS
     # ========================================================================
 
-    def list_jurisdictions(self) -> List[str]:
+    def list_jurisdictions(self) -> list[str]:
         """Get list of all jurisdictions."""
         return JURISDICTIONS.copy()
 
-    def get_act_citation(self, jurisdiction: str) -> Optional[str]:
+    def get_act_citation(self, jurisdiction: str) -> str | None:
         """Get the citation for a jurisdiction's Interpretation Act."""
         act = self.acts.get(jurisdiction)
         return act.citation if act else None
 
-    def get_act_url(self, jurisdiction: str) -> Optional[str]:
+    def get_act_url(self, jurisdiction: str) -> str | None:
         """Get the URL for a jurisdiction's Interpretation Act."""
         act = self.acts.get(jurisdiction)
         return act.url if act else None
 
-    def get_uniform_definitions(self) -> Dict[str, Any]:
+    def get_uniform_definitions(self) -> dict[str, Any]:
         """Get information about uniform definitions across jurisdictions."""
-        return self.data.get('cross_jurisdictional_analysis', {}).get('uniform_definitions', {})
+        return self.data.get("cross_jurisdictional_analysis", {}).get("uniform_definitions", {})
 
-    def get_nlp_implications(self) -> Dict[str, Any]:
+    def get_nlp_implications(self) -> dict[str, Any]:
         """Get NLP implications and processing rules."""
-        return self.data.get('legal_nlp_implications', {})
+        return self.data.get("legal_nlp_implications", {})
 
-    def get_automated_reasoning_rules(self) -> Dict[str, Any]:
+    def get_automated_reasoning_rules(self) -> dict[str, Any]:
         """Get automated reasoning rules and logic."""
-        return self.data.get('automated_reasoning_rules', {})
+        return self.data.get("automated_reasoning_rules", {})
 
-    def export_definitions_for_nlp(self, jurisdiction: str = "Commonwealth") -> Dict[str, str]:
+    def export_definitions_for_nlp(self, jurisdiction: str = "Commonwealth") -> dict[str, str]:
         """
         Export definitions in simple format for NLP processing.
 
@@ -803,7 +800,8 @@ class InterpretationActsDB:
 # CONVENIENCE FUNCTIONS
 # ============================================================================
 
-def get_definition(term: str, jurisdiction: str = "Commonwealth") -> Optional[str]:
+
+def get_definition(term: str, jurisdiction: str = "Commonwealth") -> str | None:
     """
     Quick lookup of a definition (convenience function).
 
@@ -854,6 +852,7 @@ def is_permissive(modal: str, jurisdiction: str = "Commonwealth") -> bool:
 # ============================================================================
 # CLI INTERFACE
 # ============================================================================
+
 
 def main():
     """CLI interface for testing and exploration."""

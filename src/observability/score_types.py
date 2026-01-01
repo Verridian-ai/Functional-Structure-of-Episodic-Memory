@@ -6,13 +6,14 @@ Data classes for retrieval accuracy scoring.
 """
 
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
 from datetime import datetime
 from enum import Enum
+from typing import Any
 
 
 class ScoreCategory(str, Enum):
     """Categories of accuracy scoring."""
+
     ENTITY_RELEVANCE = "entity_relevance"
     STRUCTURAL_ACCURACY = "structural_accuracy"
     TEMPORAL_COHERENCE = "temporal_coherence"
@@ -33,6 +34,7 @@ class AccuracyMetrics:
     - 0.70-0.85 = Acceptable
     - <0.70 = Needs improvement
     """
+
     # Core metrics
     entity_relevance: float = 0.0
     structural_accuracy: float = 0.0
@@ -50,7 +52,7 @@ class AccuracyMetrics:
     # Metadata
     query: str = ""
     timestamp: datetime = field(default_factory=datetime.utcnow)
-    evaluation_notes: List[str] = field(default_factory=list)
+    evaluation_notes: list[str] = field(default_factory=list)
 
     # Counts for precision/recall calculation
     true_positives: int = 0
@@ -81,7 +83,7 @@ class AccuracyMetrics:
         """Check if composite score meets target threshold."""
         return self.composite_score >= target
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for logging."""
         return {
             "entity_relevance": self.entity_relevance,
@@ -104,6 +106,7 @@ class AccuracyMetrics:
 @dataclass
 class ScoringWeights:
     """Configurable weights for composite score calculation."""
+
     entity_relevance: float = 0.25
     structural_accuracy: float = 0.20
     temporal_coherence: float = 0.15
@@ -113,15 +116,15 @@ class ScoringWeights:
     def validate(self) -> bool:
         """Ensure weights sum to 1.0."""
         total = (
-            self.entity_relevance +
-            self.structural_accuracy +
-            self.temporal_coherence +
-            self.legal_precision +
-            self.answer_completeness
+            self.entity_relevance
+            + self.structural_accuracy
+            + self.temporal_coherence
+            + self.legal_precision
+            + self.answer_completeness
         )
         return abs(total - 1.0) < 0.001
 
-    def to_dict(self) -> Dict[str, float]:
+    def to_dict(self) -> dict[str, float]:
         return {
             "entity_relevance": self.entity_relevance,
             "structural_accuracy": self.structural_accuracy,

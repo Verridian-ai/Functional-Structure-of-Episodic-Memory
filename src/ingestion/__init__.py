@@ -12,17 +12,17 @@ Key Components:
 - TOON format integration
 """
 
+from .case_patterns import LANDMARK_CASES
+from .classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
 from .corpus_domain_extractor import DomainClassifier
 from .court_hierarchy import (
     COURT_CODES,
-    get_court_info,
-    get_authority_score,
-    get_domain_hint,
     extract_court_from_citation,
+    get_authority_score,
+    get_court_info,
+    get_domain_hint,
 )
-from .classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
 from .legislation_patterns import LEGISLATION_TO_DOMAIN
-from .case_patterns import LANDMARK_CASES
 
 __all__ = [
     "DomainClassifier",

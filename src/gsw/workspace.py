@@ -11,22 +11,29 @@ Analogous to:
 
 import json
 import sys
-from pathlib import Path
-from typing import Dict, List, Optional, Any
 from datetime import datetime
+from pathlib import Path
+from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
 from src.logic.gsw_schema import (
-    GlobalWorkspace, Actor, State, VerbPhrase, PredictiveQuestion,
-    SpatioTemporalLink, ChunkExtraction, OntologyContext, ActorType,
-    QuestionType, LinkType
+    Actor,
+    ActorType,
+    GlobalWorkspace,
+    LinkType,
+    OntologyContext,
+    PredictiveQuestion,
+    QuestionType,
+    SpatioTemporalLink,
+    State,
+    VerbPhrase,
 )
-
 
 # ============================================================================
 # WORKSPACE MANAGER
 # ============================================================================
+
 
 class WorkspaceManager:
     """
@@ -39,11 +46,7 @@ class WorkspaceManager:
     - Querying capabilities
     """
 
-    def __init__(
-        self,
-        workspace: Optional[GlobalWorkspace] = None,
-        storage_path: Optional[Path] = None
-    ):
+    def __init__(self, workspace: GlobalWorkspace | None = None, storage_path: Path | None = None):
         self.workspace = workspace or GlobalWorkspace()
         self.storage_path = storage_path
 
@@ -55,7 +58,7 @@ class WorkspaceManager:
             return cls(storage_path=path)
 
         # Auto-detect format
-        if path.suffix == '.toon':
+        if path.suffix == ".toon":
             return cls.load_toon(path)
         else:
             return cls.load_json(path)
@@ -63,14 +66,16 @@ class WorkspaceManager:
     @classmethod
     def load_json(cls, path: Path) -> "WorkspaceManager":
         """Load workspace from JSON file."""
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
 
         workspace = cls._deserialize_workspace(data)
         manager = cls(workspace=workspace, storage_path=path)
 
-        print(f"[Workspace] Loaded JSON: {len(workspace.actors)} actors, "
-              f"{len(workspace.questions)} questions")
+        print(
+            f"[Workspace] Loaded JSON: {len(workspace.actors)} actors, "
+            f"{len(workspace.questions)} questions"
+        )
 
         return manager
 
@@ -79,7 +84,7 @@ class WorkspaceManager:
         """Load workspace from TOON file."""
         from src.utils.toon import ToonDecoder
 
-        with open(path, 'r', encoding='utf-8') as f:
+        with open(path, encoding="utf-8") as f:
             toon_content = f.read()
 
         # Decode TOON to workspace dict
@@ -90,12 +95,14 @@ class WorkspaceManager:
 
         manager = cls(workspace=workspace, storage_path=path)
 
-        print(f"[Workspace] Loaded TOON: {len(workspace.actors)} actors, "
-              f"{len(workspace.questions)} questions")
+        print(
+            f"[Workspace] Loaded TOON: {len(workspace.actors)} actors, "
+            f"{len(workspace.questions)} questions"
+        )
 
         return manager
 
-    def save(self, path: Optional[Path] = None) -> None:
+    def save(self, path: Path | None = None) -> None:
         """Save workspace to JSON file."""
         save_path = path or self.storage_path
         if not save_path:
@@ -105,33 +112,32 @@ class WorkspaceManager:
 
         data = self._serialize_workspace(self.workspace)
 
-        with open(save_path, 'w', encoding='utf-8') as f:
+        with open(save_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
 
         print(f"[Workspace] Saved to {save_path}")
 
-    def save_toon(self, path: Optional[Path] = None) -> None:
+    def save_toon(self, path: Path | None = None) -> None:
         """
         Save workspace to TOON file (~62% smaller than JSON).
 
         TOON (Token-Oriented Object Notation) provides massive size reduction
         for LLM context optimization while maintaining full data fidelity.
         """
-        from src.utils.toon import ToonEncoder
 
         save_path = path or self.storage_path
         if not save_path:
             raise ValueError("No storage path specified")
 
         # Force .toon extension
-        save_path = save_path.with_suffix('.toon')
+        save_path = save_path.with_suffix(".toon")
 
         # Convert workspace to TOON format
         toon_data = self.workspace.to_toon()
 
         # Save
         save_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(save_path, 'w', encoding='utf-8') as f:
+        with open(save_path, "w", encoding="utf-8") as f:
             f.write(toon_data)
 
         print(f"[Workspace] Saved TOON to {save_path}")
@@ -143,14 +149,14 @@ class WorkspaceManager:
         This is used for the self-improving feedback loop (Phase 4.5).
         The ontology context is injected into the Operator prompt.
         """
-        from collections import Counter
 
         context = OntologyContext()
 
         # Count actor types
         for actor in self.workspace.actors.values():
-            context.actor_types[actor.actor_type.value] = \
+            context.actor_types[actor.actor_type.value] = (
                 context.actor_types.get(actor.actor_type.value, 0) + 1
+            )
 
             # Count roles
             for role in actor.roles:
@@ -158,17 +164,15 @@ class WorkspaceManager:
 
             # Count state names
             for state in actor.states:
-                context.state_names[state.name] = \
-                    context.state_names.get(state.name, 0) + 1
+                context.state_names[state.name] = context.state_names.get(state.name, 0) + 1
 
         # Count verb types
         for verb in self.workspace.verb_phrases.values():
-            context.verb_types[verb.verb] = \
-                context.verb_types.get(verb.verb, 0) + 1
+            context.verb_types[verb.verb] = context.verb_types.get(verb.verb, 0) + 1
 
         return context
 
-    def get_statistics(self) -> Dict[str, Any]:
+    def get_statistics(self) -> dict[str, Any]:
         """Get comprehensive workspace statistics."""
         stats = self.workspace.get_statistics()
 
@@ -185,15 +189,16 @@ class WorkspaceManager:
 
         return stats
 
-    def query_actors_by_role(self, role: str) -> List[Actor]:
+    def query_actors_by_role(self, role: str) -> list[Actor]:
         """Find all actors with a specific role."""
         role_lower = role.lower()
         return [
-            actor for actor in self.workspace.actors.values()
+            actor
+            for actor in self.workspace.actors.values()
             if any(role_lower in r.lower() for r in actor.roles)
         ]
 
-    def query_actors_by_state(self, state_name: str, state_value: str = None) -> List[Actor]:
+    def query_actors_by_state(self, state_name: str, state_value: str = None) -> list[Actor]:
         """Find actors with a specific state."""
         results = []
         for actor in self.workspace.actors.values():
@@ -204,7 +209,7 @@ class WorkspaceManager:
                         break
         return results
 
-    def get_timeline(self) -> List[Dict[str, Any]]:
+    def get_timeline(self) -> list[dict[str, Any]]:
         """Get chronological timeline of events."""
         events = []
 
@@ -214,13 +219,17 @@ class WorkspaceManager:
                 # Look up temporal entity
                 temporal = self.workspace.actors.get(verb.temporal_id)
                 if temporal:
-                    events.append({
-                        "date": temporal.name,
-                        "type": "action",
-                        "verb": verb.verb,
-                        "agent": self.workspace.actors.get(verb.agent_id, {}).get("name", "Unknown"),
-                        "id": verb.id
-                    })
+                    events.append(
+                        {
+                            "date": temporal.name,
+                            "type": "action",
+                            "verb": verb.verb,
+                            "agent": self.workspace.actors.get(verb.agent_id, {}).get(
+                                "name", "Unknown"
+                            ),
+                            "id": verb.id,
+                        }
+                    )
 
         # Sort by date string (works for ISO dates)
         events.sort(key=lambda x: x.get("date", ""))
@@ -228,7 +237,7 @@ class WorkspaceManager:
         return events
 
     @staticmethod
-    def _serialize_workspace(workspace: GlobalWorkspace) -> Dict[str, Any]:
+    def _serialize_workspace(workspace: GlobalWorkspace) -> dict[str, Any]:
         """Serialize workspace to JSON-compatible dict."""
         return {
             "metadata": {
@@ -236,7 +245,7 @@ class WorkspaceManager:
                 "last_updated": workspace.last_updated,
                 "chunk_count": workspace.chunk_count,
                 "document_count": workspace.document_count,
-                "domain": workspace.domain
+                "domain": workspace.domain,
             },
             "actors": {
                 aid: {
@@ -253,13 +262,13 @@ class WorkspaceManager:
                             "value": s.value,
                             "start_date": s.start_date,
                             "end_date": s.end_date,
-                            "source_chunk_id": s.source_chunk_id
+                            "source_chunk_id": s.source_chunk_id,
                         }
                         for s in a.states
                     ],
                     "spatio_temporal_link_ids": a.spatio_temporal_link_ids,
                     "involved_cases": a.involved_cases,
-                    "source_chunk_ids": a.source_chunk_ids
+                    "source_chunk_ids": a.source_chunk_ids,
                 }
                 for aid, a in workspace.actors.items()
             },
@@ -272,7 +281,7 @@ class WorkspaceManager:
                     "temporal_id": v.temporal_id,
                     "spatial_id": v.spatial_id,
                     "is_implicit": v.is_implicit,
-                    "source_chunk_id": v.source_chunk_id
+                    "source_chunk_id": v.source_chunk_id,
                 }
                 for vid, v in workspace.verb_phrases.items()
             },
@@ -286,7 +295,7 @@ class WorkspaceManager:
                     "answer_text": q.answer_text,
                     "answer_entity_id": q.answer_entity_id,
                     "source_chunk_id": q.source_chunk_id,
-                    "answered_in_chunk_id": q.answered_in_chunk_id
+                    "answered_in_chunk_id": q.answered_in_chunk_id,
                 }
                 for qid, q in workspace.questions.items()
             },
@@ -296,15 +305,15 @@ class WorkspaceManager:
                     "linked_entity_ids": l.linked_entity_ids,
                     "tag_type": l.tag_type.value,
                     "tag_value": l.tag_value,
-                    "source_chunk_id": l.source_chunk_id
+                    "source_chunk_id": l.source_chunk_id,
                 }
                 for lid, l in workspace.spatio_temporal_links.items()
             },
-            "entity_summaries": workspace.entity_summaries
+            "entity_summaries": workspace.entity_summaries,
         }
 
     @staticmethod
-    def _deserialize_workspace(data: Dict[str, Any]) -> GlobalWorkspace:
+    def _deserialize_workspace(data: dict[str, Any]) -> GlobalWorkspace:
         """Deserialize workspace from JSON dict."""
         workspace = GlobalWorkspace()
 
@@ -320,15 +329,17 @@ class WorkspaceManager:
         for aid, adata in data.get("actors", {}).items():
             states = []
             for sdata in adata.get("states", []):
-                states.append(State(
-                    id=sdata["id"],
-                    entity_id=sdata.get("entity_id", aid),
-                    name=sdata["name"],
-                    value=sdata["value"],
-                    start_date=sdata.get("start_date"),
-                    end_date=sdata.get("end_date"),
-                    source_chunk_id=sdata.get("source_chunk_id", "")
-                ))
+                states.append(
+                    State(
+                        id=sdata["id"],
+                        entity_id=sdata.get("entity_id", aid),
+                        name=sdata["name"],
+                        value=sdata["value"],
+                        start_date=sdata.get("start_date"),
+                        end_date=sdata.get("end_date"),
+                        source_chunk_id=sdata.get("source_chunk_id", ""),
+                    )
+                )
 
             actor = Actor(
                 id=adata["id"],
@@ -339,7 +350,7 @@ class WorkspaceManager:
                 states=states,
                 spatio_temporal_link_ids=adata.get("spatio_temporal_link_ids", []),
                 involved_cases=adata.get("involved_cases", []),
-                source_chunk_ids=adata.get("source_chunk_ids", [])
+                source_chunk_ids=adata.get("source_chunk_ids", []),
             )
             workspace.actors[aid] = actor
 
@@ -353,7 +364,7 @@ class WorkspaceManager:
                 temporal_id=vdata.get("temporal_id"),
                 spatial_id=vdata.get("spatial_id"),
                 is_implicit=vdata.get("is_implicit", False),
-                source_chunk_id=vdata.get("source_chunk_id", "")
+                source_chunk_id=vdata.get("source_chunk_id", ""),
             )
 
         # Questions
@@ -367,7 +378,7 @@ class WorkspaceManager:
                 answer_text=qdata.get("answer_text"),
                 answer_entity_id=qdata.get("answer_entity_id"),
                 source_chunk_id=qdata.get("source_chunk_id", ""),
-                answered_in_chunk_id=qdata.get("answered_in_chunk_id")
+                answered_in_chunk_id=qdata.get("answered_in_chunk_id"),
             )
 
         # Spatio-temporal links
@@ -377,7 +388,7 @@ class WorkspaceManager:
                 linked_entity_ids=ldata.get("linked_entity_ids", []),
                 tag_type=LinkType(ldata.get("tag_type", "temporal")),
                 tag_value=ldata.get("tag_value"),
-                source_chunk_id=ldata.get("source_chunk_id", "")
+                source_chunk_id=ldata.get("source_chunk_id", ""),
             )
 
         # Entity summaries
@@ -389,6 +400,7 @@ class WorkspaceManager:
 # ============================================================================
 # WORKSPACE OPERATIONS
 # ============================================================================
+
 
 def merge_workspaces(ws1: GlobalWorkspace, ws2: GlobalWorkspace) -> GlobalWorkspace:
     """Merge two workspaces together."""
@@ -436,7 +448,7 @@ if __name__ == "__main__":
         id="test_001",
         name="John Smith",
         actor_type=ActorType.PERSON,
-        roles=["Applicant", "Husband"]
+        roles=["Applicant", "Husband"],
     )
     workspace.add_actor(actor)
 
@@ -444,7 +456,7 @@ if __name__ == "__main__":
         id="q_001",
         question_text="When did the parties separate?",
         question_type=QuestionType.WHEN,
-        answerable=False
+        answerable=False,
     )
     workspace.questions[question.id] = question
 
@@ -453,14 +465,14 @@ if __name__ == "__main__":
 
     # Get statistics
     stats = manager.get_statistics()
-    print(f"\nWorkspace stats:")
+    print("\nWorkspace stats:")
     print(f"  - Actors: {stats['total_actors']}")
     print(f"  - Questions: {stats['total_questions']}")
     print(f"  - Unanswered: {stats['unanswered_questions']}")
 
     # Get ontology context
     context = manager.get_ontology_context()
-    print(f"\nOntology context:")
+    print("\nOntology context:")
     print(f"  - Role types: {context.role_types}")
 
     # Test save/load

@@ -9,11 +9,9 @@ Pricing (Gemini 2.5 Flash):
 - Output: $2.50 per 1M tokens
 """
 
-from dataclasses import dataclass, field
-from typing import Dict, Optional
-from datetime import datetime
 import json
-
+from dataclasses import dataclass
+from datetime import datetime
 
 # Model pricing per 1M tokens
 MODEL_PRICING = {
@@ -50,7 +48,7 @@ class CostTracker:
     summary_input: int = 0
     summary_output: int = 0
 
-    start_time: Optional[datetime] = None
+    start_time: datetime | None = None
 
     def __post_init__(self):
         self.start_time = datetime.now()
@@ -74,7 +72,7 @@ class CostTracker:
             self.summary_input += input_tokens
             self.summary_output += output_tokens
 
-    def get_pricing(self) -> Dict[str, float]:
+    def get_pricing(self) -> dict[str, float]:
         """Get pricing for current model."""
         return MODEL_PRICING.get(self.model, {"input": 0.30, "output": 2.50})
 
@@ -134,9 +132,12 @@ PERFORMANCE:
     def print_progress(self, docs_processed: int, total_docs: int = 0):
         """Print a progress line with current costs."""
         pct = f" ({100*docs_processed/total_docs:.1f}%)" if total_docs > 0 else ""
-        print(f"  Docs: {docs_processed}{pct} | "
-              f"Tokens: {self.total_input_tokens + self.total_output_tokens:,} | "
-              f"Cost: ${self.total_cost:.4f}", end='\r')
+        print(
+            f"  Docs: {docs_processed}{pct} | "
+            f"Tokens: {self.total_input_tokens + self.total_output_tokens:,} | "
+            f"Cost: ${self.total_cost:.4f}",
+            end="\r",
+        )
 
     def to_dict(self) -> dict:
         """Convert to dictionary for JSON serialization."""
@@ -153,17 +154,17 @@ PERFORMANCE:
                 "reconciler": {"input": self.reconciler_input, "output": self.reconciler_output},
                 "spacetime": {"input": self.spacetime_input, "output": self.spacetime_output},
                 "summary": {"input": self.summary_input, "output": self.summary_output},
-            }
+            },
         }
 
     def save(self, filepath: str):
         """Save cost report to JSON file."""
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             json.dump(self.to_dict(), f, indent=2)
 
 
 # Global instance for easy access
-_cost_tracker: Optional[CostTracker] = None
+_cost_tracker: CostTracker | None = None
 
 
 def get_cost_tracker(model: str = "google/gemini-2.5-flash") -> CostTracker:

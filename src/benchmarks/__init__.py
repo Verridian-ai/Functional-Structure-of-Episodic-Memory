@@ -14,14 +14,12 @@ This module includes:
 Based on: arXiv:2511.07587 - Functional Structure of Episodic Memory
 """
 
+from src.benchmarks.benchmark_runner import BenchmarkRunner
 from src.benchmarks.family_law_discrepancy import (
-    LegalDiscrepancyType,
-    InTextDiscrepancyType,
     DiscrepancyInstance,
-    FamilyLawBenchmark
-)
-from src.benchmarks.benchmark_runner import (
-    BenchmarkRunner
+    FamilyLawBenchmark,
+    InTextDiscrepancyType,
+    LegalDiscrepancyType,
 )
 
 __all__ = [
@@ -29,5 +27,5 @@ __all__ = [
     "InTextDiscrepancyType",
     "DiscrepancyInstance",
     "FamilyLawBenchmark",
-    "BenchmarkRunner"
+    "BenchmarkRunner",
 ]

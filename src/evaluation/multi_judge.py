@@ -8,18 +8,19 @@ scores from different models to provide a robust evaluation.
 Uses OpenRouter API for accessing multiple models.
 """
 
-import os
 import asyncio
-import statistics
-from enum import Enum
-from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
 import json
+import os
+import statistics
+from dataclasses import dataclass, field
+from enum import Enum
+
 import httpx
 
 
 class JudgeModel(Enum):
     """Available judge models via OpenRouter."""
+
     GPT4O = "openai/gpt-4o"
     CLAUDE = "anthropic/claude-3-sonnet"
     GEMINI = "google/gemini-2.0-flash"
@@ -28,22 +29,24 @@ class JudgeModel(Enum):
 @dataclass
 class JudgeEvaluation:
     """Evaluation from a single judge model."""
+
     model: JudgeModel
     score: float  # 1-10 scale
-    issues: List[str] = field(default_factory=list)
-    strengths: List[str] = field(default_factory=list)
+    issues: list[str] = field(default_factory=list)
+    strengths: list[str] = field(default_factory=list)
     reasoning: str = ""
 
 
 @dataclass
 class AggregatedEvaluation:
     """Aggregated evaluation from multiple judges."""
+
     mean_score: float
     median_score: float
     consensus_level: float  # 0-1, how much judges agree
-    individual_evaluations: List[JudgeEvaluation] = field(default_factory=list)
-    combined_issues: List[str] = field(default_factory=list)
-    combined_strengths: List[str] = field(default_factory=list)
+    individual_evaluations: list[JudgeEvaluation] = field(default_factory=list)
+    combined_issues: list[str] = field(default_factory=list)
+    combined_strengths: list[str] = field(default_factory=list)
 
 
 class MultiJudgeEvaluator:
@@ -55,11 +58,7 @@ class MultiJudgeEvaluator:
     to reduce bias and improve evaluation quality.
     """
 
-    def __init__(
-        self,
-        judges: Optional[List[JudgeModel]] = None,
-        api_key: Optional[str] = None
-    ):
+    def __init__(self, judges: list[JudgeModel] | None = None, api_key: str | None = None):
         """
         Initialize the Multi-Judge Evaluator.
 
@@ -72,11 +71,7 @@ class MultiJudgeEvaluator:
         """
         # Default to using all judges if none specified
         if judges is None:
-            self.judges = [
-                JudgeModel.GPT4O,
-                JudgeModel.CLAUDE,
-                JudgeModel.GEMINI
-            ]
+            self.judges = [JudgeModel.GPT4O, JudgeModel.CLAUDE, JudgeModel.GEMINI]
         else:
             self.judges = judges
 
@@ -89,10 +84,7 @@ class MultiJudgeEvaluator:
             )
 
     async def evaluate_response(
-        self,
-        query: str,
-        response: str,
-        context: str
+        self, query: str, response: str, context: str
     ) -> AggregatedEvaluation:
         """
         Evaluate a response using multiple judge models.
@@ -107,16 +99,12 @@ class MultiJudgeEvaluator:
         """
         # Gather evaluations from all judges concurrently
         tasks = [
-            self._get_judge_evaluation(judge, query, response, context)
-            for judge in self.judges
+            self._get_judge_evaluation(judge, query, response, context) for judge in self.judges
         ]
         evaluations = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Filter out any failed evaluations
-        valid_evaluations = [
-            eval for eval in evaluations
-            if isinstance(eval, JudgeEvaluation)
-        ]
+        valid_evaluations = [eval for eval in evaluations if isinstance(eval, JudgeEvaluation)]
 
         if not valid_evaluations:
             # Return a default evaluation if all judges failed
@@ -126,18 +114,14 @@ class MultiJudgeEvaluator:
                 consensus_level=0.0,
                 individual_evaluations=[],
                 combined_issues=["All judge evaluations failed"],
-                combined_strengths=[]
+                combined_strengths=[],
             )
 
         # Aggregate the evaluations
         return self._aggregate_evaluations(valid_evaluations)
 
     async def _get_judge_evaluation(
-        self,
-        judge: JudgeModel,
-        query: str,
-        response: str,
-        context: str
+        self, judge: JudgeModel, query: str, response: str, context: str
     ) -> JudgeEvaluation:
         """
         Get evaluation from a single judge model.
@@ -160,11 +144,8 @@ class MultiJudgeEvaluator:
         # Call the judge model via OpenRouter
         async with httpx.AsyncClient(
             base_url="https://openrouter.ai/api/v1",
-            headers={
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json"
-            },
-            timeout=60.0
+            headers={"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"},
+            timeout=60.0,
         ) as client:
             response_data = await client.post(
                 "/chat/completions",
@@ -176,16 +157,13 @@ class MultiJudgeEvaluator:
                             "content": (
                                 "You are an expert evaluator of AI responses. "
                                 "Provide detailed, objective evaluations in JSON format."
-                            )
+                            ),
                         },
-                        {
-                            "role": "user",
-                            "content": prompt
-                        }
+                        {"role": "user", "content": prompt},
                     ],
                     "temperature": 0.1,
-                    "max_tokens": 2000
-                }
+                    "max_tokens": 2000,
+                },
             )
             response_data.raise_for_status()
             result = response_data.json()
@@ -197,17 +175,18 @@ class MultiJudgeEvaluator:
         cleaned_content = content.strip()
         if cleaned_content.startswith("```"):
             # Remove opening ```json or ```
-            cleaned_content = cleaned_content.split('\n', 1)[1]
+            cleaned_content = cleaned_content.split("\n", 1)[1]
             # Remove closing ```
             if cleaned_content.endswith("```"):
-                cleaned_content = cleaned_content.rsplit('\n', 1)[0]
+                cleaned_content = cleaned_content.rsplit("\n", 1)[0]
 
         try:
             eval_data = json.loads(cleaned_content)
         except json.JSONDecodeError:
             # Try to extract JSON from the response
             import re
-            match = re.search(r'\{[\s\S]*\}', cleaned_content)
+
+            match = re.search(r"\{[\s\S]*\}", cleaned_content)
             if match:
                 eval_data = json.loads(match.group())
             else:
@@ -219,13 +198,10 @@ class MultiJudgeEvaluator:
             score=float(eval_data.get("score", 5.0)),
             issues=eval_data.get("issues", []),
             strengths=eval_data.get("strengths", []),
-            reasoning=eval_data.get("reasoning", "")
+            reasoning=eval_data.get("reasoning", ""),
         )
 
-    def _aggregate_evaluations(
-        self,
-        evaluations: List[JudgeEvaluation]
-    ) -> AggregatedEvaluation:
+    def _aggregate_evaluations(self, evaluations: list[JudgeEvaluation]) -> AggregatedEvaluation:
         """
         Aggregate evaluations from multiple judges.
 
@@ -236,11 +212,7 @@ class MultiJudgeEvaluator:
             AggregatedEvaluation combining all judge feedback
         """
         if not evaluations:
-            return AggregatedEvaluation(
-                mean_score=0.0,
-                median_score=0.0,
-                consensus_level=0.0
-            )
+            return AggregatedEvaluation(mean_score=0.0, median_score=0.0, consensus_level=0.0)
 
         # Calculate score statistics
         scores = [eval.score for eval in evaluations]
@@ -269,13 +241,10 @@ class MultiJudgeEvaluator:
             consensus_level=consensus_level,
             individual_evaluations=evaluations,
             combined_issues=all_issues,
-            combined_strengths=all_strengths
+            combined_strengths=all_strengths,
         )
 
-    def _calculate_consensus(
-        self,
-        evaluations: List[JudgeEvaluation]
-    ) -> float:
+    def _calculate_consensus(self, evaluations: list[JudgeEvaluation]) -> float:
         """
         Calculate consensus level among judges (0-1 scale).
 
@@ -307,12 +276,7 @@ class MultiJudgeEvaluator:
 
         return consensus
 
-    def _build_evaluation_prompt(
-        self,
-        query: str,
-        response: str,
-        context: str
-    ) -> str:
+    def _build_evaluation_prompt(self, query: str, response: str, context: str) -> str:
         """
         Build the evaluation prompt for judge models.
 

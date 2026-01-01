@@ -10,11 +10,11 @@ Enhanced classification system with:
 This module supersedes the basic DomainClassifier for production use.
 """
 
-import re
 import logging
+import re
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple, Optional, Any
 from enum import Enum
+from typing import Any
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -25,8 +25,10 @@ logger = logging.getLogger(__name__)
 # ENUMS AND CONSTANTS
 # ============================================================================
 
+
 class DocumentType(Enum):
     """Legal document types with classification priority."""
+
     CASE_LAW = "case_law"
     PRIMARY_LEGISLATION = "primary_legislation"
     SECONDARY_LEGISLATION = "secondary_legislation"
@@ -39,6 +41,7 @@ class DocumentType(Enum):
 
 class CitationType(Enum):
     """Citation format types."""
+
     MEDIUM_NEUTRAL = "medium_neutral"  # [2020] HCA 1
     AUTHORIZED_REPORT = "authorized_report"  # (2020) 271 CLR 657
     LEGISLATION = "legislation"  # Family Law Act 1975 (Cth)
@@ -47,6 +50,7 @@ class CitationType(Enum):
 
 class BindingStatus(Enum):
     """Precedent binding status."""
+
     BINDING = "binding"
     PERSUASIVE = "persuasive"
     NOT_BINDING = "not_binding"
@@ -57,43 +61,48 @@ class BindingStatus(Enum):
 # DATA CLASSES
 # ============================================================================
 
+
 @dataclass
 class LegislationRef:
     """Extracted legislation reference."""
+
     name: str
-    year: Optional[int] = None
-    jurisdiction: Optional[str] = None
-    section: Optional[str] = None
-    subsection: Optional[str] = None
+    year: int | None = None
+    jurisdiction: str | None = None
+    section: str | None = None
+    subsection: str | None = None
     is_current: bool = True
-    domain_hint: Optional[str] = None
+    domain_hint: str | None = None
 
 
 @dataclass
 class CaseRef:
     """Extracted case law reference."""
+
     name: str
     citation: str
-    year: Optional[int] = None
-    court: Optional[str] = None
+    year: int | None = None
+    court: str | None = None
     is_landmark: bool = False
-    domain_hint: Optional[str] = None
+    domain_hint: str | None = None
 
 
 @dataclass
 class CourtInfo:
     """Court metadata for a document."""
+
     code: str
     name: str
     level: str
     jurisdiction: str
     authority_score: int
-    domain_hint: Optional[str] = None
+    domain_hint: str | None = None
 
 
 @dataclass
 class BoostBreakdown:
     """Detailed breakdown of BOOST scoring factors."""
+
     citation_match: int = 0  # BOOST 1
     jurisdiction_alignment: int = 0  # BOOST 2
     court_domain_hint: int = 0  # BOOST 3
@@ -109,32 +118,32 @@ class BoostBreakdown:
     def total(self) -> int:
         """Calculate total BOOST score."""
         return (
-            self.citation_match +
-            self.jurisdiction_alignment +
-            self.court_domain_hint +
-            self.legislation_reference +
-            self.case_law_reference +
-            self.case_title_pattern +
-            self.multi_domain_confidence +
-            self.legislation_status +
-            self.common_statute_distinction +
-            self.document_type_weight
+            self.citation_match
+            + self.jurisdiction_alignment
+            + self.court_domain_hint
+            + self.legislation_reference
+            + self.case_law_reference
+            + self.case_title_pattern
+            + self.multi_domain_confidence
+            + self.legislation_status
+            + self.common_statute_distinction
+            + self.document_type_weight
         )
 
-    def to_dict(self) -> Dict[str, int]:
+    def to_dict(self) -> dict[str, int]:
         """Convert to dictionary for serialization."""
         return {
-            'citation_match': self.citation_match,
-            'jurisdiction_alignment': self.jurisdiction_alignment,
-            'court_domain_hint': self.court_domain_hint,
-            'legislation_reference': self.legislation_reference,
-            'case_law_reference': self.case_law_reference,
-            'case_title_pattern': self.case_title_pattern,
-            'multi_domain_confidence': self.multi_domain_confidence,
-            'legislation_status': self.legislation_status,
-            'common_statute_distinction': self.common_statute_distinction,
-            'document_type_weight': self.document_type_weight,
-            'total': self.total,
+            "citation_match": self.citation_match,
+            "jurisdiction_alignment": self.jurisdiction_alignment,
+            "court_domain_hint": self.court_domain_hint,
+            "legislation_reference": self.legislation_reference,
+            "case_law_reference": self.case_law_reference,
+            "case_title_pattern": self.case_title_pattern,
+            "multi_domain_confidence": self.multi_domain_confidence,
+            "legislation_status": self.legislation_status,
+            "common_statute_distinction": self.common_statute_distinction,
+            "document_type_weight": self.document_type_weight,
+            "total": self.total,
         }
 
 
@@ -146,16 +155,17 @@ class MultiDomainClassification:
     This is the primary output structure for the enhanced classifier,
     providing detailed multi-domain attribution with confidence scores.
     """
+
     document_id: str
     primary_domain: str
     primary_category: str
     primary_confidence: float
-    secondary_domains: List[Tuple[str, str, float]] = field(default_factory=list)
+    secondary_domains: list[tuple[str, str, float]] = field(default_factory=list)
     document_type: DocumentType = DocumentType.UNKNOWN
     citation_type: CitationType = CitationType.UNKNOWN
-    legislation_refs: List[LegislationRef] = field(default_factory=list)
-    case_refs: List[CaseRef] = field(default_factory=list)
-    court_info: Optional[CourtInfo] = None
+    legislation_refs: list[LegislationRef] = field(default_factory=list)
+    case_refs: list[CaseRef] = field(default_factory=list)
+    court_info: CourtInfo | None = None
     authority_score: int = 0
     binding_status: BindingStatus = BindingStatus.UNKNOWN
     boost_breakdown: BoostBreakdown = field(default_factory=BoostBreakdown)
@@ -164,54 +174,58 @@ class MultiDomainClassification:
     keyword_matches: int = 0
     classification_version: str = "2.0"
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert to dictionary for serialization."""
         return {
-            'document_id': self.document_id,
-            'primary_domain': self.primary_domain,
-            'primary_category': self.primary_category,
-            'primary_confidence': round(self.primary_confidence, 3),
-            'secondary_domains': [
-                {'domain': d, 'category': c, 'confidence': round(conf, 3)}
+            "document_id": self.document_id,
+            "primary_domain": self.primary_domain,
+            "primary_category": self.primary_category,
+            "primary_confidence": round(self.primary_confidence, 3),
+            "secondary_domains": [
+                {"domain": d, "category": c, "confidence": round(conf, 3)}
                 for d, c, conf in self.secondary_domains
             ],
-            'document_type': self.document_type.value,
-            'citation_type': self.citation_type.value,
-            'legislation_refs': [
+            "document_type": self.document_type.value,
+            "citation_type": self.citation_type.value,
+            "legislation_refs": [
                 {
-                    'name': ref.name,
-                    'year': ref.year,
-                    'jurisdiction': ref.jurisdiction,
-                    'section': ref.section,
-                    'is_current': ref.is_current,
-                    'domain_hint': ref.domain_hint,
+                    "name": ref.name,
+                    "year": ref.year,
+                    "jurisdiction": ref.jurisdiction,
+                    "section": ref.section,
+                    "is_current": ref.is_current,
+                    "domain_hint": ref.domain_hint,
                 }
                 for ref in self.legislation_refs[:10]
             ],
-            'case_refs': [
+            "case_refs": [
                 {
-                    'name': ref.name,
-                    'citation': ref.citation,
-                    'year': ref.year,
-                    'court': ref.court,
-                    'is_landmark': ref.is_landmark,
-                    'domain_hint': ref.domain_hint,
+                    "name": ref.name,
+                    "citation": ref.citation,
+                    "year": ref.year,
+                    "court": ref.court,
+                    "is_landmark": ref.is_landmark,
+                    "domain_hint": ref.domain_hint,
                 }
                 for ref in self.case_refs[:10]
             ],
-            'court_info': {
-                'code': self.court_info.code,
-                'name': self.court_info.name,
-                'level': self.court_info.level,
-                'jurisdiction': self.court_info.jurisdiction,
-                'authority_score': self.court_info.authority_score,
-                'domain_hint': self.court_info.domain_hint,
-            } if self.court_info else None,
-            'authority_score': self.authority_score,
-            'binding_status': self.binding_status.value,
-            'boost_breakdown': self.boost_breakdown.to_dict(),
-            'keyword_matches': self.keyword_matches,
-            'classification_version': self.classification_version,
+            "court_info": (
+                {
+                    "code": self.court_info.code,
+                    "name": self.court_info.name,
+                    "level": self.court_info.level,
+                    "jurisdiction": self.court_info.jurisdiction,
+                    "authority_score": self.court_info.authority_score,
+                    "domain_hint": self.court_info.domain_hint,
+                }
+                if self.court_info
+                else None
+            ),
+            "authority_score": self.authority_score,
+            "binding_status": self.binding_status.value,
+            "boost_breakdown": self.boost_breakdown.to_dict(),
+            "keyword_matches": self.keyword_matches,
+            "classification_version": self.classification_version,
         }
 
 
@@ -219,76 +233,79 @@ class MultiDomainClassification:
 # CITATION EXTRACTION
 # ============================================================================
 
+
 class CitationExtractor:
     """Extract and parse legal citations from text."""
 
     # Medium Neutral: [2020] HCA 1
-    MEDIUM_NEUTRAL_PATTERN = re.compile(
-        r'\[(\d{4})\]\s*([A-Za-z]{2,10})\s*(\d+)',
-        re.IGNORECASE
-    )
+    MEDIUM_NEUTRAL_PATTERN = re.compile(r"\[(\d{4})\]\s*([A-Za-z]{2,10})\s*(\d+)", re.IGNORECASE)
 
     # Authorized Report: (2020) 271 CLR 657
     AUTHORIZED_REPORT_PATTERN = re.compile(
-        r'\((\d{4})\)\s+(\d+)\s+([A-Z]{2,6})\s+(\d+)',
-        re.IGNORECASE
+        r"\((\d{4})\)\s+(\d+)\s+([A-Z]{2,6})\s+(\d+)", re.IGNORECASE
     )
 
     # Legislation: Family Law Act 1975 (Cth) s 79
     LEGISLATION_PATTERN = re.compile(
-        r'([A-Z][a-zA-Z\s]+(?:Act|Regulation|Rules?))\s+(\d{4})\s*\(([A-Za-z]{2,4})\)(?:\s+s\s*(\d+[a-zA-Z]*(?:\([a-z0-9]+\))?))?',
-        re.IGNORECASE
+        r"([A-Z][a-zA-Z\s]+(?:Act|Regulation|Rules?))\s+(\d{4})\s*\(([A-Za-z]{2,4})\)(?:\s+s\s*(\d+[a-zA-Z]*(?:\([a-z0-9]+\))?))?",
+        re.IGNORECASE,
     )
 
     # Section/Subsection: s 51(xxvi), reg 4.12
     SECTION_PATTERN = re.compile(
-        r'(?:s|section|reg|regulation|r|rule)\s*(\d+[a-zA-Z]*(?:\([a-z0-9]+\))?(?:\.\d+)?)',
-        re.IGNORECASE
+        r"(?:s|section|reg|regulation|r|rule)\s*(\d+[a-zA-Z]*(?:\([a-z0-9]+\))?(?:\.\d+)?)",
+        re.IGNORECASE,
     )
 
     @classmethod
-    def extract_medium_neutral(cls, text: str) -> List[Dict]:
+    def extract_medium_neutral(cls, text: str) -> list[dict]:
         """Extract medium neutral citations."""
         results = []
         for match in cls.MEDIUM_NEUTRAL_PATTERN.finditer(text):
             year, court, number = match.groups()
-            results.append({
-                'citation': match.group(0),
-                'year': int(year),
-                'court': court.upper(),
-                'number': int(number),
-                'type': CitationType.MEDIUM_NEUTRAL,
-            })
+            results.append(
+                {
+                    "citation": match.group(0),
+                    "year": int(year),
+                    "court": court.upper(),
+                    "number": int(number),
+                    "type": CitationType.MEDIUM_NEUTRAL,
+                }
+            )
         return results
 
     @classmethod
-    def extract_authorized_reports(cls, text: str) -> List[Dict]:
+    def extract_authorized_reports(cls, text: str) -> list[dict]:
         """Extract authorized report citations."""
         results = []
         for match in cls.AUTHORIZED_REPORT_PATTERN.finditer(text):
             year, volume, report, page = match.groups()
-            results.append({
-                'citation': match.group(0),
-                'year': int(year),
-                'volume': int(volume),
-                'report': report.upper(),
-                'page': int(page),
-                'type': CitationType.AUTHORIZED_REPORT,
-            })
+            results.append(
+                {
+                    "citation": match.group(0),
+                    "year": int(year),
+                    "volume": int(volume),
+                    "report": report.upper(),
+                    "page": int(page),
+                    "type": CitationType.AUTHORIZED_REPORT,
+                }
+            )
         return results
 
     @classmethod
-    def extract_legislation(cls, text: str) -> List[LegislationRef]:
+    def extract_legislation(cls, text: str) -> list[LegislationRef]:
         """Extract legislation references with section numbers."""
         results = []
         for match in cls.LEGISLATION_PATTERN.finditer(text):
             name, year, jurisdiction, section = match.groups()
-            results.append(LegislationRef(
-                name=name.strip(),
-                year=int(year) if year else None,
-                jurisdiction=jurisdiction.upper() if jurisdiction else None,
-                section=section,
-            ))
+            results.append(
+                LegislationRef(
+                    name=name.strip(),
+                    year=int(year) if year else None,
+                    jurisdiction=jurisdiction.upper() if jurisdiction else None,
+                    section=section,
+                )
+            )
         return results
 
     @classmethod
@@ -307,6 +324,7 @@ class CitationExtractor:
 # ENHANCED CLASSIFIER
 # ============================================================================
 
+
 class EnhancedDomainClassifier:
     """
     Enhanced multi-domain classifier with 10-factor BOOST scoring.
@@ -321,13 +339,15 @@ class EnhancedDomainClassifier:
 
     def __init__(self):
         # Import configuration lazily to avoid circular imports
-        from src.ingestion.classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
-        from src.ingestion.legislation_patterns import LEGISLATION_TO_DOMAIN
         from src.ingestion.case_patterns import LANDMARK_CASES
+        from src.ingestion.classification_config import CLASSIFICATION_MAP, DOMAIN_MAPPING
         from src.ingestion.court_hierarchy import (
-            COURT_CODES, get_court_info, get_domain_hint,
-            extract_court_from_citation
+            COURT_CODES,
+            extract_court_from_citation,
+            get_court_info,
+            get_domain_hint,
         )
+        from src.ingestion.legislation_patterns import LEGISLATION_TO_DOMAIN
 
         self.classification_map = CLASSIFICATION_MAP
         self.domain_mapping = DOMAIN_MAPPING
@@ -339,13 +359,13 @@ class EnhancedDomainClassifier:
         self.extract_court_from_citation = extract_court_from_citation
 
         # Build reverse lookup: category -> domain
-        self.category_to_domain: Dict[str, str] = {}
+        self.category_to_domain: dict[str, str] = {}
         for broad, granular_list in self.domain_mapping.items():
             for granular in granular_list:
                 self.category_to_domain[granular] = broad
 
         # Pre-compile keyword patterns
-        self.patterns: Dict[str, re.Pattern] = {}
+        self.patterns: dict[str, re.Pattern] = {}
         for category, keywords in self.classification_map.items():
             # Clean keywords - remove markdown artifacts
             clean_keywords = [self._clean_keyword(k) for k in keywords if k.strip()]
@@ -365,16 +385,16 @@ class EnhancedDomainClassifier:
         if not keyword:
             return ""
         # Remove markdown bold/italic
-        cleaned = re.sub(r'\*+', '', keyword)
+        cleaned = re.sub(r"\*+", "", keyword)
         # Remove markdown headers
-        cleaned = re.sub(r'^#+\s*', '', cleaned)
+        cleaned = re.sub(r"^#+\s*", "", cleaned)
         # Remove code blocks
-        cleaned = re.sub(r'```[a-z]*', '', cleaned)
+        cleaned = re.sub(r"```[a-z]*", "", cleaned)
         # Clean up whitespace
         cleaned = cleaned.strip()
         return cleaned
 
-    def classify(self, doc: Dict[str, Any]) -> MultiDomainClassification:
+    def classify(self, doc: dict[str, Any]) -> MultiDomainClassification:
         """
         Classify a document with enhanced multi-domain attribution.
 
@@ -384,11 +404,11 @@ class EnhancedDomainClassifier:
         Returns:
             MultiDomainClassification with full attribution details
         """
-        doc_id = doc.get('id', doc.get('citation', 'unknown'))
-        doc_type_str = doc.get('type', '')
-        citation = doc.get('citation', '') or ''
-        text = doc.get('text', '') or ''
-        jurisdiction = (doc.get('jurisdiction', '') or '').lower()
+        doc_id = doc.get("id", doc.get("citation", "unknown"))
+        doc_type_str = doc.get("type", "")
+        citation = doc.get("citation", "") or ""
+        text = doc.get("text", "") or ""
+        jurisdiction = (doc.get("jurisdiction", "") or "").lower()
 
         # Determine document type
         doc_type = self._detect_document_type(doc_type_str)
@@ -409,7 +429,7 @@ class EnhancedDomainClassifier:
         search_text = f"{citation} {text[:15000]}".lower()
         citation_lower = citation.lower()
 
-        scores: Dict[str, int] = {}
+        scores: dict[str, int] = {}
 
         for category, pattern in self.patterns.items():
             matches = pattern.findall(search_text)
@@ -430,7 +450,7 @@ class EnhancedDomainClassifier:
 
             # BOOST 3: Court domain hint alignment
             if court_info and court_info.domain_hint:
-                category_domain = self.category_to_domain.get(category, '')
+                category_domain = self.category_to_domain.get(category, "")
                 if court_info.domain_hint == category_domain:
                     base_score += 25
                     boost.court_domain_hint = 25
@@ -441,7 +461,7 @@ class EnhancedDomainClassifier:
         for leg_ref in legislation_refs:
             if leg_ref.name in self.legislation_to_domain:
                 leg_info = self.legislation_to_domain[leg_ref.name]
-                for subcat in leg_info.get('subcategories', []):
+                for subcat in leg_info.get("subcategories", []):
                     scores[subcat] = scores.get(subcat, 0) + 15
                 boost.legislation_reference = max(boost.legislation_reference, 15)
 
@@ -449,7 +469,7 @@ class EnhancedDomainClassifier:
         for case_ref in case_refs:
             if case_ref.name in self.landmark_cases:
                 case_info = self.landmark_cases[case_ref.name]
-                for subcat in case_info.get('subcategories', []):
+                for subcat in case_info.get("subcategories", []):
                     scores[subcat] = scores.get(subcat, 0) + 10
                 boost.case_law_reference = max(boost.case_law_reference, 10)
 
@@ -473,7 +493,7 @@ class EnhancedDomainClassifier:
         # BOOST 9: Common law vs statute distinction
         if self._is_common_law_decision(text, court_info):
             for cat in scores:
-                if 'Equity' in cat or 'Tort' in cat or 'Prop_' in cat:
+                if "Equity" in cat or "Tort" in cat or "Prop_" in cat:
                     scores[cat] += 5
             boost.common_statute_distinction = 5
 
@@ -530,21 +550,21 @@ class EnhancedDomainClassifier:
     def _detect_document_type(self, type_str: str) -> DocumentType:
         """Detect document type from type string."""
         type_lower = type_str.lower()
-        if 'primary_legislation' in type_lower or type_lower == 'act':
+        if "primary_legislation" in type_lower or type_lower == "act":
             return DocumentType.PRIMARY_LEGISLATION
-        if 'secondary_legislation' in type_lower or 'regulation' in type_lower:
+        if "secondary_legislation" in type_lower or "regulation" in type_lower:
             return DocumentType.SECONDARY_LEGISLATION
-        if 'bill' in type_lower:
+        if "bill" in type_lower:
             return DocumentType.BILL
-        if 'explanatory' in type_lower or 'memo' in type_lower:
+        if "explanatory" in type_lower or "memo" in type_lower:
             return DocumentType.EXPLANATORY_MEMO
-        if 'tribunal' in type_lower:
+        if "tribunal" in type_lower:
             return DocumentType.TRIBUNAL_DECISION
-        if 'case' in type_lower or 'decision' in type_lower:
+        if "case" in type_lower or "decision" in type_lower:
             return DocumentType.CASE_LAW
         return DocumentType.UNKNOWN
 
-    def _extract_court_info(self, citation: str) -> Optional[CourtInfo]:
+    def _extract_court_info(self, citation: str) -> CourtInfo | None:
         """Extract court information from citation."""
         court_code = self.extract_court_from_citation(citation)
         if not court_code:
@@ -556,14 +576,14 @@ class EnhancedDomainClassifier:
 
         return CourtInfo(
             code=court_code,
-            name=info.get('name', ''),
-            level=info.get('level', ''),
-            jurisdiction=info.get('jurisdiction', ''),
-            authority_score=info.get('authority_score', 0),
-            domain_hint=info.get('domain_hint'),
+            name=info.get("name", ""),
+            level=info.get("level", ""),
+            jurisdiction=info.get("jurisdiction", ""),
+            authority_score=info.get("authority_score", 0),
+            domain_hint=info.get("domain_hint"),
         )
 
-    def _extract_legislation_refs(self, text: str) -> List[LegislationRef]:
+    def _extract_legislation_refs(self, text: str) -> list[LegislationRef]:
         """Extract legislation references from text."""
         refs = []
         text_lower = text.lower()
@@ -572,17 +592,19 @@ class EnhancedDomainClassifier:
         for name_lower, name_original in self.legislation_names.items():
             if name_lower in text_lower:
                 leg_info = self.legislation_to_domain.get(name_original, {})
-                refs.append(LegislationRef(
-                    name=name_original,
-                    domain_hint=leg_info.get('domain'),
-                ))
+                refs.append(
+                    LegislationRef(
+                        name=name_original,
+                        domain_hint=leg_info.get("domain"),
+                    )
+                )
 
         # Also extract with regex for section numbers
         refs.extend(CitationExtractor.extract_legislation(text))
 
         return refs[:15]
 
-    def _extract_case_refs(self, text: str) -> List[CaseRef]:
+    def _extract_case_refs(self, text: str) -> list[CaseRef]:
         """Extract case law references from text."""
         refs = []
         text_lower = text.lower()
@@ -591,12 +613,14 @@ class EnhancedDomainClassifier:
         for name_lower, name_original in self.case_names.items():
             if name_lower in text_lower:
                 case_info = self.landmark_cases.get(name_original, {})
-                refs.append(CaseRef(
-                    name=name_original,
-                    citation=case_info.get('citation', ''),
-                    is_landmark=True,
-                    domain_hint=case_info.get('domain'),
-                ))
+                refs.append(
+                    CaseRef(
+                        name=name_original,
+                        citation=case_info.get("citation", ""),
+                        is_landmark=True,
+                        domain_hint=case_info.get("domain"),
+                    )
+                )
 
         return refs[:15]
 
@@ -619,19 +643,23 @@ class EnhancedDomainClassifier:
                 boost = 15
 
         if "Employment" in category or "Emp_" in category:
-            if "employment" in jurisdiction or "industrial" in jurisdiction or "fair work" in search_text:
+            if (
+                "employment" in jurisdiction
+                or "industrial" in jurisdiction
+                or "fair work" in search_text
+            ):
                 boost = 15
 
         return boost
 
-    def _calculate_title_pattern_boost(
-        self, citation_lower: str, scores: Dict[str, int]
-    ) -> int:
+    def _calculate_title_pattern_boost(self, citation_lower: str, scores: dict[str, int]) -> int:
         """Calculate BOOST 6: Case title patterns."""
         boost = 0
 
         # Criminal indicators
-        if any(pattern in citation_lower for pattern in ["r v ", "regina v ", "dpp v ", "police v "]):
+        if any(
+            pattern in citation_lower for pattern in ["r v ", "regina v ", "dpp v ", "police v "]
+        ):
             scores["Criminal_General"] = scores.get("Criminal_General", 0) + 20
             boost = max(boost, 20)
 
@@ -676,25 +704,24 @@ class EnhancedDomainClassifier:
         }
         return weights.get(doc_type, 0)
 
-    def _is_common_law_decision(
-        self, text: str, court_info: Optional[CourtInfo]
-    ) -> bool:
+    def _is_common_law_decision(self, text: str, court_info: CourtInfo | None) -> bool:
         """Determine if this is a common law (vs statute-based) decision."""
         if not court_info:
             return False
 
         # Common law indicators
         common_law_markers = [
-            "common law", "precedent", "stare decisis",
-            "ratio decidendi", "obiter dicta",
+            "common law",
+            "precedent",
+            "stare decisis",
+            "ratio decidendi",
+            "obiter dicta",
         ]
 
         text_lower = text[:5000].lower()
         return any(marker in text_lower for marker in common_law_markers)
 
-    def _determine_binding_status(
-        self, court_info: Optional[CourtInfo]
-    ) -> BindingStatus:
+    def _determine_binding_status(self, court_info: CourtInfo | None) -> BindingStatus:
         """Determine binding precedent status."""
         if not court_info:
             return BindingStatus.UNKNOWN

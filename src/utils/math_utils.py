@@ -7,6 +7,7 @@ Helper functions for matrix operations.
 
 import numpy as np
 
+
 def normalize(A: np.ndarray, axis: int = 0) -> np.ndarray:
     """
     Normalizes a probability distribution/matrix.
@@ -19,10 +20,12 @@ def normalize(A: np.ndarray, axis: int = 0) -> np.ndarray:
     A_norm = A_norm / sums
     return A_norm
 
+
 def softmax(x: np.ndarray) -> np.ndarray:
     """Softmax function."""
     e_x = np.exp(x - np.max(x))
     return e_x / e_x.sum()
+
 
 def kl_divergence(P: np.ndarray, Q: np.ndarray) -> float:
     """KL Divergence D_KL(P || Q)."""
@@ -31,8 +34,8 @@ def kl_divergence(P: np.ndarray, Q: np.ndarray) -> float:
     Q = np.clip(Q, 1e-12, 1.0)
     return np.sum(P * np.log(P / Q))
 
+
 def entropy(P: np.ndarray) -> float:
     """Shannon Entropy H(P)."""
     P = np.clip(P, 1e-12, 1.0)
     return -np.sum(P * np.log(P))
-

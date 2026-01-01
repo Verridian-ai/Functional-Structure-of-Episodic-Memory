@@ -10,33 +10,35 @@ Based on Task T1.7.
 """
 
 from dataclasses import dataclass, field
-from typing import List, Dict, Optional
 from enum import Enum, auto
+
 
 class CaseArchetype(Enum):
     """
     Top-level heuristic case archetypes.
     """
+
     # Parenting
-    PARENTING_EQUAL_TIME = auto()          # 50/50 shared care
-    PARENTING_SUBSTANTIAL_TIME = auto()    # Significant time but not equal
-    PARENTING_SUPERVISED_TIME = auto()     # Risk factors requiring supervision
-    PARENTING_RELOCATION = auto()          # One parent moving away
-    PARENTING_ALIENATION = auto()          # Allegations of parental alienation
-    PARENTING_HIGH_CONFLICT = auto()       # Intractable conflict
-    
+    PARENTING_EQUAL_TIME = auto()  # 50/50 shared care
+    PARENTING_SUBSTANTIAL_TIME = auto()  # Significant time but not equal
+    PARENTING_SUPERVISED_TIME = auto()  # Risk factors requiring supervision
+    PARENTING_RELOCATION = auto()  # One parent moving away
+    PARENTING_ALIENATION = auto()  # Allegations of parental alienation
+    PARENTING_HIGH_CONFLICT = auto()  # Intractable conflict
+
     # Property
-    PROPERTY_LONG_MARRIAGE = auto()        # Long duration (>15 years)
-    PROPERTY_SHORT_MARRIAGE = auto()       # Short duration (<5 years)
-    PROPERTY_HIGH_WEALTH = auto()          # High net worth
-    PROPERTY_HIGH_DISPARITY = auto()       # Big difference in earning capacity
-    PROPERTY_COMPLEX_STRUCTURE = auto()    # Trusts, businesses, etc.
-    
+    PROPERTY_LONG_MARRIAGE = auto()  # Long duration (>15 years)
+    PROPERTY_SHORT_MARRIAGE = auto()  # Short duration (<5 years)
+    PROPERTY_HIGH_WEALTH = auto()  # High net worth
+    PROPERTY_HIGH_DISPARITY = auto()  # Big difference in earning capacity
+    PROPERTY_COMPLEX_STRUCTURE = auto()  # Trusts, businesses, etc.
+
     # Combined / Other
-    VIOLENCE_FAMILY_VIOLENCE = auto()      # Presence of FV allegations
-    PROCEDURAL_INTERIM = auto()            # Interim hearing
-    PROCEDURAL_FINAL = auto()              # Final hearing
+    VIOLENCE_FAMILY_VIOLENCE = auto()  # Presence of FV allegations
+    PROCEDURAL_INTERIM = auto()  # Interim hearing
+    PROCEDURAL_FINAL = auto()  # Final hearing
     UNKNOWN = auto()
+
 
 @dataclass
 class CaseStructure:
@@ -44,21 +46,22 @@ class CaseStructure:
     Represents the structural "skeleton" of a case.
     Extracted by the TEMFactorizer (Micro-TEM).
     """
+
     archetype: CaseArchetype
     confidence: float
-    
+
     # Key structural features identified
-    features: Dict[str, float] = field(default_factory=dict)
-    
+    features: dict[str, float] = field(default_factory=dict)
+
     # Explanation of why this structure was chosen
     reasoning: str = ""
 
-    def to_dict(self) -> Dict:
+    def to_dict(self) -> dict:
         return {
             "archetype": self.archetype.name,
             "confidence": self.confidence,
             "features": self.features,
-            "reasoning": self.reasoning
+            "reasoning": self.reasoning,
         }
 
     def to_toon(self) -> str:
@@ -75,6 +78,7 @@ class CaseStructure:
         data = f"{self.archetype.name},{self.confidence},{features_str},{reasoning_escaped}"
         return f"CaseStructure[1]{{archetype,confidence,features,reasoning}}\n{data}"
 
+
 # Descriptions for RAG/Context
 ARCHETYPE_DESCRIPTIONS = {
     CaseArchetype.PARENTING_EQUAL_TIME: "Standard parenting case considering equal shared parental responsibility and time.",
@@ -86,4 +90,3 @@ ARCHETYPE_DESCRIPTIONS = {
     CaseArchetype.PROPERTY_HIGH_DISPARITY: "Property case with significant difference in future earning capacity, often leading to adjustment.",
     CaseArchetype.VIOLENCE_FAMILY_VIOLENCE: "Case involving allegations of family violence, impacting both parenting arrangements and property contributions.",
 }
-

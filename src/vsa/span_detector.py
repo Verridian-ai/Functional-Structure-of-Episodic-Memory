@@ -15,7 +15,7 @@ problematic text spans with high precision.
 
 import re
 from dataclasses import dataclass
-from typing import List, Tuple, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from src.vsa.legal_vsa import LegalVSA
@@ -35,6 +35,7 @@ class SpanIssue:
         confidence: Confidence score of the detection (0.0 to 1.0)
         source_reference: Reference to the source rule or pattern that flagged this
     """
+
     issue_type: str
     span_start: int
     span_end: int
@@ -54,12 +55,12 @@ class SpanAlignedVSA:
     """
 
     # Regex patterns for common legal entities
-    NUMERICAL_PATTERN = r'\$?[\d,]+\.?\d*'
-    DATE_PATTERN = r'\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b'
-    PARTY_PATTERN = r'\b(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*(?:\s+(?:Inc|LLC|Corp|Ltd|Co)\.?))\b'
-    REFERENCE_PATTERN = r'(?:Section|Article|Clause|Paragraph)\s+\d+(?:\.\d+)*'
+    NUMERICAL_PATTERN = r"\$?[\d,]+\.?\d*"
+    DATE_PATTERN = r"\b(?:\d{1,2}[-/]\d{1,2}[-/]\d{2,4}|\d{4}[-/]\d{1,2}[-/]\d{1,2}|(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{1,2},?\s+\d{4})\b"
+    PARTY_PATTERN = r"\b(?:[A-Z][a-z]+(?:\s+[A-Z][a-z]+)*(?:\s+(?:Inc|LLC|Corp|Ltd|Co)\.?))\b"
+    REFERENCE_PATTERN = r"(?:Section|Article|Clause|Paragraph)\s+\d+(?:\.\d+)*"
 
-    def __init__(self, base_vsa: 'LegalVSA'):
+    def __init__(self, base_vsa: "LegalVSA"):
         """
         Initialize the span detector with an existing LegalVSA instance.
 
@@ -68,7 +69,7 @@ class SpanAlignedVSA:
         """
         self.base_vsa = base_vsa
 
-    def detect_issues_with_spans(self, text: str, extraction: dict) -> List[SpanIssue]:
+    def detect_issues_with_spans(self, text: str, extraction: dict) -> list[SpanIssue]:
         """
         Main detection method that runs all span-level checks.
 
@@ -93,7 +94,7 @@ class SpanAlignedVSA:
 
         return issues
 
-    def _detect_numerical_spans(self, text: str, extraction: dict) -> List[SpanIssue]:
+    def _detect_numerical_spans(self, text: str, extraction: dict) -> list[SpanIssue]:
         """
         Detect conflicting or inconsistent numerical values in the text.
 
@@ -110,7 +111,7 @@ class SpanAlignedVSA:
         issues = []
 
         # Extract expected amounts from extraction dict
-        expected_amounts = extraction.get('amounts', [])
+        expected_amounts = extraction.get("amounts", [])
 
         # Find all numerical values in text
         for match in re.finditer(self.NUMERICAL_PATTERN, text, re.IGNORECASE):
@@ -137,22 +138,24 @@ class SpanAlignedVSA:
                 if expected_amounts:
                     expected_value = min(
                         expected_amounts,
-                        key=lambda x: abs(self._normalize_number(str(x)) - normalized_found)
+                        key=lambda x: abs(self._normalize_number(str(x)) - normalized_found),
                     )
 
-                    issues.append(SpanIssue(
-                        issue_type="numerical_conflict",
-                        span_start=span_start,
-                        span_end=span_end,
-                        flagged_text=found_value,
-                        expected_value=str(expected_value),
-                        confidence=0.8,
-                        source_reference="numerical_pattern_matcher"
-                    ))
+                    issues.append(
+                        SpanIssue(
+                            issue_type="numerical_conflict",
+                            span_start=span_start,
+                            span_end=span_end,
+                            flagged_text=found_value,
+                            expected_value=str(expected_value),
+                            confidence=0.8,
+                            source_reference="numerical_pattern_matcher",
+                        )
+                    )
 
         return issues
 
-    def _detect_date_spans(self, text: str, extraction: dict) -> List[SpanIssue]:
+    def _detect_date_spans(self, text: str, extraction: dict) -> list[SpanIssue]:
         """
         Detect date inconsistencies in the text.
 
@@ -170,7 +173,7 @@ class SpanAlignedVSA:
         """
         issues = []
 
-        expected_dates = extraction.get('dates', [])
+        expected_dates = extraction.get("dates", [])
 
         # Find all date patterns in text
         found_dates = []
@@ -194,17 +197,21 @@ class SpanAlignedVSA:
 
                 if not is_valid and expected_dates:
                     # Find closest expected date
-                    expected_value = expected_dates[0] if len(expected_dates) == 1 else "one of expected dates"
+                    expected_value = (
+                        expected_dates[0] if len(expected_dates) == 1 else "one of expected dates"
+                    )
 
-                    issues.append(SpanIssue(
-                        issue_type="date_mismatch",
-                        span_start=span_start,
-                        span_end=span_end,
-                        flagged_text=found_date,
-                        expected_value=str(expected_value),
-                        confidence=0.75,
-                        source_reference="date_pattern_matcher"
-                    ))
+                    issues.append(
+                        SpanIssue(
+                            issue_type="date_mismatch",
+                            span_start=span_start,
+                            span_end=span_end,
+                            flagged_text=found_date,
+                            expected_value=str(expected_value),
+                            confidence=0.75,
+                            source_reference="date_pattern_matcher",
+                        )
+                    )
 
         # Check for chronological impossibilities (future dates in historical docs, etc.)
         for i in range(len(found_dates) - 1):
@@ -214,19 +221,21 @@ class SpanAlignedVSA:
             # If we can parse both dates, check ordering
             # (This is a simplified check - full implementation would parse dates properly)
             if self._is_chronologically_impossible(date1, date2):
-                issues.append(SpanIssue(
-                    issue_type="chronological_impossibility",
-                    span_start=start2,
-                    span_end=end2,
-                    flagged_text=date2,
-                    expected_value=f"date after {date1}",
-                    confidence=0.6,
-                    source_reference="chronological_validator"
-                ))
+                issues.append(
+                    SpanIssue(
+                        issue_type="chronological_impossibility",
+                        span_start=start2,
+                        span_end=end2,
+                        flagged_text=date2,
+                        expected_value=f"date after {date1}",
+                        confidence=0.6,
+                        source_reference="chronological_validator",
+                    )
+                )
 
         return issues
 
-    def _detect_party_spans(self, text: str, extraction: dict) -> List[SpanIssue]:
+    def _detect_party_spans(self, text: str, extraction: dict) -> list[SpanIssue]:
         """
         Detect party name mismatches and inconsistencies.
 
@@ -244,7 +253,7 @@ class SpanAlignedVSA:
         """
         issues = []
 
-        expected_parties = extraction.get('parties', [])
+        expected_parties = extraction.get("parties", [])
 
         # Find all potential party names in text
         for match in re.finditer(self.PARTY_PATTERN, text):
@@ -266,21 +275,25 @@ class SpanAlignedVSA:
                     expected_value = self._find_closest_party(found_party, expected_parties)
 
                     # Calculate confidence based on similarity
-                    confidence = 0.7 if self._is_similar_party(found_party, expected_value) else 0.85
+                    confidence = (
+                        0.7 if self._is_similar_party(found_party, expected_value) else 0.85
+                    )
 
-                    issues.append(SpanIssue(
-                        issue_type="party_name_mismatch",
-                        span_start=span_start,
-                        span_end=span_end,
-                        flagged_text=found_party,
-                        expected_value=expected_value,
-                        confidence=confidence,
-                        source_reference="party_pattern_matcher"
-                    ))
+                    issues.append(
+                        SpanIssue(
+                            issue_type="party_name_mismatch",
+                            span_start=span_start,
+                            span_end=span_end,
+                            flagged_text=found_party,
+                            expected_value=expected_value,
+                            confidence=confidence,
+                            source_reference="party_pattern_matcher",
+                        )
+                    )
 
         return issues
 
-    def _detect_reference_spans(self, text: str, extraction: dict) -> List[SpanIssue]:
+    def _detect_reference_spans(self, text: str, extraction: dict) -> list[SpanIssue]:
         """
         Detect reference errors (e.g., to sections, articles, clauses).
 
@@ -298,7 +311,7 @@ class SpanAlignedVSA:
         """
         issues = []
 
-        valid_references = extraction.get('valid_references', [])
+        valid_references = extraction.get("valid_references", [])
 
         # Find all reference patterns
         for match in re.finditer(self.REFERENCE_PATTERN, text, re.IGNORECASE):
@@ -316,22 +329,22 @@ class SpanAlignedVSA:
                         break
 
                 if not is_valid:
-                    issues.append(SpanIssue(
-                        issue_type="invalid_reference",
-                        span_start=span_start,
-                        span_end=span_end,
-                        flagged_text=found_ref,
-                        expected_value="valid section reference",
-                        confidence=0.65,
-                        source_reference="reference_validator"
-                    ))
+                    issues.append(
+                        SpanIssue(
+                            issue_type="invalid_reference",
+                            span_start=span_start,
+                            span_end=span_end,
+                            flagged_text=found_ref,
+                            expected_value="valid section reference",
+                            confidence=0.65,
+                            source_reference="reference_validator",
+                        )
+                    )
 
         return issues
 
     def calculate_location_alignment(
-        self,
-        predicted: List[Tuple[int, int]],
-        ground_truth: List[Tuple[int, int]]
+        self, predicted: list[tuple[int, int]], ground_truth: list[tuple[int, int]]
     ) -> float:
         """
         Calculate alignment score between predicted and ground truth spans.
@@ -374,7 +387,7 @@ class SpanAlignedVSA:
 
         return total_iou / count if count > 0 else 0.0
 
-    def _calculate_iou(self, span1: Tuple[int, int], span2: Tuple[int, int]) -> float:
+    def _calculate_iou(self, span1: tuple[int, int], span2: tuple[int, int]) -> float:
         """
         Calculate Intersection over Union (IoU) for two spans.
 
@@ -411,7 +424,7 @@ class SpanAlignedVSA:
     def _normalize_number(self, value: str) -> float:
         """Normalize a numerical string to a float value."""
         # Remove currency symbols and commas
-        cleaned = value.replace('$', '').replace(',', '').strip()
+        cleaned = value.replace("$", "").replace(",", "").strip()
         try:
             return float(cleaned)
         except ValueError:
@@ -420,7 +433,7 @@ class SpanAlignedVSA:
     def _normalize_date(self, date_str: str) -> str:
         """Normalize a date string for comparison."""
         # Simplified normalization - lowercase and remove extra whitespace
-        return ' '.join(date_str.lower().split())
+        return " ".join(date_str.lower().split())
 
     def _dates_match(self, date1: str, date2: str) -> bool:
         """Check if two date strings represent the same date."""
@@ -429,8 +442,8 @@ class SpanAlignedVSA:
         norm2 = self._normalize_date(date2)
 
         # Extract numerical components for fuzzy matching
-        nums1 = set(re.findall(r'\d+', norm1))
-        nums2 = set(re.findall(r'\d+', norm2))
+        nums1 = set(re.findall(r"\d+", norm1))
+        nums2 = set(re.findall(r"\d+", norm2))
 
         # If they share significant numerical components, consider them matching
         return len(nums1 & nums2) >= 2 or norm1 == norm2
@@ -463,7 +476,7 @@ class SpanAlignedVSA:
         min_words = min(len(words1), len(words2))
         return len(common_words) >= min_words * 0.6
 
-    def _find_closest_party(self, party_name: str, expected_parties: List) -> str:
+    def _find_closest_party(self, party_name: str, expected_parties: list) -> str:
         """Find the most similar party name from expected parties."""
         if not expected_parties:
             return "unknown party"
@@ -503,8 +516,8 @@ class SpanAlignedVSA:
     def _references_match(self, ref1: str, ref2: str) -> bool:
         """Check if two reference strings refer to the same section."""
         # Extract numerical parts
-        nums1 = re.findall(r'\d+', ref1)
-        nums2 = re.findall(r'\d+', ref2)
+        nums1 = re.findall(r"\d+", ref1)
+        nums2 = re.findall(r"\d+", ref2)
 
         # If they have the same numbers, consider them matching
         return nums1 == nums2

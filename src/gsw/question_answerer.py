@@ -6,10 +6,10 @@ Handles checking if chunks answer pending questions.
 """
 
 import re
-from typing import Dict, List, Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.logic.gsw_schema import PredictiveQuestion, ChunkExtraction
+    from src.logic.gsw_schema import ChunkExtraction, PredictiveQuestion
 
 
 class QuestionAnswerer:
@@ -23,11 +23,8 @@ class QuestionAnswerer:
     """
 
     def answer_questions(
-        self,
-        questions: List["PredictiveQuestion"],
-        chunk_text: str,
-        extraction: "ChunkExtraction"
-    ) -> List[Dict[str, Any]]:
+        self, questions: list["PredictiveQuestion"], chunk_text: str, extraction: "ChunkExtraction"
+    ) -> list[dict[str, Any]]:
         """
         Check if the chunk text answers any pending questions.
 
@@ -64,21 +61,23 @@ class QuestionAnswerer:
                 answer_found = self._find_value_answer(chunk_lower)
 
             if answer_found:
-                answered.append({
-                    "question_id": q.id,
-                    "answer_text": str(answer_found).title(),
-                    "answer_entity_id": None,
-                    "confidence": 0.7
-                })
+                answered.append(
+                    {
+                        "question_id": q.id,
+                        "answer_text": str(answer_found).title(),
+                        "answer_entity_id": None,
+                        "confidence": 0.7,
+                    }
+                )
 
         return answered
 
     def _find_when_answer(self, q_text: str, chunk_lower: str) -> str | None:
         """Find date answers for 'when' questions."""
         date_patterns = [
-            r'(\d{1,2}\s+(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{4})',
-            r'((?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4})',
-            r'(\d{4}-\d{2}-\d{2})',
+            r"(\d{1,2}\s+(?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{4})",
+            r"((?:january|february|march|april|may|june|july|august|september|october|november|december)\s+\d{1,2},?\s+\d{4})",
+            r"(\d{4}-\d{2}-\d{2})",
         ]
 
         # Check if question topic is in chunk
@@ -94,11 +93,7 @@ class QuestionAnswerer:
 
         return None
 
-    def _find_who_answer(
-        self,
-        q_text: str,
-        extraction: "ChunkExtraction"
-    ) -> str | None:
+    def _find_who_answer(self, q_text: str, extraction: "ChunkExtraction") -> str | None:
         """Find person answers for 'who' questions."""
         for actor in extraction.actors:
             if actor.actor_type.value == "person":
@@ -108,7 +103,7 @@ class QuestionAnswerer:
 
     def _find_value_answer(self, chunk_lower: str) -> str | None:
         """Find monetary value answers."""
-        money_pattern = r'\$[\d,]+(?:\.\d{2})?(?:\s*(?:million|m))?'
+        money_pattern = r"\$[\d,]+(?:\.\d{2})?(?:\s*(?:million|m))?"
         matches = re.findall(money_pattern, chunk_lower)
         if matches:
             return matches[0]
