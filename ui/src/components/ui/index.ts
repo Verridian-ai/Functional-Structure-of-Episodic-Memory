@@ -17,7 +17,7 @@ export { ErrorBoundary, useErrorHandler, withErrorBoundary } from './ErrorBounda
 export { SkipLinks } from './SkipLinks';
 export { VisuallyHidden } from './VisuallyHidden';
 export { SafeHtmlProse } from './SafeHtml';
-export { Skeleton, SkeletonText, SkeletonCircle, SkeletonCard } from './Skeleton';
+export { Skeleton, MessageSkeleton, ConversationSkeleton, CardSkeleton } from './Skeleton';
 export { SynapseLoader } from './SynapseLoader';
 
 // Toast System

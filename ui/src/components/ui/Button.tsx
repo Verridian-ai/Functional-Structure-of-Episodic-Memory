@@ -24,6 +24,8 @@ interface BaseButtonProps {
   rightIcon?: React.ReactNode;
   /** Make button full width */
   fullWidth?: boolean;
+  /** Whether button is disabled */
+  disabled?: boolean;
   /** Additional CSS classes */
   className?: string;
   /** Children elements */
